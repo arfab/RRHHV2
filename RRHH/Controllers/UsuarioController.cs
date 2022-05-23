@@ -25,7 +25,7 @@ namespace RRHH.Controllers
                 return View(usuarioRepo.ObtenerUsuarios());
             }
 
-            return RedirectToAction("Index", "RRHH");
+            return View();
 
 
         }
@@ -78,7 +78,7 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetString("ROL_DESCRIPCION", (string.IsNullOrEmpty(usuario.rol_descripcion)) ? "" : usuario.rol_descripcion);*/
 
 
-                return RedirectToAction("Index", "RRHH");
+                return RedirectToAction("Index", "Home");
             }
             else
             {

@@ -23,7 +23,7 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@UsuarioID", login);
                 //parameter.Add("@clave", BCryptNet.HashPassword(clave));
-                usuario = con.QueryFirstOrDefault<Models.Usuario>("dwLogin", parameter, commandType: CommandType.StoredProcedure);
+                usuario = con.QueryFirstOrDefault<Models.Usuario>("spLogin", parameter, commandType: CommandType.StoredProcedure);
 
             }
 
@@ -73,7 +73,7 @@ namespace RRHH.Repository
                 parameters.Add("@perfil_id", usuario.perfil_id);
 
 
-                icantFilas = con.Execute("dwUsuarioInsertar", parameters, commandType: CommandType.StoredProcedure);
+                icantFilas = con.Execute("spUsuarioInsertar", parameters, commandType: CommandType.StoredProcedure);
 
 
             }
@@ -96,7 +96,7 @@ namespace RRHH.Repository
                 parameters.Add("@perfil_id", usuario.perfil_id);
 
 
-                icantFilas = con.Execute("dwUsuarioModificar", parameters, commandType: CommandType.StoredProcedure);
+                icantFilas = con.Execute("spUsuarioModificar", parameters, commandType: CommandType.StoredProcedure);
 
 
             }
@@ -118,7 +118,7 @@ namespace RRHH.Repository
 
 
 
-                icantFilas = con.Execute("dwUsuarioCambiarClave", parameters, commandType: CommandType.StoredProcedure);
+                icantFilas = con.Execute("spUsuarioCambiarClave", parameters, commandType: CommandType.StoredProcedure);
 
 
             }
@@ -133,7 +133,7 @@ namespace RRHH.Repository
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
-                return con.Query<Usuario>("dwUsuarioObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+                return con.Query<Usuario>("spUsuarioObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
         }
@@ -150,7 +150,7 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@UsuarioID", UsuarioId);
 
-                return con.QuerySingle<Usuario>("dwUsuarioObtener", parameter, commandType: CommandType.StoredProcedure);
+                return con.QuerySingle<Usuario>("spUsuarioObtener", parameter, commandType: CommandType.StoredProcedure);
             }
 
         }
@@ -168,7 +168,7 @@ namespace RRHH.Repository
                 DynamicParameters parameters2 = new DynamicParameters();
                 parameters2.Add("@UsuarioID", UsuarioID);
 
-                icantFilas = con.Execute("dwUsuarioEliminar", parameters2, commandType: CommandType.StoredProcedure);
+                icantFilas = con.Execute("spUsuarioEliminar", parameters2, commandType: CommandType.StoredProcedure);
 
 
             }
