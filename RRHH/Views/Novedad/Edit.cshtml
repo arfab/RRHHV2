@@ -1,0 +1,258 @@
+﻿@model RRHH.Models.Novedad
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@{
+    ViewData["Title"] = "Novedad";
+
+}
+
+<form asp-action="Edit" method="post">
+<div class="container">
+<h2>Edición de legajo</h2>
+
+       
+            <div class="row ">
+                <div class="col bottom-buffer">
+                <label asp-for="nro_legajo" class="control-label">Nro. Legajo</label>
+                <input asp-for="nro_legajo" type="number" class="form-control" />
+                <span class="alert-danger" asp-validation-for="nro_legajo"></span>
+                </div>
+            </div>
+
+             <div class="row ">
+                <div class="col bottom-buffer">
+                <label asp-for="medio_recepcion" class="control-label">Medio Recepción</label>
+                <input asp-for="medio_recepcion" class="form-control" />
+                 <span class="alert-danger" asp-validation-for="medio_recepcion"></span>
+                 </div>
+            </div>
+             <div class="row ">
+                <div class="col bottom-buffer">
+                <label asp-for="observacion" class="control-label">Observación</label>
+                <input asp-for="observacion" class="form-control" />
+                 <span class="alert-danger" asp-validation-for="observacion"></span>
+                 </div>
+            </div>
+
+            <div class="row">
+              <div class="col bottom-buffer">
+                 <div class="card" style="width: 18rem;">
+                   <div class="card-body">
+                     <h5 class="card-title">Categoría Novedad</h5>
+                     <select  class="form-control" id="categoria_novedad_id" asp-for="categoria_novedad_id" ></select>
+                     <span class="alert-danger" asp-validation-for="categoria_novedad_id"></span>
+                   </div>
+                </div>
+            </div>
+
+           <div class="col bottom-buffer">
+             <div class="card" style="width: 18rem;">
+               <div class="card-body">
+                 <h5 class="card-title">Tipo Novedad</h5>
+                 <select  class="form-control" id="tipo_novedad_id" asp-for="tipo_novedad_id" ></select>
+                  <span class="alert-danger" asp-validation-for="tipo_novedad_id"></span>
+              </div>
+            </div>
+           </div>
+
+            <div class="col bottom-buffer">
+             <div class="card" style="width: 18rem;">
+               <div class="card-body">
+                 <h5 class="card-title">Tipo Resolución</h5>
+                 <select  class="form-control" id="tipo_resolucion_id" asp-for="tipo_resolucion_id" ></select>
+                  <span class="alert-danger" asp-validation-for="tipo_resolucion_id"></span>
+              </div>
+            </div>
+           </div>
+
+
+           </div>
+
+             <div class="row ">
+                <div class="col bottom-buffer">
+                <label asp-for="concepto" class="control-label">Concepto</label>
+                <input asp-for="concepto" type="number" class="form-control" />
+                <span class="alert-danger" asp-validation-for="concepto"></span>
+                </div>
+            </div>
+
+              <div class="row ">
+                <div class="col bottom-buffer">
+                <label asp-for="dias" class="control-label">Días</label>
+                <input asp-for="dias" type="number" class="form-control" />
+                <span class="alert-danger" asp-validation-for="dias"></span>
+                </div>
+            </div>
+
+
+           <div class="row " id="divInsertar">
+                <div class="col bottom-buffer">
+                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+                     <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success"   >Grabar</button>
+                </div>
+            </div>
+   
+
+
+
+
+  <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Legajo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Salir -->
+<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Novedad</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se perderán los cambios efectuados. Está seguro?
+      </div>
+      <div class="modal-footer">
+        <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ </form>
+
+
+ <script type="text/javascript">
+
+
+$(document).ready(function () {
+
+     
+
+       ObtenerCategoriasNovedad();
+       ObtenerTiposNovedad();
+       ObtenerTiposResolucion();
+
+     // $('#txtSelectedDate').datepicker({format: 'dd/mm/yyyy' });
+
+
+     // $(function () {
+     // $('#txtSelectedDate').datepicker({
+     //   changeMonth: true,
+     //   changeYear: true,
+     //   format: "dd/mm/yyyy",
+     //   language: "es"
+     //   });
+
+     //});
+
+   })
+
+  function mostrarModalSalida(){
+    if ($("#btnGrabar").is(":visible"))
+      $("#mdSalir").modal('show');
+    else 
+      window.location.href = "/Legajo/Index";
+  }
+
+  function mostrarModalGrabar(){
+    $("#mdGrabar").modal('show');
+  }
+
+
+  var ObtenerCategoriasNovedad = function () {
+         var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_novedad_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerCategoriasNovedad","Novedad")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#categoria_novedad_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodCategoria)
+                          $('#categoria_novedad_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#categoria_novedad_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+      var ObtenerTiposNovedad = function () {
+         var CodCategoria =@Html.Raw(Json.Serialize(Model.tipo_novedad_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerTiposNovedad","Novedad")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#tipo_novedad_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodCategoria)
+                          $('#tipo_novedad_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#tipo_novedad_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+     var ObtenerTiposResolucion = function () {
+         var CodCategoria =@Html.Raw(Json.Serialize(Model.tipo_resolucion_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerTiposResolucion","Novedad")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#tipo_resolucion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodCategoria)
+                          $('#tipo_resolucion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#tipo_resolucion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+
+</script>
+
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
