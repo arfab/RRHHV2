@@ -29,10 +29,13 @@ namespace RRHH.Repository
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", DateTime.Now);
                 parameters.Add("@fecha_resolucion", DateTime.Now);
+                parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
                 icantFilas = con.Execute("spNovedadInsertar", parameters, commandType: CommandType.StoredProcedure);
 
+                if (parameters.Get<int>("@retValue") < 0) return "El legajo no existe";
+                
 
             }
             return "";
@@ -59,11 +62,12 @@ namespace RRHH.Repository
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", DateTime.Now);
                 parameters.Add("@fecha_resolucion", DateTime.Now);
-
+                parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
                 con.Execute("spNovedadModificar", parameters, commandType: CommandType.StoredProcedure);
 
+                if (parameters.Get<int>("@retValue") < 0) return "El legajo no existe";
 
             }
             return "";

@@ -75,6 +75,7 @@
                      <td>
                         <td>
                           <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-nro_legajo=@item.nro_legajo><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
+                         <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-nro_legajo=@item.nro_legajo><i data-mdb-toggle='tooltip' title='Novedades' class='bi bi-pencil-square'></i></a>
                           <a onclick="mostrarModalEliminar('@item.nro_legajo');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
                       
                     </td>

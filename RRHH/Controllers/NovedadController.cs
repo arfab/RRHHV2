@@ -41,7 +41,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int? id, int? nro_legajo)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -68,6 +68,9 @@ namespace RRHH.Controllers
             {
                 //ViewData["ID"] = 0;
                 ViewData["MODO"] = "A";
+
+                if (nro_legajo != null) novedad.nro_legajo = nro_legajo.Value;
+
                 return View(novedad);
             }
 
