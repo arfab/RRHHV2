@@ -7,7 +7,46 @@
 }
 
 
-<form asp-controller="Novedad"  method="post" >
+ <form asp-action="Index" method="post">
+     
+
+            <div class="d-flex justify-content-center align-items-center container ">
+
+
+                <div class="input-group mb-3">
+                   <span class="input-group-text">Categoría Novedad</span>            
+                    <select  class="form-control" name="categoria_novedad_id" id="categoria_novedad_id" ></select>                        
+                </div>
+            </div>
+             <div class="d-flex justify-content-center align-items-center container ">
+
+
+                <div class="input-group mb-3">
+                   <span class="input-group-text">Tipo Novedad</span>            
+                    <select  class="form-control" name="tipo_novedad_id" id="tipo_novedad_id" ></select>                        
+                </div>
+            </div>
+
+             <div class="d-flex justify-content-center align-items-center container ">
+
+
+                <div class="input-group mb-3">
+                   <span class="input-group-text">Tipo Resolución</span>            
+                    <select  class="form-control" name="tipo_resolucion_id" id="tipo_resolucion_id" ></select>                        
+                </div>
+
+            </div>
+           
+            <div class="d-flex justify-content-center align-items-center container ">
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Legajo:</span>
+                     <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />            
+                    <input type="submit" value="Buscar" class="btn btn-outline-primary" />
+                </div>
+            </div>
+
+
  <div class="container">
      <div class="jumbotron text-center Titulo">
       <h2>Novedades</h2>
@@ -94,6 +133,7 @@
          </center>
 
 
+
     <!-- Modal Eliminar Novedad -->
 
     <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
@@ -120,9 +160,88 @@
         </div>
     </div>
     </div>
+
 </form>
 
+
  <script type="text/javascript">
+
+$(document).ready(function() {
+    if ($("#nro_legajo").val() == 0) 
+    {
+        $("#nro_legajo").val('');
+    }
+
+   
+    ObtenerCategoriasNovedad();
+    ObtenerTiposNovedad();
+    ObtenerTiposResolucion();
+
+
+
+});
+
+
+ var ObtenerCategoriasNovedad = function () {
+       var CodCategoria =@Html.Raw(Json.Serialize(ViewData["CategoriaNovedadActual"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerCategoriasNovedad","Novedad")',
+            type: 'GET',
+            success: function (data) {
+                $('#categoria_novedad_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodCategoria)
+                          $('#categoria_novedad_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#categoria_novedad_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+    var ObtenerTiposNovedad = function () {
+         var CodTipo =@Html.Raw(Json.Serialize(ViewData["TipoNovedadActual"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerTiposNovedad","Novedad")',
+            type: 'GET',
+            success: function (data) {
+                $('#tipo_novedad_id').find('option').remove()
+               $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodTipo)
+                          $('#tipo_novedad_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#tipo_novedad_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+        var ObtenerTiposResolucion = function () {
+          var CodTipo =@Html.Raw(Json.Serialize(ViewData["TipoResolucionActual"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerTiposResolucion","Novedad")',
+            type: 'GET',
+            success: function (data) {
+                $('#tipo_resolucion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodTipo)
+                          $('#tipo_resolucion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#tipo_resolucion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
     function mostrarModalEliminar(nro_legajo){
       $("#hfID").val(nro_legajo);
       $("#mdEliminar").modal('show');

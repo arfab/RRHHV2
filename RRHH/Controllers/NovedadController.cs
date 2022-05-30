@@ -13,7 +13,7 @@ namespace RRHH.Controllers
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public IActionResult Index()
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -27,7 +27,12 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
-                return View(novedadRepo.ObtenerTodos(-1,-1,-1));
+                ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
+                ViewData["TipoNovedadActual"] = tipo_novedad_id;
+                ViewData["TipoResolucionActual"] = tipo_resolucion_id;
+                ViewData["LegajoActual"] = nro_legajo;
+
+                return View(novedadRepo.ObtenerTodos((categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo));
             }
 
             return View();
