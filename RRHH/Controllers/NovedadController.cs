@@ -13,7 +13,39 @@ namespace RRHH.Controllers
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo)
+        public IActionResult Index()
+        {
+
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            if (perfil_id == 1)
+            {
+                INovedadRepo novedadRepo;
+
+                novedadRepo = new NovedadRepo();
+
+                ViewData["CategoriaNovedadActual"] = -1;
+                ViewData["TipoNovedadActual"] = -1;
+                ViewData["TipoResolucionActual"] = -1;
+                ViewData["LegajoActual"] = -1;
+                ViewData["FechaNovedadDesdeActual"] = DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day;
+                ViewData["FechaNovedadHastaActual"] = DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day;
+
+                return View(novedadRepo.ObtenerTodos(-1 , -1, -1 ,-1,DateTime.Now , DateTime.Now));
+            }
+
+            return View();
+
+
+        }
+
+        [HttpPost]
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -31,8 +63,10 @@ namespace RRHH.Controllers
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
                 ViewData["LegajoActual"] = nro_legajo;
+                ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Year + "-" + fecha_novedad_desde.Month + "-" + fecha_novedad_desde.Day;
+                ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Year + "-" + fecha_novedad_hasta.Month + "-" + fecha_novedad_hasta.Day; ;
 
-                return View(novedadRepo.ObtenerTodos((categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo));
+                return View(novedadRepo.ObtenerTodos((categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0)?-1:tipo_novedad_id, (tipo_resolucion_id == 0)?-1:tipo_resolucion_id, (nro_legajo == 0)?-1:nro_legajo,fecha_novedad_desde,fecha_novedad_hasta));
             }
 
             return View();
@@ -198,6 +232,49 @@ namespace RRHH.Controllers
             return Json(new SelectList(l, "id", "descripcion"));
         }
 
+        [HttpGet]
+        public JsonResult ObtenerUbicaciones()
+        {
+            List<Models.Ubicacion> l = new List<Models.Ubicacion>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                l = con.Query<Models.Ubicacion>("select * from ubicacion order by descripcion", parameters).ToList();
+            }
+
+
+            l.Insert(0, new Models.Ubicacion(-1, "-- Seleccione la ubicación --"));
+
+            return Json(new SelectList(l, "codigo", "descripcion"));
+
+
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerResponsables()
+        {
+            List<Models.Responsable> l = new List<Models.Responsable>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                l = con.Query<Models.Responsable>("select * from responsable order by id", parameters).ToList();
+            }
+
+
+            l.Insert(0, new Models.Responsable(-1, "-- Seleccione el responsable --", ""));
+
+            return Json(new SelectList(l, "id", "apellido"));
+        }
 
     }
 }

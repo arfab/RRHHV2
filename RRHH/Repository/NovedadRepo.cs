@@ -20,6 +20,8 @@ namespace RRHH.Repository
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nro_legajo", novedad.nro_legajo);
+                parameters.Add("@ubicacion_id", novedad.ubicacion_id);
+                parameters.Add("@responsable_id", novedad.responsable_id);
                 parameters.Add("@categoria_novedad_id", novedad.categoria_novedad_id);
                 parameters.Add("@tipo_novedad_id", (novedad.tipo_novedad_id==-1)?null: novedad.tipo_novedad_id);
                 parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id==-1)?null:novedad.tipo_resolucion_id);
@@ -53,6 +55,8 @@ namespace RRHH.Repository
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@id", novedad.id);
                 parameters.Add("@nro_legajo", novedad.nro_legajo);
+                parameters.Add("@ubicacion_id", novedad.ubicacion_id);
+                parameters.Add("@responsable_id", novedad.responsable_id);
                 parameters.Add("@categoria_novedad_id", novedad.categoria_novedad_id);
                 parameters.Add("@tipo_novedad_id", novedad.tipo_novedad_id);
                 parameters.Add("@tipo_resolucion_id", novedad.tipo_resolucion_id);
@@ -74,7 +78,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Novedad> ObtenerTodos(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo )
+        public IEnumerable<Novedad> ObtenerTodos(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta )
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -88,6 +92,8 @@ namespace RRHH.Repository
                 parameter.Add("@tipo_novedad_id", tipo_novedad_id);
                 parameter.Add("@tipo_resolucion_id", tipo_resolucion_id);
                 parameter.Add("@nro_legajo", nro_legajo);
+                parameter.Add("@fecha_novedad_desde", fecha_novedad_desde);
+                parameter.Add("@fecha_novedad_hasta", fecha_novedad_hasta);
 
                 return con.Query<Novedad>("spNovedadObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
             }

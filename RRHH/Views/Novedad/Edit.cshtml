@@ -9,7 +9,7 @@
 
 <form asp-action="Edit" method="post">
 <div class="container">
-<h2>Edición de legajo</h2>
+<h2>Novedad</h2>
 
        
             <div class="row ">
@@ -19,6 +19,29 @@
                 <span class="alert-danger" asp-validation-for="nro_legajo"></span>
                 </div>
             </div>
+
+            <div class="row">
+              <div class="col bottom-buffer">
+                 <div class="card" style="width: 18rem;">
+                   <div class="card-body">
+                     <h5 class="card-title">Ubicación</h5>
+                     <select  class="form-control" id="ubicacion_id" asp-for="ubicacion_id" ></select>
+                     <span class="alert-danger" asp-validation-for="ubicacion_id"></span>
+                   </div>
+                </div>
+            </div>
+
+            <div class="col bottom-buffer">
+                 <div class="card" style="width: 18rem;">
+                   <div class="card-body">
+                     <h5 class="card-title">Responsable</h5>
+                     <select  class="form-control" id="responsable_id" asp-for="responsable_id" ></select>
+                     <span class="alert-danger" asp-validation-for="responsable_id"></span>
+                   </div>
+                </div>
+            </div>
+            </div>
+
 
               <div class="row">
               <div class="col bottom-buffer">
@@ -174,6 +197,8 @@ $(document).ready(function () {
     var FechaNovedad = @Html.Raw(Json.Serialize(Model.fecha_novedad));
     var FechaResolucion = @Html.Raw(Json.Serialize(Model.fecha_resolucion));
 
+    ObtenerUbicaciones();
+    ObtenerResponsables();
     ObtenerCategoriasNovedad();
     ObtenerTiposNovedad();
     ObtenerTiposResolucion();
@@ -444,6 +469,16 @@ $(document).ready(function () {
          habilitar_grabar();     
     });
 
+    
+    $("#responsable_id").change(function () {
+         habilitar_grabar();     
+    });
+
+    
+    $("#ubicacion_id").change(function () {
+         habilitar_grabar();     
+    });
+
   function mostrarModalSalida(){
     if ($("#btnGrabar").is(":visible"))
       $("#mdSalir").modal('show');
@@ -522,6 +557,51 @@ $(document).ready(function () {
       });
     }
 
+
+     var ObtenerUbicaciones = function () {
+         var CodUbicacion =@Html.Raw(Json.Serialize(Model.ubicacion_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Novedad")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+    var ObtenerResponsables = function () {
+         var CodResponsable =@Html.Raw(Json.Serialize(Model.responsable_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerResponsables","Novedad")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#responsable_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodResponsable)
+                          $('#responsable_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#responsable_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+
+    }
      
     $(function () {
       $('#txtSelectedFechaNovedad').datepicker({

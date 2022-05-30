@@ -14,7 +14,7 @@ namespace RRHH.Controllers
 
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public IActionResult Index()
+        public IActionResult Index(int nro_legajo, string apellido)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -28,7 +28,11 @@ namespace RRHH.Controllers
 
                 legajoRepo = new LegajoRepo();
 
-                return View(legajoRepo.ObtenerTodos());
+                ViewData["ApellidoActual"] = apellido;
+                ViewData["LegajoActual"] = nro_legajo;
+
+
+                return View(legajoRepo.ObtenerTodos((nro_legajo==0)?-1:nro_legajo, (apellido==null)?"":apellido));
             }
 
             return View();

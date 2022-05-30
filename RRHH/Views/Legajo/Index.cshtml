@@ -8,6 +8,22 @@
 
 
 <form asp-controller="Legajo"  method="post" >
+
+         
+
+           
+            <div class="d-flex justify-content-center align-items-center container ">
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Legajo:</span>
+                     <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
+                     <span class="input-group-text">Apellido:</span>
+                     <input name="apellido" id="apellido" value="@ViewData["ApellidoActual"]" class="form-control" />   
+                    <input type="submit" value="Buscar" class="btn btn-outline-primary" />
+                </div>
+            </div>
+
+
  <div class="container">
      <div class="jumbotron text-center Titulo">
       <h2>Legajos</h2>
@@ -75,7 +91,7 @@
                      <td>
                         <td>
                           <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-nro_legajo=@item.nro_legajo><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
-                         <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-nro_legajo=@item.nro_legajo><i data-mdb-toggle='tooltip' title='Novedades' class='bi bi-pencil-square'></i></a>
+                         <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-nro_legajo=@item.nro_legajo><i data-mdb-toggle='tooltip' title='Novedades' class='bi  bi-calendar2-plus'></i></a>
                           <a onclick="mostrarModalEliminar('@item.nro_legajo');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
                       
                     </td>
@@ -120,6 +136,15 @@
 </form>
 
  <script type="text/javascript">
+
+  $(document).ready(function() {
+    if ($("#nro_legajo").val() == 0) 
+    {
+        $("#nro_legajo").val('');
+    }
+
+ 
+  });
     function mostrarModalEliminar(nro_legajo){
       $("#hfID").val(nro_legajo);
       $("#mdEliminar").modal('show');

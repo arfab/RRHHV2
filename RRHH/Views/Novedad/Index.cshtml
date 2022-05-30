@@ -14,35 +14,26 @@
 
 
                 <div class="input-group mb-3">
-                   <span class="input-group-text">Categoría Novedad</span>            
-                    <select  class="form-control" name="categoria_novedad_id" id="categoria_novedad_id" ></select>                        
-                </div>
-            </div>
-             <div class="d-flex justify-content-center align-items-center container ">
-
-
-                <div class="input-group mb-3">
-                   <span class="input-group-text">Tipo Novedad</span>            
-                    <select  class="form-control" name="tipo_novedad_id" id="tipo_novedad_id" ></select>                        
+                   <span class="input-group-text">Categoría</span>            
+                    <select  class="form-control" name="categoria_novedad_id" id="categoria_novedad_id" ></select>       
+                     <span class="input-group-text">Tipo</span>            
+                    <select  class="form-control" name="tipo_novedad_id" id="tipo_novedad_id" ></select>   
+                     <span class="input-group-text">Resolución</span>            
+                    <select  class="form-control" name="tipo_resolucion_id" id="tipo_resolucion_id" ></select>              
                 </div>
             </div>
 
-             <div class="d-flex justify-content-center align-items-center container ">
-
-
-                <div class="input-group mb-3">
-                   <span class="input-group-text">Tipo Resolución</span>            
-                    <select  class="form-control" name="tipo_resolucion_id" id="tipo_resolucion_id" ></select>                        
-                </div>
-
-            </div>
-           
+             
             <div class="d-flex justify-content-center align-items-center container ">
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Legajo:</span>
-                     <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />            
-                    <input type="submit" value="Buscar" class="btn btn-outline-primary" />
+                     <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
+                      <span class="input-group-text">Desde:</span>
+                      <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde"   readonly="readonly"/>
+                      <span class="input-group-text">Hasta:</span>
+                      <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta"  readonly="readonly"/>
+                      <input type="submit" value="Buscar" class="btn btn-outline-primary" />
                 </div>
             </div>
 
@@ -84,6 +75,10 @@
                     <thead>
                         <tr>
                             <th>Nro. Legajo</th>
+                            <th>Apellido</th>
+                            <th>Nombre</th>
+                            <th>Ubicacion</th>
+                            <th>Responsable</th>
                             <th>Fecha Novedad</th>
                             <th>Categoría Novedad</th>
                             <th>Tipo Novedad</th>
@@ -99,8 +94,20 @@
                       <td>
                           @item.nro_legajo
                      </td>
+                     <td>
+                          @item.apellido
+                     </td>
+                     <td>
+                          @item.nombre
+                     </td>
+                     <td>
+                          @item.ubicacion
+                     </td>
+                     <td>
+                          @item.responsable
+                     </td>
                       <td>
-                          @item.fecha_novedad
+                          @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
                      </td>
                      <td>
                           @item.categoria_novedad
@@ -167,7 +174,10 @@
  <script type="text/javascript">
 
 $(document).ready(function() {
-    if ($("#nro_legajo").val() == 0) 
+    var FechaNovedadDesde = @Html.Raw(Json.Serialize(ViewData["FechaNovedadDesdeActual"]));
+    var FechaNovedadHasta = @Html.Raw(Json.Serialize(ViewData["FechaNovedadHastaActual"]));
+
+    if ($("#nro_legajo").val() <=0) 
     {
         $("#nro_legajo").val('');
     }
@@ -177,7 +187,17 @@ $(document).ready(function() {
     ObtenerTiposNovedad();
     ObtenerTiposResolucion();
 
+       $('#txtSelectedFechaNovedadDesde').datepicker({format: 'dd/mm/yyyy' });
+        $('#txtSelectedFechaNovedadHasta').datepicker({format: 'dd/mm/yyyy' });
 
+
+        if (FechaNovedadDesde==null)
+          $('#txtSelectedFechaNovedadDesde').datepicker('setDate', "-0d");
+        else 
+           $('#txtSelectedFechaNovedadDesde').datepicker('setDate', "-0d");
+          //$('#txtSelectedFechaNovedadDesde').datepicker('setDate',FechaNovedadDesde.substring(0,10));
+
+        $('#txtSelectedFechaNovedadHasta').datepicker('setDate', "-0d");
 
 });
 
@@ -246,4 +266,24 @@ $(document).ready(function() {
       $("#hfID").val(nro_legajo);
       $("#mdEliminar").modal('show');
      }
+
+     $(function () {
+      $('#txtSelectedFechaNovedadDesde').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
+
+     
+     $(function () {
+      $('#txtSelectedFechaNovedadHasta').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+
+     });
 </script>

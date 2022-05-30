@@ -7,7 +7,7 @@ namespace RRHH.Repository
         public string Insertar(Legajo legajo);
         public string Modificar(Legajo legajo);
         public Legajo Obtener(int iNroLegajo);
-        public IEnumerable<Legajo> ObtenerTodos();
+        public IEnumerable<Legajo> ObtenerTodos(int iNroLegajo, string sApellido);
         public string Eliminar(int iNroLegajo);
     }
 }

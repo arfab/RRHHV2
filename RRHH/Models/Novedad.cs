@@ -9,6 +9,17 @@ namespace RRHH.Models
         [Required(ErrorMessage = "El campo es requerido")]
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? nro_legajo { get; set; }
+        public string? apellido { get; set; }
+        public string? nombre { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        public int? ubicacion_id { get; set; }
+        public string? ubicacion { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        public int? responsable_id { get; set; }
+        public string? responsable { get; set; }
+
+
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? categoria_novedad_id { get; set; }
         public string? categoria_novedad { get; set; }
@@ -24,10 +35,11 @@ namespace RRHH.Models
         public int? concepto { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? dias { get; set; }
-        [BindProperty, DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? fecha_novedad { get; set; }
         [BindProperty, DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? fecha_resolucion { get; set; }
         public DateTime? fecha_alta { get; set; }
+
     }
 }

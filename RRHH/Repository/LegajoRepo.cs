@@ -62,7 +62,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Legajo> ObtenerTodos()
+        public IEnumerable<Legajo> ObtenerTodos(int iNroLegajo, string sApellido)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -70,7 +70,12 @@ namespace RRHH.Repository
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
-                return con.Query<Legajo>("spLegajoObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@nro_legajo", iNroLegajo);
+                parameter.Add("@apellido", sApellido);
+
+
+                return con.Query<Legajo>("spLegajoObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
             }
 
         }
