@@ -27,8 +27,8 @@ namespace RRHH.Repository
                 parameters.Add("@dias", novedad.dias);
                 parameters.Add("@medio_recepcion", novedad.medio_recepcion);
                 parameters.Add("@observacion", novedad.observacion);
-                parameters.Add("@fecha_novedad", DateTime.Now);
-                parameters.Add("@fecha_resolucion", DateTime.Now);
+                parameters.Add("@fecha_novedad", novedad.fecha_novedad);
+                parameters.Add("@fecha_resolucion", novedad.fecha_resolucion);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -60,8 +60,8 @@ namespace RRHH.Repository
                 parameters.Add("@dias", novedad.dias);
                 parameters.Add("@medio_recepcion", novedad.medio_recepcion);
                 parameters.Add("@observacion", novedad.observacion);
-                parameters.Add("@fecha_novedad", DateTime.Now);
-                parameters.Add("@fecha_resolucion", DateTime.Now);
+                parameters.Add("@fecha_novedad", novedad.fecha_novedad);
+                parameters.Add("@fecha_resolucion", novedad.fecha_resolucion);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 

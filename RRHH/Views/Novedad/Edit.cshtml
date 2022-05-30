@@ -31,6 +31,15 @@
                 </div>
             </div>
 
+             <div class="col bottom-buffer btns2" runat="server" id="divFechaNovedad">
+              <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                      <h5 class="card-title">Fecha Novedad</h5>
+                      <input type="text" id="txtSelectedFechaNovedad" name="fecha_novedad"  asp-for="fecha_novedad" readonly="readonly"/>
+                  </div>
+              </div>
+           </div>
+
            <div class="col bottom-buffer" id="divTipoNovedad">
              <div class="card" style="width: 18rem;">
                <div class="card-body">
@@ -40,6 +49,9 @@
               </div>
             </div>
            </div>
+
+          
+
 
             <div class="col bottom-buffer"  id="divTipoResolucion">
              <div class="card" style="width: 18rem;">
@@ -51,6 +63,15 @@
             </div>
            </div>
 
+           
+           <div class="col bottom-buffer btns2" runat="server" id="divFechaResolucion">
+              <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                      <h5 class="card-title">Fecha Resolución</h5>
+                      <input type="text" id="txtSelectedFechaResolucion" name="fecha_resolucion"  asp-for="fecha_resolucion" readonly="readonly"/>
+                  </div>
+              </div>
+           </div>
 
            </div>
 
@@ -148,7 +169,10 @@
 
 $(document).ready(function () {
 
-    var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_novedad_id));
+    var CodCategoria = @Html.Raw(Json.Serialize(Model.categoria_novedad_id));
+    var CodTipoResolucion = @Html.Raw(Json.Serialize(Model.tipo_resolucion_id));
+    var FechaNovedad = @Html.Raw(Json.Serialize(Model.fecha_novedad));
+    var FechaResolucion = @Html.Raw(Json.Serialize(Model.fecha_resolucion));
 
     ObtenerCategoriasNovedad();
     ObtenerTiposNovedad();
@@ -166,6 +190,13 @@ $(document).ready(function () {
               habilitar();
           }
          }
+
+
+         if (CodTipoResolucion >0) 
+            $("#divFechaResolucion").show();
+          else 
+            $("#divFechaResolucion").hide();
+
 
       habilitar_grabar();
 
@@ -188,14 +219,23 @@ $(document).ready(function () {
 
      //});
 
+
+        
+        $('#txtSelectedFechaNovedad').datepicker({format: 'dd/mm/yyyy' });
+        $('#txtSelectedFechaResolucion').datepicker({format: 'dd/mm/yyyy' });
+
+        if(FechaNovedad==null) $('#txtSelectedFechaNovedad').datepicker('setDate', "-0d");
+        if(FechaResolucion==null) $('#txtSelectedFechaResolucion').datepicker('setDate', "-0d");
+
    })
 
     function habilitar() {
 
       $("#divTipoNovedad").hide();
+      $("#divFechaNovedad").hide();
 
       $("#divTipoResolucion").hide();
-
+      $("#divFechaResolucion").hide();
 
       $("#divConcepto").hide();
 
@@ -207,6 +247,12 @@ $(document).ready(function () {
 
       $("#divObservacion").show();
 
+      if ($("#divTipoResolucion") >0) 
+         $("#divFechaResolucion").show();
+      else 
+         $("#divFechaResolucion").hide();
+
+
       return;   
     }
 
@@ -214,9 +260,11 @@ $(document).ready(function () {
    function blanquear() {
       $("#tipo_novedad_id").val(-1);
       $("#divTipoNovedad").hide();
+      $("#divFechaNovedad").hide();
 
       $("#tipo_resolucion_id").val(-1);
       $("#divTipoResolucion").hide();
+      $("#divFechaResolucion").hide();
 
       $("#concepto").val("");
       $("#divConcepto").hide();
@@ -236,9 +284,11 @@ $(document).ready(function () {
     function sanciones() {
       $("#tipo_novedad_id").val(-1);
       $("#divTipoNovedad").show();
+      $("#divFechaNovedad").show();
 
       $("#tipo_resolucion_id").val(-1);
       $("#divTipoResolucion").show();
+      $("#divFechaResolucion").show();
 
       $("#concepto").val("");
       $("#divConcepto").show();
@@ -259,8 +309,10 @@ $(document).ready(function () {
     function habilitar_sanciones() {
 
       $("#divTipoNovedad").show();
+      $("#divFechaNovedad").show();
 
       $("#divTipoResolucion").show();
+      $("#divFechaResolucion").show();
 
       $("#divConcepto").show();
 
@@ -269,6 +321,13 @@ $(document).ready(function () {
       $("#divMedioRecepcion").hide();
 
       $("#divObservacion").show();
+
+      if ($("#divTipoResolucion") >0) 
+         $("#divFechaResolucion").show();
+      else 
+         $("#divFechaResolucion").hide();
+
+
       return;   
     }
 
@@ -276,9 +335,11 @@ $(document).ready(function () {
     function felicitaciones() {
       $("#tipo_novedad_id").val(-1);
       $("#divTipoNovedad").hide();
+      $("#divFechaNovedad").show();
 
       $("#tipo_resolucion_id").val(-1);
       $("#divTipoResolucion").hide();
+      $("#divFechaResolucion").hide();
 
       $("#concepto").val("");
       $("#divConcepto").show();
@@ -293,14 +354,18 @@ $(document).ready(function () {
       $("#observacion").val("");
       $("#divObservacion").show();
 
+
+
       return;   
     }
 
      function habilitar_felicitaciones() {
 
       $("#divTipoNovedad").hide();
+      $("#divFechaNovedad").show();
 
       $("#divTipoResolucion").hide();
+      $("#divFechaResolucion").hide();
 
       $("#divConcepto").show();
 
@@ -309,6 +374,11 @@ $(document).ready(function () {
       $("#divMedioRecepcion").show();
 
       $("#divObservacion").show();
+
+      if ($("#divTipoResolucion") >0) 
+         $("#divFechaResolucion").show();
+      else 
+         $("#divFechaResolucion").hide();
 
       return;   
     }
@@ -321,7 +391,7 @@ $(document).ready(function () {
 
        if ($("#categoria_novedad_id").val() == 1) {
          if ($("#tipo_novedad_id").val() <=0) estado=false;
-         if ($("#tipo_resolucion_id").val() <=0) estado=false;
+         //if ($("#tipo_resolucion_id").val() <=0) estado=false;
        }
 
       
@@ -353,10 +423,24 @@ $(document).ready(function () {
     });
 
     $("#tipo_resolucion_id").change(function () {
+
+         if ($("#tipo_resolucion_id").val() >0) 
+            $("#divFechaResolucion").show();
+          else 
+            $("#divFechaResolucion").hide();
+
          habilitar_grabar();     
     });
 
     $("#observacion").change(function () {
+         habilitar_grabar();     
+    });
+
+    $("#fecha_novedad").change(function () {
+         habilitar_grabar();     
+    });
+
+    $("#fecha_resolucion").change(function () {
          habilitar_grabar();     
     });
 
@@ -438,6 +522,24 @@ $(document).ready(function () {
       });
     }
 
+     
+    $(function () {
+      $('#txtSelectedFechaNovedad').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
+
+      $(function () {
+      $('#txtSelectedFechaResolucion').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
 
 </script>
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace RRHH.Models
 {
@@ -23,7 +24,9 @@ namespace RRHH.Models
         public int? concepto { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? dias { get; set; }
+        [BindProperty, DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? fecha_novedad { get; set; }
+        [BindProperty, DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? fecha_resolucion { get; set; }
         public DateTime? fecha_alta { get; set; }
     }
