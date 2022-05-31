@@ -1,0 +1,16 @@
+﻿body {
+}
+
+.BarraCantidad {
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+}
+
+.bottom-buffer {
+    margin-bottom: 20px;
+}
+
+.chkBox {
+    margin-left: 20px;
+}

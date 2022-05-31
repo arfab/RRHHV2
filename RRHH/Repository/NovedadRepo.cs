@@ -27,7 +27,6 @@ namespace RRHH.Repository
                 parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id==-1)?null:novedad.tipo_resolucion_id);
                 parameters.Add("@concepto", novedad.concepto);
                 parameters.Add("@dias", novedad.dias);
-                parameters.Add("@medio_recepcion", novedad.medio_recepcion);
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", novedad.fecha_novedad);
                 parameters.Add("@fecha_resolucion", novedad.fecha_resolucion);
@@ -62,7 +61,6 @@ namespace RRHH.Repository
                 parameters.Add("@tipo_resolucion_id", novedad.tipo_resolucion_id);
                 parameters.Add("@concepto", novedad.concepto);
                 parameters.Add("@dias", novedad.dias);
-                parameters.Add("@medio_recepcion", novedad.medio_recepcion);
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", novedad.fecha_novedad);
                 parameters.Add("@fecha_resolucion", novedad.fecha_resolucion);

@@ -92,7 +92,7 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@nro_legajo", iNroLegajo);
 
-                return con.QuerySingle<Legajo>("spLegajoObtener", parameter, commandType: CommandType.StoredProcedure);
+                return con.QuerySingleOrDefault<Legajo>("spLegajoObtener", parameter, commandType: CommandType.StoredProcedure);
             }
 
         }

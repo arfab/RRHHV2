@@ -14,124 +14,90 @@
        
             <div class="row ">
                 <div class="col bottom-buffer">
-                <label asp-for="nro_legajo" class="control-label">Nro. Legajo</label>
-                <input asp-for="nro_legajo" type="number" class="form-control" />
-                <span class="alert-danger" asp-validation-for="nro_legajo"></span>
+                  <label asp-for="nro_legajo" class="control-label">Nro. Legajo</label>
+                  <input asp-for="nro_legajo" type="number" class="form-control" />
+                  <span class="alert-danger" asp-validation-for="nro_legajo"></span>
                 </div>
+                <div class="col bottom-buffer">
+                  <label asp-for="nombre" id="nombre" name="nombre" class="control-label"></label> <label asp-for="apellido" id="apellido" name="apellido" class="control-label"></label>
+                </div>
+
             </div>
 
             <div class="row">
               <div class="col bottom-buffer">
-                 <div class="card" style="width: 18rem;">
-                   <div class="card-body">
-                     <h5 class="card-title">Ubicación</h5>
+                     <label asp-for="ubicacion_id" class="control-label">Ubicación</label>
                      <select  class="form-control" id="ubicacion_id" asp-for="ubicacion_id" ></select>
                      <span class="alert-danger" asp-validation-for="ubicacion_id"></span>
-                   </div>
-                </div>
-            </div>
+              </div>
 
-            <div class="col bottom-buffer">
-                 <div class="card" style="width: 18rem;">
-                   <div class="card-body">
-                     <h5 class="card-title">Responsable</h5>
+              <div class="col bottom-buffer">
+                     <label asp-for="responsable_id" class="control-label">Responsable</label>
                      <select  class="form-control" id="responsable_id" asp-for="responsable_id" ></select>
                      <span class="alert-danger" asp-validation-for="responsable_id"></span>
-                   </div>
-                </div>
-            </div>
+              </div>
             </div>
 
-
-              <div class="row">
+            <div class="row">
               <div class="col bottom-buffer">
-                 <div class="card" style="width: 18rem;">
-                   <div class="card-body">
-                     <h5 class="card-title">Categoría Novedad</h5>
+                     <label asp-for="categoria_novedad_id" class="control-label">Categoría Novedad</label>
                      <select  class="form-control" id="categoria_novedad_id" asp-for="categoria_novedad_id" ></select>
                      <span class="alert-danger" asp-validation-for="categoria_novedad_id"></span>
-                   </div>
-                </div>
+
             </div>
 
-             <div class="col bottom-buffer btns2" runat="server" id="divFechaNovedad">
-              <div class="card" style="width: 18rem;">
-                  <div class="card-body">
-                      <h5 class="card-title">Fecha Novedad</h5>
-                      <input type="text" id="txtSelectedFechaNovedad" name="fecha_novedad"  asp-for="fecha_novedad" readonly="readonly"/>
-                  </div>
-              </div>
-           </div>
-
-           <div class="col bottom-buffer" id="divTipoNovedad">
-             <div class="card" style="width: 18rem;">
-               <div class="card-body">
-                 <h5 class="card-title">Tipo Novedad</h5>
+            <div class="col bottom-buffer" id="divTipoNovedad">
+                 <label asp-for="tipo_novedad_id" class="control-label">Tipo Novedad</label>
                  <select  class="form-control" id="tipo_novedad_id" asp-for="tipo_novedad_id" ></select>
                   <span class="alert-danger" asp-validation-for="tipo_novedad_id"></span>
               </div>
-            </div>
+
+             <div class="col bottom-buffer btns2" id="divFechaNovedad">
+                      <label asp-for="fecha_novedad" class="control-label">Fecha Novedad</label><br />
+                      <input type="text" id="txtSelectedFechaNovedad" name="fecha_novedad"  asp-for="fecha_novedad" readonly="readonly"/>
+
+             </div>
            </div>
 
-          
+           <div class="row">
+             
 
-
-            <div class="col bottom-buffer"  id="divTipoResolucion">
-             <div class="card" style="width: 18rem;">
-               <div class="card-body">
-                 <h5 class="card-title">Tipo Resolución</h5>
+              <div class="col bottom-buffer"  id="divTipoResolucion">
+                 <label asp-for="tipo_resolucion_id" class="control-label">Tipo Resolución</label>
                  <select  class="form-control" id="tipo_resolucion_id" asp-for="tipo_resolucion_id"  ></select>
                   <span class="alert-danger" asp-validation-for="tipo_resolucion_id"></span>
               </div>
-            </div>
-           </div>
 
            
-           <div class="col bottom-buffer btns2" runat="server" id="divFechaResolucion">
-              <div class="card" style="width: 18rem;">
-                  <div class="card-body">
-                      <h5 class="card-title">Fecha Resolución</h5>
+              <div class="col bottom-buffer btns2" runat="server" id="divFechaResolucion">
+                      <label asp-for="fecha_resolucion" class="control-label">Fecha Resolución</label><br />
                       <input type="text" id="txtSelectedFechaResolucion" name="fecha_resolucion"  asp-for="fecha_resolucion" readonly="readonly"/>
-                  </div>
-              </div>
-           </div>
-
+             </div>
            </div>
 
 
-             <div class="row "  id="divMedioRecepcion">
-                <div class="col bottom-buffer">
-                <label asp-for="medio_recepcion" class="control-label">Medio Recepción</label>
-                <input asp-for="medio_recepcion" class="form-control" id="medio_recepcion" />
-                 <span class="alert-danger" asp-validation-for="medio_recepcion"></span>
-                 </div>
-            </div>
-             <div class="row ">
-                <div class="col bottom-buffer"  id="divObservacion">
-                <label asp-for="observacion" class="control-label">Observación</label>
-                <input asp-for="observacion" class="form-control" id="observacion" />
-                 <span class="alert-danger" asp-validation-for="observacion"></span>
-                 </div>
-            </div>
-
-          
-
-             <div class="row ">
-                <div class="col bottom-buffer"  id="divConcepto">
+          <div class="row">
+             <div class="col bottom-buffer"  id="divConcepto">
                 <label asp-for="concepto" class="control-label">Concepto</label>
                 <input asp-for="concepto" type="number" class="form-control"  id="concepto"/>
                 <span class="alert-danger" asp-validation-for="concepto"></span>
-                </div>
             </div>
 
-              <div class="row ">
-                <div class="col bottom-buffer"  id="divDias">
+              <div class="col bottom-buffer"  id="divDias">
                 <label asp-for="dias" class="control-label">Días</label>
                 <input asp-for="dias" type="number" class="form-control" id="dias" />
                 <span class="alert-danger" asp-validation-for="dias"></span>
-                </div>
-            </div>
+              </div>
+           </div>
 
+           
+          <div class="row">
+             <div class="col bottom-buffer"  id="divObservacion">
+                <label asp-for="observacion" class="control-label">Observación</label>
+                <input asp-for="observacion" class="form-control" id="observacion" />
+                 <span class="alert-danger" asp-validation-for="observacion"></span>
+             </div>
+          </div>
 
            <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
@@ -196,6 +162,11 @@ $(document).ready(function () {
     var CodTipoResolucion = @Html.Raw(Json.Serialize(Model.tipo_resolucion_id));
     var FechaNovedad = @Html.Raw(Json.Serialize(Model.fecha_novedad));
     var FechaResolucion = @Html.Raw(Json.Serialize(Model.fecha_resolucion));
+    var Apellido = @Html.Raw(Json.Serialize(Model.apellido));
+    var Nombre = @Html.Raw(Json.Serialize(Model.nombre));
+    
+    $("#apellido").text('');
+    $("#nombre").text('');
 
     ObtenerUbicaciones();
     ObtenerResponsables();
@@ -230,6 +201,16 @@ $(document).ready(function () {
         $("#nro_legajo").val('');
     }
 
+
+    if (Apellido != null) 
+    {
+        $("#apellido").text(Apellido);
+    }
+
+     if (Nombre != null) 
+    {
+        $("#nombre").text(Nombre);
+    }
 
      // $('#txtSelectedDate').datepicker({format: 'dd/mm/yyyy' });
 
@@ -267,9 +248,6 @@ $(document).ready(function () {
       $("#divDias").hide();
 
 
-      $("#divMedioRecepcion").hide();
-
-
       $("#divObservacion").show();
 
       if ($("#divTipoResolucion") >0) 
@@ -297,8 +275,6 @@ $(document).ready(function () {
       $("#dias").val("");
       $("#divDias").hide();
 
-      $("#medio_recepcion").val("");
-      $("#divMedioRecepcion").hide();
 
       $("#observacion").val("");
       $("#divObservacion").show();
@@ -321,8 +297,6 @@ $(document).ready(function () {
       $("#dias").val("");
       $("#divDias").show();
 
-      $("#medio_recepcion").val("");
-      $("#divMedioRecepcion").hide();
 
       $("#observacion").val("");
       $("#divObservacion").show();
@@ -343,7 +317,6 @@ $(document).ready(function () {
 
       $("#divDias").show();
 
-      $("#divMedioRecepcion").hide();
 
       $("#divObservacion").show();
 
@@ -359,7 +332,7 @@ $(document).ready(function () {
 
     function felicitaciones() {
       $("#tipo_novedad_id").val(-1);
-      $("#divTipoNovedad").hide();
+      $("#divTipoNovedad").show();
       $("#divFechaNovedad").show();
 
       $("#tipo_resolucion_id").val(-1);
@@ -372,9 +345,6 @@ $(document).ready(function () {
       $("#dias").val("");
       $("#divDias").hide();
 
-      $("#medio_recepcion").val("");
-      $("#divMedioRecepcion").show();
-
       
       $("#observacion").val("");
       $("#divObservacion").show();
@@ -386,7 +356,7 @@ $(document).ready(function () {
 
      function habilitar_felicitaciones() {
 
-      $("#divTipoNovedad").hide();
+      $("#divTipoNovedad").show();
       $("#divFechaNovedad").show();
 
       $("#divTipoResolucion").hide();
@@ -396,7 +366,6 @@ $(document).ready(function () {
 
       $("#divDias").hide();
 
-      $("#divMedioRecepcion").show();
 
       $("#divObservacion").show();
 
@@ -409,15 +378,20 @@ $(document).ready(function () {
     }
 
     function habilitar_grabar() {
-        var estado = true;
+       var estado = true;
+     
+
        if ($("#nro_legajo").val() <=0) estado=false;
+       if ($("#apellido").text() == '') estado=false;
+       if ($("#nombre").text() == '') estado=false;
        if ($("#categoria_novedad_id").val() <=0) estado=false;
        if ($("#observacion").val() =='') estado=false;
+       if ($("#tipo_novedad_id").val() <=0) estado=false;
 
-       if ($("#categoria_novedad_id").val() == 1) {
-         if ($("#tipo_novedad_id").val() <=0) estado=false;
-         //if ($("#tipo_resolucion_id").val() <=0) estado=false;
-       }
+       //if ($("#categoria_novedad_id").val() == 1) {
+       //  if ($("#tipo_novedad_id").val() <=0) estado=false;
+       //  if ($("#tipo_resolucion_id").val() <=0) estado=false;
+       //}
 
       
 
@@ -428,7 +402,8 @@ $(document).ready(function () {
     }
 
      $("#nro_legajo").change(function () {
-         habilitar_grabar();     
+         ObtenerLegajo($("#nro_legajo").val())
+         //habilitar_grabar();     
     });
 
 
@@ -480,10 +455,11 @@ $(document).ready(function () {
     });
 
   function mostrarModalSalida(){
-    if ($("#btnGrabar").is(":visible"))
-      $("#mdSalir").modal('show');
-    else 
-      window.location.href = "/Novedad/Index";
+       $("#mdSalir").modal('show');
+    //if ($("#btnGrabar").is(":visible"))
+    //  $("#mdSalir").modal('show');
+    //else 
+    //  window.location.href = "/Novedad/Index";
   }
 
   function mostrarModalGrabar(){
@@ -600,7 +576,25 @@ $(document).ready(function () {
             error: function () {
             }
       });
+    }
 
+    var ObtenerLegajo = function (nro_legajo) {
+         $.ajax({
+            url: '@Url.Action("ObtenerLegajo","Novedad")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                nro_legajo: nro_legajo,
+            },
+            success: function (data) {
+                $('#apellido').text(data.apellido);
+                $('#nombre').text(data.nombre);
+                habilitar_grabar(); 
+            },
+            error: function () {
+            }
+      });
     }
      
     $(function () {

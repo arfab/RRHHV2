@@ -13,7 +13,7 @@ namespace RRHH.Controllers
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public IActionResult Index()
+        public IActionResult Index(int nro_legajo)
         {
 
 
@@ -29,14 +29,17 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
+                DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); 
+                DateTime fechaHasta = DateTime.Now;
+
                 ViewData["CategoriaNovedadActual"] = -1;
                 ViewData["TipoNovedadActual"] = -1;
                 ViewData["TipoResolucionActual"] = -1;
-                ViewData["LegajoActual"] = -1;
-                ViewData["FechaNovedadDesdeActual"] = DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day;
-                ViewData["FechaNovedadHastaActual"] = DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day;
+                ViewData["LegajoActual"] = nro_legajo;
+                ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2,'0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
+                ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
 
-                return View(novedadRepo.ObtenerTodos(-1 , -1, -1 ,-1,DateTime.Now , DateTime.Now));
+                return View(novedadRepo.ObtenerTodos(-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta));
             }
 
             return View();
@@ -63,8 +66,8 @@ namespace RRHH.Controllers
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
                 ViewData["LegajoActual"] = nro_legajo;
-                ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Year + "-" + fecha_novedad_desde.Month + "-" + fecha_novedad_desde.Day;
-                ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Year + "-" + fecha_novedad_hasta.Month + "-" + fecha_novedad_hasta.Day; ;
+                ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
+                ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year; 
 
                 return View(novedadRepo.ObtenerTodos((categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0)?-1:tipo_novedad_id, (tipo_resolucion_id == 0)?-1:tipo_resolucion_id, (nro_legajo == 0)?-1:nro_legajo,fecha_novedad_desde,fecha_novedad_hasta));
             }
@@ -244,7 +247,8 @@ namespace RRHH.Controllers
 
                 DynamicParameters parameters = new DynamicParameters();
 
-                l = con.Query<Models.Ubicacion>("select * from ubicacion order by descripcion", parameters).ToList();
+               // l = con.Query<Models.Ubicacion>("select * from ubicacion order by descripcion", parameters).ToList();
+                l = con.Query<Models.Ubicacion>("spUbicacionObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
 
@@ -267,7 +271,7 @@ namespace RRHH.Controllers
 
                 DynamicParameters parameters = new DynamicParameters();
 
-                l = con.Query<Models.Responsable>("select * from responsable order by id", parameters).ToList();
+                l = con.Query<Models.Responsable>("spResponsableObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
 
@@ -275,6 +279,28 @@ namespace RRHH.Controllers
 
             return Json(new SelectList(l, "id", "apellido"));
         }
+
+        [HttpGet]
+        public JsonResult ObtenerLegajo(int nro_legajo)
+        {
+            ILegajoRepo legajoRepo;
+
+            legajoRepo = new LegajoRepo();
+
+            Legajo legajo = new Legajo();
+
+            legajo= legajoRepo.Obtener(nro_legajo);
+
+            if (legajo==null)
+            {
+                legajo = new Legajo();
+                legajo.apellido = "";
+                legajo.nombre = "";
+            }
+
+            return Json(legajo);
+        }
+
 
     }
 }
