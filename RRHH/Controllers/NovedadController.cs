@@ -159,6 +159,8 @@ namespace RRHH.Controllers
                   return;
             }
 
+       
+
         [HttpPost]
         public void ExportarPDF(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta)
         {
@@ -184,7 +186,7 @@ namespace RRHH.Controllers
                 Document document = new iTextSharp.text.Document(PageSize.A4, 5f, 5f, 10f, 10f);
                 FileStream fs = new FileStream(filepath, FileMode.Create);
 
-                PdfWriter writer =  PdfWriter.GetInstance(document, fs);
+                PdfWriter writer = PdfWriter.GetInstance(document, fs);
                 document.Open();
 
                 Font font1 = FontFactory.GetFont(FontFactory.COURIER_BOLD, 10);
