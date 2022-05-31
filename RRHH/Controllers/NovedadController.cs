@@ -125,8 +125,8 @@ namespace RRHH.Controllers
 
             ViewData["MODO"] = modo;
 
-            //if (ModelState.IsValid)
-            //{
+            if (valida(novedad))
+            {
 
 
                 novedadRepo = new NovedadRepo();
@@ -146,7 +146,7 @@ namespace RRHH.Controllers
                     ViewBag.Message = sret;
                 }
 
-            //}
+            }
             return View(novedad);
         }
 
@@ -301,6 +301,28 @@ namespace RRHH.Controllers
             return Json(legajo);
         }
 
+
+        public Boolean valida(Novedad novedad)
+        {
+
+            if (novedad.nro_legajo == null) return false;
+
+            LegajoRepo legajoRepo;
+
+            legajoRepo = new LegajoRepo();
+
+            if(legajoRepo.Obtener(novedad.nro_legajo.Value)==null) return false;
+            if (novedad.categoria_novedad_id <= 0) return false;
+
+            if (novedad.tipo_novedad_id <= 0) return false;
+            if (novedad.observacion == null) return false;
+            if (novedad.observacion.Trim()=="") return false;
+            if (novedad.responsable_id <= 0) return false;
+            if (novedad.ubicacion_id < 0) return false;
+
+            return true;
+
+        }
 
     }
 }

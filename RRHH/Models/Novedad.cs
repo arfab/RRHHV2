@@ -11,7 +11,7 @@ namespace RRHH.Models
         public int? nro_legajo { get; set; }
         public string? apellido { get; set; }
         public string? nombre { get; set; }
-        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        [Range(0, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? ubicacion_id { get; set; }
         public string? ubicacion { get; set; }
 
@@ -29,7 +29,7 @@ namespace RRHH.Models
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? tipo_resolucion_id { get; set; }
         public string? tipo_resolucion { get; set; }
-        public string? medio_recepcion { get; set; }
+        [Required(ErrorMessage = "El campo es requerido")]
         public string? observacion { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? concepto { get; set; }
