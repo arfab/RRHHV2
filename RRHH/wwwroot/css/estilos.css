@@ -14,3 +14,15 @@
 .chkBox {
     margin-left: 20px;
 }
+
+/* Modify the background color */
+.navbar-custom {
+    background-color: #c8c4c4;
+}
+
+/* Modify brand and text color */
+
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+  color: black;
+ }
