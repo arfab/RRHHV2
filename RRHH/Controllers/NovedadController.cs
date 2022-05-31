@@ -5,13 +5,23 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RRHH.Repository;
-
+using ClosedXML.Excel;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace RRHH.Controllers
 {
     public class NovedadController : Controller
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
+
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public NovedadController(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
+
 
         public IActionResult Index(int nro_legajo)
         {
@@ -75,6 +85,187 @@ namespace RRHH.Controllers
             return View();
 
 
+        }
+
+        [HttpPost]
+        public void  ExportarExcel(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta)
+        {
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return ;
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            if (perfil_id == 1)
+            {
+                INovedadRepo novedadRepo;
+
+                novedadRepo = new NovedadRepo();
+
+               
+                IEnumerable <Novedad> l= novedadRepo.ObtenerTodos((categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta);
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Novedades");
+                    
+                    var currentRow = 1;
+                    for (int i = 1; i <= 11; i++)
+                    {
+                        worksheet.Cell(1, i).Style.Font.SetBold();
+                    }
+                    worksheet.Cell(currentRow, 1).Value = "Legajo";
+                    worksheet.Cell(currentRow, 2).Value = "Apellido";
+                    worksheet.Cell(currentRow, 3).Value = "Nombre";
+                    worksheet.Cell(currentRow, 4).Value = "Ubicacion";
+                    worksheet.Cell(currentRow, 5).Value = "Responsable";
+                    worksheet.Cell(currentRow, 6).Value = "Fecha Novedad";
+                    worksheet.Cell(currentRow, 7).Value = "Categoría Novedad";
+                    worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
+                    worksheet.Cell(currentRow, 9).Value = "Fecha Resolución";
+                    worksheet.Cell(currentRow, 10).Value = "Tipo Resolución";
+                    worksheet.Cell(currentRow, 11).Value = "Observaciones";
+
+                    foreach (var item in l)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
+                        worksheet.Cell(currentRow, 2).Value = item.apellido;
+                        worksheet.Cell(currentRow, 3).Value = item.nombre;
+                        worksheet.Cell(currentRow, 4).Value = item.ubicacion;
+                        worksheet.Cell(currentRow, 5).Value = item.responsable;
+                        worksheet.Cell(currentRow, 6).Value = item.fecha_novedad;
+                        worksheet.Cell(currentRow, 7).Value = item.categoria_novedad;
+                        worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
+                        worksheet.Cell(currentRow, 9).Value = item.fecha_resolucion;
+                        worksheet.Cell(currentRow, 10).Value = item.tipo_resolucion;
+                        worksheet.Cell(currentRow, 11).Value = item.observacion;
+
+                    }
+
+                    worksheet.Columns().AdjustToContents();
+
+                    using var stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    Response.Clear();
+                    Response.Headers.Add("content-disposition", "attachment;filename=Novedades.xls");
+                    Response.ContentType = "application/xls";
+                    Response.Body.WriteAsync(content);
+                    Response.Body.Flush();
+                }
+            }
+
+
+                  return;
+            }
+
+        [HttpPost]
+        public void ExportarPDF(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta)
+        {
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return;
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            string webRootPath = _webHostEnvironment.WebRootPath;
+            string contentRootPath = _webHostEnvironment.ContentRootPath;
+
+
+            if (perfil_id == 1)
+            {
+                INovedadRepo novedadRepo;
+
+                novedadRepo = new NovedadRepo();
+
+                int pdfRowIndex = 1;
+                string filename = "Novedades-" + DateTime.Now.ToString("dd-MM-yyyy");
+                string filepath = Path.Combine(webRootPath, "data") + "\\" + filename + ".pdf";
+                Document document = new iTextSharp.text.Document(PageSize.A4, 5f, 5f, 10f, 10f);
+                FileStream fs = new FileStream(filepath, FileMode.Create);
+
+                PdfWriter writer =  PdfWriter.GetInstance(document, fs);
+                document.Open();
+
+                Font font1 = FontFactory.GetFont(FontFactory.COURIER_BOLD, 10);
+                Font font2 = FontFactory.GetFont(FontFactory.COURIER, 8);
+
+                float[] columnDefinitionSize = { 2F, 5F, 2F, 5F };
+                PdfPTable table;
+                PdfPCell cell;
+
+                table = new PdfPTable(columnDefinitionSize)
+                {
+                    WidthPercentage = 100
+                };
+
+                cell = new PdfPCell
+                {
+                    BackgroundColor = new BaseColor(0xC0, 0xC0, 0xC0)
+                };
+
+                IEnumerable<Novedad> l = novedadRepo.ObtenerTodos((categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta);
+
+
+                table.AddCell(new Phrase("Legajo", font1));
+                table.AddCell(new Phrase("Apellido", font1));
+                table.AddCell(new Phrase("Nombre", font1));
+                table.AddCell(new Phrase("Ubicacion", font1));
+                table.AddCell(new Phrase("Responsable", font1));
+                table.AddCell(new Phrase("Fecha Novedad", font1));
+                table.AddCell(new Phrase("Categoría Novedad", font1));
+                table.AddCell(new Phrase("Tipo Novedad", font1));
+                table.AddCell(new Phrase("Fecha Resolución", font1));
+                table.AddCell(new Phrase("Tipo Resolución", font1));
+                table.AddCell(new Phrase("Observaciones", font1));
+                table.HeaderRows = 1;
+
+                foreach (var item in l)
+                {
+                    table.AddCell(new Phrase(item.nro_legajo.ToString(), font2));
+                    table.AddCell(new Phrase(item.apellido, font2));
+                    table.AddCell(new Phrase(item.nombre, font2));
+                    table.AddCell(new Phrase(item.ubicacion, font2));
+                    table.AddCell(new Phrase(item.responsable, font2));
+                    table.AddCell(new Phrase(item.fecha_novedad.ToString(), font2));
+                    table.AddCell(new Phrase(item.categoria_novedad, font2));
+                    table.AddCell(new Phrase(item.tipo_novedad, font2));
+                    table.AddCell(new Phrase(item.fecha_resolucion.ToString(), font2));
+                    table.AddCell(new Phrase(item.tipo_resolucion, font2));
+                    table.AddCell(new Phrase(item.observacion, font2));
+
+                    pdfRowIndex++;
+
+                }
+
+                document.Add(table);
+                document.Close();
+                document.CloseDocument();
+                document.Dispose();
+                writer.Close();
+                writer.Dispose();
+                fs.Close();
+                fs.Dispose();
+
+                FileStream sourceFile = new FileStream(filepath, FileMode.Open);
+                float fileSize = 0;
+                fileSize = sourceFile.Length;
+                byte[] getContent = new byte[Convert.ToInt32(Math.Truncate(fileSize))];
+                sourceFile.Read(getContent, 0, Convert.ToInt32(sourceFile.Length));
+                sourceFile.Close();
+                Response.Clear();
+                Response.Headers.Clear();
+                Response.ContentType = "application/pdf";
+                Response.Headers.Add("Content-Length", getContent.Length.ToString());
+                Response.Headers.Add("Content-Disposition", "attachment; filename=" + filename + ".pdf;");
+                Response.Body.WriteAsync(getContent);
+                Response.Body.Flush();
+
+
+            }
+
+
+            return;
         }
 
         [HttpGet]
