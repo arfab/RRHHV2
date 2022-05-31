@@ -26,47 +26,50 @@
        <form asp-controller="Usuario" asp-action="Login" method="post" >
       
 
-                 <div class="row">
+               
+
+                <div class="container" style="margin:auto; width=300px;" >
+                      <div class="row">
                    <div class="col">
-                     <div><img  class="img-fluid" style="margin-top:20px;margin-bottom:10px;" src="/img/logo_mtg.png" ></div>
+                     <div><img   style="margin-top:10px;margin-bottom:5px;" src="/img/logo_mtg2.png" ></div>
                    </div>
                  </div>
          
-               @* 
-                 <div class="row" style="margin:auto; width=300px;">
+             
+                 <div class="row" style="width=300px;">
                     <div class="col">
-                      <h1 class="title-light align-center " style="color:grey;">Ingrese al Sistema</h1>
+                      <h1 class="title-light align-center " style="color:black;">Ingrese al Sistema</h1>
                     </div>
-                 </div>       *@           
+                 </div>                
 
-
-                <div class="container" style="margin:auto; width=300px;" >
                  <div class="row" >
                         <div class="col justify-content-center ">
 
                             <div class="row"  style="margin-top:20px;margin-bottom:20px;" >
-                                <div class="col-3"></div>
-                                <div class="col-6" >
+                                <div class="col-4"></div>
+                                <div class="col-4" >
                                     <input asp-for="UsuarioID" name="UsuarioID" class="form-control" placeholder="Nombre de Usuario" required="" autofocus=""/>
                                 </div>
-                                <div class="col-3"></div>
+                                <div class="col-4"></div>
                             </div>
                             <div class="row" style="margin-bottom:20px;">
-                                <div class="col-3"></div>
-								 <div class="col-6"><input type="password" asp-for="clave" name="clave" class="form-control" TextMode="Password" placeholder="Contraseña" required=""/></div>
-                                 <div class="col-3"></div>
+                                <div class="col-4"></div>
+								 <div class="col-4"><input type="password" asp-for="clave" name="clave" class="form-control" TextMode="Password" placeholder="Contraseña" required=""/></div>
+                                 <div class="col-4"></div>
                             </div>
                             <div class="row">
-                                <div class="col-3"></div>
-                                <div class="col-6">
-								<button type="submit"  value="Insert"  class="btn btn-lg btn-outline-success " >INGRESAR</button>
+                                <div class="col-4"></div>
+                                <div class="col-4">
+								<button type="submit"  value="Insert"  class="btn btn-lg btn-dark " >INGRESAR</button>
                                 </div>
-                                <div class="col-3"></div>
+                                <div class="col-4"></div>
                             </div>
 
                         </div>
                     </div>
                    </div>
+
+
 
                   <p class="mt-5 mb-3 text-muted">©2022</p>
 
