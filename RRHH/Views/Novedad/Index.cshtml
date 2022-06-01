@@ -61,8 +61,8 @@
                     <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]">INGRESAR NOVEDAD</a>
 
                       <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
-                    <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
-
+@*                    <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
+*@
 
                 </div>
             </div>
@@ -131,7 +131,11 @@
                           @item.tipo_novedad
                      </td>
                       <td>
-                          @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                          @{
+                             if (item.fecha_resolucion!=null) {
+                                    @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                             }
+                            }
                      </td>
                      <td>
                           @item.tipo_resolucion

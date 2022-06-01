@@ -25,12 +25,12 @@ namespace RRHH.Repository
                 parameters.Add("@responsable_id", novedad.responsable_id);
                 parameters.Add("@categoria_novedad_id", novedad.categoria_novedad_id);
                 parameters.Add("@tipo_novedad_id", (novedad.tipo_novedad_id==-1)?null: novedad.tipo_novedad_id);
-                parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id==-1)?null:novedad.tipo_resolucion_id);
+                parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id > 0) ? novedad.tipo_resolucion_id : null);
                 parameters.Add("@concepto", novedad.concepto);
                 parameters.Add("@dias", novedad.dias);
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", novedad.fecha_novedad);
-                parameters.Add("@fecha_resolucion", novedad.fecha_resolucion);
+                parameters.Add("@fecha_resolucion", (novedad.tipo_resolucion_id > 0) ? novedad.fecha_resolucion : null);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -60,12 +60,12 @@ namespace RRHH.Repository
                 parameters.Add("@responsable_id", novedad.responsable_id);
                 parameters.Add("@categoria_novedad_id", novedad.categoria_novedad_id);
                 parameters.Add("@tipo_novedad_id", novedad.tipo_novedad_id);
-                parameters.Add("@tipo_resolucion_id", novedad.tipo_resolucion_id);
+                parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id > 0)?novedad.tipo_resolucion_id:null);
                 parameters.Add("@concepto", novedad.concepto);
                 parameters.Add("@dias", novedad.dias);
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", novedad.fecha_novedad);
-                parameters.Add("@fecha_resolucion", novedad.fecha_resolucion);
+                parameters.Add("@fecha_resolucion", (novedad.tipo_resolucion_id>0)?novedad.fecha_resolucion:null);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 

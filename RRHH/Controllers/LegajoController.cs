@@ -142,7 +142,7 @@ namespace RRHH.Controllers
 
                 DynamicParameters parameters = new DynamicParameters();
 
-                l = con.Query<Models.Sector>("select * from sector order by id", parameters).ToList();
+                l = con.Query<Models.Sector>("spSectorObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
 
