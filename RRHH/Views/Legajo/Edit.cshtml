@@ -14,192 +14,185 @@
        
             <div class="row ">
                 <div class="col bottom-buffer">
-                <label asp-for="nro_legajo" class="control-label">Nro. Legajo</label>
-                <input asp-for="nro_legajo" type="number" class="form-control" />
-                <span class="alert-danger" asp-validation-for="nro_legajo"></span>
+                   <label asp-for="nro_legajo" class="control-label">Nro. Legajo</label>
+                   <input asp-for="nro_legajo" type="number" class="form-control"  />
+                   <span class="alert-danger" asp-validation-for="nro_legajo"></span>
                 </div>
-            </div>
+           </div>
 
-             <div class="row ">
-                <div class="col bottom-buffer">
-                <label asp-for="nombre" class="control-label">Nombre</label>
-                <input asp-for="nombre" class="form-control" />
-                 <span class="alert-danger" asp-validation-for="nombre"></span>
-                 </div>
-            </div>
-             <div class="row ">
-                <div class="col bottom-buffer">
-                <label asp-for="apellido" class="control-label">Apellido</label>
-                <input asp-for="apellido" class="form-control" />
-                 <span class="alert-danger" asp-validation-for="apellido"></span>
-                 </div>
-            </div>
+                 <div class="row ">
+                    <div class="col bottom-buffer">
+                    <label asp-for="nombre" class="control-label">Nombre</label>
+                    <input asp-for="nombre" class="form-control" />
+                     <span class="alert-danger" asp-validation-for="nombre"></span>
+                     </div>
+                </div>
+                 <div class="row ">
+                    <div class="col bottom-buffer">
+                    <label asp-for="apellido" class="control-label">Apellido</label>
+                    <input asp-for="apellido" class="form-control" />
+                     <span class="alert-danger" asp-validation-for="apellido"></span>
+                     </div>
+                </div>
 
-            <div class="row">
-              <div class="col bottom-buffer">
-                 <div class="card" style="width: 18rem;">
-                   <div class="card-body">
-                     <h5 class="card-title">Sector</h5>
+                <div class="row">
+                  <div class="col bottom-buffer">
+                     <label asp-for="sector_id" class="control-label">Sector</label>
                      <select  class="form-control" id="sector_id" asp-for="sector_id" ></select>
                      <span class="alert-danger" asp-validation-for="sector_id"></span>
-                   </div>
-                </div>
-            </div>
+                  </div>
 
-           <div class="col bottom-buffer">
-             <div class="card" style="width: 18rem;">
-               <div class="card-body">
-                 <h5 class="card-title">Categoría</h5>
-                 <select  class="form-control" id="categoria_id" asp-for="categoria_id" ></select>
-                  <span class="alert-danger" asp-validation-for="categoria_id"></span>
-              </div>
-            </div>
-           </div>
-           </div>
+                  <div class="col bottom-buffer">
+                     <label asp-for="categoria_id" class="control-label">Categoría</label>
+                     <select  class="form-control" id="categoria_id" asp-for="categoria_id" ></select>
+                      <span class="alert-danger" asp-validation-for="categoria_id"></span>
 
-           <div class="row " id="divInsertar">
-                <div class="col bottom-buffer">
-                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
-                     <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success"   >Grabar</button>
+                 </div>
+               </div>
+
+               <div class="row " id="divInsertar">
+                    <div class="col bottom-buffer">
+                          <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+                         <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success"   >Grabar</button>
+                    </div>
                 </div>
-            </div>
    
-</div>
+    </div>
 
 
 
 
-  <!-- Modal Grabar -->
-<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" >Legajo</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Confirma los cambios hechos?
-      </div>
-      <div class="modal-footer">
-          <button type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success" >SI</button>
-          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      <!-- Modal Grabar -->
+    <div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" >Legajo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Confirma los cambios hechos?
+          </div>
+          <div class="modal-footer">
+              <button type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success" >SI</button>
+              <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
 
 
-<!-- Modal Salir -->
-<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" >Legajo</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Se perderán los cambios efectuados. Está seguro?
-      </div>
-      <div class="modal-footer">
-        <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
-        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+    <!-- Modal Salir -->
+    <div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" >Legajo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Se perderán los cambios efectuados. Está seguro?
+          </div>
+          <div class="modal-footer">
+            <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
+            <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-</div>
- </form>
+    </div>
+     </form>
 
 
- <script type="text/javascript">
+     <script type="text/javascript">
 
 
-$(document).ready(function () {
+    $(document).ready(function () {
 
-     
+         
 
-       ObtenerSectores();
-       ObtenerCategorias();
+           ObtenerSectores();
+           ObtenerCategorias();
 
-     // $('#txtSelectedDate').datepicker({format: 'dd/mm/yyyy' });
-
-
-     // $(function () {
-     // $('#txtSelectedDate').datepicker({
-     //   changeMonth: true,
-     //   changeYear: true,
-     //   format: "dd/mm/yyyy",
-     //   language: "es"
-     //   });
-
-     //});
-
-   })
-
-  function mostrarModalSalida(){
-    if ($("#btnGrabar").is(":visible"))
-      $("#mdSalir").modal('show');
-    else 
-      window.location.href = "/Legajo/Index";
-  }
-
-  function mostrarModalGrabar(){
-    $("#mdGrabar").modal('show');
-  }
+         // $('#txtSelectedDate').datepicker({format: 'dd/mm/yyyy' });
 
 
-  var ObtenerSectores = function () {
-         var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
-         $.ajax({
-            url: '@Url.Action("ObtenerSectores","Legajo")',
-            type: 'GET',
-            data: {
-            },
-            success: function (data) {
-                $('#sector_id').find('option').remove()
-                $(data).each(
-                    function (index, item) {   
-                        if (item.value==CodSector)
-                          $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                        else 
-                          $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
-                    });
-            },
-            error: function () {
-            }
-      });
-    }
+         // $(function () {
+         // $('#txtSelectedDate').datepicker({
+         //   changeMonth: true,
+         //   changeYear: true,
+         //   format: "dd/mm/yyyy",
+         //   language: "es"
+         //   });
 
-  var ObtenerCategorias = function () {
-         var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_id));
-         $.ajax({
-            url: '@Url.Action("ObtenerCategorias","Legajo")',
-            type: 'GET',
-            data: {
-            },
-            success: function (data) {
-                $('#categoria_id').find('option').remove()
-                $(data).each(
-                    function (index, item) {            
-                        if (item.value==CodCategoria)
-                          $('#categoria_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                        else 
-                          $('#categoria_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
-                    });
-            },
-            error: function () {
-            }
-      });
-    }
-</script>
+         //});
+
+       })
+
+      function mostrarModalSalida(){
+        if ($("#btnGrabar").is(":visible"))
+          $("#mdSalir").modal('show');
+        else 
+          window.location.href = "/Legajo/Index";
+      }
+
+      function mostrarModalGrabar(){
+        $("#mdGrabar").modal('show');
+      }
 
 
-@if (ViewBag.Message != null)
-{
-    <script type="text/javascript">
-            window.onload = function () {
-                alert("@ViewBag.Message");
-            };
+      var ObtenerSectores = function () {
+             var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
+             $.ajax({
+                url: '@Url.Action("ObtenerSectores","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodSector)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+      var ObtenerCategorias = function () {
+             var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_id));
+             $.ajax({
+                url: '@Url.Action("ObtenerCategorias","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#categoria_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodCategoria)
+                              $('#categoria_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#categoria_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
     </script>
+
+
+    @if (ViewBag.Message != null)
+{
+        <script type="text/javascript">
+                window.onload = function () {
+                    alert("@ViewBag.Message");
+                };
+        </script>
 }
