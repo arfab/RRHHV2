@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RRHH.Repository;
 using ClosedXML.Excel;
-
+using SelectPdf;
 
 namespace RRHH.Controllers
 {
@@ -112,13 +112,14 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 2).Value = "Apellido";
                     worksheet.Cell(currentRow, 3).Value = "Nombre";
                     worksheet.Cell(currentRow, 4).Value = "Ubicacion";
-                    worksheet.Cell(currentRow, 5).Value = "Responsable";
-                    worksheet.Cell(currentRow, 6).Value = "Fecha Novedad";
-                    worksheet.Cell(currentRow, 7).Value = "Categoría Novedad";
-                    worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
-                    worksheet.Cell(currentRow, 9).Value = "Fecha Resolución";
-                    worksheet.Cell(currentRow, 10).Value = "Tipo Resolución";
-                    worksheet.Cell(currentRow, 11).Value = "Observaciones";
+                    worksheet.Cell(currentRow, 5).Value = "Sector";
+                    worksheet.Cell(currentRow, 6).Value = "Responsable";
+                    worksheet.Cell(currentRow, 7).Value = "Fecha Novedad";
+                    worksheet.Cell(currentRow, 8).Value = "Categoría Novedad";
+                    worksheet.Cell(currentRow, 9).Value = "Tipo Novedad";
+                    worksheet.Cell(currentRow, 10).Value = "Fecha Resolución";
+                    worksheet.Cell(currentRow, 11).Value = "Tipo Resolución";
+                    worksheet.Cell(currentRow, 12).Value = "Observaciones";
 
                     foreach (var item in l)
                     {
@@ -127,13 +128,14 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 2).Value = item.apellido;
                         worksheet.Cell(currentRow, 3).Value = item.nombre;
                         worksheet.Cell(currentRow, 4).Value = item.ubicacion;
-                        worksheet.Cell(currentRow, 5).Value = item.responsable;
-                        worksheet.Cell(currentRow, 6).Value = item.fecha_novedad;
-                        worksheet.Cell(currentRow, 7).Value = item.categoria_novedad;
-                        worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
-                        worksheet.Cell(currentRow, 9).Value = item.fecha_resolucion;
-                        worksheet.Cell(currentRow, 10).Value = item.tipo_resolucion;
-                        worksheet.Cell(currentRow, 11).Value = item.observacion;
+                        worksheet.Cell(currentRow, 5).Value = item.sector;
+                        worksheet.Cell(currentRow, 6).Value = item.responsable;
+                        worksheet.Cell(currentRow, 7).Value = item.fecha_novedad;
+                        worksheet.Cell(currentRow, 8).Value = item.categoria_novedad;
+                        worksheet.Cell(currentRow, 9).Value = item.tipo_novedad;
+                        worksheet.Cell(currentRow, 10).Value = item.fecha_resolucion;
+                        worksheet.Cell(currentRow, 11).Value = item.tipo_resolucion;
+                        worksheet.Cell(currentRow, 12).Value = item.observacion;
 
                     }
 
@@ -154,116 +156,126 @@ namespace RRHH.Controllers
                   return;
             }
 
+
+
+        [HttpPost]
+        public IActionResult ExportarPDF(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        {
+
+            string html = @"<html>
+                               <body>
+                                 <table>
+                                  <thead>
+                                     <tr>
+                                       <th>Nro. Legajo</th>
+                                       <th>Apellido</th>
+                                       <th>Nombre</th>
+                                       <th>Ubicacion</th>
+                                       <th>Sector</th>
+                                       <th>Responsable</th>
+                                       <th>Fecha Novedad</th>
+                                       <th>Categoría Novedad</th>
+                                       <th>Tipo Novedad</th>
+                                       <th>Fecha Resolución</th>
+                                       <th>Tipo Resolución</th>
+                                       <th>Observaciones</th>
+                                     </tr>
+                                   </thead> ";
+                              
+
+            //string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            //if (usuario_id == null) return;
+
+            //int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
        
 
-        //[HttpPost]
-        //public void ExportarPDF(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta)
-        //{
-        //    string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            //if (perfil_id == 1)
+            //{
+                INovedadRepo novedadRepo;
 
-        //    if (usuario_id == null) return;
+                novedadRepo = new NovedadRepo();
 
-        //    int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
-
-        //    string webRootPath = _webHostEnvironment.WebRootPath;
-        //    string contentRootPath = _webHostEnvironment.ContentRootPath;
+                IEnumerable<Novedad> l = novedadRepo.ObtenerTodos((categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
 
 
-        //    if (perfil_id == 1)
-        //    {
-        //        INovedadRepo novedadRepo;
-
-        //        novedadRepo = new NovedadRepo();
-
-        //        int pdfRowIndex = 1;
-        //        string filename = "Novedades-" + DateTime.Now.ToString("dd-MM-yyyy");
-        //        string filepath = Path.Combine(webRootPath, "data") + "\\" + filename + ".pdf";
-        //        Document document = new iTextSharp.text.Document(PageSize.A4, 5f, 5f, 10f, 10f);
-        //        FileStream fs = new FileStream(filepath, FileMode.Create);
-
-        //        PdfWriter writer = PdfWriter.GetInstance(document, fs);
-        //        document.Open();
-
-        //        Font font1 = FontFactory.GetFont(FontFactory.COURIER_BOLD, 10);
-        //        Font font2 = FontFactory.GetFont(FontFactory.COURIER, 8);
-
-        //        float[] columnDefinitionSize = { 2F, 5F, 2F, 5F };
-        //        PdfPTable table;
-        //        PdfPCell cell;
-
-        //        table = new PdfPTable(columnDefinitionSize)
-        //        {
-        //            WidthPercentage = 100
-        //        };
-
-        //        cell = new PdfPCell
-        //        {
-        //            BackgroundColor = new BaseColor(0xC0, 0xC0, 0xC0)
-        //        };
-
-        //        IEnumerable<Novedad> l = novedadRepo.ObtenerTodos((categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta);
+               
+                foreach (var item in l)
+                {
+                    html += "<tr>";
+                    html += "<td>" + item.nro_legajo.ToString() + "</td>";
+                    html += "<td>" + item.apellido + "</td>";
+                    html += "<td>" + item.nombre + "</td>";
+                    html += "<td>" + item.ubicacion + "</td>";
+                    html += "<td>" + item.sector + "</td>";
+                    html += "<td>" + item.responsable + "</td>";
+                    html += "<td>" + item.fecha_novedad.ToString() + "</td>";
+                    html += "<td>" + item.categoria_novedad + "</td>";
+                    html += "<td>" + item.tipo_novedad + "</td>";
+                    html += "<td>" + item.fecha_resolucion.ToString() + "</td>";
+                    html += "<td>" + item.tipo_resolucion + "</td>";
+                    html += "<td>" + item.observacion + "</td>";
 
 
-        //        table.AddCell(new Phrase("Legajo", font1));
-        //        table.AddCell(new Phrase("Apellido", font1));
-        //        table.AddCell(new Phrase("Nombre", font1));
-        //        table.AddCell(new Phrase("Ubicacion", font1));
-        //        table.AddCell(new Phrase("Responsable", font1));
-        //        table.AddCell(new Phrase("Fecha Novedad", font1));
-        //        table.AddCell(new Phrase("Categoría Novedad", font1));
-        //        table.AddCell(new Phrase("Tipo Novedad", font1));
-        //        table.AddCell(new Phrase("Fecha Resolución", font1));
-        //        table.AddCell(new Phrase("Tipo Resolución", font1));
-        //        table.AddCell(new Phrase("Observaciones", font1));
-        //        table.HeaderRows = 1;
-
-        //        foreach (var item in l)
-        //        {
-        //            table.AddCell(new Phrase(item.nro_legajo.ToString(), font2));
-        //            table.AddCell(new Phrase(item.apellido, font2));
-        //            table.AddCell(new Phrase(item.nombre, font2));
-        //            table.AddCell(new Phrase(item.ubicacion, font2));
-        //            table.AddCell(new Phrase(item.responsable, font2));
-        //            table.AddCell(new Phrase(item.fecha_novedad.ToString(), font2));
-        //            table.AddCell(new Phrase(item.categoria_novedad, font2));
-        //            table.AddCell(new Phrase(item.tipo_novedad, font2));
-        //            table.AddCell(new Phrase(item.fecha_resolucion.ToString(), font2));
-        //            table.AddCell(new Phrase(item.tipo_resolucion, font2));
-        //            table.AddCell(new Phrase(item.observacion, font2));
-
-        //            pdfRowIndex++;
-
-        //        }
-
-        //        document.Add(table);
-        //        document.Close();
-        //        document.CloseDocument();
-        //        document.Dispose();
-        //        writer.Close();
-        //        writer.Dispose();
-        //        fs.Close();
-        //        fs.Dispose();
-
-        //        FileStream sourceFile = new FileStream(filepath, FileMode.Open);
-        //        float fileSize = 0;
-        //        fileSize = sourceFile.Length;
-        //        byte[] getContent = new byte[Convert.ToInt32(Math.Truncate(fileSize))];
-        //        sourceFile.Read(getContent, 0, Convert.ToInt32(sourceFile.Length));
-        //        sourceFile.Close();
-        //        Response.Clear();
-        //        Response.Headers.Clear();
-        //        Response.ContentType = "application/pdf";
-        //        Response.Headers.Add("Content-Length", getContent.Length.ToString());
-        //        Response.Headers.Add("Content-Disposition", "attachment; filename=" + filename + ".pdf;");
-        //        Response.Body.WriteAsync(getContent);
-        //        Response.Body.Flush();
+                    html += "</tr>";
 
 
-        //    }
+                }
+
+                html += "  </table> </body> </html>";
+
+                string pdf_page_size = "A4";
+                PdfPageSize pageSize = (PdfPageSize)Enum.Parse(typeof(PdfPageSize),
+                    pdf_page_size, true);
+
+                string pdf_orientation = "Portrait";
+                PdfPageOrientation pdfOrientation =
+                    (PdfPageOrientation)Enum.Parse(typeof(PdfPageOrientation),
+                    pdf_orientation, true);
+
+                int webPageWidth = 1024;
+                try
+                {
+                    webPageWidth = Convert.ToInt32("1024");
+                }
+                catch { }
+
+                int webPageHeight = 0;
+                try
+                {
+                    webPageHeight = Convert.ToInt32("0");
+                }
+                catch { }
+
+                // instantiate a html to pdf converter object
+                HtmlToPdf converter = new HtmlToPdf();
+
+                // set converter options
+                converter.Options.PdfPageSize = pageSize;
+                converter.Options.PdfPageOrientation = pdfOrientation;
+                converter.Options.WebPageWidth = webPageWidth;
+                converter.Options.WebPageHeight = webPageHeight;
+
+                // create a new pdf document converting an url
+                PdfDocument doc = converter.ConvertHtmlString(html, "");
+               
+                // save pdf document
+                doc.Save("c://rrhh/Novedades_" + DateTime.Now.ToString("dd-MM-yyyy HH.mm.ss") + ".pdf");
+                
+
+            // close pdf document
+            doc.Close();
+
+            
 
 
-        //    return;
-        //}
+           
+
+
+            return View("Index",l);
+
+        }
 
         [HttpGet]
         public IActionResult Edit(int? id, int? nro_legajo)

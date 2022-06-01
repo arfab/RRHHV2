@@ -61,8 +61,8 @@
                     <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]">INGRESAR NOVEDAD</a>
 
                       <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
-@*                      <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
-*@
+                    <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
+
 
                 </div>
             </div>
@@ -88,6 +88,7 @@
                             <th>Apellido</th>
                             <th>Nombre</th>
                             <th>Ubicacion</th>
+                            <th>Sector</th>
                             <th>Responsable</th>
                             <th>Fecha Novedad</th>
                             <th>Categoría Novedad</th>
@@ -113,6 +114,9 @@
                      </td>
                      <td>
                           @item.ubicacion
+                     </td>
+                     <td>
+                          @item.sector
                      </td>
                      <td>
                           @item.responsable
