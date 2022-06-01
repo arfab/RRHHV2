@@ -614,6 +614,7 @@ $(document).ready(function () {
 </script>
 
 
+
 @if (ViewBag.Message != null)
 {
     <script type="text/javascript">
@@ -621,4 +622,9 @@ $(document).ready(function () {
                 alert("@ViewBag.Message");
             };
     </script>
+}
+
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial" />
 }

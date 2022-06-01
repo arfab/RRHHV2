@@ -483,7 +483,7 @@ namespace RRHH.Controllers
             {
                 legajo = new Legajo();
                 legajo.apellido = "";
-                legajo.nombre = "No existe ese nro de legajo";
+                legajo.nombre = "";
             }
 
             return Json(legajo);
@@ -511,6 +511,24 @@ namespace RRHH.Controllers
             return true;
 
         }
+
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult LegajoExiste(int nro_legajo)
+        {
+            bool result;
+
+            LegajoRepo legajoRepo;
+
+            legajoRepo = new LegajoRepo();
+
+            if( legajoRepo.Obtener(nro_legajo)==null)
+                result = false;
+            else
+                result = true;
+
+            return Json(result);
+        }
+
 
     }
 }

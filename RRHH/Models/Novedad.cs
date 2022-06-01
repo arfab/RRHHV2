@@ -8,6 +8,7 @@ namespace RRHH.Models
         public int? id { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        [Remote(action: "LegajoExiste",controller:"Novedad", ErrorMessage = "El nro de legajo no existe")]
         public int? nro_legajo { get; set; }
         public string? apellido { get; set; }
         public string? nombre { get; set; }
