@@ -16,7 +16,7 @@ namespace RRHH.Controllers
 
        
 
-        public IActionResult Index(int nro_legajo)
+        public IActionResult Index(int nro_legajo, string apellido)
         {
 
 
@@ -39,10 +39,11 @@ namespace RRHH.Controllers
                 ViewData["TipoNovedadActual"] = -1;
                 ViewData["TipoResolucionActual"] = -1;
                 ViewData["LegajoActual"] = nro_legajo;
+                ViewData["ApellidoActual"] = apellido;
                 ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2,'0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
                 ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
 
-                return View(novedadRepo.ObtenerTodos(-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta));
+                return View(novedadRepo.ObtenerTodos(-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta, (apellido == null) ? "" : apellido));
             }
 
             return View();
@@ -51,7 +52,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta)
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -69,10 +70,11 @@ namespace RRHH.Controllers
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
                 ViewData["LegajoActual"] = nro_legajo;
+                ViewData["ApellidoActual"] = apellido;
                 ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
                 ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year; 
 
-                return View(novedadRepo.ObtenerTodos((categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0)?-1:tipo_novedad_id, (tipo_resolucion_id == 0)?-1:tipo_resolucion_id, (nro_legajo == 0)?-1:nro_legajo,fecha_novedad_desde,fecha_novedad_hasta));
+                return View(novedadRepo.ObtenerTodos((categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0)?-1:tipo_novedad_id, (tipo_resolucion_id == 0)?-1:tipo_resolucion_id, (nro_legajo == 0)?-1:nro_legajo,fecha_novedad_desde,fecha_novedad_hasta,(apellido == null) ? "" : apellido));
             }
 
             return View();
@@ -81,7 +83,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public void  ExportarExcel(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta)
+        public void  ExportarExcel(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -96,7 +98,7 @@ namespace RRHH.Controllers
                 novedadRepo = new NovedadRepo();
 
                
-                IEnumerable <Novedad> l= novedadRepo.ObtenerTodos((categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta);
+                IEnumerable <Novedad> l= novedadRepo.ObtenerTodos((categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta,(apellido == null) ? "" : apellido);
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("Novedades");
@@ -368,7 +370,7 @@ namespace RRHH.Controllers
 
                 DynamicParameters parameters = new DynamicParameters();
 
-                l = con.Query<Models.CategoriaNovedad>("select * from categoria_novedad order by id", parameters).ToList();
+                l = con.Query<Models.CategoriaNovedad>("spCategoriaNovedadObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
 
@@ -390,7 +392,7 @@ namespace RRHH.Controllers
 
                 DynamicParameters parameters = new DynamicParameters();
 
-                l = con.Query<Models.TipoNovedad>("select * from tipo_novedad order by id", parameters).ToList();
+                l = con.Query<Models.TipoNovedad>("spTipoNovedadObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
 
@@ -412,7 +414,7 @@ namespace RRHH.Controllers
 
                 DynamicParameters parameters = new DynamicParameters();
 
-                l = con.Query<Models.TipoResolucion>("select * from tipo_resolucion order by id", parameters).ToList();
+                l = con.Query<Models.TipoResolucion>("spTipoResolucionObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
 
@@ -481,7 +483,7 @@ namespace RRHH.Controllers
             {
                 legajo = new Legajo();
                 legajo.apellido = "";
-                legajo.nombre = "";
+                legajo.nombre = "No existe ese nro de legajo";
             }
 
             return Json(legajo);

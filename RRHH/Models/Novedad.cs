@@ -26,7 +26,7 @@ namespace RRHH.Models
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? tipo_novedad_id { get; set; }
         public string? tipo_novedad { get; set; }
-        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        
         public int? tipo_resolucion_id { get; set; }
         public string? tipo_resolucion { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]

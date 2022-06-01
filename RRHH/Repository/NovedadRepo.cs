@@ -76,7 +76,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Novedad> ObtenerTodos(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta )
+        public IEnumerable<Novedad> ObtenerTodos(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido )
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -90,6 +90,7 @@ namespace RRHH.Repository
                 parameter.Add("@tipo_novedad_id", tipo_novedad_id);
                 parameter.Add("@tipo_resolucion_id", tipo_resolucion_id);
                 parameter.Add("@nro_legajo", nro_legajo);
+                parameter.Add("@apellido", apellido);
                 parameter.Add("@fecha_novedad_desde", fecha_novedad_desde);
                 parameter.Add("@fecha_novedad_hasta", fecha_novedad_hasta);
 
