@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace RRHH.Models
 {
@@ -6,6 +7,7 @@ namespace RRHH.Models
     {
         [Required(ErrorMessage = "El campo es requerido")]
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        //[Remote(action: "LegajoNoExiste", controller: "Legajo", ErrorMessage = "El nro de legajo ya existe")]
         public int? nro_legajo { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]
         public string apellido { get; set; }

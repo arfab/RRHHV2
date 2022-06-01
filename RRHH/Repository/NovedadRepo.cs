@@ -21,6 +21,7 @@ namespace RRHH.Repository
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@nro_legajo", novedad.nro_legajo);
                 parameters.Add("@ubicacion_id", novedad.ubicacion_id);
+                parameters.Add("@sector_id", novedad.sector_id);
                 parameters.Add("@responsable_id", novedad.responsable_id);
                 parameters.Add("@categoria_novedad_id", novedad.categoria_novedad_id);
                 parameters.Add("@tipo_novedad_id", (novedad.tipo_novedad_id==-1)?null: novedad.tipo_novedad_id);
@@ -55,6 +56,7 @@ namespace RRHH.Repository
                 parameters.Add("@id", novedad.id);
                 parameters.Add("@nro_legajo", novedad.nro_legajo);
                 parameters.Add("@ubicacion_id", novedad.ubicacion_id);
+                parameters.Add("@sector_id", novedad.sector_id);
                 parameters.Add("@responsable_id", novedad.responsable_id);
                 parameters.Add("@categoria_novedad_id", novedad.categoria_novedad_id);
                 parameters.Add("@tipo_novedad_id", novedad.tipo_novedad_id);

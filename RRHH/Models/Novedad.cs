@@ -12,9 +12,13 @@ namespace RRHH.Models
         public int? nro_legajo { get; set; }
         public string? apellido { get; set; }
         public string? nombre { get; set; }
+
         [Range(0, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? ubicacion_id { get; set; }
         public string? ubicacion { get; set; }
+
+        public int? sector_id { get; set; }
+        public string? sector { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? responsable_id { get; set; }

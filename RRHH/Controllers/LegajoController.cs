@@ -85,9 +85,8 @@ namespace RRHH.Controllers
 
             ViewData["MODO"] = modo;
 
-            if (ModelState.IsValid)
+            if (valida(legajo, modo))
             {
-
 
                 legajoRepo = new LegajoRepo();
 
@@ -173,6 +172,56 @@ namespace RRHH.Controllers
             return Json(new SelectList(l, "id", "descripcion"));
         }
 
+
+        public Boolean valida(Legajo legajo, string modo)
+        {
+
+            if (legajo.nro_legajo == null) return false;
+
+            LegajoRepo legajoRepo;
+
+            legajoRepo = new LegajoRepo();
+
+            if (modo == "A")
+            {
+                if (legajoRepo.Obtener(legajo.nro_legajo.Value) != null)
+                    return false;
+            }
+            else
+            {
+                if (legajoRepo.Obtener(legajo.nro_legajo.Value) == null) 
+                    return false;
+            }
+            if (legajo.apellido == null) return false;
+            if (legajo.apellido.Trim() == "") return false;
+
+            if (legajo.nombre == null) return false;
+            if (legajo.nombre.Trim() == "") return false;
+
+            if (legajo.categoria_id <= 0) return false;
+
+            if (legajo.sector_id <= 0) return false;
+
+            return true;
+
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult LegajoNoExiste(int nro_legajo)
+        {
+            bool result;
+
+            LegajoRepo legajoRepo;
+
+            legajoRepo = new LegajoRepo();
+
+            if (legajoRepo.Obtener(nro_legajo) == null)
+                result = true;
+            else
+                result = false;
+
+            return Json(result);
+        }
 
 
     }

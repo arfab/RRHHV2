@@ -15,7 +15,7 @@
             <div class="row ">
                 <div class="col bottom-buffer">
                    <label asp-for="nro_legajo" class="control-label">Nro. Legajo</label>
-                   <input asp-for="nro_legajo" type="number" class="form-control"  />
+                   <input asp-for="nro_legajo" id="nro_legajo" type="number" class="form-control"  />
                    <span class="alert-danger" asp-validation-for="nro_legajo"></span>
                 </div>
            </div>
@@ -101,7 +101,7 @@
         </div>
       </div>
     </div>
-    </div>
+
      </form>
 
 
@@ -110,10 +110,16 @@
 
     $(document).ready(function () {
 
-         
+        var Modo =  @Html.Raw(Json.Serialize(@ViewData["MODO"]));
+      
 
-           ObtenerSectores();
-           ObtenerCategorias();
+        if (Modo == "E") {
+           $('#nro_legajo').prop('readonly', true);
+         }
+
+
+         ObtenerSectores();
+         ObtenerCategorias();
 
          // $('#txtSelectedDate').datepicker({format: 'dd/mm/yyyy' });
 
@@ -195,4 +201,9 @@
                     alert("@ViewBag.Message");
                 };
         </script>
+}
+
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial" />
 }

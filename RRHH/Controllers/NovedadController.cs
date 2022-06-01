@@ -319,7 +319,7 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
-                if (modo == "E")
+                if (modo == "E" || modo == null)
                     sret = novedadRepo.Modificar(novedad);
                 else
                     sret = novedadRepo.Insertar(novedad);
@@ -443,6 +443,30 @@ namespace RRHH.Controllers
             l.Insert(0, new Models.Ubicacion(-1, "-- Seleccione la ubicación --"));
 
             return Json(new SelectList(l, "codigo", "descripcion"));
+
+
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerSectores()
+        {
+            List<Models.Sector> l = new List<Models.Sector>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                // l = con.Query<Models.Ubicacion>("select * from ubicacion order by descripcion", parameters).ToList();
+                l = con.Query<Models.Sector>("spSectorObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Sector(-1, "-- Seleccione el sector --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
 
 
         }
