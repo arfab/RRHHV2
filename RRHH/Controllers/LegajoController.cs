@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RRHH.Repository;
-
+using ClosedXML.Excel;
 
 namespace RRHH.Controllers
 {
@@ -13,6 +13,14 @@ namespace RRHH.Controllers
     {
 
         static readonly string strConnectionString = Tools.GetConnectionString();
+
+        private Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment;
+
+        public LegajoController(Microsoft.AspNetCore.Hosting.IWebHostEnvironment _environment)
+        {
+            Environment = _environment;
+        }
+
 
         public IActionResult Index(int nro_legajo, string apellido)
         {
@@ -126,6 +134,143 @@ namespace RRHH.Controllers
 
             return RedirectToAction("Index");
 
+        }
+
+
+
+        [HttpPost]
+        public ActionResult Importar(IFormFile file)
+        {
+
+            string wwwPath = this.Environment.WebRootPath;
+            string contentPath = this.Environment.ContentRootPath;
+            string path = Path.Combine(this.Environment.WebRootPath, "Uploads");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            DataTable dt = new DataTable();
+            //Checking file content length and Extension must be .xlsx  
+            if (file != null && System.IO.Path.GetExtension(file.FileName).ToLower() == ".xlsx")
+            {
+
+                string fileName = Path.GetFileName(file.FileName);
+              
+
+                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                //path = Path.Combine(path, Path.GetFileName(file.FileName));
+                //string path = Path.Combine(Server.MapPath("~/UploadFile"), Path.GetFileName(file.FileName));
+                ////Saving the file  
+                //file.SaveAs(path);
+                ////Started reading the Excel file.  
+                using (XLWorkbook workbook = new XLWorkbook(Path.Combine(path, file.FileName)))
+                {
+                    IXLWorksheet worksheet = workbook.Worksheet(1);
+                    bool FirstRow = true;
+                    //Range for reading the cells based on the last cell used.  
+                    string readRange = "1:1";
+                    foreach (IXLRow row in worksheet.RowsUsed())
+                    {
+                        //If Reading the First Row (used) then add them as column name  
+                        if (FirstRow)
+                        {
+                            //Checking the Last cellused for column generation in datatable  
+                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dt.Columns.Add(cell.Value.ToString());
+                            }
+                            FirstRow = false;
+                        }
+                        else
+                        {
+                            
+                            //Adding a Row in datatable  
+                            dt.Rows.Add();
+                            int cellIndex = 0;
+                            //Updating the values of datatable  
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                cellIndex++;
+                            }
+
+
+                        }
+                    }
+                    //If no data in Excel file  
+                    if (FirstRow)
+                    {
+                        ViewBag.Message = "Empty Excel File!";
+                    }
+
+
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        LegajoRepo legajoRepo = new LegajoRepo();
+                        Legajo legajo = new Legajo();
+
+                        string fecha_alta = dr[4].ToString();
+                        string dia_alta = "";
+                        string mes_alta = "";
+                        string anio_alta = "";
+                        if (fecha_alta!="")
+                        {
+                            dia_alta = fecha_alta.Substring(0, fecha_alta.IndexOf("/")).PadLeft(2, '0');
+                            mes_alta = fecha_alta.Substring(fecha_alta.IndexOf("/") + 1, fecha_alta.LastIndexOf("/") - fecha_alta.IndexOf("/") - 1).PadLeft(2, '0');
+                            anio_alta = fecha_alta.Substring(fecha_alta.LastIndexOf("/") + 1, 4);
+                            fecha_alta = anio_alta + "-" + mes_alta + "-" + dia_alta;
+                        }
+
+                        string fecha_baja = dr[5].ToString();
+                        string dia_baja = "";
+                        string mes_baja = "";
+                        string anio_baja = "";
+                        if (fecha_baja != "")
+                        {
+                            dia_baja = fecha_baja.Substring(0, fecha_baja.IndexOf("/")).PadLeft(2, '0');
+                            mes_baja = fecha_baja.Substring(fecha_baja.IndexOf("/") + 1, fecha_baja.LastIndexOf("/") - fecha_baja.IndexOf("/") - 1).PadLeft(2, '0');
+                            anio_baja = fecha_baja.Substring(fecha_baja.LastIndexOf("/") + 1, 4);
+                            fecha_baja = anio_baja + "-" + mes_baja + "-" + dia_baja;
+                        }
+
+                        legajo = legajoRepo.ObtenerDeImportacion(
+                                  dr[1].ToString(), 
+                                  dr[2].ToString(), 
+                                  dr[3].ToString(), 
+                                  dr[0].ToString(), 
+                                  dr[6].ToString(), 
+                                  dr[7].ToString(), 
+                                  dr[8].ToString(),
+                                  fecha_alta,
+                                  fecha_baja, 
+                                  dr[9].ToString()
+                                  );
+
+                        if (legajo == null)
+                            ViewBag.Message = "ERROR";
+                        else
+                        {
+                            legajoRepo.Insertar(legajo);
+                            ViewBag.Message = "OK";
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                //If file extension of the uploaded file is different then .xlsx  
+                ViewBag.Message = "Please select file with .xlsx extension!";
+            }
+
+            return RedirectToAction("Index");
+            // return View(dt);
         }
 
 

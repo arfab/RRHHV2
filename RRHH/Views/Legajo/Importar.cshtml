@@ -1,0 +1,80 @@
+﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@using System.Data  
+@model DataTable  
+
+  
+@*<!DOCTYPE html>  
+  
+<html>  
+<head>  
+    <meta name="viewport" content="width=device-width" />  
+    <title>ReadExcelFile</title>  
+    <style>  
+        table {  
+            border: 1px solid #000000;  
+            text-align: left;  
+            border-collapse: collapse;  
+            margin-top:20px;  
+        }  
+  
+            table td, table th {  
+                border: 1px solid #000000;  
+                padding: 5px 4px;  
+            }  
+  
+            table th {  
+                background-color: #5396d2;  
+                color:white;  
+            }  
+    </style>  
+</head>  
+<body> *@ 
+
+     <div class="container">
+       <div class="jumbotron text-center Titulo bottom-buffer ">
+        <h2>Legajos</h2>
+       </div>
+
+      <center>
+    @using (Html.BeginForm("UploadExcel", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))  
+    {  
+       @* <div>  
+            <label>Upload File:</label>  
+            <input type="file" id="file" name="file" />  
+            <input type="submit" value="Upload File" />  
+        </div>  *@
+        <!--Display Error Message-->  
+        <div style="color:red;">@ViewBag.Message</div>  
+        <!--Show the Data Table on the View after reading the Excel File-->  
+        if (Model != null)  
+        {  
+  
+            <table>  
+                <tr>  
+                    @for (int i = 0; i < Model.Columns.Count; i++)  
+                    {  
+                        <th>@Model.Columns[i].ColumnName</th>  
+                    }  
+                </tr>  
+                @for (int i = 0; i < Model.Rows.Count; i++)  
+                {  
+                    <tr>  
+                        @for (int j = 0; j < Model.Columns.Count; j++)  
+                        {  
+                            <td>@Model.Rows[i][j]</td>  
+                        }  
+                    </tr>  
+                }  
+            </table>  
+        }  
+        <div>  
+  
+        </div>  
+    }  
+    </div>
+@*</body>  
+</html>  *@

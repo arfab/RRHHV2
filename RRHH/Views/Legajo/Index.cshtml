@@ -10,7 +10,7 @@
 
 }
 
-<form asp-controller="Legajo"  method="post" >
+<form asp-controller="Legajo"  method="post" enctype="multipart/form-data" >
 
          
 
@@ -48,8 +48,17 @@
             <div class="col bottom-buffer">
                 <div class="btns2">
                     <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Legajo" asp-action="Edit" asp-route-modo="A">NUEVO LEGAJO</a>
+
                 </div>
             </div>
+
+            <div class="col bottom-buffer">
+                <div class="btns2">
+                     <input type="file" name="file" />
+                      <button id="btnImportar" type="submit" asp-action="importar" class="btn btn-outline-success">Importar</button>
+                </div>
+            </div>
+
           </div>
         }
 

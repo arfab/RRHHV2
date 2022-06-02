@@ -105,24 +105,60 @@ namespace RRHH.Repository
 
         }
 
-        public string Eliminar(int iNroLegajo)
+        public Legajo ObtenerDeImportacion(string nro_legajo, string apellido, string nombre, string empresa, string sector, string categoria, string funcion, string fecha_alta, string fecha_baja, string observacion)
         {
 
-            int icantFilas;
-            using (var con = new SqlConnection(strConnectionString))
+            using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
 
-                DynamicParameters parameters2 = new DynamicParameters();
-                parameters2.Add("@nro_legajo", iNroLegajo);
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@nro_legajo", nro_legajo);
+                parameter.Add("@apellido", apellido);
+                parameter.Add("@nombre", nombre);
+                parameter.Add("@empresa", empresa);
+                parameter.Add("@sector", sector);
+                parameter.Add("@categoria", categoria);
+                parameter.Add("@funcion", funcion);
+                parameter.Add("@str_fecha_ingreso", fecha_alta);
+                parameter.Add("@str_fecha_baja", fecha_baja);
+                parameter.Add("@observacion", observacion);
+                parameter.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
-                icantFilas = con.Execute("spLegajoEliminar", parameters2, commandType: CommandType.StoredProcedure);
 
+                return con.QuerySingleOrDefault<Legajo>("spLegajoObtenerDeImportacion", parameter, commandType: CommandType.StoredProcedure);
+
+               // if (parameter.Get<int>("@retValue") < 0) return "Error al importar";
 
             }
 
+        }
+
+        public string Eliminar(int iNroLegajo)
+        {
+
+            try
+            {
+                int icantFilas;
+                using (var con = new SqlConnection(strConnectionString))
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+
+                    DynamicParameters parameters2 = new DynamicParameters();
+                    parameters2.Add("@nro_legajo", iNroLegajo);
+
+                    icantFilas = con.Execute("spLegajoEliminar", parameters2, commandType: CommandType.StoredProcedure);
+
+
+                }
+            }
+            catch
+            {
+            }
             return "";
         }
     }
