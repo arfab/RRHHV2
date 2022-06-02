@@ -177,7 +177,19 @@ namespace RRHH.Repository
         }
 
 
+        public IEnumerable<Perfil> ObtenerPerfiles()
+        {
 
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                return con.Query<Perfil>("spPerfilObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+        }
+
+
+        }
     }
-}
 

@@ -41,7 +41,16 @@
                   </div>
             </div>
 
-             <div class="row" id="divPerfil">
+            
+            <div class="row" id="divPerfil">
+                   <div class="col bottom-buffer" id="divTipoNovedad">
+                     <label asp-for="perfil_id" class="control-label">Perfil</label>
+                     <select  class="form-control" id="perfil_id" asp-for="perfil_id" ></select>
+                     <span class="alert-danger" asp-validation-for="perfil_id"></span>
+                   </div>
+            </div>
+
+@*             <div class="row" id="divPerfil2">
                   <div class="col bottom-buffer">
                  <div class="form-check form-check-inline">
                        <input class="form-check-input" asp-for="perfil_id" type="radio"  value="1" id="admin" checked>
@@ -56,7 +65,7 @@
                         <label class="form-check-label">Acceso limitado</label>
                   </div>
                   </div>
-             </div>    
+             </div>  *@  
 
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">                    
@@ -118,6 +127,15 @@
 
  <script type="text/javascript">
 
+     $(document).ready(function () {
+
+    var CodPerfil = @Html.Raw(Json.Serialize(Model.perfil_id));
+    
+
+    ObtenerPerfiles();
+
+
+   })
 
 //function HabilitarGrabar() {
 //    if ($("#items").val()!="" && $("#cliente_id").val()!=0) 
@@ -135,6 +153,29 @@ function mostrarModalSalida(){
 function mostrarModalGrabar(){
     $("#mdGrabar").modal('show');
 }
+
+
+   var ObtenerPerfiles = function () {
+         var CodPerfil =@Html.Raw(Json.Serialize(Model.perfil_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerPerfiles","Usuario")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#perfil_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodPerfil)
+                          $('#perfil_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#perfil_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
 
 </script>
 

@@ -1,11 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RRHH.Models;
 using RRHH.Repository;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace RRHH.Controllers
 {
     public class UsuarioController : Controller
     {
+
+        static readonly string strConnectionString = Tools.GetConnectionString();
 
 
         public IActionResult Index()
@@ -76,9 +82,8 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetString("APELLIDO", (string.IsNullOrEmpty(usuario.Apellido)) ? "" : usuario.Apellido);
                 HttpContext.Session.SetString("NOMBRE", (string.IsNullOrEmpty(usuario.Nombre)) ? "" : usuario.Nombre);
                 HttpContext.Session.SetInt32("PERFIL_ID", usuario.perfil_id);
-                /*HttpContext.Session.SetInt32("ID_ROL", usuario.perfil_id);
-                HttpContext.Session.SetString("ROL_CODIGO", (string.IsNullOrEmpty(usuario.rol_codigo)) ? "" : usuario.rol_codigo);
-                HttpContext.Session.SetString("ROL_DESCRIPCION", (string.IsNullOrEmpty(usuario.rol_descripcion)) ? "" : usuario.rol_descripcion);*/
+                HttpContext.Session.SetString("PERFIL", usuario.perfil_descripcion);
+
 
 
                 return RedirectToAction("Index", "Home");
@@ -123,6 +128,8 @@ namespace RRHH.Controllers
 
             string sret;
             IUsuarioRepo usuarioRepo;
+
+            ModelState.Remove("id");
 
             if (ModelState.IsValid)
             {
@@ -234,7 +241,7 @@ namespace RRHH.Controllers
             IUsuarioRepo usuarioRepo;
 
             ModelState.Remove("UsuarioID");
-            ModelState.Remove("perfil_id");
+           // ModelState.Remove("perfil_id");
 
             if (ModelState.IsValid)
             {
@@ -291,6 +298,7 @@ namespace RRHH.Controllers
 
             ModelState.Remove("UsuarioID");
             ModelState.Remove("perfil_id");
+            ModelState.Remove("id");
 
             if (ModelState.IsValid)
             {
@@ -305,7 +313,7 @@ namespace RRHH.Controllers
                 if (sret == "")
                 {
 
-                    return RedirectToAction("Index", "Dashboard");
+                    return RedirectToAction("Login", "Usuario");
                 }
                 else
                 {
@@ -335,6 +343,27 @@ namespace RRHH.Controllers
 
         }
 
+
+        [HttpGet]
+        public JsonResult ObtenerPerfiles()
+        {
+            List<Models.Perfil> l = new List<Models.Perfil>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                l = con.Query<Models.Perfil>("spPerfilObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Perfil(-1, "-- Seleccione el perfil --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
 
     }
 }

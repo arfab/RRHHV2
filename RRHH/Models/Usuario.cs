@@ -22,6 +22,7 @@ namespace RRHH.Models
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "El campo es requerido")]
+        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int perfil_id { get; set; }
 
         public string? perfil_descripcion { get; set; }
