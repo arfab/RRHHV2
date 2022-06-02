@@ -9,7 +9,7 @@ namespace RRHH.Repository
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public string Insertar(Novedad novedad)
+        public string Insertar(Novedad novedad,int usuario_id)
         {
             int icantFilas;
             using (var con = new SqlConnection(strConnectionString))
@@ -31,6 +31,7 @@ namespace RRHH.Repository
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", novedad.fecha_novedad);
                 parameters.Add("@fecha_resolucion", (novedad.tipo_resolucion_id > 0) ? novedad.fecha_resolucion : null);
+                parameters.Add("@usuario_id", usuario_id);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -43,7 +44,7 @@ namespace RRHH.Repository
             return "";
         }
 
-        public string Modificar(Novedad novedad)
+        public string Modificar(Novedad novedad, int usuario_id)
         {
 
             using (var con = new SqlConnection(strConnectionString))
@@ -66,6 +67,7 @@ namespace RRHH.Repository
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", novedad.fecha_novedad);
                 parameters.Add("@fecha_resolucion", (novedad.tipo_resolucion_id>0)?novedad.fecha_resolucion:null);
+                parameters.Add("@usuario_id", usuario_id);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 

@@ -109,8 +109,11 @@
            <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
-                     <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success"   >Grabar</button>
+                     <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success">Grabar</button>
                 </div>
+                 <div class="col bottom-buffer">
+                     Ultima modificación: @Model.usuario (@Model.fecha_alta)
+                 </div>
             </div>
    
 

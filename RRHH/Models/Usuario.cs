@@ -4,6 +4,8 @@ namespace RRHH.Models
     {
     public class Usuario
     {
+        public int id { get; set; }
+
         [Required(ErrorMessage = "El campo es requerido")]
         [Display(Name = "Usuario")]
         [StringLength(255, ErrorMessage = "{0} debe tener por lo menos {2} caracteres.", MinimumLength = 3)]

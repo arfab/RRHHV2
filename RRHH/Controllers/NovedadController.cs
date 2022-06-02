@@ -319,8 +319,12 @@ namespace RRHH.Controllers
         [HttpPost]
         public IActionResult Edit(string modo, int? id, Novedad novedad)
         {
+            int? usuario_id = HttpContext.Session.GetInt32("UID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
             string sret;
+
             INovedadRepo novedadRepo;
 
             ViewData["MODO"] = modo;
@@ -332,9 +336,9 @@ namespace RRHH.Controllers
                 novedadRepo = new NovedadRepo();
 
                 if (modo == "E" || modo == null)
-                    sret = novedadRepo.Modificar(novedad);
+                    sret = novedadRepo.Modificar(novedad, usuario_id.Value);
                 else
-                    sret = novedadRepo.Insertar(novedad);
+                    sret = novedadRepo.Insertar(novedad, usuario_id.Value);
 
                 if (sret == "")
                 {

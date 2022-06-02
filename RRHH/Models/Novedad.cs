@@ -46,5 +46,8 @@ namespace RRHH.Models
         public DateTime? fecha_resolucion { get; set; }
         public DateTime? fecha_alta { get; set; }
 
+        public int? usuario_id { get; set; }
+        public string? usuario { get; set; }
+
     }
 }

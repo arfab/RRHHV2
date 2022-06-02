@@ -39,6 +39,7 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("APELLIDO", "");
             HttpContext.Session.SetString("NOMBRE", "");
             HttpContext.Session.SetString("PERFIL_ID", "");
+            HttpContext.Session.SetString("ID", "");
             //HttpContext.Session.SetString("EMAIL", "");
             //HttpContext.Session.SetString("ID_ROL", "");
             //HttpContext.Session.SetString("ROL_CODIGO", "");
@@ -69,6 +70,8 @@ namespace RRHH.Controllers
 
             if (usuario != null)
             {
+                HttpContext.Session.SetInt32("UID", usuario.id);
+
                 HttpContext.Session.SetString("USUARIO_ID", usuario.UsuarioID);
                 HttpContext.Session.SetString("APELLIDO", (string.IsNullOrEmpty(usuario.Apellido)) ? "" : usuario.Apellido);
                 HttpContext.Session.SetString("NOMBRE", (string.IsNullOrEmpty(usuario.Nombre)) ? "" : usuario.Nombre);
@@ -175,6 +178,7 @@ namespace RRHH.Controllers
 
             ModelState.Remove("UsuarioID");
             ModelState.Remove("clave");
+            ModelState.Remove("id");
 
             if (ModelState.IsValid)
             {
