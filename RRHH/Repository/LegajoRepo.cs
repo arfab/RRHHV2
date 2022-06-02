@@ -22,10 +22,14 @@ namespace RRHH.Repository
                 parameters.Add("@nro_legajo", legajo.nro_legajo);
                 parameters.Add("@apellido", legajo.apellido);
                 parameters.Add("@nombre", legajo.nombre);
+                parameters.Add("@empresa_id", legajo.empresa_id);
                 parameters.Add("@sector_id", legajo.sector_id);
                 parameters.Add("@categoria_id", legajo.categoria_id);
+                parameters.Add("@funcion_id", (legajo.funcion_id <= 0) ? null : legajo.funcion_id);
+                parameters.Add("@observacion", legajo.observacion);
                 parameters.Add("@activo", 1);
-                parameters.Add("@fecha_alta", DateTime.Now);
+                parameters.Add("@fecha_alta", legajo.fecha_alta);
+                parameters.Add("@fecha_baja", legajo.fecha_baja);
 
 
                 icantFilas = con.Execute("spLegajoInsertar", parameters, commandType: CommandType.StoredProcedure);
@@ -48,10 +52,14 @@ namespace RRHH.Repository
                 parameters.Add("@nro_legajo", legajo.nro_legajo);
                 parameters.Add("@apellido", legajo.apellido);
                 parameters.Add("@nombre", legajo.nombre);
+                parameters.Add("@empresa_id", legajo.empresa_id);
                 parameters.Add("@sector_id", legajo.sector_id);
                 parameters.Add("@categoria_id", legajo.categoria_id);
+                parameters.Add("@funcion_id", (legajo.funcion_id<=0)?null:legajo.funcion_id);
+                parameters.Add("@observacion", legajo.observacion);
                 parameters.Add("@activo", 1);
-                parameters.Add("@fecha_alta", DateTime.Now);
+                parameters.Add("@fecha_alta", legajo.fecha_alta);
+                parameters.Add("@fecha_baja", legajo.fecha_baja);
 
 
                 con.Execute("spLegajoModificar", parameters, commandType: CommandType.StoredProcedure);

@@ -121,7 +121,10 @@
                                        </ul>
                               </li>
                              }
-                             <li class="nav-item"><a class="nav-link" href="/Legajo/Index">Legajos</a></li>
+                             @if (_perfil_id <= 2)
+                             {
+                               <li class="nav-item"><a class="nav-link" href="/Legajo/Index">Legajos</a></li>
+                             }
                              <li class="nav-item"><a class="nav-link" href="/Novedad/Index">Novedades</a></li>
 
                            
@@ -136,10 +139,10 @@
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">@_usuario_id
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                     @if (_perfil_id >0)
+                                    @* @if (_perfil_id >0)
                                      {
                                       <li class="nav-item"><a class="dropdown-item" href="/Usuario/CambiarClavePersonal">Cambiar Clave</a></li>
-                                     }
+                                     }*@
                                     <li><a class="dropdown-item" href="/Usuario/Logout">Salir</a></li>
                                 </ul>
                             </li>

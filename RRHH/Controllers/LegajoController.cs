@@ -172,6 +172,47 @@ namespace RRHH.Controllers
             return Json(new SelectList(l, "id", "descripcion"));
         }
 
+        [HttpGet]
+        public JsonResult ObtenerEmpresas()
+        {
+            List<Models.Empresa> l = new List<Models.Empresa>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                l = con.Query<Models.Empresa>("spEmpresaObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Empresa(-1, "-- Seleccione la empresa --",""));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerFunciones()
+        {
+            List<Models.Funcion> l = new List<Models.Funcion>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                l = con.Query<Models.Funcion>("spFuncionObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Funcion(-1, "-- Seleccione la función --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
 
         public Boolean valida(Legajo legajo, string modo)
         {
@@ -192,6 +233,9 @@ namespace RRHH.Controllers
                 if (legajoRepo.Obtener(legajo.nro_legajo.Value) == null) 
                     return false;
             }
+
+            if (legajo.empresa_id <= 0) return false;
+
             if (legajo.apellido == null) return false;
             if (legajo.apellido.Trim() == "") return false;
 

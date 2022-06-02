@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<RRHH.Models.Novedad>
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewBag.Title = "Index";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 }
 
 
@@ -56,17 +59,19 @@
         </div>
 
           <div class="row bottom-buffer">
-            <div class="col bottom-buffer">
-                <div class="btns2">
-                    <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]">INGRESAR NOVEDAD</a>
-
-                      <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
-@*                    <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
+              <div class="col bottom-buffer">
+                 <div class="btns2">             
+                    @if (_perfil_id <= 2)
+                    {
+                        <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]">INGRESAR NOVEDAD</a>
+                    }
+                    <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
+@*                  <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
 *@
-
-                </div>
-            </div>
-        </div>
+                 </div>
+              </div>
+          </div>
+    
 
        @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
@@ -147,8 +152,10 @@
                      <td>
                         <td>
                           <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
-                          <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
-                      
+                           @if (_perfil_id <= 2)
+                           {
+                             <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
+                           }
                     </td>
                     </tr>  
                     

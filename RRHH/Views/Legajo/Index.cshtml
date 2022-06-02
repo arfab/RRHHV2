@@ -1,11 +1,14 @@
 ﻿@model IEnumerable<RRHH.Models.Legajo>
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewBag.Title = "Index";
-}
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 
+}
 
 <form asp-controller="Legajo"  method="post" >
 
@@ -33,19 +36,22 @@
             </div>
 
 
-     <div class="row">
+        <div class="row">
             <div class="col bottom-buffer">
                 <span id="spanTitulo"></span>
             </div>
         </div>
 
+         @if (_perfil_id <=2)
+         {
           <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
                     <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Legajo" asp-action="Edit" asp-route-modo="A">NUEVO LEGAJO</a>
                 </div>
             </div>
-        </div>
+          </div>
+        }
 
        @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
@@ -95,8 +101,11 @@
                         <td>
                           <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-nro_legajo=@item.nro_legajo><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
                          <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-nro_legajo=@item.nro_legajo><i data-mdb-toggle='tooltip' title='Novedades' class='bi  bi-calendar2-plus'></i></a>
-                          <a onclick="mostrarModalEliminar('@item.nro_legajo');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
-                      
+                         @if (_perfil_id <=2)
+                         {
+                                <a onclick="mostrarModalEliminar('@item.nro_legajo');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
+                         }
+
                     </td>
                     </tr>  
                     
