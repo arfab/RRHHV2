@@ -167,7 +167,6 @@
         var Nombre = @Html.Raw(Json.Serialize(Model.nombre));
         var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
         var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
-        var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
 
         if (Modo == "E") {
            $('#nro_legajo').prop('readonly', true);
@@ -198,8 +197,8 @@
         }
 
          ObtenerGeneros();
-         ObtenerSectores();
-         ObtenerLocales();
+         //ObtenerSectores();
+         //ObtenerLocales();
          ObtenerCategorias();
          ObtenerEmpresas();
          ObtenerFunciones();

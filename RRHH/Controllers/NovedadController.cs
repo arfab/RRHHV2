@@ -16,7 +16,7 @@ namespace RRHH.Controllers
 
        
 
-        public IActionResult Index(int nro_legajo, string apellido)
+        public IActionResult Index(int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
         {
 
 
@@ -35,10 +35,15 @@ namespace RRHH.Controllers
                 DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); 
                 DateTime fechaHasta = DateTime.Now;
 
+                ViewData["EmpresaActual"] = empresa_id;
                 ViewData["CategoriaNovedadActual"] = -1;
                 ViewData["TipoNovedadActual"] = -1;
                 ViewData["TipoResolucionActual"] = -1;
+                ViewData["EmpresaActual"] = empresa_id;
                 ViewData["LegajoActual"] = nro_legajo;
+                ViewData["UbicacionActual"] = ubicacion_id;
+                ViewData["SectorActual"] = sector_id;
+                ViewData["LocalActual"] = local_id;
                 ViewData["ApellidoActual"] = apellido;
                 ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2,'0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
                 ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
@@ -52,7 +57,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido)
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -71,6 +76,9 @@ namespace RRHH.Controllers
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
                 ViewData["LegajoActual"] = nro_legajo;
+                ViewData["UbicacionActual"] = ubicacion_id;
+                ViewData["SectorActual"] = sector_id;
+                ViewData["LocalActual"] = local_id;
                 ViewData["ApellidoActual"] = apellido;
                 ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
                 ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year; 
@@ -279,7 +287,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -308,6 +316,10 @@ namespace RRHH.Controllers
                 ViewData["MODO"] = "A";
 
                 if (nro_legajo != null) novedad.nro_legajo = nro_legajo.Value;
+                if (empresa_id != null) novedad.empresa_id = empresa_id.Value;
+                if (ubicacion_id != null) novedad.ubicacion_id = ubicacion_id.Value;
+                if (sector_id != null) novedad.sector_id = sector_id.Value;
+                if (local_id != null) novedad.local_id = local_id.Value;
 
                 return View(novedad);
             }
@@ -491,6 +503,30 @@ namespace RRHH.Controllers
 
 
             l.Insert(0, new Models.Sector(-1, "-- Seleccione el sector --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+
+
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerLocales()
+        {
+            List<Models.Local> l = new List<Models.Local>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                // l = con.Query<Models.Ubicacion>("select * from ubicacion order by descripcion", parameters).ToList();
+                l = con.Query<Models.Local>("spLocalObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Local(-1, "-- Seleccione el local --"));
 
             return Json(new SelectList(l, "id", "descripcion"));
 

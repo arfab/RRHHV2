@@ -51,5 +51,9 @@ namespace RRHH.Models
         public int? usuario_id { get; set; }
         public string? usuario { get; set; }
 
+        public int? local_id { get; set; }
+        public string? local { get; set; }
+
+
     }
 }

@@ -38,7 +38,7 @@
             <div class="d-flex justify-content-center align-items-center container ">
                <div class="input-group mb-3">
                   <span class="input-group-text">Empresa</span>            
-                  <select  class="form-control" name="empresa_id" id="empresa_id" ></select>           
+                  <select  class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EmpresaActual"]" ></select>           
 		          <span class="input-group-text">Legajo:</span>
                   <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
                   <span class="input-group-text">Apellido:</span>
@@ -71,7 +71,7 @@
                  <div class="btns2">             
                     @if (_perfil_id <= 2)
                     {
-                        <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]">INGRESAR NOVEDAD</a>
+                        <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>
                     }
                     <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
 @*                  <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
@@ -101,7 +101,7 @@
                             <th>Apellido</th>
                             <th>Nombre</th>
                             <th>Ubicacion</th>
-                            <th>Sector</th>
+                            <th>Sector/Local</th>
                             <th>Responsable</th>
                             <th>Fecha Novedad</th>
                             <th>Categoría Novedad</th>
@@ -129,7 +129,14 @@
                           @item.ubicacion
                      </td>
                      <td>
-                          @item.sector
+                          @if (@item.ubicacion_id==1 || @item.ubicacion_id==2 )
+                           {
+                             @item.sector
+                           }
+                           else
+                           {
+                             @item.local
+                           }
                      </td>
                      <td>
                           @item.responsable

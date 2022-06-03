@@ -41,12 +41,19 @@
                      <span class="alert-danger" asp-validation-for="ubicacion_id"></span>
               </div>
            
-              <div class="col bottom-buffer" id="divSector">
+               <div class="row">
+                   <div class="col bottom-buffer" id="divSector">
                      <label asp-for="sector_id" class="control-label">Sector</label>
                      <select  class="form-control" id="sector_id" asp-for="sector_id" ></select>
                      <span class="alert-danger" asp-validation-for="sector_id"></span>
-
+                  </div>
+                  <div class="col bottom-buffer" id="divLocal">
+                     <label asp-for="local_id" class="control-label">Local</label>
+                     <select  class="form-control" id="local_id" asp-for="local_id" ></select>
+                     <span class="alert-danger" asp-validation-for="local_id"></span>
+                  </div>
                 </div>
+
 
               <div class="col bottom-buffer">
                      <label asp-for="responsable_id" class="control-label">Responsable</label>
@@ -195,13 +202,25 @@ $(document).ready(function () {
     ObtenerUbicaciones();
     
 
-    if (CodUbicacion==1) {
+     if (CodUbicacion==1 || CodUbicacion==2) {
             ObtenerSectores();
             $("#divSector").show();
+            $("#local_id").val(-1);
+            $("#divLocal").hide();
         }
         else {
-            $("#sector_id").val(-1);
-            $("#divSector").hide();
+           if (CodUbicacion == 3) {
+               ObtenerLocales();
+               $("#divLocal").show();
+               $("#sector_id").val(-1);
+               $("#divSector").hide();
+           }
+           else {
+               $("#divLocal").hide();
+                $("#local_id").val(-1);
+               $("#sector_id").val(-1);
+               $("#divSector").hide();
+           }
         }
    
     ObtenerEmpresas();
@@ -488,11 +507,15 @@ $(document).ready(function () {
 
     
     $("#ubicacion_id").change(function () {
-        if ($("#ubicacion_id").val() == 1) {
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2) {
             ObtenerSectores();
             $("#divSector").show();
+            $("#local_id").val(-1);
+            $("#divLocal").hide();
         }
         else {
+            ObtenerLocales();
+            $("#divLocal").show();
             $("#sector_id").val(-1);
             $("#divSector").hide();
         }
@@ -645,6 +668,28 @@ $(document).ready(function () {
             }
       });
     }
+
+        var ObtenerLocales = function () {
+             var CodLocal = @Html.Raw(Json.Serialize(Model.local_id));
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#local_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#local_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#local_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
 
 
     var ObtenerResponsables = function () {

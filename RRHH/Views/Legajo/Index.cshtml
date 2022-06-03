@@ -116,7 +116,7 @@
                            {
                              @item.local
                            }
-                           </td>
+                     </td>
                      <td>
                           @item.categoria
                      </td>
@@ -124,7 +124,7 @@
                      <td>
                         <td>
                           <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
-                         <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-nro_legajo=@item.nro_legajo><i data-mdb-toggle='tooltip' title='Novedades' class='bi  bi-calendar2-plus'></i></a>
+                         <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-empresa_id=@item.empresa_id asp-route-nro_legajo=@item.nro_legajo asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id asp-route-local_id=@item.local_id><i data-mdb-toggle='tooltip' title='Novedades' class='bi  bi-calendar2-plus'></i></a>
                          @if (_perfil_id <=2)
                          {
                                 <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
