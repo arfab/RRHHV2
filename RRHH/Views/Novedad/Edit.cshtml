@@ -195,7 +195,7 @@ $(document).ready(function () {
     ObtenerUbicaciones();
     
 
-    if (CodUbicacion==0) {
+    if (CodUbicacion==1) {
             ObtenerSectores();
             $("#divSector").show();
         }
@@ -488,7 +488,7 @@ $(document).ready(function () {
 
     
     $("#ubicacion_id").change(function () {
-        if ($("#ubicacion_id").val() == 0) {
+        if ($("#ubicacion_id").val() == 1) {
             ObtenerSectores();
             $("#divSector").show();
         }

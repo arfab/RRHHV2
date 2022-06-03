@@ -35,21 +35,29 @@
                 </div>
             </div>
 
+            <div class="d-flex justify-content-center align-items-center container ">
+               <div class="input-group mb-3">
+                  <span class="input-group-text">Empresa</span>            
+                  <select  class="form-control" name="empresa_id" id="empresa_id" ></select>           
+		          <span class="input-group-text">Legajo:</span>
+                  <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
+                  <span class="input-group-text">Apellido:</span>
+                  <input name="apellido" id="apellido" value="@ViewData["ApellidoActual"]" class="form-control" />                                          
+              </div>
+            </div>
              
             <div class="d-flex justify-content-center align-items-center container ">
 
                 <div class="input-group mb-3">
-                      <span class="input-group-text">Legajo:</span>
-                      <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
-                      <span class="input-group-text">Apellido:</span>
-                      <input name="apellido" id="apellido" value="@ViewData["ApellidoActual"]" class="form-control" />   
-                      <span class="input-group-text">Desde:</span>
+                     <span class="input-group-text">Desde:</span>
                       <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde"   readonly="readonly"/>
                       <span class="input-group-text">Hasta:</span>
                       <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta"  readonly="readonly"/>
                       <input type="submit" value="Buscar" class="btn btn-outline-primary" />
                 </div>
             </div>
+
+
 
 
      <div class="row">
@@ -138,7 +146,7 @@
                       <td>
                           @{
                              if (item.fecha_resolucion!=null) {
-                                    @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                        @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                              }
                             }
                      </td>
@@ -211,7 +219,7 @@ $(document).ready(function() {
         $("#nro_legajo").val('');
     }
 
-   
+    ObtenerEmpresas();
     ObtenerCategoriasNovedad();
     ObtenerTiposNovedad();
     ObtenerTiposResolucion();
@@ -232,6 +240,27 @@ $(document).ready(function() {
 
 });
 
+var ObtenerEmpresas = function () {
+             var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#empresa_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpresa)
+                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
 
  var ObtenerCategoriasNovedad = function () {
        var CodCategoria =@Html.Raw(Json.Serialize(ViewData["CategoriaNovedadActual"]));

@@ -43,7 +43,7 @@ namespace RRHH.Controllers
                 ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2,'0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
                 ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
 
-                return View(novedadRepo.ObtenerTodos(-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta, (apellido == null) ? "" : apellido));
+                return View(novedadRepo.ObtenerTodos(-1,-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta, (apellido == null) ? "" : apellido));
             }
 
             return View();
@@ -52,7 +52,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -66,6 +66,7 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
+                ViewData["EmpresaActual"] = empresa_id;
                 ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
@@ -74,7 +75,7 @@ namespace RRHH.Controllers
                 ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
                 ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year; 
 
-                return View(novedadRepo.ObtenerTodos((categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0)?-1:tipo_novedad_id, (tipo_resolucion_id == 0)?-1:tipo_resolucion_id, (nro_legajo == 0)?-1:nro_legajo,fecha_novedad_desde,fecha_novedad_hasta,(apellido == null) ? "" : apellido));
+                return View(novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0)?-1:tipo_novedad_id, (tipo_resolucion_id == 0)?-1:tipo_resolucion_id, (nro_legajo == 0)?-1:nro_legajo,fecha_novedad_desde,fecha_novedad_hasta,(apellido == null) ? "" : apellido));
             }
 
             return View();
@@ -83,7 +84,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public void  ExportarExcel(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        public void  ExportarExcel(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -98,7 +99,7 @@ namespace RRHH.Controllers
                 novedadRepo = new NovedadRepo();
 
                
-                IEnumerable <Novedad> l= novedadRepo.ObtenerTodos((categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta,(apellido == null) ? "" : apellido);
+                IEnumerable <Novedad> l= novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta,(apellido == null) ? "" : apellido);
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("Novedades");
@@ -159,7 +160,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult ExportarPDF(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        public IActionResult ExportarPDF(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
         {
 
             string html = @"<html>
@@ -197,7 +198,7 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
-                IEnumerable<Novedad> l = novedadRepo.ObtenerTodos((categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+                IEnumerable<Novedad> l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
 
 
                
