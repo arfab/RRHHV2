@@ -13,6 +13,14 @@
 <div class="container">
 <h2>Novedad</h2>
 
+            <div class="row">
+                  <div class="col bottom-buffer">
+                     <label asp-for="empresa_id" class="control-label">Empresa</label>
+                     <select  class="form-control" id="empresa_id" asp-for="empresa_id" ></select>
+                     <span class="alert-danger" asp-validation-for="empresa_id"></span>
+                  </div>
+            </div>
+
        
             <div class="row ">
                 <div class="col bottom-buffer">
@@ -196,7 +204,7 @@ $(document).ready(function () {
             $("#divSector").hide();
         }
    
-
+    ObtenerEmpresas();
     ObtenerResponsables();
     ObtenerCategoriasNovedad();
     ObtenerTiposNovedad();
@@ -431,7 +439,7 @@ $(document).ready(function () {
     }
 
      $("#nro_legajo").change(function () {
-         ObtenerLegajo($("#nro_legajo").val())
+         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
          //habilitar_grabar();     
     });
 
@@ -504,6 +512,28 @@ $(document).ready(function () {
     $("#mdGrabar").modal('show');
   }
 
+
+   var ObtenerEmpresas = function () {
+             var CodEmpresa =@Html.Raw(Json.Serialize(Model.empresa_id));
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#empresa_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpresa)
+                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
 
   var ObtenerCategoriasNovedad = function () {
          var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_novedad_id));
@@ -639,14 +669,15 @@ $(document).ready(function () {
       });
     }
 
-    var ObtenerLegajo = function (nro_legajo) {
+    var ObtenerLegajo = function (empresa_id, nro_legajo) {
          $.ajax({
             url: '@Url.Action("ObtenerLegajo","Novedad")',
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
             data: {
-                nro_legajo: nro_legajo,
+                empresa_id: empresa_id,
+                nro_legajo: nro_legajo
             },
             success: function (data) {
                 $('#apellido').text(data.apellido);

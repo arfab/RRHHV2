@@ -32,7 +32,7 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameter = new DynamicParameters();
-                parameter.Add("@codigo", iUbicacion);
+                parameter.Add("@id", iUbicacion);
 
                 return con.QuerySingle<Ubicacion>("spUbicacionObtener", parameter, commandType: CommandType.StoredProcedure);
             }

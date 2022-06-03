@@ -329,6 +329,15 @@ namespace RRHH.Controllers
 
             ViewData["MODO"] = modo;
 
+
+            Legajo legajo = new Legajo();
+            ILegajoRepo legajoRepo;
+            legajoRepo = new LegajoRepo();
+            legajo = legajoRepo.ObtenerPorNro(novedad.empresa_id.Value, novedad.nro_legajo.Value);
+            novedad.legajo_id = legajo.id;
+
+
+
             if (valida(novedad))
             {
 
@@ -458,7 +467,7 @@ namespace RRHH.Controllers
 
             l.Insert(0, new Models.Ubicacion(-1, "-- Seleccione la ubicación --"));
 
-            return Json(new SelectList(l, "codigo", "descripcion"));
+            return Json(new SelectList(l, "id", "descripcion"));
 
 
         }
@@ -509,7 +518,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public JsonResult ObtenerLegajo(int nro_legajo)
+        public JsonResult ObtenerLegajo(int empresa_id, int nro_legajo)
         {
             ILegajoRepo legajoRepo;
 
@@ -517,7 +526,7 @@ namespace RRHH.Controllers
 
             Legajo legajo = new Legajo();
 
-            legajo= legajoRepo.Obtener(nro_legajo);
+            legajo= legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
 
             if (legajo==null)
             {
@@ -539,7 +548,7 @@ namespace RRHH.Controllers
 
             legajoRepo = new LegajoRepo();
 
-            if(legajoRepo.Obtener(novedad.nro_legajo.Value)==null) return false;
+            if(legajoRepo.Obtener(novedad.legajo_id.Value)==null) return false;
             if (novedad.categoria_novedad_id <= 0) return false;
 
             if (novedad.tipo_novedad_id <= 0) return false;
@@ -553,7 +562,7 @@ namespace RRHH.Controllers
         }
 
         [AcceptVerbs("GET", "POST")]
-        public IActionResult LegajoExiste(int nro_legajo)
+        public IActionResult LegajoExiste(int nro_legajo, int empresa_id)
         {
             bool result;
 
@@ -561,7 +570,7 @@ namespace RRHH.Controllers
 
             legajoRepo = new LegajoRepo();
 
-            if( legajoRepo.Obtener(nro_legajo)==null)
+            if( legajoRepo.ObtenerPorNro(empresa_id, nro_legajo)==null)
                 result = false;
             else
                 result = true;

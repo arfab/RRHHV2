@@ -6,14 +6,14 @@
         {
         }
 
-        public Ubicacion(int ubi_codigo, string ubi_descripcion)
+        public Ubicacion(int ubi_id, string ubi_descripcion)
         {
-            codigo = ubi_codigo;
+            id = ubi_id;
             descripcion = ubi_descripcion;
 
         }
 
-        public int codigo { get; set; }
+        public int id { get; set; }
 
         public string descripcion { get; set; }
 

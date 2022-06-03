@@ -49,6 +49,7 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@id", legajo.id);
                 parameters.Add("@nro_legajo", legajo.nro_legajo);
                 parameters.Add("@apellido", legajo.apellido);
                 parameters.Add("@nombre", legajo.nombre);
@@ -88,7 +89,24 @@ namespace RRHH.Repository
 
         }
 
-        public Legajo Obtener(int iNroLegajo)
+        public Legajo Obtener(int id)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@id", id);
+
+                return con.QuerySingleOrDefault<Legajo>("spLegajoObtener", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
+        public Legajo ObtenerPorNro(int empresa_id, int iNroLegajo)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -99,8 +117,9 @@ namespace RRHH.Repository
 
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@nro_legajo", iNroLegajo);
+                parameter.Add("@empresa_id", empresa_id);
 
-                return con.QuerySingleOrDefault<Legajo>("spLegajoObtener", parameter, commandType: CommandType.StoredProcedure);
+                return con.QuerySingleOrDefault<Legajo>("spLegajoObtenerPorNro", parameter, commandType: CommandType.StoredProcedure);
             }
 
         }
@@ -136,7 +155,7 @@ namespace RRHH.Repository
 
         }
 
-        public string Eliminar(int iNroLegajo)
+        public string Eliminar(int id)
         {
 
             try
@@ -149,7 +168,7 @@ namespace RRHH.Repository
 
 
                     DynamicParameters parameters2 = new DynamicParameters();
-                    parameters2.Add("@nro_legajo", iNroLegajo);
+                    parameters2.Add("@id", id);
 
                     icantFilas = con.Execute("spLegajoEliminar", parameters2, commandType: CommandType.StoredProcedure);
 

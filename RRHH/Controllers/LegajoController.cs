@@ -49,7 +49,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? nro_legajo)
+        public IActionResult Edit(int? id)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -58,13 +58,13 @@ namespace RRHH.Controllers
 
             Legajo legajo = new Legajo();
 
-            if (nro_legajo != null)
+            if (id != null)
             {
                 ILegajoRepo legajoRepo;
 
                 legajoRepo = new LegajoRepo();
 
-                legajo = legajoRepo.Obtener(nro_legajo.Value);
+                legajo = legajoRepo.Obtener(id.Value);
 
                 //ViewData["ID"] = nro_legajo.Value;
 
@@ -85,7 +85,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int? nro_legajo, Legajo legajo)
+        public IActionResult Edit(string modo, int? id, Legajo legajo)
         {
 
             string sret;
@@ -375,7 +375,7 @@ namespace RRHH.Controllers
             }
             else
             {
-                if (legajoRepo.Obtener(legajo.nro_legajo.Value) == null) 
+                if (legajoRepo.Obtener(legajo.id.Value) == null) 
                     return false;
             }
 

@@ -5,6 +5,7 @@ namespace RRHH.Models
 {
     public class Legajo
     {
+        public int? id { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         //[Remote(action: "LegajoNoExiste", controller: "Legajo", ErrorMessage = "El nro de legajo ya existe")]
