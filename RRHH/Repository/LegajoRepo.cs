@@ -22,8 +22,12 @@ namespace RRHH.Repository
                 parameters.Add("@nro_legajo", legajo.nro_legajo);
                 parameters.Add("@apellido", legajo.apellido);
                 parameters.Add("@nombre", legajo.nombre);
+                parameters.Add("@dni", legajo.dni);
+                parameters.Add("@genero_id", legajo.genero_id);
                 parameters.Add("@empresa_id", legajo.empresa_id);
+                parameters.Add("@ubicacion_id", legajo.ubicacion_id);
                 parameters.Add("@sector_id", legajo.sector_id);
+                parameters.Add("@local_id", legajo.local_id);
                 parameters.Add("@categoria_id", legajo.categoria_id);
                 parameters.Add("@funcion_id", (legajo.funcion_id <= 0) ? null : legajo.funcion_id);
                 parameters.Add("@observacion", legajo.observacion);
@@ -53,8 +57,12 @@ namespace RRHH.Repository
                 parameters.Add("@nro_legajo", legajo.nro_legajo);
                 parameters.Add("@apellido", legajo.apellido);
                 parameters.Add("@nombre", legajo.nombre);
+                parameters.Add("@dni", legajo.dni);
+                parameters.Add("@genero_id", legajo.genero_id);
                 parameters.Add("@empresa_id", legajo.empresa_id);
+                parameters.Add("@ubicacion_id", legajo.ubicacion_id);
                 parameters.Add("@sector_id", legajo.sector_id);
+                parameters.Add("@local_id", legajo.local_id);
                 parameters.Add("@categoria_id", legajo.categoria_id);
                 parameters.Add("@funcion_id", (legajo.funcion_id<=0)?null:legajo.funcion_id);
                 parameters.Add("@observacion", legajo.observacion);

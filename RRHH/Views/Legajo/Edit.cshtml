@@ -19,6 +19,11 @@
                      <select  class="form-control" id="empresa_id" asp-for="empresa_id" ></select>
                      <span class="alert-danger" asp-validation-for="empresa_id"></span>
                   </div>
+                   <div class="col bottom-buffer">
+                     <label asp-for="ubicacion_id" class="control-label">Ubicación</label>
+                     <select  class="form-control" id="ubicacion_id" asp-for="ubicacion_id" ></select>
+                     <span class="alert-danger" asp-validation-for="ubicacion_id"></span>
+                  </div>
             </div>
 
             <div class="row ">
@@ -29,27 +34,39 @@
                 </div>
            </div>
 
-                 <div class="row ">
-                    <div class="col bottom-buffer">
+           <div class="row ">
+                 <div class="col bottom-buffer">
                     <label asp-for="nombre" class="control-label">Nombre</label>
                     <input asp-for="nombre" class="form-control" />
                      <span class="alert-danger" asp-validation-for="nombre"></span>
-                     </div>
-                </div>
-                 <div class="row ">
-                    <div class="col bottom-buffer">
+                 </div>
+                 <div class="col bottom-buffer">
                     <label asp-for="apellido" class="control-label">Apellido</label>
                     <input asp-for="apellido" class="form-control" />
                      <span class="alert-danger" asp-validation-for="apellido"></span>
-                     </div>
-                </div>
+                 </div>
+                  <div class="col bottom-buffer">
+                     <label asp-for="genero_id" class="control-label">Género</label>
+                     <select  class="form-control" id="genero_id" asp-for="genero_id" ></select>
+                     <span class="alert-danger" asp-validation-for="genero_id"></span>
+                  </div>
+             </div>
 
                 <div class="row">
-                  <div class="col bottom-buffer">
+                   <div class="col bottom-buffer" id="divSector">
                      <label asp-for="sector_id" class="control-label">Sector</label>
                      <select  class="form-control" id="sector_id" asp-for="sector_id" ></select>
                      <span class="alert-danger" asp-validation-for="sector_id"></span>
                   </div>
+                  <div class="col bottom-buffer" id="divLocal">
+                     <label asp-for="local_id" class="control-label">Local</label>
+                     <select  class="form-control" id="local_id" asp-for="local_id" ></select>
+                     <span class="alert-danger" asp-validation-for="local_id"></span>
+                  </div>
+                </div>
+
+                <div class="row">
+               
 
                   <div class="col bottom-buffer">
                      <label asp-for="categoria_id" class="control-label">Categoría</label>
@@ -145,14 +162,44 @@
     $(document).ready(function () {
 
         var Modo =  @Html.Raw(Json.Serialize(@ViewData["MODO"]));
-      
+        var CodGenero = @Html.Raw(Json.Serialize(Model.genero_id));
+        var Apellido = @Html.Raw(Json.Serialize(Model.apellido));
+        var Nombre = @Html.Raw(Json.Serialize(Model.nombre));
+        var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
+        var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
+        var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
 
         if (Modo == "E") {
            $('#nro_legajo').prop('readonly', true);
          }
 
+        ObtenerUbicaciones();
+    
 
+       if (CodUbicacion==1 || CodUbicacion==2) {
+            ObtenerSectores();
+            $("#divSector").show();
+            $("#local_id").val(-1);
+            $("#divLocal").hide();
+        }
+        else {
+           if (CodUbicacion == 3) {
+               ObtenerLocales();
+               $("#divLocal").show();
+               $("#sector_id").val(-1);
+               $("#divSector").hide();
+           }
+           else {
+               $("#divLocal").hide();
+                $("#local_id").val(-1);
+               $("#sector_id").val(-1);
+               $("#divSector").hide();
+           }
+        }
+
+         ObtenerGeneros();
          ObtenerSectores();
+         ObtenerLocales();
          ObtenerCategorias();
          ObtenerEmpresas();
          ObtenerFunciones();
@@ -160,6 +207,22 @@
           $('#txtSelectedFechaAlta').datepicker({format: 'dd/mm/yyyy' });
 
        })
+
+      $("#ubicacion_id").change(function () {
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2) {
+            ObtenerSectores();
+            $("#divSector").show();
+            $("#local_id").val(-1);
+            $("#divLocal").hide();
+        }
+        else {
+            ObtenerLocales();
+            $("#divLocal").show();
+            $("#sector_id").val(-1);
+            $("#divSector").hide();
+        }
+      });
+
 
       function mostrarModalSalida(){
         if ($("#btnGrabar").is(":visible"))
@@ -172,6 +235,49 @@
         $("#mdGrabar").modal('show');
       }
 
+       var ObtenerGeneros = function () {
+             var CodGenero = @Html.Raw(Json.Serialize(Model.genero_id));
+             $.ajax({
+                url: '@Url.Action("ObtenerGeneros","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#genero_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodGenero)
+                              $('#genero_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#genero_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+       var ObtenerUbicaciones = function () {
+         var CodUbicacion =@Html.Raw(Json.Serialize(Model.ubicacion_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Legajo")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
 
       var ObtenerSectores = function () {
              var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
@@ -194,6 +300,29 @@
                 }
           });
         }
+
+        var ObtenerLocales = function () {
+             var CodLocal = @Html.Raw(Json.Serialize(Model.local_id));
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#local_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#local_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#local_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
 
       var ObtenerCategorias = function () {
              var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_id));

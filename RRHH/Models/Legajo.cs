@@ -14,14 +14,30 @@ namespace RRHH.Models
         public string apellido { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]
         public string nombre { get; set; }
-        [Required(ErrorMessage = "El campo es requerido")]
+
+        public int? dni { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
-        public int? sector_id { get; set; }
-        public string? sector { get; set; }
-        public int? funcion_id { get; set; }
-        public string? funcion { get; set; }
+        public int? genero_id { get; set; }
+        public string? genero { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? empresa_id { get; set; }
         public string? empresa { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        public int? ubicacion_id { get; set; }
+        public string? ubicacion { get; set; }
+
+        public int? sector_id { get; set; }
+        public string? sector { get; set; }
+
+        public int? local_id { get; set; }
+        public string? local { get; set; }
+
+        public int? funcion_id { get; set; }
+        public string? funcion { get; set; }
+
         [Required(ErrorMessage = "El campo es requerido")]
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? categoria_id { get; set; }

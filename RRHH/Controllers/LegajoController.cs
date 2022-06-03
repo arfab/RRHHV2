@@ -297,6 +297,30 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
+        public JsonResult ObtenerLocales()
+        {
+            List<Models.Local> l = new List<Models.Local>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                // l = con.Query<Models.Ubicacion>("select * from ubicacion order by descripcion", parameters).ToList();
+                l = con.Query<Models.Local>("spLocalObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Local(-1, "-- Seleccione el local --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+
+
+        }
+
+        [HttpGet]
         public JsonResult ObtenerCategorias()
         {
             List<Models.Categoria> l = new List<Models.Categoria>();
@@ -339,6 +363,52 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
+        public JsonResult ObtenerGeneros()
+        {
+            List<Models.Genero> l = new List<Models.Genero>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                l = con.Query<Models.Genero>("spGeneroObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Genero(-1, "-- Seleccione el género --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerUbicaciones()
+        {
+            List<Models.Ubicacion> l = new List<Models.Ubicacion>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                // l = con.Query<Models.Ubicacion>("select * from ubicacion order by descripcion", parameters).ToList();
+                l = con.Query<Models.Ubicacion>("spUbicacionObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Ubicacion(-1, "-- Seleccione la ubicación --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+
+
+        }
+
+
+        [HttpGet]
         public JsonResult ObtenerFunciones()
         {
             List<Models.Funcion> l = new List<Models.Funcion>();
@@ -370,7 +440,7 @@ namespace RRHH.Controllers
 
             if (modo == "A")
             {
-                if (legajoRepo.Obtener(legajo.nro_legajo.Value) != null)
+                if (legajoRepo.ObtenerPorNro(legajo.empresa_id.Value, legajo.nro_legajo.Value) != null)
                     return false;
             }
             else
@@ -389,7 +459,9 @@ namespace RRHH.Controllers
 
             if (legajo.categoria_id <= 0) return false;
 
-            if (legajo.sector_id <= 0) return false;
+            if ((legajo.ubicacion_id==1 || legajo.ubicacion_id==2) && legajo.sector_id <= 0) return false;
+
+            if (legajo.ubicacion_id == 3 && legajo.local_id <= 0) return false;
 
             return true;
 

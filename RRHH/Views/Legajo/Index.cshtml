@@ -82,7 +82,8 @@
                             <th>Nro. Legajo</th>
                             <th>Nombre</th>
                             <th>Apellido</td>
-                            <th>Sector</th>
+                            <th>Ubicación</th>
+                            <th>Sector/Local</th>
                             <th>Categoría</th>
                             <th></th>
                         </tr>
@@ -104,8 +105,18 @@
                           @item.apellido
                      </td>
                      <td>
-                          @item.sector
+                          @item.ubicacion
                      </td>
+                     <td> 
+                          @if (@item.ubicacion_id==1 || @item.ubicacion_id==2 )
+                           {
+                             @item.sector
+                           }
+                           else
+                           {
+                             @item.local
+                           }
+                           </td>
                      <td>
                           @item.categoria
                      </td>
