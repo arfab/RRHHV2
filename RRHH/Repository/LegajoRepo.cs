@@ -79,7 +79,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Legajo> ObtenerTodos(int iNroLegajo, string sApellido)
+        public IEnumerable<Legajo> ObtenerTodos(int empresa_id, int iNroLegajo, string sApellido)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -88,6 +88,7 @@ namespace RRHH.Repository
                     con.Open();
 
                 DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@empresa_id", empresa_id);
                 parameter.Add("@nro_legajo", iNroLegajo);
                 parameter.Add("@apellido", sApellido);
 

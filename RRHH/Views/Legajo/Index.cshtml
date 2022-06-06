@@ -27,6 +27,8 @@
             <div class="d-flex justify-content-center align-items-center container ">
 
                 <div class="input-group mb-3">
+                    <span class="input-group-text">Empresa</span>            
+                    <select  class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EmpresaActual"]" ></select>           		       
                     <span class="input-group-text">Legajo:</span>
                      <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
                      <span class="input-group-text">Apellido:</span>
@@ -59,10 +61,10 @@
                 </div>
             </div>
 
-          </div>
-        }
+                </div>
+            }
 
-       @* <div class="d-flex justify-content-center align-items-center container ">
+            @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
                 <div class="col bottom-buffer badge bg-secondary">
                     <span id="spanCantidad" class="BarraCantidad">Cantidad  de usuarios: @Model.Count()</span>
@@ -70,76 +72,78 @@
             </div>
         </div>*@
 
-        <div class="row">
-            <div class="col bottom-buffer">
-                <div class="table-responsive">
+            @if (@Model != null)
+            {
+                <div class="row">
+                    <div class="col bottom-buffer">
+                        <div class="table-responsive">
 
 
-                <table class="table table-hover">
-                    <thead>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Empresa</th>
+                                        <th>Nro. Legajo</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                <th>Ubicación</th>
+                <th>Sector/Local</th>
+                <th>Categoría</th>
+                <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
                         <tr>
-                            <th>Empresa</th>
-                            <th>Nro. Legajo</th>
-                            <th>Nombre</th>
-                            <th>Apellido</td>
-                            <th>Ubicación</th>
-                            <th>Sector/Local</th>
-                            <th>Categoría</th>
-                            <th></th>
+                            <td>
+                                @item.empresa
+                            </td>
+                            <td>
+                                @item.nro_legajo
+                            </td>
+                            <td>
+                                @item.nombre
+                            </td>
+                            <td>
+                                @item.apellido
+                            </td>
+                            <td>
+                                @item.ubicacion
+                            </td>
+                            <td> 
+                                @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
+                                {
+                                    @item.sector
+                                }
+                                else
+                                {
+                                    @item.local
+                                }
+                            </td>
+                            <td>
+                                @item.categoria
+                            </td>
+
+                            <td>
+                                <td>
+                                    <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
+                                    <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-empresa_id=@item.empresa_id asp-route-nro_legajo=@item.nro_legajo asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id asp-route-local_id=@item.local_id><i data-mdb-toggle='tooltip' title='Novedades' class='bi  bi-calendar2-plus'></i></a>
+                                    @if (_perfil_id <= 2)
+                                    {
+                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
+                                    }
+
+                                </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                     @foreach (var item in Model)
-                     {
-                     <tr>
-                      <td>
-                          @item.empresa
-                      </td>
-                      <td>
-                          @item.nro_legajo
-                     </td>
-                      <td>
-                          @item.nombre
-                     </td>
-                     <td>
-                          @item.apellido
-                     </td>
-                     <td>
-                          @item.ubicacion
-                     </td>
-                     <td> 
-                          @if (@item.ubicacion_id==1 || @item.ubicacion_id==2 )
-                           {
-                             @item.sector
-                           }
-                           else
-                           {
-                             @item.local
-                           }
-                     </td>
-                     <td>
-                          @item.categoria
-                     </td>
 
-                     <td>
-                        <td>
-                          <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
-                         <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-empresa_id=@item.empresa_id asp-route-nro_legajo=@item.nro_legajo asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id asp-route-local_id=@item.local_id><i data-mdb-toggle='tooltip' title='Novedades' class='bi  bi-calendar2-plus'></i></a>
-                         @if (_perfil_id <=2)
-                         {
-                                <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
-                         }
-
-                    </td>
-                    </tr>  
-                    
-                 }
-                 </tbody>
+                    }
+                </tbody>
                 </table>
-              </div>
-            </div>
-         </div>
-
+                </div>
+                </div>
+                </div>
+            }
          </center>
 
 
@@ -179,10 +183,42 @@
         $("#nro_legajo").val('');
     }
 
+      ObtenerEmpresas();
  
   });
+
+  var ObtenerEmpresas = function () {
+             var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#empresa_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpresa)
+                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
     function mostrarModalEliminar(nro_legajo){
       $("#hfID").val(nro_legajo);
       $("#mdEliminar").modal('show');
      }
 </script>
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}

@@ -48,7 +48,9 @@ namespace RRHH.Controllers
                 ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2,'0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
                 ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
 
-                return View(novedadRepo.ObtenerTodos(-1,-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta, (apellido == null) ? "" : apellido));
+                return View();
+
+                //return View(novedadRepo.ObtenerTodos(-1,-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta, (apellido == null) ? "" : apellido));
             }
 
             return View();
@@ -71,6 +73,9 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
+                IEnumerable<Novedad> novedades;
+
+
                 ViewData["EmpresaActual"] = empresa_id;
                 ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
@@ -83,7 +88,39 @@ namespace RRHH.Controllers
                 ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
                 ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year; 
 
-                return View(novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id==0)?-1:categoria_novedad_id, (tipo_novedad_id == 0)?-1:tipo_novedad_id, (tipo_resolucion_id == 0)?-1:tipo_resolucion_id, (nro_legajo == 0)?-1:nro_legajo,fecha_novedad_desde,fecha_novedad_hasta,(apellido == null) ? "" : apellido));
+                if (nro_legajo >0)
+                {
+                    if (empresa_id <= 0)
+                    {
+                        ViewBag.Message = "Debe seleccionar la empresa";
+                        return View();
+                    }
+                    else
+                    {
+                        Legajo legajo = new Legajo();
+                        ILegajoRepo legajoRepo;
+                        legajoRepo = new LegajoRepo();
+                        legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+
+                        if (legajo == null)
+                        {
+                            ViewBag.Message = "No existe el legajo para esa empresa";
+                            return View();
+                        }
+                    }
+
+
+                }
+
+                novedades = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+
+                if (novedades.Count() == 0)
+                {
+                    ViewBag.Message = "No existen novedades para el criterio seleccionado";
+                    return View();
+                }
+
+                return View(novedades);
             }
 
             return View();

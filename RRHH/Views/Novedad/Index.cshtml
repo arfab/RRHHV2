@@ -89,98 +89,101 @@
             </div>
         </div>*@
 
-        <div class="row">
-            <div class="col bottom-buffer">
-                <div class="table-responsive">
+            @if (@Model != null)
+            {
+                <div class="row">
+                    <div class="col bottom-buffer">
+                        <div class="table-responsive">
 
 
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Nro. Legajo</th>
-                            <th>Apellido</th>
-                            <th>Nombre</th>
-                            <th>Ubicacion</th>
-                            <th>Sector/Local</th>
-                            <th>Responsable</th>
-                            <th>Fecha Novedad</th>
-                            <th>Categoría Novedad</th>
-                            <th>Tipo Novedad</th>
-                            <th>Fecha Resolución</th>
-                            <th>Tipo Resolución</th>
-                            <th>Observaciones</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                     @foreach (var item in Model)
-                     {
-                     <tr>
-                      <td>
-                          @item.nro_legajo
-                     </td>
-                     <td>
-                          @item.apellido
-                     </td>
-                     <td>
-                          @item.nombre
-                     </td>
-                     <td>
-                          @item.ubicacion
-                     </td>
-                     <td>
-                          @if (@item.ubicacion_id==1 || @item.ubicacion_id==2 )
-                           {
-                             @item.sector
-                           }
-                           else
-                           {
-                             @item.local
-                           }
-                     </td>
-                     <td>
-                          @item.responsable
-                     </td>
-                      <td>
-                          @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
-                     </td>
-                     <td>
-                          @item.categoria_novedad
-                     </td>
-                     <td>
-                          @item.tipo_novedad
-                     </td>
-                      <td>
-                          @{
-                             if (item.fecha_resolucion!=null) {
-                                        @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
-                             }
-                            }
-                     </td>
-                     <td>
-                          @item.tipo_resolucion
-                     </td>
-                     <td>
-                          @item.observacion
-                     </td>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nro. Legajo</th>
+                                        <th>Apellido</th>
+                                        <th>Nombre</th>
+                                        <th>Ubicacion</th>
+                                        <th>Sector/Local</th>
+                                        <th>Responsable</th>
+                                        <th>Fecha Novedad</th>
+                                        <th>Categoría Novedad</th>
+                                        <th>Tipo Novedad</th>
+                                        <th>Fecha Resolución</th>
+                                        <th>Tipo Resolución</th>
+                                        <th>Observaciones</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.nro_legajo
+                                            </td>
+                                            <td>
+                                                @item.apellido
+                                            </td>
+                                            <td>
+                                                @item.nombre
+                                            </td>
+                                            <td>
+                                                @item.ubicacion
+                                            </td>
+                                            <td>
+                                                @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
+                                                {
+                                                    @item.sector
+                                                }
+                                                else
+                                                {
+                                                    @item.local
+                                                }
+                                            </td>
+                                            <td>
+                                                @item.responsable
+                                            </td>
+                                            <td>
+                                                @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
+                                            </td>
+                                            <td>
+                                                @item.categoria_novedad
+                                            </td>
+                                            <td>
+                                                @item.tipo_novedad
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (item.fecha_resolucion != null)
+                                                    {
+                                                        @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @item.tipo_resolucion
+                                            </td>
+                                            <td>
+                                                @item.observacion
+                                            </td>
 
-                     <td>
-                        <td>
-                          <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
-                           @if (_perfil_id <= 2)
-                           {
-                             <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
-                           }
-                    </td>
-                    </tr>  
-                    
-                 }
-                 </tbody>
+                                            <td>
+                                                <td>
+                                                    <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
+                                                    @if (_perfil_id <= 2)
+                                                    {
+                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
+                                                    }
+                                                </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
                 </table>
               </div>
             </div>
          </div>
-
+         }
          </center>
 
 
@@ -354,3 +357,12 @@ var ObtenerEmpresas = function () {
 
      });
 </script>
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}

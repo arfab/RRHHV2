@@ -21,8 +21,11 @@ namespace RRHH.Controllers
             Environment = _environment;
         }
 
+        
+        public IActionResult Index() { return View(); }
 
-        public IActionResult Index(int nro_legajo, string apellido)
+        [HttpPost]
+        public IActionResult Index(int empresa_id, int nro_legajo, string apellido)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -36,11 +39,45 @@ namespace RRHH.Controllers
 
                 legajoRepo = new LegajoRepo();
 
+                IEnumerable<Legajo> legajos;
+
                 ViewData["ApellidoActual"] = apellido;
                 ViewData["LegajoActual"] = nro_legajo;
+                ViewData["EmpresaActual"] = empresa_id;
+
+                if (nro_legajo > 0)
+                {
+                    if (empresa_id <= 0)
+                    {
+                        ViewBag.Message = "Debe seleccionar la empresa";
+                        return View();
+                    }
+                    else
+                    {
+                        Legajo legajo = new Legajo();
+                        legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+
+                        if (legajo == null)
+                        {
+                            ViewBag.Message = "No existe el legajo para esa empresa";
+                            return View();
+                        }
+                    }
 
 
-                return View(legajoRepo.ObtenerTodos((nro_legajo==0)?-1:nro_legajo, (apellido==null)?"":apellido));
+                }
+
+                legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+
+                if (legajos.Count() == 0)
+                {
+                    ViewBag.Message = "No existen legajos para el criterio seleccionado";
+                    return View();
+                }
+
+
+
+                return View(legajos);
             }
 
             return View();
