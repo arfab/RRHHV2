@@ -48,9 +48,12 @@ namespace RRHH.Controllers
                 ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2,'0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
                 ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
 
-                return View();
+                
 
-                //return View(novedadRepo.ObtenerTodos(-1,-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta, (apellido == null) ? "" : apellido));
+                if (nro_legajo > 0 && empresa_id > 0)
+                  return View(novedadRepo.ObtenerTodos(-1,-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta, (apellido == null) ? "" : apellido));
+                else
+                  return View();
             }
 
             return View();
@@ -386,6 +389,8 @@ namespace RRHH.Controllers
             legajo = legajoRepo.ObtenerPorNro(novedad.empresa_id.Value, novedad.nro_legajo.Value);
             novedad.legajo_id = legajo.id;
 
+            //if (modo=="S")
+            //    return RedirectToAction("Index", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo = novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });
 
 
             if (valida(novedad))
@@ -402,7 +407,7 @@ namespace RRHH.Controllers
                 if (sret == "")
                 {
 
-                    return RedirectToAction("Index", "Novedad");
+                    return RedirectToAction("Index", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo= novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });
                 }
                 else
                 {
@@ -413,6 +418,24 @@ namespace RRHH.Controllers
             return View(novedad);
         }
 
+        [HttpPost]
+        public IActionResult Salir(Novedad novedad)
+        {
+            int? usuario_id = HttpContext.Session.GetInt32("UID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+         
+            Legajo legajo = new Legajo();
+            ILegajoRepo legajoRepo;
+            legajoRepo = new LegajoRepo();
+            legajo = legajoRepo.ObtenerPorNro(novedad.empresa_id.Value, novedad.nro_legajo.Value);
+            novedad.legajo_id = legajo.id;
+                  
+
+            return RedirectToAction("Index", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo = novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });
+           
+        }
 
         public IActionResult Delete(int hfID)
         {
