@@ -125,10 +125,13 @@
 
            <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
+
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+
                        @if (_perfil_id <=2) {
-                         <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success">Grabar</button>
-                       }
+                        <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
+@*                         <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success">Grabar</button>
+*@                       }
                 </div>
                  <div class="col bottom-buffer">
                      Ultima modificación: @Model.usuario (@Model.fecha_alta)
@@ -151,7 +154,7 @@
         Confirma los cambios hechos?
       </div>
       <div class="modal-footer">
-          <button type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success" >SI</button>
+          <button type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
           <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>
@@ -172,8 +175,7 @@
         Se perderán los cambios efectuados. Está seguro?
       </div>
       <div class="modal-footer">
-        <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
-       @* <button type="submit" asp-route-modo="S" class="btn btn-outline-success" >SI</button>*@
+         <a asp-action="Index" asp-route-empresa_id=@ViewData["EMPRESA_ID"] asp-route-nro_legajo=@ViewData["NRO_LEGAJO"] class="btn btn-outline-success"  Text="SI">SI</a>
         <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>

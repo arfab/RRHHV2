@@ -21,8 +21,30 @@ namespace RRHH.Controllers
             Environment = _environment;
         }
 
-        
-        public IActionResult Index() { return View(); }
+        [HttpGet]
+        public IActionResult Index(int empresa_id, int nro_legajo, string apellido, int modo) 
+        {
+
+            ILegajoRepo legajoRepo;
+
+            legajoRepo = new LegajoRepo();
+
+            IEnumerable<Legajo> legajos;
+
+            ViewData["APELLIDO"] = apellido;
+            ViewData["NRO_LEGAJO"] = nro_legajo;
+            ViewData["EMPRESA_ID"] = empresa_id;
+
+
+            if (nro_legajo > 0 && empresa_id > 0 || apellido != null)
+            {
+                legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                return View(legajos);
+            }
+            else
+                return View();
+
+        }
 
         [HttpPost]
         public IActionResult Index(int empresa_id, int nro_legajo, string apellido)
@@ -41,9 +63,9 @@ namespace RRHH.Controllers
 
                 IEnumerable<Legajo> legajos;
 
-                ViewData["ApellidoActual"] = apellido;
-                ViewData["LegajoActual"] = nro_legajo;
-                ViewData["EmpresaActual"] = empresa_id;
+                ViewData["APELLIDO"] = apellido;
+                ViewData["NRO_LEGAJO"] = nro_legajo;
+                ViewData["EMPRESA_ID"] = empresa_id;
 
                 if (nro_legajo > 0)
                 {
@@ -107,6 +129,10 @@ namespace RRHH.Controllers
 
                 ViewData["MODO"] = "E";
 
+                ViewData["APELLIDO"] = legajo.apellido;
+                ViewData["NRO_LEGAJO"] = legajo.nro_legajo;
+                ViewData["EMPRESA_ID"] = legajo.empresa_id;
+
                 return View(legajo);
             }
             else
@@ -129,6 +155,10 @@ namespace RRHH.Controllers
             ILegajoRepo legajoRepo;
 
             ViewData["MODO"] = modo;
+
+            ViewData["APELLIDO"] = legajo.apellido;
+            ViewData["NRO_LEGAJO"] = legajo.nro_legajo;
+            ViewData["EMPRESA_ID"] = legajo.empresa_id;
 
             if (valida(legajo, modo))
             {
@@ -329,7 +359,7 @@ namespace RRHH.Controllers
             }
 
 
-            l.Insert(0, new Models.Sector(-1, "-- Seleccione el sector --"));
+            l.Insert(0, new Models.Sector(-1, "-- Seleccione el sector --",-1,""));
 
             return Json(new SelectList(l, "id", "descripcion"));
         }

@@ -3,13 +3,14 @@ using RRHH.Models;
 using System.Data;
 using System.Data.SqlClient;
 
+
 namespace RRHH.Repository
 {
-    public class SectorRepo:ISectorRepo
+    public class FuncionRepo:IFuncionRepo
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public string Insertar(Sector sector)
+        public string Insertar(Funcion funcion)
         {
             int icantFilas;
             using (var con = new SqlConnection(strConnectionString))
@@ -19,19 +20,19 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@descripcion", sector.descripcion);
+                parameters.Add("@descripcion", funcion.descripcion);
 
 
-                icantFilas = con.Execute("spSectorInsertar", parameters, commandType: CommandType.StoredProcedure);
+                icantFilas = con.Execute("spFuncionInsertar", parameters, commandType: CommandType.StoredProcedure);
 
 
             }
             return "";
         }
 
-        public string Modificar(Sector sector)
+        public string Modificar(Funcion funcion)
         {
-       
+
             using (var con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
@@ -39,11 +40,11 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@id", sector.id);
-                parameters.Add("@descripcion", sector.descripcion);
+                parameters.Add("@id", funcion.id);
+                parameters.Add("@descripcion", funcion.descripcion);
 
 
-                con.Execute("spSectorModificar", parameters, commandType: CommandType.StoredProcedure);
+                con.Execute("spFuncionModificar", parameters, commandType: CommandType.StoredProcedure);
 
 
             }
@@ -51,7 +52,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Sector> ObtenerTodos(int ubicacion_id)
+        public IEnumerable<Funcion> ObtenerTodos()
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -59,16 +60,12 @@ namespace RRHH.Repository
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
-                DynamicParameters parameter = new DynamicParameters();
-                parameter.Add("@ubicacion_id", ubicacion_id);
-
-
-                return con.Query<Sector>("spSectorObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
+                return con.Query<Funcion>("spFuncionObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
         }
 
-        public Sector Obtener(int iSector)
+        public Funcion Obtener(int iFuncion)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -78,14 +75,14 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameter = new DynamicParameters();
-                parameter.Add("@id", iSector);
+                parameter.Add("@id", iFuncion);
 
-                return con.QuerySingle<Sector>("spSectorObtener", parameter, commandType: CommandType.StoredProcedure);
+                return con.QuerySingle<Funcion>("spFuncionObtener", parameter, commandType: CommandType.StoredProcedure);
             }
 
         }
 
-        public string Eliminar(int iSector)
+        public string Eliminar(int iFuncion)
         {
 
             int icantFilas;
@@ -96,15 +93,15 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameters2 = new DynamicParameters();
-                parameters2.Add("@id", iSector);
+                parameters2.Add("@id", iFuncion);
 
-                icantFilas = con.Execute("spSectorEliminar", parameters2, commandType: CommandType.StoredProcedure);
+                icantFilas = con.Execute("spFuncionEliminar", parameters2, commandType: CommandType.StoredProcedure);
 
 
             }
 
             return "";
         }
-
     }
 }
+

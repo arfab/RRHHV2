@@ -28,11 +28,11 @@
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Empresa</span>            
-                    <select  class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EmpresaActual"]" ></select>           		       
+                    <select  class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EMPRESA_ID"]" ></select>           		       
                     <span class="input-group-text">Legajo:</span>
-                     <input name="nro_legajo" id="nro_legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
+                     <input name="nro_legajo" id="nro_legajo" value="@ViewData["NRO_LEGAJO"]" type="number" class="form-control" />   
                      <span class="input-group-text">Apellido:</span>
-                     <input name="apellido" id="apellido" value="@ViewData["ApellidoActual"]" class="form-control" />   
+                     <input name="apellido" id="apellido" value="@ViewData["APELLIDO"]" class="form-control" />   
                     <input type="submit" value="Buscar" class="btn btn-outline-primary" />
                 </div>
             </div>
@@ -188,7 +188,7 @@
   });
 
   var ObtenerEmpresas = function () {
-             var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+             var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
              $.ajax({
                 url: '@Url.Action("ObtenerEmpresas","Legajo")',
                 type: 'GET',

@@ -348,6 +348,9 @@ namespace RRHH.Controllers
 
                 ViewData["MODO"] = "E";
 
+                ViewData["EMPRESA_ID"] = novedad.empresa_id;
+                ViewData["NRO_LEGAJO"] = novedad.nro_legajo;
+
                 return View(novedad);
             }
             else
@@ -418,24 +421,7 @@ namespace RRHH.Controllers
             return View(novedad);
         }
 
-        [HttpPost]
-        public IActionResult Salir(Novedad novedad)
-        {
-            int? usuario_id = HttpContext.Session.GetInt32("UID");
-
-            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
-
-         
-            Legajo legajo = new Legajo();
-            ILegajoRepo legajoRepo;
-            legajoRepo = new LegajoRepo();
-            legajo = legajoRepo.ObtenerPorNro(novedad.empresa_id.Value, novedad.nro_legajo.Value);
-            novedad.legajo_id = legajo.id;
-                  
-
-            return RedirectToAction("Index", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo = novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });
-           
-        }
+      
 
         public IActionResult Delete(int hfID)
         {
@@ -563,7 +549,7 @@ namespace RRHH.Controllers
             }
 
 
-            l.Insert(0, new Models.Sector(-1, "-- Seleccione el sector --"));
+            l.Insert(0, new Models.Sector(-1, "-- Seleccione el sector --",-1,""));
 
             return Json(new SelectList(l, "id", "descripcion"));
         }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RRHH.Models.Sector>
+﻿@model IEnumerable<RRHH.Models.Funcion>
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
 
@@ -7,10 +7,10 @@
 }
 
 
-<form asp-controller="Usuario"  method="post" >
+<form asp-controller="Funcion"  method="post" >
  <div class="container">
      <div class="jumbotron text-center Titulo">
-      <h2>Sectores</h2>
+      <h2>Tareas</h2>
     </div>
 
       <center>
@@ -20,13 +20,13 @@
             </div>
         </div>
 
-         @* <div class="row bottom-buffer">
+          <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
-                    <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Sector" asp-action="Edit">NUEVO SECTOR</a>
+                    <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Funcion" asp-action="Edit">NUEVA TAREA</a>
                 </div>
             </div>
-        </div>*@
+        </div>
 
        @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
@@ -45,31 +45,26 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Ubicación</th>
                             <th>Nombre</th>
-                            @*<th></th>*@
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                      @foreach (var item in Model)
                      {
                      <tr>
-                       <td>
+                      <td>
                           @item.id
                      </td>
-                      <td>
-                          @item.ubicacion
-                     </td>
-                     
                       <td>
                           @item.descripcion
                      </td>                   
                      <td>
-                      @*  <td>
-                          <a asp-controller="Sector" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el sector' class='bi bi-pencil-square'></i></a>
-                          <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el sector'  class='bi bi-x-circle'></i></a>
+                        <td>
+                          <a asp-controller="Funcion" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar la tarea' class='bi bi-pencil-square'></i></a>
+                          <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la tarea'  class='bi bi-x-circle'></i></a>
                       
-                    </td>*@
+                    </td>
                     </tr>  
                     
                  }
@@ -89,13 +84,13 @@
             <div class="modal-content">
               
                         <div class="modal-header">
-                            <h5 class="modal-title">Sector</h5>
+                            <h5 class="modal-title">Categoría</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
 
                         <div class="modal-body">
-                            Se eliminará el sector con todos sus datos. Está seguro?
+                            Se eliminará la tarea con todos sus datos. Está seguro?
                              <input id="hfID" name="hfID" type="hidden" >
                         </div>
                         <div class="modal-footer">
@@ -113,7 +108,6 @@
  <script type="text/javascript">
     function mostrarModalEliminar(id){
       $("#hfID").val(id);
-      $("#bReserva").attr('asp-route-id2', id.toString());
       $("#mdEliminar").modal('show');
      }
 </script>
