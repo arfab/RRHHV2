@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <Folder Include="DB\" />
-    <Folder Include="Views\Responsable\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\data\" />
   </ItemGroup>

@@ -1,0 +1,117 @@
+﻿@model IEnumerable<RRHH.Models.Responsable>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<form asp-controller="Responsable"  method="post" >
+ <div class="container">
+     <div class="jumbotron text-center Titulo">
+      <h2>Responsables</h2>
+    </div>
+
+      <center>
+     <div class="row">
+            <div class="col bottom-buffer">
+                <span id="spanTitulo"></span>
+            </div>
+        </div>
+
+          <div class="row bottom-buffer">
+            <div class="col bottom-buffer">
+                <div class="btns2">
+                    <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Responsable" asp-action="Edit">NUEVO RESPONSABLE</a>
+                </div>
+            </div>
+        </div>
+
+       @* <div class="d-flex justify-content-center align-items-center container ">
+            <div class="row">
+                <div class="col bottom-buffer badge bg-secondary">
+                    <span id="spanCantidad" class="BarraCantidad">Cantidad  de usuarios: @Model.Count()</span>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="row">
+            <div class="col bottom-buffer">
+                <div class="table-responsive">
+
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                     @foreach (var item in Model)
+                     {
+                     <tr>
+                      <td>
+                          @item.id
+                     </td>
+                      <td>
+                          @item.nombre
+                     </td>     
+                      <td>
+                          @item.apellido
+                     </td> 
+                     <td>
+                        <td>
+                          <a asp-controller="Responsable" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el responsable' class='bi bi-pencil-square'></i></a>
+                          <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el responsable'  class='bi bi-x-circle'></i></a>
+                      
+                    </td>
+                    </tr>  
+                    
+                 }
+                 </tbody>
+                </table>
+              </div>
+            </div>
+         </div>
+
+         </center>
+
+
+    <!-- Modal Eliminar -->
+
+    <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              
+                        <div class="modal-header">
+                            <h5 class="modal-title">Responsable</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+                            Se eliminará al responsable con todos sus datos. Está seguro?
+                             <input id="hfID" name="hfID" type="hidden" >
+                        </div>
+                        <div class="modal-footer">
+                             <button id="btnEliminar" type="submit" asp-action="Delete"  value="" class="btn btn-outline-success"  >SI</button>
+                             <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                        </div>
+          
+
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+ <script type="text/javascript">
+    function mostrarModalEliminar(id){
+      $("#hfID").val(id);
+      $("#mdEliminar").modal('show');
+     }
+</script>

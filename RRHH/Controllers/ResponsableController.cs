@@ -64,5 +64,57 @@ namespace RRHH.Controllers
 
         }
 
+
+        [HttpPost]
+        public IActionResult Edit(int? id, Responsable responsable)
+        {
+
+            string sret;
+            IResponsableRepo responsableRepo;
+
+            if (ModelState.IsValid)
+            {
+
+                responsableRepo = new ResponsableRepo();
+
+                if (id != null)
+                    sret = responsableRepo.Modificar(responsable);
+                else
+                    sret = responsableRepo.Insertar(responsable);
+
+                if (sret == "")
+                {
+
+                    return RedirectToAction("Index", "Responsable");
+                }
+                else
+                {
+                    ViewBag.Message = sret;
+                }
+
+            }
+
+            return View(responsable);
+        }
+
+
+        public IActionResult Delete(int hfID)
+        {
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+
+            IResponsableRepo responsableRepo;
+
+            responsableRepo = new ResponsableRepo();
+
+            responsableRepo.Eliminar(hfID);
+
+
+            return RedirectToAction("Index");
+
+        }
+
     }
 }
