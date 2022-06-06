@@ -24,7 +24,7 @@ namespace RRHH.Controllers
 
                 sectorRepo = new SectorRepo();
 
-                return View(sectorRepo.ObtenerTodos());
+                return View(sectorRepo.ObtenerTodos(-1));
             }
 
             return View();

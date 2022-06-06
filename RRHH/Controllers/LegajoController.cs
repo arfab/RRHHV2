@@ -313,7 +313,7 @@ namespace RRHH.Controllers
 
 
         [HttpGet]
-        public JsonResult ObtenerSectores()
+        public JsonResult ObtenerSectores(int ubicacion_id)
         {
             List<Models.Sector> l = new List<Models.Sector>();
 
@@ -323,8 +323,9 @@ namespace RRHH.Controllers
                     con.Open();
 
                 DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@ubicacion_id", ubicacion_id);
 
-                l = con.Query<Models.Sector>("spSectorObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+                l = con.Query<Models.Sector>("spSectorObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
             }
 
 

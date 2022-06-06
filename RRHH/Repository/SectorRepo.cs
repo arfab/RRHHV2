@@ -51,13 +51,17 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Sector> ObtenerTodos()
+        public IEnumerable<Sector> ObtenerTodos(int ubicacion_id)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@ubicacion_id", ubicacion_id);
+
 
                 return con.Query<Sector>("spSectorObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
