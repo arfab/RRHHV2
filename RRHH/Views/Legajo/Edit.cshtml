@@ -85,7 +85,12 @@
                <div class="row">
                  <div class="col bottom-buffer btns2" id="divFechaAlta">
                       <label asp-for="fecha_alta" class="control-label">Fecha Ingreso</label><br />
-                      <input type="text" id="txtSelectedFechaAlta" name="fecha_alta"  asp-for="fecha_alta" readonly="readonly"/>
+                      <input type="text" id="txtSelectedFechaAlta" name="fecha_alta"  asp-for="fecha_alta" />
+
+                 </div>
+                   <div class="col bottom-buffer btns2" id="divFechaBaja">
+                      <label asp-for="fecha_baja" class="control-label">Fecha Baja</label><br />
+                      <input type="text" id="txtSelectedFechaBaja" name="fecha_baja"  asp-for="fecha_baja" />
 
                  </div>
               </div>
@@ -204,6 +209,7 @@
          ObtenerFunciones();
  
           $('#txtSelectedFechaAlta').datepicker({format: 'dd/mm/yyyy' });
+          $('#txtSelectedFechaBaja').datepicker({format: 'dd/mm/yyyy' });
 
        })
 
@@ -399,7 +405,15 @@
         format: "dd/mm/yyyy",
         language: "es"
         });
+       $('#txtSelectedFechaBaja').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        }); 
      });
+
+
     </script>
 
 
