@@ -315,8 +315,10 @@ namespace RRHH.Controllers
                                   dr[7].ToString(), 
                                   dr[8].ToString(),
                                   fecha_alta,
-                                  fecha_baja, 
-                                  dr[9].ToString()
+                                  fecha_baja,
+                                  dr[10].ToString(),
+                                  dr[9].ToString(),
+                                  dr[11].ToString()
                                   );
 
                         if (legajo == null)

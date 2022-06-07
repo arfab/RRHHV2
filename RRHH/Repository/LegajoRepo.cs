@@ -133,7 +133,7 @@ namespace RRHH.Repository
 
         }
 
-        public Legajo ObtenerDeImportacion(string nro_legajo, string apellido, string nombre, string empresa, string sector, string categoria, string funcion, string fecha_alta, string fecha_baja, string observacion)
+        public Legajo ObtenerDeImportacion(string nro_legajo, string apellido, string nombre, string empresa, string sector, string categoria, string funcion, string fecha_alta, string fecha_baja, string genero, string observacion, string ubicacion_id )
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -153,6 +153,8 @@ namespace RRHH.Repository
                 parameter.Add("@str_fecha_ingreso", fecha_alta);
                 parameter.Add("@str_fecha_baja", fecha_baja);
                 parameter.Add("@observacion", observacion);
+                parameter.Add("@genero", genero);
+                parameter.Add("@ubicacion_id", ubicacion_id);
                 parameter.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
