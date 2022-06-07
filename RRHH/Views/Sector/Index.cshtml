@@ -20,13 +20,13 @@
             </div>
         </div>
 
-         @* <div class="row bottom-buffer">
+         <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
                     <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Sector" asp-action="Edit">NUEVO SECTOR</a>
                 </div>
             </div>
-        </div>*@
+        </div>
 
        @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
@@ -47,7 +47,7 @@
                             <th>ID</th>
                             <th>Ubicación</th>
                             <th>Nombre</th>
-                            @*<th></th>*@
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,11 +65,11 @@
                           @item.descripcion
                      </td>                   
                      <td>
-                      @*  <td>
+                      <td>
                           <a asp-controller="Sector" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el sector' class='bi bi-pencil-square'></i></a>
                           <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el sector'  class='bi bi-x-circle'></i></a>
                       
-                    </td>*@
+                    </td>
                     </tr>  
                     
                  }

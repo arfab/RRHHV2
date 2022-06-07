@@ -20,6 +20,7 @@ namespace RRHH.Repository
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@descripcion", sector.descripcion);
+                parameters.Add("@ubicacion_id", sector.ubicacion_id);
 
 
                 icantFilas = con.Execute("spSectorInsertar", parameters, commandType: CommandType.StoredProcedure);
@@ -41,7 +42,7 @@ namespace RRHH.Repository
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@id", sector.id);
                 parameters.Add("@descripcion", sector.descripcion);
-
+                parameters.Add("@ubicacion_id", sector.ubicacion_id);
 
                 con.Execute("spSectorModificar", parameters, commandType: CommandType.StoredProcedure);
 

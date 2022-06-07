@@ -39,13 +39,15 @@ namespace RRHH.Controllers
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+           
+            Sector sec = new Sector();
 
             if (id!=null)
             {
                 ISectorRepo sectorRepo;
                 sectorRepo = new SectorRepo();
 
-                Sector sec = new Sector();
+              
 
                 sec = sectorRepo.Obtener(id.Value);
 
@@ -56,7 +58,7 @@ namespace RRHH.Controllers
             else
             {
                 ViewData["ID"] = 0;
-                return View();
+                return View(sec);
             }
             
 
@@ -70,6 +72,8 @@ namespace RRHH.Controllers
 
             string sret;
             ISectorRepo sectorRepo;
+
+            ModelState.Remove("ubicacion");
 
             if (ModelState.IsValid)
             {
@@ -94,6 +98,24 @@ namespace RRHH.Controllers
             }
 
             return View(sector);
+        }
+
+        public IActionResult Delete(int hfID)
+        {
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+
+            ISectorRepo sectorRepo;
+
+            sectorRepo = new SectorRepo();
+
+            sectorRepo.Eliminar(hfID);
+
+
+            return RedirectToAction("Index");
+
         }
 
     }

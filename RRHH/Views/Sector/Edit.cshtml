@@ -15,7 +15,13 @@
                 <input asp-for="descripcion" class="form-control" />
                  <span class="alert-danger" asp-validation-for="descripcion"></span>
                  </div>
-            </div>                       
+            </div>           
+            
+            <div class="col bottom-buffer">
+                     <label asp-for="ubicacion_id" class="control-label">Ubicación</label>
+                     <select  class="form-control" id="ubicacion_id" asp-for="ubicacion_id" ></select>
+                     <span class="alert-danger" asp-validation-for="ubicacion_id"></span>
+                  </div>
 
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
@@ -82,6 +88,11 @@
 //     $("#btnGrabar").hide(); 
 //}
 
+$(document).ready(function () {  
+        var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
+        ObtenerUbicaciones();
+ })
+
 function mostrarModalSalida(){
     if ($("#btnGrabar").is(":visible"))
       $("#mdSalir").modal('show');
@@ -91,6 +102,29 @@ function mostrarModalSalida(){
 function mostrarModalGrabar(){
     $("#mdGrabar").modal('show');
 }
+
+
+ var ObtenerUbicaciones = function () {
+         var CodUbicacion =@Html.Raw(Json.Serialize(Model.ubicacion_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Legajo")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
 
 </script>
 
