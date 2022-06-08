@@ -1,10 +1,12 @@
 ﻿@model RRHH.Models.Usuario
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewData["Title"] = "Edición de usuario";
-
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 }
 
 <form asp-action="Edit" method="post">
@@ -23,14 +25,29 @@
              <div class="row ">
                 <div class="col bottom-buffer">
                 <label asp-for="Nombre" class="control-label">Nombre</label>
-                <input asp-for="Nombre" class="form-control" />
-                 <span class="alert-danger" asp-validation-for="Nombre"></span>
-                 </div>
+                @if (_perfil_id == 1)
+                {
+                    <input asp-for="Nombre" class="form-control"  />
+                }
+                else
+                {
+                     <input asp-for="Nombre" class="form-control" readonly />
+                }
+                <span class="alert-danger" asp-validation-for="Nombre"></span>
+              </div>
             </div>
              <div class="row ">
                 <div class="col bottom-buffer">
                 <label asp-for="Apellido" class="control-label">Apellido</label>
-                <input asp-for="Apellido" class="form-control" />
+               
+                 @if (_perfil_id == 1)
+                {
+                    <input asp-for="Apellido" class="form-control" />
+                }
+                else
+                {
+                     <input asp-for="Apellido" class="form-control" readonly />
+                }
                  <span class="alert-danger" asp-validation-for="Apellido"></span>
                  </div>
             </div>
@@ -38,7 +55,18 @@
               <div class="row" id="divPerfil">
                    <div class="col bottom-buffer" id="divTipoNovedad">
                      <label asp-for="perfil_id" class="control-label">Perfil</label>
-                     <select  class="form-control" id="perfil_id" asp-for="perfil_id" ></select>
+
+                      @if (_perfil_id == 1 || _perfil_id==2 && @Model.perfil_id!=1)
+                     {
+                       <select  class="form-control" id="perfil_id" asp-for="perfil_id" ></select>
+                     }
+                     else
+                     {
+                        <select  class="form-control" id="perfil_id" asp-for="perfil_id" disabled ></select>
+                     }
+
+
+                     
                      <span class="alert-danger" asp-validation-for="perfil_id"></span>
                    </div>
             </div>

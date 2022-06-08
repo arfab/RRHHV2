@@ -25,24 +25,36 @@ namespace RRHH.Controllers
         public IActionResult Index(int empresa_id, int nro_legajo, string apellido, int modo) 
         {
 
-            ILegajoRepo legajoRepo;
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
-            legajoRepo = new LegajoRepo();
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
-            IEnumerable<Legajo> legajos;
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            ViewData["APELLIDO"] = apellido;
-            ViewData["NRO_LEGAJO"] = nro_legajo;
-            ViewData["EMPRESA_ID"] = empresa_id;
-
-
-            if (nro_legajo > 0 && empresa_id > 0 || apellido != null)
+            if (perfil_id > 0 && perfil_id <= 3)
             {
-                legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
-                return View(legajos);
+                ILegajoRepo legajoRepo;
+
+                legajoRepo = new LegajoRepo();
+
+                IEnumerable<Legajo> legajos;
+
+                ViewData["APELLIDO"] = apellido;
+                ViewData["NRO_LEGAJO"] = nro_legajo;
+                ViewData["EMPRESA_ID"] = empresa_id;
+
+
+                if (nro_legajo > 0 && empresa_id > 0 || apellido != null)
+                {
+                    legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                    return View(legajos);
+                }
+                else
+                    return View();
             }
-            else
-                return View();
+
+            return RedirectToAction("Login", "Usuario");
+
 
         }
 
@@ -55,7 +67,7 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            if (perfil_id >0)
+            if (perfil_id >0 && perfil_id <=3)
             {
                 ILegajoRepo legajoRepo;
 
@@ -102,7 +114,7 @@ namespace RRHH.Controllers
                 return View(legajos);
             }
 
-            return View();
+            return RedirectToAction("Login", "Usuario");
 
 
         }

@@ -18,7 +18,7 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            if (perfil_id == 1)
+            if (perfil_id == 1 || perfil_id == 2)
             {
                 ITipoResolucionRepo tipoResolucionRepo;
 
@@ -27,7 +27,7 @@ namespace RRHH.Controllers
                 return View(tipoResolucionRepo.ObtenerTodos());
             }
 
-            return View();
+            return RedirectToAction("Login", "Usuario");
 
 
         }

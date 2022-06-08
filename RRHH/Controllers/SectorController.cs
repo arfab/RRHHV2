@@ -18,7 +18,7 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            if (perfil_id == 1)
+            if (perfil_id == 1 || perfil_id == 2)
             {
                 ISectorRepo sectorRepo;
 
@@ -27,7 +27,7 @@ namespace RRHH.Controllers
                 return View(sectorRepo.ObtenerTodos(-1));
             }
 
-            return View();
+            return  RedirectToAction("Login", "Usuario");
 
 
         }
@@ -102,7 +102,7 @@ namespace RRHH.Controllers
 
         public IActionResult Delete(int hfID)
         {
-
+            string sret;
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
@@ -111,8 +111,18 @@ namespace RRHH.Controllers
 
             sectorRepo = new SectorRepo();
 
-            sectorRepo.Eliminar(hfID);
+            sret=sectorRepo.Eliminar(hfID);
 
+
+            if (sret == "")
+            {
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+            }
 
             return RedirectToAction("Index");
 

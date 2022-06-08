@@ -28,7 +28,7 @@ namespace RRHH.Controllers
                 return View(ubicacionRepo.ObtenerTodos());
             }
 
-            return View();
+            return RedirectToAction("Login", "Usuario");
 
 
         }

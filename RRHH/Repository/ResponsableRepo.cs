@@ -85,18 +85,30 @@ namespace RRHH.Repository
         {
 
             int icantFilas;
-            using (var con = new SqlConnection(strConnectionString))
+            try
             {
-                if (con.State == ConnectionState.Closed)
-                    con.Open();
+
+                using (var con = new SqlConnection(strConnectionString))
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
 
 
-                DynamicParameters parameters2 = new DynamicParameters();
-                parameters2.Add("@id", iResponsable);
+                    DynamicParameters parameters2 = new DynamicParameters();
+                    parameters2.Add("@id", iResponsable);
 
-                icantFilas = con.Execute("spResponsableEliminar", parameters2, commandType: CommandType.StoredProcedure);
+                    icantFilas = con.Execute("spResponsableEliminar", parameters2, commandType: CommandType.StoredProcedure);
 
 
+                }
+            }
+            catch (SqlException e)
+            {
+                if (e.Number == 547)
+                    return "No se puede borrar al responsable. Existen datos cargados asociados al mismo.";
+                else
+                    return "Error en la base de datos.";
+               
             }
 
             return "";

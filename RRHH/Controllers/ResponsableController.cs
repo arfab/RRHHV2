@@ -19,7 +19,7 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            if (perfil_id == 1)
+            if (perfil_id == 1 || perfil_id == 2)
             {
                 IResponsableRepo responsableRepo;
 
@@ -100,7 +100,7 @@ namespace RRHH.Controllers
 
         public IActionResult Delete(int hfID)
         {
-
+            string sret;
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
@@ -109,10 +109,21 @@ namespace RRHH.Controllers
 
             responsableRepo = new ResponsableRepo();
 
-            responsableRepo.Eliminar(hfID);
+            sret=responsableRepo.Eliminar(hfID);
 
+            if (sret == "")
+            {
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index", "Responsable");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+
+                return View("Index", responsableRepo.ObtenerTodos());
+            }
+
+           
 
         }
 

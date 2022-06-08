@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<RRHH.Models.Usuario>
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewBag.Title = "Index";
+     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 }
 
 
@@ -20,6 +23,8 @@
             </div>
         </div>
 
+       @if (_perfil_id ==1)
+       {
           <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
@@ -27,6 +32,7 @@
                 </div>
             </div>
         </div>
+       }
 
        @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
@@ -47,7 +53,7 @@
                             <th>Usuario</th>
                             <th>Nombre</th>
                             <th>Apellido</td>
-                            <th>Perfil</th>
+                            <th>Perfil</td>
                             <th></th>
                         </tr>
                     </thead>
@@ -67,13 +73,18 @@
                      <td>
                           @item.perfil_descripcion
                      </td>
-                     <td>
-                        <td>
-                          <a asp-controller="Usuario" asp-action="CambiarClave" asp-route-UsuarioId="@item.UsuarioID"><i data-mdb-toggle='tooltip' title='Cambiar Clave'  class='bi bi-file-earmark-lock'></i></a>
+                    
+                      <td>
+                          @if (_perfil_id==1) {
+                            <a asp-controller="Usuario" asp-action="CambiarClave" asp-route-UsuarioId="@item.UsuarioID"><i data-mdb-toggle='tooltip' title='Cambiar Clave'  class='bi bi-file-earmark-lock'></i></a>
+                          }
                           <a asp-controller="Usuario" asp-action="Edit" asp-route-UsuarioId="@item.UsuarioID"><i data-mdb-toggle='tooltip' title='Editar el Usuario' class='bi bi-pencil-square'></i></a>
-                          <a onclick="mostrarModalEliminar('@item.UsuarioID');" ><i data-mdb-toggle='tooltip' title='Eliminar el usuario'  class='bi bi-x-circle'></i></a>
-                      
-                    </td>
+                          @if (_perfil_id == 1)
+                          {
+                              <a onclick="mostrarModalEliminar('@item.UsuarioID');" ><i data-mdb-toggle='tooltip' title='Eliminar el usuario'  class='bi bi-x-circle'></i></a>
+                           }
+                       </td>
+                  
                     </tr>  
                     
                  }
