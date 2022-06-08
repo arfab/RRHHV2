@@ -10,7 +10,7 @@
 }
 
 
- <form asp-action="Index" method="post">
+ <form  method="post" enctype="multipart/form-data">
      
 
          
@@ -50,10 +50,12 @@
 
                 <div class="input-group mb-3">
                      <span class="input-group-text">Desde:</span>
-                      <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde"   readonly="readonly"/>
+                      <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  readonly="readonly"/>
                       <span class="input-group-text">Hasta:</span>
-                      <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta"  readonly="readonly"/>
-                      <input type="submit" value="Buscar" class="btn btn-outline-primary" />
+                      <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]"  readonly="readonly"/>
+                      <input type="submit" value="Buscar" asp-action="Index" class="btn btn-outline-primary" />
+                      <input type="submit" value="Resetear" asp-action="Reset" class="btn btn-outline-primary" />
+
                 </div>
             </div>
 
@@ -73,6 +75,10 @@
                     {
                         <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>
                     }
+
+                     <input type="file" name="file" />
+                      <button id="btnImportar" type="submit" asp-action="importar" class="btn btn-outline-success">Importar</button>
+
                     <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
 @*                  <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
 *@
@@ -106,11 +112,11 @@
                                         <th>Sector/Local</th>
                                         <th>Responsable</th>
                                         <th>Fecha Novedad</th>
-                                        <th>Categoría Novedad</th>
+                                        @*<th>Categoría Novedad</th>*@
                                         <th>Tipo Novedad</th>
                                         <th>Fecha Resolución</th>
                                         <th>Tipo Resolución</th>
-                                        <th>Observaciones</th>
+                                       @* <th>Observaciones</th>*@
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -146,9 +152,9 @@
                                             <td>
                                                 @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 @item.categoria_novedad
-                                            </td>
+                                            </td>*@
                                             <td>
                                                 @item.tipo_novedad
                                             </td>
@@ -163,9 +169,9 @@
                                             <td>
                                                 @item.tipo_resolucion
                                             </td>
-                                            <td>
+                                           @* <td>
                                                 @item.observacion
-                                            </td>
+                                            </td>*@
 
                                             <td>
                                                 <td>

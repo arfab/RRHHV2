@@ -14,9 +14,16 @@ namespace RRHH.Controllers
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-       
+        private Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment;
 
-        public IActionResult Index(int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
+        public NovedadController(Microsoft.AspNetCore.Hosting.IWebHostEnvironment _environment)
+        {
+            Environment = _environment;
+        }
+
+
+
+        public IActionResult Reset(int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
         {
 
 
@@ -25,6 +32,79 @@ namespace RRHH.Controllers
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+           
+
+
+            if (perfil_id > 0)
+            {
+                INovedadRepo novedadRepo;
+
+                novedadRepo = new NovedadRepo();
+
+                DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                DateTime fechaHasta = DateTime.Now;
+
+           
+                ViewData["EmpresaActual"] = -1;
+                ViewData["CategoriaNovedadActual"] = -1;
+                ViewData["TipoNovedadActual"] = -1;
+                ViewData["TipoResolucionActual"] = -1;
+   
+                ViewData["LegajoActual"] = "";
+                ViewData["UbicacionActual"] = -1;
+                ViewData["SectorActual"] = -1;
+                ViewData["LocalActual"] = -1;
+                ViewData["ApellidoActual"] = "";
+                ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
+                ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
+
+
+                HttpContext.Session.SetString("EMPRESA_ACTUAL","");
+                HttpContext.Session.SetString("LEGAJO_ACTUAL", "");
+                HttpContext.Session.SetString("CATEGORIA_NOVEDAD_ACTUAL", "");
+                HttpContext.Session.SetString("TIPO_NOVEDAD_ACTUAL", "");
+                HttpContext.Session.SetString("TIPO_RESOLUCION_ACTUAL", "");
+
+                HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year);
+                HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year);
+
+
+
+                //if (nro_legajo > 0 && empresa_id > 0)
+                //    return View("Index",novedadRepo.ObtenerTodos(-1, -1, -1, -1,  -1, fechaDesde, fechaHasta, ""));
+                //else
+                return View("Index");
+            }
+
+            return View("Index");
+
+
+        }
+
+
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
+        {
+
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            DateTime? fecha_novedad_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE"));
+            DateTime? fecha_novedad_hasta = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_HASTA"));
+
+            if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL");
+            if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL");
+
+            if (HttpContext.Session.GetInt32("CATEGORIA_NOVEDAD_ACTUAL") != null) categoria_novedad_id = (int)HttpContext.Session.GetInt32("CATEGORIA_NOVEDAD_ACTUAL");
+            if (HttpContext.Session.GetInt32("TIPO_NOVEDAD_ACTUAL") != null) tipo_novedad_id = (int)HttpContext.Session.GetInt32("TIPO_NOVEDAD_ACTUAL");
+            if (HttpContext.Session.GetInt32("TIPO_RESOLUCION_ACTUAL") != null) tipo_resolucion_id = (int)HttpContext.Session.GetInt32("TIPO_RESOLUCION_ACTUAL");
+
+
+
 
             if (perfil_id >0)
             {
@@ -35,10 +115,13 @@ namespace RRHH.Controllers
                 DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); 
                 DateTime fechaHasta = DateTime.Now;
 
+                if (fecha_novedad_desde != null && fecha_novedad_desde.Value.Year>1000) fechaDesde = fecha_novedad_desde.Value;
+                if (fecha_novedad_hasta != null && fecha_novedad_hasta.Value.Year > 1000) fechaHasta = fecha_novedad_hasta.Value;
+
                 ViewData["EmpresaActual"] = empresa_id;
-                ViewData["CategoriaNovedadActual"] = -1;
-                ViewData["TipoNovedadActual"] = -1;
-                ViewData["TipoResolucionActual"] = -1;
+                ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
+                ViewData["TipoNovedadActual"] = tipo_novedad_id;
+                ViewData["TipoResolucionActual"] = tipo_resolucion_id;
                 ViewData["EmpresaActual"] = empresa_id;
                 ViewData["LegajoActual"] = nro_legajo;
                 ViewData["UbicacionActual"] = ubicacion_id;
@@ -50,7 +133,7 @@ namespace RRHH.Controllers
 
                 
 
-                if (nro_legajo > 0 && empresa_id > 0)
+                if (nro_legajo > 0 && empresa_id > 0 )
                   return View(novedadRepo.ObtenerTodos(-1,-1 , -1, -1 ,(nro_legajo==0)?-1:nro_legajo,fechaDesde ,fechaHasta, (apellido == null) ? "" : apellido));
                 else
                   return View();
@@ -89,7 +172,19 @@ namespace RRHH.Controllers
                 ViewData["LocalActual"] = local_id;
                 ViewData["ApellidoActual"] = apellido;
                 ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
-                ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year; 
+                ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year;
+
+                ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
+
+                HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
+                HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
+
+                HttpContext.Session.SetInt32("CATEGORIA_NOVEDAD_ACTUAL", categoria_novedad_id);
+                HttpContext.Session.SetInt32("TIPO_NOVEDAD_ACTUAL", tipo_novedad_id);
+                HttpContext.Session.SetInt32("TIPO_RESOLUCION_ACTUAL", tipo_resolucion_id);
+
+                HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0'));
+                HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0'));
 
                 if (nro_legajo >0)
                 {
@@ -411,6 +506,8 @@ namespace RRHH.Controllers
                 {
 
                     return RedirectToAction("Index", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo= novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });
+                   
+
                 }
                 else
                 {
@@ -659,6 +756,147 @@ namespace RRHH.Controllers
 
             return Json(result);
         }
+
+
+
+        [HttpPost]
+        public ActionResult Importar(IFormFile file)
+        {
+
+            string wwwPath = this.Environment.WebRootPath;
+            string contentPath = this.Environment.ContentRootPath;
+            string path = Path.Combine(this.Environment.WebRootPath, "Uploads");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            DataTable dt = new DataTable();
+            //Checking file content length and Extension must be .xlsx  
+            if (file != null && System.IO.Path.GetExtension(file.FileName).ToLower() == ".xlsx")
+            {
+
+                string fileName = Path.GetFileName(file.FileName);
+
+
+                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                //path = Path.Combine(path, Path.GetFileName(file.FileName));
+                //string path = Path.Combine(Server.MapPath("~/UploadFile"), Path.GetFileName(file.FileName));
+                ////Saving the file  
+                //file.SaveAs(path);
+                ////Started reading the Excel file.  
+                using (XLWorkbook workbook = new XLWorkbook(Path.Combine(path, file.FileName)))
+                {
+                    IXLWorksheet worksheet = workbook.Worksheet(1);
+                    bool FirstRow = true;
+                    //Range for reading the cells based on the last cell used.  
+                    string readRange = "1:1";
+                    foreach (IXLRow row in worksheet.RowsUsed())
+                    {
+                        //If Reading the First Row (used) then add them as column name  
+                        if (FirstRow)
+                        {
+                            //Checking the Last cellused for column generation in datatable  
+                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dt.Columns.Add(cell.Value.ToString());
+                            }
+                            FirstRow = false;
+                        }
+                        else
+                        {
+
+                            //Adding a Row in datatable  
+                            dt.Rows.Add();
+                            int cellIndex = 0;
+                            //Updating the values of datatable  
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dt.Rows[dt.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                cellIndex++;
+                            }
+
+
+                        }
+                    }
+                    //If no data in Excel file  
+                    if (FirstRow)
+                    {
+                        ViewBag.Message = "Empty Excel File!";
+                    }
+
+
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        NovedadRepo novedadRepo = new NovedadRepo();
+                        Novedad novedad = new Novedad();
+
+                        string fecha_novedad = dr[7].ToString();
+                        string dia_novedad = "";
+                        string mes_novedad = "";
+                        string anio_novedad = "";
+                        if (fecha_novedad != "")
+                        {
+                            dia_novedad = fecha_novedad.Substring(0, fecha_novedad.IndexOf("/")).PadLeft(2, '0');
+                            mes_novedad = fecha_novedad.Substring(fecha_novedad.IndexOf("/") + 1, fecha_novedad.LastIndexOf("/") - fecha_novedad.IndexOf("/") - 1).PadLeft(2, '0');
+                            anio_novedad = fecha_novedad.Substring(fecha_novedad.LastIndexOf("/") + 1, 4);
+                            fecha_novedad = anio_novedad + "-" + mes_novedad + "-" + dia_novedad;
+                        }
+
+                        string fecha_resolucion = dr[9].ToString();
+                        string dia_resolucion = "";
+                        string mes_resolucion = "";
+                        string anio_resolucion = "";
+                        if (fecha_resolucion != "")
+                        {
+                            dia_resolucion = fecha_resolucion.Substring(0, fecha_resolucion.IndexOf("/")).PadLeft(2, '0');
+                            mes_resolucion = fecha_resolucion.Substring(fecha_resolucion.IndexOf("/") + 1, fecha_resolucion.LastIndexOf("/") - fecha_resolucion.IndexOf("/") - 1).PadLeft(2, '0');
+                            anio_resolucion = fecha_resolucion.Substring(fecha_resolucion.LastIndexOf("/") + 1, 4);
+                            fecha_resolucion = anio_resolucion + "-" + mes_resolucion + "-" + dia_resolucion;
+                        }
+
+                        novedad = novedadRepo.ObtenerDeImportacion(
+                                  dr[1].ToString(),
+                                  dr[2].ToString(),
+                                  dr[3].ToString(),
+                                  dr[4].ToString(),
+                                  dr[5].ToString(),
+                                  dr[6].ToString(),
+                                  dr[0].ToString(),
+                                  dr[8].ToString(),
+                                  fecha_novedad,
+                                  dr[10].ToString(),
+                                  fecha_resolucion,
+                                  dr[11].ToString(),
+                                  dr[12].ToString()
+                                  );
+
+                        if (novedad == null)
+                            ViewBag.Message = "ERROR";
+                        else
+                        {
+                            novedadRepo.Insertar(novedad, (int)novedad.usuario_id);
+                            ViewBag.Message = "OK";
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                //If file extension of the uploaded file is different then .xlsx  
+                ViewBag.Message = "Please select file with .xlsx extension!";
+            }
+
+            return RedirectToAction("Index");
+            // return View(dt);
+        }
+
 
 
     }

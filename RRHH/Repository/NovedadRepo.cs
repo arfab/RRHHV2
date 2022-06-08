@@ -123,6 +123,45 @@ namespace RRHH.Repository
 
         }
 
+
+        public Novedad ObtenerDeImportacion(string empresa, string nro_legajo, string ubicacion_id,  string sector, string responsable, string concepto, string categoria_novedad, string tipo_novedad, string fecha_novedad, string tipo_resolucion,  string fecha_resolucion, string dias, string observacion)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@empresa", empresa);
+                parameter.Add("@nro_legajo", nro_legajo);
+                parameter.Add("@ubicacion_id", ubicacion_id);
+                parameter.Add("@sector", sector);
+                parameter.Add("@responsable", responsable);
+                parameter.Add("@concepto", concepto);
+                parameter.Add("@categoria_novedad", categoria_novedad);
+                parameter.Add("@tipo_novedad", tipo_novedad);
+                parameter.Add("@str_fecha_novedad", fecha_novedad);
+                parameter.Add("@tipo_resolucion", tipo_resolucion);
+                parameter.Add("@str_fecha_resolucion", fecha_resolucion);
+                parameter.Add("@dias", dias);
+                parameter.Add("@observacion", observacion);
+               
+                parameter.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
+                Novedad novedad = new Novedad();
+
+                novedad =  con.QuerySingleOrDefault<Novedad>("spNovedadObtenerDeImportacion", parameter, commandType: CommandType.StoredProcedure);
+
+                return novedad;
+
+            }
+
+        }
+
+
+
         public string Eliminar(int id)
         {
 
