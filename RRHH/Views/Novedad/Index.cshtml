@@ -69,7 +69,7 @@
           <div class="row bottom-buffer">
               <div class="col bottom-buffer">
                  <div class="btns2">             
-                    @if (_perfil_id <= 2)
+                    @if (_perfil_id <= 3)
                     {
                         <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>
                     }
@@ -170,7 +170,7 @@
                                             <td>
                                                 <td>
                                                     <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
-                                                    @if (_perfil_id <= 2)
+                                                    @if (_perfil_id <= 3)
                                                     {
                                                         <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
                                                     }
