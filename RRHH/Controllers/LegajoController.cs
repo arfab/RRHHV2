@@ -49,18 +49,22 @@ namespace RRHH.Controllers
                 ViewData["NRO_LEGAJO"] = "";
                 ViewData["EMPRESA_ID"] = -1;
 
+                ViewData["UBICACION_ID"] = -1;
+                ViewData["SECTOR_ID"] = -1;
 
                 HttpContext.Session.SetString("EMPRESA_ACTUAL_LEGAJO", "");
                 HttpContext.Session.SetString("LEGAJO_ACTUAL_LEGAJO", "");
                 HttpContext.Session.SetString("APELLIDO_LEGAJO", "");
-               
+                HttpContext.Session.SetString("UBICACION_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("SECTOR_ACTUAL_LEGAJO", "");
+
                 HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
-                int cant = legajoRepo.ObtenerCantidad( -1, -1, "" );
+                int cant = legajoRepo.ObtenerCantidad( -1, -1,-1,-1, "" );
 
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                return View("Index", legajoRepo.ObtenerPagina(1,-1, -1, ""));
+                return View("Index", legajoRepo.ObtenerPagina(1,-1, -1,-1, -1, ""));
 
             }
 
@@ -70,7 +74,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(int empresa_id, int nro_legajo, string apellido, int modo) 
+        public IActionResult Index(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int modo) 
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -83,6 +87,10 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO");
             if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL_LEGAJO") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL_LEGAJO");
             if (HttpContext.Session.GetString("APELLIDO_ACTUAL_LEGAJO") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL_LEGAJO");
+
+            if (HttpContext.Session.GetInt32("UBICACION_ACTUAL_LEGAJO") != null) ubicacion_id = (int)HttpContext.Session.GetInt32("UBICACION_ACTUAL_LEGAJO");
+
+            if (HttpContext.Session.GetInt32("SECTOR_ACTUAL_LEGAJO") != null) sector_id = (int)HttpContext.Session.GetInt32("SECTOR_ACTUAL_LEGAJO");
 
 
             if (perfil_id > 0 && perfil_id <= 3)
@@ -97,6 +105,9 @@ namespace RRHH.Controllers
                 ViewData["NRO_LEGAJO"] = nro_legajo;
                 ViewData["EMPRESA_ID"] = empresa_id;
 
+                ViewData["UBICACION_ID"] = ubicacion_id;
+                ViewData["SECTOR_ID"] = sector_id;
+
                 int? pag_legajo = HttpContext.Session.GetInt32("PAG_LEGAJO");
 
                 if (pag_legajo == null)
@@ -105,11 +116,11 @@ namespace RRHH.Controllers
                     HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
                 }
 
-                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido);
 
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value,(empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value,(empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido);
                 return View(legajos);
 
                 //if (nro_legajo > 0 && empresa_id > 0 || apellido != null)
@@ -127,7 +138,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int empresa_id, int nro_legajo, string apellido)
+        public IActionResult Index(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -147,9 +158,17 @@ namespace RRHH.Controllers
                 ViewData["NRO_LEGAJO"] = nro_legajo;
                 ViewData["EMPRESA_ID"] = empresa_id;
 
+
+                ViewData["UBICACION_ID"] = ubicacion_id;
+                ViewData["SECTOR_ID"] = sector_id;
+
                 HttpContext.Session.SetInt32("EMPRESA_ACTUAL_LEGAJO", empresa_id);
                 HttpContext.Session.SetInt32("LEGAJO_ACTUAL_LEGAJO", nro_legajo);
                 HttpContext.Session.SetString("APELLIDO_LEGAJO", (apellido==null)?"":apellido);
+
+                HttpContext.Session.SetInt32("UBICACION_ACTUAL_LEGAJO", ubicacion_id);
+
+                HttpContext.Session.SetInt32("SECTOR_ACTUAL_LEGAJO", sector_id);
 
 
                 if (nro_legajo > 0)
@@ -184,11 +203,11 @@ namespace RRHH.Controllers
                 //    HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
                 //}
 
-                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido);
 
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value, (empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value, (empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido);
 
 
                // legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);

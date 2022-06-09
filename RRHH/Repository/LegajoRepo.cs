@@ -79,7 +79,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Legajo> ObtenerTodos(int empresa_id, int iNroLegajo, string sApellido)
+        public IEnumerable<Legajo> ObtenerTodos(int empresa_id, int iNroLegajo, int ubicacion_id, int sector_id, string sApellido)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -90,6 +90,8 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@empresa_id", empresa_id);
                 parameter.Add("@nro_legajo", iNroLegajo);
+                parameter.Add("@ubicacion_id", ubicacion_id);
+                parameter.Add("@sector_id", sector_id);
                 parameter.Add("@apellido", sApellido);
 
 
@@ -98,7 +100,7 @@ namespace RRHH.Repository
 
         }
 
-        public IEnumerable<Legajo> ObtenerPagina(int pag, int empresa_id, int iNroLegajo, string sApellido)
+        public IEnumerable<Legajo> ObtenerPagina(int pag, int empresa_id, int iNroLegajo, int ubicacion_id, int sector_id, string sApellido)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -110,6 +112,8 @@ namespace RRHH.Repository
                 parameter.Add("@pag", pag);
                 parameter.Add("@empresa_id", empresa_id);
                 parameter.Add("@nro_legajo", iNroLegajo);
+                parameter.Add("@ubicacion_id", ubicacion_id);
+                parameter.Add("@sector_id", sector_id);
                 parameter.Add("@apellido", sApellido);
 
 
@@ -118,7 +122,7 @@ namespace RRHH.Repository
 
         }
 
-        public int ObtenerCantidad(int empresa_id, int iNroLegajo, string sApellido)
+        public int ObtenerCantidad(int empresa_id, int iNroLegajo, int ubicacion_id, int sector_id, string sApellido)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -129,6 +133,8 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@empresa_id", empresa_id);
                 parameter.Add("@nro_legajo", iNroLegajo);
+                parameter.Add("@ubicacion_id", ubicacion_id);
+                parameter.Add("@sector_id", sector_id);
                 parameter.Add("@apellido", sApellido);
 
 
