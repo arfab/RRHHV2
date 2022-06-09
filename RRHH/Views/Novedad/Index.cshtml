@@ -138,7 +138,7 @@
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        <tr>
+                                        <tr style="background:@(item.categoria_novedad_id ==1 ? "white" : "lightgray");">
                                             <td>
                                                 @item.nro_legajo
                                             </td>

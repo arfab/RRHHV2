@@ -139,7 +139,7 @@ namespace RRHH.Controllers
                     HttpContext.Session.SetInt32("PAG_NOVEDAD", 1);
                 }
 
-                int cant = novedadRepo.ObtenerCantidad(-1, -1, -1, -1, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
 
                 HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
@@ -157,7 +157,7 @@ namespace RRHH.Controllers
                 ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2,'0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
                 ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
 
-                return View(novedadRepo.ObtenerPagina(pag_novedad.Value, -1, -1, -1, -1, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
+                return View(novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
 
 
                 //if (nro_legajo > 0 && empresa_id > 0) {
