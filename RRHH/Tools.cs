@@ -17,6 +17,20 @@
             //return "Data Source=190.210.248.41;Initial Catalog=MontagneAdministracionTest;Persist Security Info=True;User ID=usersimon;Password=bialcohol3.2021";
         }
 
+        public static string GetPaginacionNovedad()
+        {
+
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                                        .SetBasePath(Directory.GetCurrentDirectory())
+                                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            IConfigurationRoot configuration = builder.Build();
+            IConfigurationSection sPaginacionNovedad = configuration.GetSection("Parametros").GetSection("paginacion_novedad");
+
+            return sPaginacionNovedad.Value;
+
+        }
+
         public static string sObtenerMes(int iMes)
         {
             string sRet = "";

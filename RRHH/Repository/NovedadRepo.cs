@@ -106,6 +106,55 @@ namespace RRHH.Repository
 
         }
 
+        public IEnumerable<Novedad> ObtenerPagina(int pag, int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@pag", pag);
+                parameter.Add("@empresa_id", empresa_id);
+                parameter.Add("@categoria_novedad_id", categoria_novedad_id);
+                parameter.Add("@tipo_novedad_id", tipo_novedad_id);
+                parameter.Add("@tipo_resolucion_id", tipo_resolucion_id);
+                parameter.Add("@nro_legajo", nro_legajo);
+                parameter.Add("@apellido", apellido);
+                parameter.Add("@fecha_novedad_desde", fecha_novedad_desde);
+                parameter.Add("@fecha_novedad_hasta", fecha_novedad_hasta);
+
+                return con.Query<Novedad>("spNovedadObtenerPag", parameter, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+        }
+
+        public int ObtenerCantidad(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@empresa_id", empresa_id);
+                parameter.Add("@categoria_novedad_id", categoria_novedad_id);
+                parameter.Add("@tipo_novedad_id", tipo_novedad_id);
+                parameter.Add("@tipo_resolucion_id", tipo_resolucion_id);
+                parameter.Add("@nro_legajo", nro_legajo);
+                parameter.Add("@apellido", apellido);
+                parameter.Add("@fecha_novedad_desde", fecha_novedad_desde);
+                parameter.Add("@fecha_novedad_hasta", fecha_novedad_hasta);
+
+                return con.QuerySingle<int>("spNovedadObtenerCantidad", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
         public Novedad Obtener(int id)
         {
 

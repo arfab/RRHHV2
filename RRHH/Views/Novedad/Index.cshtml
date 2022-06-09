@@ -7,6 +7,8 @@
 @{
     ViewBag.Title = "Index";
     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+    var pagina = @HttpContextAccessor.HttpContext.Session.GetInt32("PAG_NOVEDAD");
+    var total_paginas = @HttpContextAccessor.HttpContext.Session.GetInt32("TOT_PAG_NOVEDAD");
 }
 
 
@@ -94,6 +96,19 @@
                 </div>
             </div>
         </div>*@
+
+          @if (pagina > 1)
+            {
+                <a asp-action="Anterior">Anterior</a>
+            }
+            @if (total_paginas > 0)
+            {
+              <span>@pagina / @total_paginas</span>
+            }
+            @if (pagina < total_paginas)
+            {
+                <a asp-action="Siguiente">Siguiente</a>
+            }
 
             @if (@Model != null)
             {
