@@ -106,6 +106,9 @@ namespace RRHH.Controllers
             DateTime? fecha_novedad_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE"));
             DateTime? fecha_novedad_hasta = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_HASTA"));
 
+            if (empresa_id > 0) HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
+            if (nro_legajo > 0) HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
+
             if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL");
             if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL");
 

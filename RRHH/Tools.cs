@@ -31,6 +31,20 @@
 
         }
 
+        public static string GetPaginacionLegajo()
+        {
+
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                                        .SetBasePath(Directory.GetCurrentDirectory())
+                                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            IConfigurationRoot configuration = builder.Build();
+            IConfigurationSection sPaginacionLegajo = configuration.GetSection("Parametros").GetSection("paginacion_legajo");
+
+            return sPaginacionLegajo.Value;
+
+        }
+
         public static string sObtenerMes(int iMes)
         {
             string sRet = "";

@@ -14,11 +14,59 @@ namespace RRHH.Controllers
 
         static readonly string strConnectionString = Tools.GetConnectionString();
 
+        static readonly int cantPag = int.Parse(Tools.GetPaginacionLegajo());
+
+
         private Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment;
 
         public LegajoController(Microsoft.AspNetCore.Hosting.IWebHostEnvironment _environment)
         {
             Environment = _environment;
+        }
+
+
+        public IActionResult Reset()
+        {
+
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+
+
+
+            if (perfil_id > 0)
+            {
+
+                ILegajoRepo legajoRepo;
+
+                legajoRepo = new LegajoRepo();
+
+                ViewData["APELLIDO"] = "" ;
+                ViewData["NRO_LEGAJO"] = "";
+                ViewData["EMPRESA_ID"] = -1;
+
+
+                HttpContext.Session.SetString("EMPRESA_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("LEGAJO_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("APELLIDO_LEGAJO", "");
+               
+                HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
+
+                int cant = legajoRepo.ObtenerCantidad( -1, -1, "" );
+
+                HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
+
+                return View("Index", legajoRepo.ObtenerPagina(1,-1, -1, ""));
+
+            }
+
+            return View("Index");
+
+
         }
 
         [HttpGet]
@@ -30,6 +78,12 @@ namespace RRHH.Controllers
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+
+            if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO");
+            if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL_LEGAJO") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL_LEGAJO");
+            if (HttpContext.Session.GetString("APELLIDO_ACTUAL_LEGAJO") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL_LEGAJO");
+
 
             if (perfil_id > 0 && perfil_id <= 3)
             {
@@ -43,14 +97,28 @@ namespace RRHH.Controllers
                 ViewData["NRO_LEGAJO"] = nro_legajo;
                 ViewData["EMPRESA_ID"] = empresa_id;
 
+                int? pag_legajo = HttpContext.Session.GetInt32("PAG_LEGAJO");
 
-                if (nro_legajo > 0 && empresa_id > 0 || apellido != null)
+                if (pag_legajo == null)
                 {
-                    legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
-                    return View(legajos);
+                    pag_legajo = 1;
+                    HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
                 }
-                else
-                    return View();
+
+                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+
+                HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
+
+                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value,(empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                return View(legajos);
+
+                //if (nro_legajo > 0 && empresa_id > 0 || apellido != null)
+                //{
+                //    legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                //    return View(legajos);
+                //}
+                //else
+                //    return View();
             }
 
             return RedirectToAction("Login", "Usuario");
@@ -79,6 +147,11 @@ namespace RRHH.Controllers
                 ViewData["NRO_LEGAJO"] = nro_legajo;
                 ViewData["EMPRESA_ID"] = empresa_id;
 
+                HttpContext.Session.SetInt32("EMPRESA_ACTUAL_LEGAJO", empresa_id);
+                HttpContext.Session.SetInt32("LEGAJO_ACTUAL_LEGAJO", nro_legajo);
+                HttpContext.Session.SetString("APELLIDO_LEGAJO", (apellido==null)?"":apellido);
+
+
                 if (nro_legajo > 0)
                 {
                     if (empresa_id <= 0)
@@ -101,7 +174,24 @@ namespace RRHH.Controllers
 
                 }
 
-                legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+                HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
+
+                int? pag_legajo = HttpContext.Session.GetInt32("PAG_LEGAJO");
+
+                //if (pag_legajo == null)
+                //{
+                //    pag_legajo = 1;
+                //    HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
+                //}
+
+                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+
+                HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
+
+                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value, (empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
+
+
+               // legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
 
                 if (legajos.Count() == 0)
                 {
@@ -118,6 +208,29 @@ namespace RRHH.Controllers
 
 
         }
+
+
+        [HttpGet]
+        public IActionResult Siguiente()
+        {
+            int pag_legajo = HttpContext.Session.GetInt32("PAG_LEGAJO").GetValueOrDefault();
+
+            HttpContext.Session.SetInt32("PAG_LEGAJO", pag_legajo + 1);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Anterior()
+        {
+            int pag_legajo = HttpContext.Session.GetInt32("PAG_LEGAJO").GetValueOrDefault();
+
+            HttpContext.Session.SetInt32("PAG_LEGAJO", pag_legajo - 1);
+
+            return RedirectToAction("Index");
+        }
+
+
 
         [HttpGet]
         public IActionResult Edit(int? id)

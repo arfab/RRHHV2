@@ -98,6 +98,45 @@ namespace RRHH.Repository
 
         }
 
+        public IEnumerable<Legajo> ObtenerPagina(int pag, int empresa_id, int iNroLegajo, string sApellido)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@pag", pag);
+                parameter.Add("@empresa_id", empresa_id);
+                parameter.Add("@nro_legajo", iNroLegajo);
+                parameter.Add("@apellido", sApellido);
+
+
+                return con.Query<Legajo>("spLegajoObtenerPag", parameter, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+        }
+
+        public int ObtenerCantidad(int empresa_id, int iNroLegajo, string sApellido)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@empresa_id", empresa_id);
+                parameter.Add("@nro_legajo", iNroLegajo);
+                parameter.Add("@apellido", sApellido);
+
+
+                return con.QuerySingle<int>("spLegajoObtenerCantidad", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
         public Legajo Obtener(int id)
         {
 
