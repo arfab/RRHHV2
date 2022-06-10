@@ -52,9 +52,9 @@
 
                 <div class="input-group mb-3">
                      <span class="input-group-text">Desde:</span>
-                      <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  readonly="readonly"/>
+                      <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  />
                       <span class="input-group-text">Hasta:</span>
-                      <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]"  readonly="readonly"/>
+                      <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]" />
                       <input type="submit" value="Buscar" asp-action="Index" class="btn btn-outline-primary" />
                       <input type="submit" value="Resetear" asp-action="Reset" class="btn btn-outline-primary" />
 
@@ -271,6 +271,29 @@ $(document).ready(function() {
 
 });
 
+
+     $("#nro_legajo").change(function () {
+           if($("#nro_legajo").val()!='')
+         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+     });
+      	
+     $("#nro_legajo").focusout(function () {
+          if($("#nro_legajo").val()!='')
+         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+     });
+
+      $("#empresa_id").change(function () {
+         if($("#nro_legajo").val()!='')
+         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+     });
+
+
+     $("#empresa_id").focusout(function () {
+         if($("#nro_legajo").val()!='')
+         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+     });
+
+
 var ObtenerEmpresas = function () {
              var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
              $.ajax({
@@ -347,6 +370,26 @@ var ObtenerEmpresas = function () {
                         else 
                           $('#tipo_resolucion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                     });
+            },
+            error: function () {
+            }
+      });
+    }
+
+     var ObtenerLegajo = function (empresa_id, nro_legajo) {
+         $.ajax({
+            url: '@Url.Action("ObtenerLegajo","Novedad")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                empresa_id: empresa_id,
+                nro_legajo: nro_legajo
+            },
+            success: function (data) {
+
+                $('#apellido').val(data.apellido);
+                  $('#empresa_id').val(data.empresa_id);
             },
             error: function () {
             }

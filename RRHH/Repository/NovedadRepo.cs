@@ -98,8 +98,8 @@ namespace RRHH.Repository
                 parameter.Add("@tipo_resolucion_id", tipo_resolucion_id);
                 parameter.Add("@nro_legajo", nro_legajo);
                 parameter.Add("@apellido", apellido);
-                parameter.Add("@fecha_novedad_desde", fecha_novedad_desde);
-                parameter.Add("@fecha_novedad_hasta", fecha_novedad_hasta);
+                parameter.Add("@fecha_novedad_desde", (fecha_novedad_desde.Year < 1000) ? null : fecha_novedad_desde);
+                parameter.Add("@fecha_novedad_hasta", (fecha_novedad_hasta.Year < 1000) ? null : fecha_novedad_hasta);
 
                 return con.Query<Novedad>("spNovedadObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
             }
@@ -123,8 +123,8 @@ namespace RRHH.Repository
                 parameter.Add("@tipo_resolucion_id", tipo_resolucion_id);
                 parameter.Add("@nro_legajo", nro_legajo);
                 parameter.Add("@apellido", apellido);
-                parameter.Add("@fecha_novedad_desde", fecha_novedad_desde);
-                parameter.Add("@fecha_novedad_hasta", fecha_novedad_hasta);
+                parameter.Add("@fecha_novedad_desde", (fecha_novedad_desde.Year < 1000) ? null : fecha_novedad_desde);
+                parameter.Add("@fecha_novedad_hasta", (fecha_novedad_hasta.Year < 1000) ? null : fecha_novedad_hasta);
 
                 return con.Query<Novedad>("spNovedadObtenerPag", parameter, commandType: CommandType.StoredProcedure).ToList();
             }
@@ -147,8 +147,8 @@ namespace RRHH.Repository
                 parameter.Add("@tipo_resolucion_id", tipo_resolucion_id);
                 parameter.Add("@nro_legajo", nro_legajo);
                 parameter.Add("@apellido", apellido);
-                parameter.Add("@fecha_novedad_desde", fecha_novedad_desde);
-                parameter.Add("@fecha_novedad_hasta", fecha_novedad_hasta);
+                parameter.Add("@fecha_novedad_desde", (fecha_novedad_desde.Year < 1000) ? null : fecha_novedad_desde);
+                parameter.Add("@fecha_novedad_hasta", (fecha_novedad_hasta.Year < 1000) ? null : fecha_novedad_hasta);
 
                 return con.QuerySingle<int>("spNovedadObtenerCantidad", parameter, commandType: CommandType.StoredProcedure);
             }

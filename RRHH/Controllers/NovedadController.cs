@@ -65,6 +65,8 @@ namespace RRHH.Controllers
 
                 HttpContext.Session.SetString("EMPRESA_ACTUAL","");
                 HttpContext.Session.SetString("LEGAJO_ACTUAL", "");
+                HttpContext.Session.SetString("APELLIDO_ACTUAL", "");
+
                 HttpContext.Session.SetString("CATEGORIA_NOVEDAD_ACTUAL", "");
                 HttpContext.Session.SetString("TIPO_NOVEDAD_ACTUAL", "");
                 HttpContext.Session.SetString("TIPO_RESOLUCION_ACTUAL", "");
@@ -79,12 +81,12 @@ namespace RRHH.Controllers
                 //else
 
 
-                int cant = novedadRepo.ObtenerCantidad(-1, -1, -1, -1, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                int cant = novedadRepo.ObtenerCantidad(-1, -1, -1, -1,  -1, fechaDesde, fechaHasta,  "" );
 
                 HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
 
-                return View("Index",novedadRepo.ObtenerPagina(1, -1, -1, -1, -1, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
+                return View("Index",novedadRepo.ObtenerPagina(1, -1, -1, -1, -1, -1 , fechaDesde, fechaHasta,  ""));
             }
 
             return View("Index");
@@ -108,9 +110,12 @@ namespace RRHH.Controllers
 
             if (empresa_id > 0) HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
             if (nro_legajo > 0) HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
+            if (apellido != null) HttpContext.Session.SetString("APELLIDO_ACTUAL", apellido);
 
             if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL");
             if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL");
+            if (HttpContext.Session.GetString("APELLIDO_ACTUAL") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL");
+
 
             if (HttpContext.Session.GetInt32("CATEGORIA_NOVEDAD_ACTUAL") != null) categoria_novedad_id = (int)HttpContext.Session.GetInt32("CATEGORIA_NOVEDAD_ACTUAL");
             if (HttpContext.Session.GetInt32("TIPO_NOVEDAD_ACTUAL") != null) tipo_novedad_id = (int)HttpContext.Session.GetInt32("TIPO_NOVEDAD_ACTUAL");
@@ -127,6 +132,8 @@ namespace RRHH.Controllers
 
                 DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); 
                 DateTime fechaHasta = DateTime.Now;
+
+                
 
                 if (fecha_novedad_desde != null && fecha_novedad_desde.Value.Year>1000) fechaDesde = fecha_novedad_desde.Value;
                 if (fecha_novedad_hasta != null && fecha_novedad_hasta.Value.Year > 1000) fechaHasta = fecha_novedad_hasta.Value;
@@ -154,8 +161,42 @@ namespace RRHH.Controllers
                 ViewData["SectorActual"] = sector_id;
                 ViewData["LocalActual"] = local_id;
                 ViewData["ApellidoActual"] = apellido;
-                ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2,'0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
-                ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
+
+                if (empresa_id > 0 && nro_legajo > 0)
+                {
+                    fechaDesde= new DateTime(1, 1, 1);
+                    fechaHasta = new DateTime(1, 1, 1);
+                    ViewData["FechaNovedadDesdeActual"] = "";
+                    ViewData["FechaNovedadHastaActual"] = "";
+                }
+                else {
+                    if (fechaDesde.Year<1000) {
+                        fechaDesde = new DateTime(1, 1, 1);
+
+                        ViewData["FechaNovedadDesdeActual"] = "";
+                    }
+                    else
+                    {
+                        ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
+
+                    }
+
+                    if (fechaHasta.Year < 1000)
+                    {
+                        fechaHasta = new DateTime(1, 1, 1);
+
+                        ViewData["FechaNovedadHastaActual"] = "";
+                    }
+                    else
+                    {
+                        ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
+
+                    }
+
+
+                }
+
+
 
                 return View(novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
 
@@ -201,13 +242,36 @@ namespace RRHH.Controllers
                 ViewData["SectorActual"] = sector_id;
                 ViewData["LocalActual"] = local_id;
                 ViewData["ApellidoActual"] = apellido;
-                ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
-                ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year;
+
+                if (fecha_novedad_desde.Year < 1000)
+                {
+                    ViewData["FechaNovedadDesdeActual"] = "";
+                }
+                else
+                {
+                    ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
+
+                }
+
+                if (fecha_novedad_hasta.Year < 1000)
+                {
+                    ViewData["FechaNovedadHastaActual"] = "";
+                }
+                else
+                {
+                    ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year;
+
+                }
+
+                //ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
+                //ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year;
 
 
    
                 HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
                 HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
+                HttpContext.Session.SetString("APELLIDO_ACTUAL", (apellido==null)?"":apellido);
+
 
                 HttpContext.Session.SetInt32("CATEGORIA_NOVEDAD_ACTUAL", categoria_novedad_id);
                 HttpContext.Session.SetInt32("TIPO_NOVEDAD_ACTUAL", tipo_novedad_id);

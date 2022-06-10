@@ -54,7 +54,7 @@ namespace RRHH.Controllers
 
                 HttpContext.Session.SetString("EMPRESA_ACTUAL_LEGAJO", "");
                 HttpContext.Session.SetString("LEGAJO_ACTUAL_LEGAJO", "");
-                HttpContext.Session.SetString("APELLIDO_LEGAJO", "");
+                HttpContext.Session.SetString("APELLIDO_ACTUAL_LEGAJO", "");
                 HttpContext.Session.SetString("UBICACION_ACTUAL_LEGAJO", "");
                 HttpContext.Session.SetString("SECTOR_ACTUAL_LEGAJO", "");
 
@@ -164,7 +164,7 @@ namespace RRHH.Controllers
 
                 HttpContext.Session.SetInt32("EMPRESA_ACTUAL_LEGAJO", empresa_id);
                 HttpContext.Session.SetInt32("LEGAJO_ACTUAL_LEGAJO", nro_legajo);
-                HttpContext.Session.SetString("APELLIDO_LEGAJO", (apellido==null)?"":apellido);
+                HttpContext.Session.SetString("APELLIDO_ACTUAL_LEGAJO", (apellido==null)?"":apellido);
 
                 HttpContext.Session.SetInt32("UBICACION_ACTUAL_LEGAJO", ubicacion_id);
 
