@@ -110,7 +110,7 @@
                 <a asp-action="Siguiente">Siguiente</a>
             }
 
-            @if (@Model != null)
+            @if (@Model != null && Model.Count()>0)
             {
                 <div class="row">
                     <div class="col bottom-buffer">
@@ -389,7 +389,9 @@ var ObtenerEmpresas = function () {
             success: function (data) {
 
                 $('#apellido').val(data.apellido);
-                  $('#empresa_id').val(data.empresa_id);
+                $('#empresa_id').val(data.empresa_id);
+                $('#txtSelectedFechaNovedadDesde').val('');
+                $('#txtSelectedFechaNovedadHasta').val('');
             },
             error: function () {
             }

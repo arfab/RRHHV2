@@ -135,8 +135,21 @@ namespace RRHH.Controllers
 
                 
 
-                if (fecha_novedad_desde != null && fecha_novedad_desde.Value.Year>1000) fechaDesde = fecha_novedad_desde.Value;
-                if (fecha_novedad_hasta != null && fecha_novedad_hasta.Value.Year > 1000) fechaHasta = fecha_novedad_hasta.Value;
+                if (fecha_novedad_desde != null)
+                  if(fecha_novedad_desde.Value.Year > 2002)
+                        fechaDesde = fecha_novedad_desde.Value;
+                  else
+                        if(fecha_novedad_desde.Value.Year!=1)
+                          fechaDesde = new DateTime(1, 1, 1);
+
+                if (fecha_novedad_hasta != null)
+                    if (fecha_novedad_hasta.Value.Year > 2002)
+                        fechaHasta = fecha_novedad_hasta.Value;
+                    else
+                          if (fecha_novedad_hasta.Value.Year != 1)
+                        fechaHasta = new DateTime(1, 1, 1);
+
+               // if (fecha_novedad_hasta != null && fecha_novedad_hasta.Value.Year > 2002) fechaHasta = fecha_novedad_hasta.Value;
 
                 int? pag_novedad = HttpContext.Session.GetInt32("PAG_NOVEDAD");
 
@@ -170,7 +183,7 @@ namespace RRHH.Controllers
                     ViewData["FechaNovedadHastaActual"] = "";
                 }
                 else {
-                    if (fechaDesde.Year<1000) {
+                    if (fechaDesde.Year<2002) {
                         fechaDesde = new DateTime(1, 1, 1);
 
                         ViewData["FechaNovedadDesdeActual"] = "";
@@ -181,7 +194,7 @@ namespace RRHH.Controllers
 
                     }
 
-                    if (fechaHasta.Year < 1000)
+                    if (fechaHasta.Year < 2002)
                     {
                         fechaHasta = new DateTime(1, 1, 1);
 
@@ -243,7 +256,7 @@ namespace RRHH.Controllers
                 ViewData["LocalActual"] = local_id;
                 ViewData["ApellidoActual"] = apellido;
 
-                if (fecha_novedad_desde.Year < 1000)
+                if (fecha_novedad_desde.Year < 2002)
                 {
                     ViewData["FechaNovedadDesdeActual"] = "";
                 }
@@ -253,7 +266,7 @@ namespace RRHH.Controllers
 
                 }
 
-                if (fecha_novedad_hasta.Year < 1000)
+                if (fecha_novedad_hasta.Year < 2002)
                 {
                     ViewData["FechaNovedadHastaActual"] = "";
                 }
