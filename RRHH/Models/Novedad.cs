@@ -22,7 +22,6 @@ namespace RRHH.Models
         public int? sector_id { get; set; }
         public string? sector { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? responsable_id { get; set; }
         public string? responsable { get; set; }
 

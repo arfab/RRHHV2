@@ -246,15 +246,26 @@ namespace RRHH.Controllers
                 IEnumerable<Novedad> novedades;
 
 
+
                 ViewData["EmpresaActual"] = empresa_id;
                 ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
-                ViewData["LegajoActual"] = nro_legajo;
-                ViewData["UbicacionActual"] = ubicacion_id;
-                ViewData["SectorActual"] = sector_id;
-                ViewData["LocalActual"] = local_id;
+                ViewData["LegajoActual"] = nro_legajo;                
                 ViewData["ApellidoActual"] = apellido;
+
+
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+                legajoRepo = new LegajoRepo();
+                legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+
+                if (legajo != null)
+                {
+                    ViewData["UbicacionActual"] = legajo.ubicacion_id;
+                    ViewData["SectorActual"] = legajo.sector_id;
+                    ViewData["LocalActual"] = legajo.local_id;
+                }
 
                 if (fecha_novedad_desde.Year < 2002)
                 {
@@ -302,10 +313,10 @@ namespace RRHH.Controllers
                     }
                     else
                     {
-                        Legajo legajo = new Legajo();
-                        ILegajoRepo legajoRepo;
-                        legajoRepo = new LegajoRepo();
-                        legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+                        //Legajo legajo = new Legajo();
+                        //ILegajoRepo legajoRepo;
+                        //legajoRepo = new LegajoRepo();
+                        //legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
 
                         if (legajo == null)
                         {
@@ -566,7 +577,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id, string origen)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -574,6 +585,8 @@ namespace RRHH.Controllers
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
             Novedad novedad = new Novedad();
+
+            ViewData["ORIGEN"] = origen;
 
             if (id != null)
             {
@@ -612,7 +625,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int? id, Novedad novedad)
+        public IActionResult Edit(string modo,  int? id,  Novedad novedad)
         {
             int? usuario_id = HttpContext.Session.GetInt32("UID");
 
@@ -623,8 +636,7 @@ namespace RRHH.Controllers
             INovedadRepo novedadRepo;
 
             ViewData["MODO"] = modo;
-
-
+            
             Legajo legajo = new Legajo();
             ILegajoRepo legajoRepo;
             legajoRepo = new LegajoRepo();
@@ -648,8 +660,9 @@ namespace RRHH.Controllers
 
                 if (sret == "")
                 {
+                    return RedirectToAction("Reset", "Novedad");
 
-                    return RedirectToAction("Index", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo= novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });
+                   // return RedirectToAction("Reset", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo= novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });
                    
 
                 }
@@ -877,7 +890,7 @@ namespace RRHH.Controllers
             if (novedad.tipo_novedad_id <= 0) return false;
             if (novedad.observacion == null) return false;
             if (novedad.observacion.Trim()=="") return false;
-            if (novedad.responsable_id <= 0) return false;
+            //if (novedad.responsable_id <= 0) return false;
             if (novedad.ubicacion_id < 0) return false;
 
             return true;
