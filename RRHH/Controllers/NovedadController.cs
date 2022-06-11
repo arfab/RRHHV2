@@ -62,6 +62,8 @@ namespace RRHH.Controllers
                 ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
                 ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
 
+                ViewData["EmpleadoActual"] = -1;
+                ViewData["FiltroActual"] = "";
 
                 HttpContext.Session.SetString("EMPRESA_ACTUAL","");
                 HttpContext.Session.SetString("LEGAJO_ACTUAL", "");
@@ -73,6 +75,11 @@ namespace RRHH.Controllers
 
                 HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year);
                 HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year);
+
+                HttpContext.Session.SetString("EMPLEADO_ACTUAL", "");
+                HttpContext.Session.SetString("FILTRO_ACTUAL", "");
+
+
 
                 HttpContext.Session.SetInt32("PAG_NOVEDAD", 1);
 
@@ -95,7 +102,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int empleado_id, string filtro)
         {
 
 
@@ -115,6 +122,9 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL");
             if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL");
             if (HttpContext.Session.GetString("APELLIDO_ACTUAL") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL");
+
+            if (HttpContext.Session.GetInt32("EMPLEADO_ACTUAL") != null) empleado_id = (int)HttpContext.Session.GetInt32("EMPLEADO_ACTUAL");
+            if (HttpContext.Session.GetString("FILTRO_ACTUAL") != null) filtro = HttpContext.Session.GetString("FILTRO_ACTUAL");
 
 
             if (HttpContext.Session.GetInt32("CATEGORIA_NOVEDAD_ACTUAL") != null) categoria_novedad_id = (int)HttpContext.Session.GetInt32("CATEGORIA_NOVEDAD_ACTUAL");
@@ -175,6 +185,27 @@ namespace RRHH.Controllers
                 ViewData["LocalActual"] = local_id;
                 ViewData["ApellidoActual"] = apellido;
 
+                ViewData["EmpleadoActual"] = empleado_id;
+                ViewData["FiltroActual"] = filtro;
+
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+                legajoRepo = new LegajoRepo();
+                // legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+
+                legajo = legajoRepo.Obtener(empleado_id);
+
+
+                if (legajo != null)
+                {
+                    ViewData["UbicacionActual"] = legajo.ubicacion_id;
+                    ViewData["SectorActual"] = legajo.sector_id;
+                    ViewData["LocalActual"] = legajo.local_id;
+                    nro_legajo = legajo.nro_legajo.Value;
+                    empresa_id = legajo.empresa_id.Value;
+                }
+
+
                 if (empresa_id > 0 && nro_legajo > 0)
                 {
                     fechaDesde= new DateTime(1, 1, 1);
@@ -229,7 +260,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id)
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int empleado_id, string filtro)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -253,18 +284,28 @@ namespace RRHH.Controllers
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
                 ViewData["LegajoActual"] = nro_legajo;                
                 ViewData["ApellidoActual"] = apellido;
-
+                ViewData["EmpleadoActual"] = empleado_id;
+                ViewData["FiltroActual"] = filtro;
 
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;
                 legajoRepo = new LegajoRepo();
-                legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+               // legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+
+                legajo = legajoRepo.Obtener(empleado_id);
+
 
                 if (legajo != null)
                 {
                     ViewData["UbicacionActual"] = legajo.ubicacion_id;
                     ViewData["SectorActual"] = legajo.sector_id;
                     ViewData["LocalActual"] = legajo.local_id;
+
+                    ViewData["EmpresaActual"] = legajo.empresa_id;
+                    ViewData["LegajoActual"] = legajo.nro_legajo;
+
+                    nro_legajo = legajo.nro_legajo.Value;
+                    empresa_id = legajo.empresa_id.Value;
                 }
 
                 if (fecha_novedad_desde.Year < 2002)
@@ -295,6 +336,9 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
                 HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
                 HttpContext.Session.SetString("APELLIDO_ACTUAL", (apellido==null)?"":apellido);
+
+                HttpContext.Session.SetInt32("EMPLEADO_ACTUAL", empleado_id);
+                HttpContext.Session.SetString("FILTRO_ACTUAL", (filtro == null) ? "" : filtro);
 
 
                 HttpContext.Session.SetInt32("CATEGORIA_NOVEDAD_ACTUAL", categoria_novedad_id);
@@ -382,7 +426,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public void  ExportarExcel(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        public void  ExportarExcel(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido, int empleado_id)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -392,6 +436,17 @@ namespace RRHH.Controllers
 
             if (perfil_id >0)
             {
+
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+                legajoRepo = new LegajoRepo();
+                legajo = legajoRepo.Obtener(empleado_id);
+                if (legajo != null)
+                {
+                    nro_legajo = legajo.nro_legajo.Value;
+                    empresa_id = legajo.empresa_id.Value;
+                }
+
                 INovedadRepo novedadRepo;
 
                 novedadRepo = new NovedadRepo();
@@ -577,7 +632,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id, string origen)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id, string origen, int empleado_id)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -615,6 +670,22 @@ namespace RRHH.Controllers
                 if (ubicacion_id != null) novedad.ubicacion_id = ubicacion_id.Value;
                 if (sector_id != null) novedad.sector_id = sector_id.Value;
                 if (local_id != null) novedad.local_id = local_id.Value;
+
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+                legajoRepo = new LegajoRepo();
+                legajo = legajoRepo.Obtener(empleado_id);
+
+
+                if (legajo != null)
+                {
+                    novedad.nro_legajo = legajo.nro_legajo.Value;
+                    novedad.empresa_id = legajo.empresa_id.Value;
+
+                    ViewData["EMPRESA_ID"] = novedad.empresa_id;
+                    ViewData["NRO_LEGAJO"] = novedad.nro_legajo;
+
+                }
 
                 return View(novedad);
             }

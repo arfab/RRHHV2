@@ -643,6 +643,31 @@ namespace RRHH.Controllers
             return Json(new SelectList(l, "id", "descripcion"));
         }
 
+        [HttpGet]
+        public JsonResult ObtenerEmpleados(string filtro)
+        {
+            List<Models.Empleado> l = new List<Models.Empleado>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@filtro", filtro);
+
+                l = con.Query<Models.Empleado>("spLegajoObtenerPorFiltro", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+            
+            if (l.Count == 0)
+                l.Insert(0, new Models.Empleado(-1, "No se encontró ningún empleado"));
+            else
+              if (l.Count > 1)
+                l.Insert(0, new Models.Empleado(-1, "-- Seleccione el empleado --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
         public Boolean valida(Legajo legajo, string modo)
         {
 

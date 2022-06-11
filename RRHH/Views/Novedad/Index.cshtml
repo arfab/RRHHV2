@@ -12,7 +12,7 @@
 }
 
 
- <form  method="post" enctype="multipart/form-data">
+ <form  method="post" enctype="multipart/form-data" class="form-floating">
      
 
          
@@ -23,8 +23,34 @@
     </div>
 
       <center>
+         @* <div class="row" id="filter">
+			<div class="form-group col-sm-4 col-xs-6">
+				<select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
+			</div>
+			<div class="form-group col-sm-4 col-xs-6">
+				<select name="tipo_novedad_id" id="tipo_novedad_id" data-filter="model" class="filter-model filter form-control"></select>
+			</div>
+			<div class="form-group col-sm-4 col-xs-6">
+				<select  name="tipo_resolucion_id" id="tipo_resolucion_id" data-filter="type" class="filter-type filter form-control"></select>
+			</div>
+	      </div>
 
-             <div class="d-flex justify-content-center align-items-center container ">
+          <div class="row form-floating" id="filter" >
+			<div class="form-floating col-sm-4 col-xs-6">
+                 <label for="empresa_id">Empresa</label>
+                <select  data-filter="model" class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EmpresaActual"]" ></select>           
+			</div>
+			<div class="form-floating  col-sm-4 col-xs-6">
+                  <label for="nro_legajo">Nro. Legajo</label>
+                  <input name="nro_legajo" id="nro_legajo"  placeholder="Nro. Legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
+			</div>
+			<div class="form-floating col-sm-4 col-xs-6">
+                  <label for="apellido">Apellido</label>
+                  <input name="apellido" id="apellido"  placeholder="Apellido" value="@ViewData["ApellidoActual"]" class="form-control" />                                          
+			</div>
+	     </div>*@
+
+           @*  <div class="d-flex justify-content-center align-items-center container ">
 
 
                 <div class="input-group mb-3">
@@ -46,9 +72,83 @@
                   <span class="input-group-text">Apellido:</span>
                   <input name="apellido" id="apellido" value="@ViewData["ApellidoActual"]" class="form-control" />                                          
               </div>
-            </div>
+            </div>*@
              
-            <div class="d-flex justify-content-center align-items-center container ">
+
+         <div class="row mb-3" >
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="categoria_novedad_id">Categoría</label>
+				<select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="tipo_novedad_id">Tipo de novedad</label>
+				<select name="tipo_novedad_id" id="tipo_novedad_id" data-filter="model" class="filter-model filter form-control"></select>
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="tipo_resolucion_id">Tipo de resolución</label>
+				<select  name="tipo_resolucion_id" id="tipo_resolucion_id" data-filter="type" class="filter-type filter form-control"></select>
+			</div>
+	      </div>
+
+          <div class="row mb-3"  hidden >
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="empresa_id">Empresa</label>
+                <select  data-filter="model" class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EmpresaActual"]" ></select>           
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                  <label for="nro_legajo">Nro. Legajo</label>
+                  <input name="nro_legajo" id="nro_legajo"  placeholder="Nro. Legajo" value="@ViewData["LegajoActual"]" type="number" class="form-control" />   
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                  <label for="apellido">Apellido</label>
+                  <input name="apellido" id="apellido"  placeholder="Apellido" value="@ViewData["ApellidoActual"]" class="form-control" />                                          
+			</div>
+	     </div>
+         <div class="row mb-3" >
+             <div class="col-sm-4 col-xs-6 mb-3">
+                  <label for="filtro">Legajo / Apellido</label>
+                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="empresa_id">Empleado</label>
+                <select  data-filter="model" class="form-control" name="empleado_id" id="empleado_id" value="@ViewData["EmpleadoActual"]" ></select>           
+			</div>
+            <div class="col-sm-4 col-xs-6 mb-3">
+                <div class="row" >
+                    <div class="col" >
+                        <label for="txtSelectedFechaNovedadDesde">Desde</label>
+                        <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  />
+                    </div>
+                     <div class="col" >
+                       <label for="txtSelectedFechaNovedadHasta">Hasta</label>
+                       <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]" />
+                  </div>
+                </div>
+            </div>
+          </div>  
+           
+         <div class="row mb-3" >
+@*			<div class="col-sm-4 col-xs-6 mb-3" >
+                 <label for="txtSelectedFechaNovedadDesde">Desde</label>
+                 <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  />
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                  <label for="txtSelectedFechaNovedadHasta">Hasta</label>
+                  <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]" />
+			</div>*@
+			<div class="col">
+                 <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
+                 <input type="submit" value="Resetear" asp-action="Reset" class="btn btn-secondary" />
+                 <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
+
+                  @if (_perfil_id <= 3)
+                    {
+                      <a type="button" id="cmdNuevo" class="btn btn-outline-primary " asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-empleado_id="@ViewData["EmpleadoActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>                     
+                    }
+
+			</div>
+	     </div>
+           @* <div class="d-flex justify-content-center align-items-center container ">
 
                 <div class="input-group mb-3">
                      <span class="input-group-text">Desde:</span>
@@ -59,7 +159,7 @@
                       <input type="submit" value="Resetear" asp-action="Reset" class="btn btn-outline-primary" />
 
                 </div>
-            </div>
+            </div>*@
 
 
 
@@ -73,15 +173,14 @@
           <div class="row bottom-buffer">
               <div class="col bottom-buffer">
                  <div class="btns2">             
-                    @if (_perfil_id <= 3)
+                   @* @if (_perfil_id <= 3)
                     {
                         <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>
-                    }
+                    }*@
 
                      <input type="file" name="file" />
                       <button id="btnImportar" type="submit" asp-action="importar" class="btn btn-outline-success">Importar</button>
 
-                    <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
 @*                  <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
 *@
                  </div>
@@ -177,7 +276,7 @@
                                                 @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                        @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                            @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                 }
                                             </td>
@@ -244,6 +343,8 @@
 $(document).ready(function() {
     var FechaNovedadDesde = @Html.Raw(Json.Serialize(ViewData["FechaNovedadDesdeActual"]));
     var FechaNovedadHasta = @Html.Raw(Json.Serialize(ViewData["FechaNovedadHastaActual"]));
+   
+    var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
 
     if ($("#nro_legajo").val() <=0) 
     {
@@ -254,6 +355,9 @@ $(document).ready(function() {
     ObtenerCategoriasNovedad();
     ObtenerTiposNovedad();
     ObtenerTiposResolucion();
+
+    ObtenerEmpleados(Filtro);
+
 
        $('#txtSelectedFechaNovedadDesde').datepicker({format: 'dd/mm/yyyy' });
         $('#txtSelectedFechaNovedadHasta').datepicker({format: 'dd/mm/yyyy' });
@@ -271,6 +375,11 @@ $(document).ready(function() {
 
 });
 
+     $("#filtro").change(function () {
+        ObtenerEmpleados($("#filtro").val());
+     });
+
+     
 
      $("#nro_legajo").change(function () {
            if($("#nro_legajo").val()!='')
@@ -387,13 +496,45 @@ var ObtenerEmpresas = function () {
                 nro_legajo: nro_legajo
             },
             success: function (data) {
-
                 $('#apellido').val(data.apellido);
                 $('#empresa_id').val(data.empresa_id);
                 $('#txtSelectedFechaNovedadDesde').val('');
                 $('#txtSelectedFechaNovedadHasta').val('');
             },
             error: function () {
+             
+            }
+      });
+    }
+
+    var ObtenerEmpleados = function (filtro) {
+         var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+         $.ajax({
+            url: '@Url.Action("ObtenerEmpleados","Legajo")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                filtro: filtro
+            },
+            success: function (data) {
+                $('#empleado_id').find('option').remove()
+                if (data[0].value > 0) { 
+                   $('#txtSelectedFechaNovedadDesde').val('');
+                   $('#txtSelectedFechaNovedadHasta').val('');
+                }
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodEmpleado)
+                          $('#empleado_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                         else 
+                          $('#empleado_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    }
+                    );
+            },
+            error: function () {
+             
             }
       });
     }

@@ -100,6 +100,24 @@ namespace RRHH.Repository
 
         }
 
+        public IEnumerable<Legajo> ObtenerPorFiltro(string sFiltro)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@filtro", sFiltro);
+
+
+                return con.Query<Legajo>("spLegajoObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+        }
+
+
         public IEnumerable<Legajo> ObtenerPagina(int pag, int empresa_id, int iNroLegajo, int ubicacion_id, int sector_id, string sApellido)
         {
 
