@@ -19,10 +19,21 @@
 
  <div class="container">
      <div class="jumbotron text-center Titulo bottom-buffer ">
-      <h2>Novedades</h2>
+      <h2>Listado de Novedades</h2>
+      <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a> | <a href="#" onclick='ToggleImportarNovedades()'>Importar de Excel</a>
     </div>
 
       <center>
+
+           <div class="row bottom-buffer" id="divImportarNovedades">
+              <div class="col bottom-buffer">
+                 <div class="btns2">             
+                     <input type="file" name="file" />
+                      <button id="btnImportar" type="submit" asp-action="importar" class="btn btn-outline-success">Importar</button>
+                 </div>
+              </div>
+          </div>
+
          @* <div class="row" id="filter">
 			<div class="form-group col-sm-4 col-xs-6">
 				<select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
@@ -75,20 +86,7 @@
             </div>*@
              
 
-         <div class="row mb-3" >
-			<div class="col-sm-4 col-xs-6 mb-3">
-                <label for="categoria_novedad_id">Categoría</label>
-				<select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
-			</div>
-			<div class="col-sm-4 col-xs-6 mb-3">
-                <label for="tipo_novedad_id">Tipo de novedad</label>
-				<select name="tipo_novedad_id" id="tipo_novedad_id" data-filter="model" class="filter-model filter form-control"></select>
-			</div>
-			<div class="col-sm-4 col-xs-6 mb-3">
-                <label for="tipo_resolucion_id">Tipo de resolución</label>
-				<select  name="tipo_resolucion_id" id="tipo_resolucion_id" data-filter="type" class="filter-type filter form-control"></select>
-			</div>
-	      </div>
+       
 
           <div class="row mb-3"  hidden >
 			<div class="col-sm-4 col-xs-6 mb-3">
@@ -126,6 +124,21 @@
                 </div>
             </div>
           </div>  
+
+          <div class="row mb-3" id="divBusquedaAvanzada" >
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="categoria_novedad_id">Categoría</label>
+				<select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="tipo_novedad_id">Tipo de novedad</label>
+				<select name="tipo_novedad_id" id="tipo_novedad_id" data-filter="model" class="filter-model filter form-control"></select>
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="tipo_resolucion_id">Tipo de resolución</label>
+				<select  name="tipo_resolucion_id" id="tipo_resolucion_id" data-filter="type" class="filter-type filter form-control"></select>
+			</div>
+	      </div>
            
          <div class="row mb-3" >
 @*			<div class="col-sm-4 col-xs-6 mb-3" >
@@ -138,7 +151,7 @@
 			</div>*@
 			<div class="col">
                  <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
-                 <input type="submit" value="Resetear" asp-action="Reset" class="btn btn-secondary" />
+                 <input type="submit" value="X" asp-action="Reset" class="btn btn-secondary" title="Limpiar todos los datos de la búsqueda"  />
                  <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-outline-primary" />
 
                   @if (_perfil_id <= 3)
@@ -170,22 +183,7 @@
             </div>
         </div>
 
-          <div class="row bottom-buffer">
-              <div class="col bottom-buffer">
-                 <div class="btns2">             
-                   @* @if (_perfil_id <= 3)
-                    {
-                        <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>
-                    }*@
-
-                     <input type="file" name="file" />
-                      <button id="btnImportar" type="submit" asp-action="importar" class="btn btn-outline-success">Importar</button>
-
-@*                  <input type="submit" asp-action="ExportarPDF" value="Exportar a PDF" class="btn btn-outline-primary" />
-*@
-                 </div>
-              </div>
-          </div>
+         
     
 
        @* <div class="d-flex justify-content-center align-items-center container ">
@@ -276,7 +274,7 @@
                                                 @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                            @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                                            @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                 }
                                             </td>
@@ -350,6 +348,9 @@ $(document).ready(function() {
     {
         $("#nro_legajo").val('');
     }
+
+    $("#divBusquedaAvanzada").hide();
+    $("#divImportarNovedades").hide();
 
     ObtenerEmpresas();
     ObtenerCategoriasNovedad();
@@ -539,11 +540,21 @@ var ObtenerEmpresas = function () {
       });
     }
 
-    function mostrarModalEliminar(nro_legajo){
-      $("#hfID").val(nro_legajo);
-      $("#mdEliminar").modal('show');
+    function ToggleBusquedaAvanzada(){   
+           $('#divBusquedaAvanzada').toggle();
+
      }
 
+     function ToggleImportarNovedades(){   
+           $('#divImportarNovedades').toggle();
+
+     }
+
+      function mostrarModalEliminar(nro_legajo){
+      $("#hfID").val(nro_legajo);
+      $("#mdEliminar").modal('show');
+
+     }
      $(function () {
       $('#txtSelectedFechaNovedadDesde').datepicker({
         changeMonth: true,
