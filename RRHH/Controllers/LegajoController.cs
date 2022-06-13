@@ -67,6 +67,7 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
                 int cant = legajoRepo.ObtenerCantidad( -1, -1,-1,-1, "" );
+                ViewData["TOTAL_LEGAJOS"] = cant;
 
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
@@ -144,6 +145,7 @@ namespace RRHH.Controllers
                 }
 
                 int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido);
+                ViewData["TOTAL_LEGAJOS"] = cant;
 
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
@@ -252,6 +254,7 @@ namespace RRHH.Controllers
                 //}
 
                 int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido);
+                ViewData["TOTAL_LEGAJOS"] = cant;
 
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 

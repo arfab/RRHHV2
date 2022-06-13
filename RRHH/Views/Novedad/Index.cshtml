@@ -118,6 +118,22 @@
                 </div>
             </div>
         </div>*@
+            @if (@ViewBag.Message==null)
+            {
+                   <div class="row">
+                       <div class="col bottom-buffer badge bg-secondary">
+                          <span id="spanCantidad" class="BarraCantidad">Cantidad: @ViewData["TOTAL_NOVEDADES"]</span>
+                      </div>
+                </div>
+            }
+            else
+            {
+                 <div class="row">
+                       <div class="col bottom-buffer badge bg-secondary">
+                          <span id="spanCantidad" class="BarraCantidad">No hay novedades para el criterio seleccionado</span>
+                      </div>
+                </div>
+            }
 
           @if (pagina > 1)
             {
@@ -199,7 +215,7 @@
                                                 @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                                                                @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                                                                    @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                 }
                                             </td>
@@ -513,7 +529,7 @@ var ObtenerEmpresas = function () {
      });
 </script>
 
-@if (ViewBag.Message != null)
+@*@if (ViewBag.Message != null)
 {
     <script type="text/javascript">
             window.onload = function () {
@@ -521,3 +537,4 @@ var ObtenerEmpresas = function () {
             };
     </script>
 }
+*@

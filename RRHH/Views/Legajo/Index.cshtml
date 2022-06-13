@@ -132,6 +132,23 @@
             </div>
         </div>*@
 
+         @if (@ViewBag.Message==null)
+            {
+                   <div class="row">
+                       <div class="col bottom-buffer badge bg-secondary">
+                          <span id="spanCantidad" class="BarraCantidad">Cantidad: @ViewData["TOTAL_LEGAJOS"]</span>
+                      </div>
+                </div>
+            }
+            else
+            {
+                 <div class="row">
+                       <div class="col bottom-buffer badge bg-secondary">
+                          <span id="spanCantidad" class="BarraCantidad">No hay legajos para el criterio seleccionado</span>
+                      </div>
+                </div>
+            }
+
 
         @if (pagina > 1)
             {
@@ -536,7 +553,7 @@
      }
 </script>
 
-@if (ViewBag.Message != null)
+@*@if (ViewBag.Message != null)
 {
     <script type="text/javascript">
             window.onload = function () {
@@ -544,3 +561,4 @@
             };
     </script>
 }
+*@
