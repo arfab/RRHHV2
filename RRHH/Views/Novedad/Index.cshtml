@@ -118,11 +118,16 @@
                 </div>
             </div>
         </div>*@
-            @if (@ViewBag.Message==null)
+           @* @if (@ViewBag.Message==null)
             {
+                  <div class="d-flex flex-row-reverse bd-highlight">
+                     <div class="p-2 bd-highlight">Cantidad: @ViewData["TOTAL_NOVEDADES"]</div>
+
+                   </div>
+                 
                    <div class="row ">
                       <div class="col bottom-buffer badge bg-secondary">
-                          <span id="spanCantidad" class="BarraCantidad">Cantidad: @ViewData["TOTAL_NOVEDADES"]</span>
+                         <span id="spanCantidad" class="BarraCantidad2">Cantidad: @ViewData["TOTAL_NOVEDADES"]</span>
                       </div>
                 </div>
             }
@@ -133,20 +138,35 @@
                           <span id="spanCantidad" class="BarraCantidad">No hay novedades para el criterio seleccionado</span>
                       </div>
                 </div>
-            }
+            }*@
 
-          @if (pagina > 1)
-            {
-                <a asp-action="Anterior">Anterior</a>
-            }
-            @if (total_paginas > 0)
-            {
-              <span>@pagina / @total_paginas</span>
-            }
-            @if (pagina < total_paginas)
-            {
-                <a asp-action="Siguiente">Siguiente</a>
-            }
+            <div class="d-flex d-flex justify-content-center">
+                @if (@ViewBag.Message==null)
+                {
+                    @if (pagina > 1)
+                    {
+                        <a asp-action="Anterior">Anterior</a>
+                    }
+                    @if (total_paginas > 0)
+                    {
+                        <span class="p-2 bd-highlight">Pág. @pagina de @total_paginas - Cantidad: @ViewData["TOTAL_NOVEDADES"]</span>
+                    }
+                    @if (pagina < total_paginas)
+                    {
+                        <a asp-action="Siguiente">Siguiente</a>
+                    }
+
+                    @if (total_paginas == 0)
+                    {
+                        <span>Pág. @pagina de @total_paginas</span>
+                    }
+                }
+                else
+                {
+                   <div class="p-2 bd-highlight">No hay novedades para el criterio seleccionado</div>
+                }
+
+           </div>
 
             @if (@Model != null && Model.Count()>0)
             {
@@ -155,7 +175,7 @@
                         <div class="table-responsive">
 
 
-                            <table class="table table-hover">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Nro. Legajo</th>
@@ -215,7 +235,7 @@
                                                 @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                                                                    @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                                                                        @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                 }
                                             </td>
@@ -225,8 +245,6 @@
                                            @* <td>
                                                 @item.observacion
                                             </td>*@
-
-                                            <td>
                                                 <td>
                                                     <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
                                                     @if (_perfil_id <= 3)

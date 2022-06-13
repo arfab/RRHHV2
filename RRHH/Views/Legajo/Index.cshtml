@@ -132,36 +132,34 @@
             </div>
         </div>*@
 
-         @if (@ViewBag.Message==null)
-            {
-                   <div class="row">
-                       <div class="col bottom-buffer badge bg-secondary">
-                          <span id="spanCantidad" class="BarraCantidad">Cantidad: @ViewData["TOTAL_LEGAJOS"]</span>
-                      </div>
-                </div>
-            }
-            else
-            {
-                 <div class="row">
-                       <div class="col bottom-buffer badge bg-secondary">
-                          <span id="spanCantidad" class="BarraCantidad">No hay legajos para el criterio seleccionado</span>
-                      </div>
-                </div>
-            }
 
+            <div class="d-flex d-flex justify-content-center">
+                @if (@ViewBag.Message==null)
+                {
+                    @if (pagina > 1)
+                    {
+                        <a class="p-2 bd-highlight" asp-action="Anterior">Anterior</a>
+                    }
+                    @if (total_paginas > 0)
+                    {
+                        <span class="p-2 bd-highlight">Pág. @pagina de @total_paginas - Cantidad: @ViewData["TOTAL_LEGAJOS"]</span>
+                    }
+                    @if (pagina < total_paginas)
+                    {
+                        <a class="p-2 bd-highlight" asp-action="Siguiente">Siguiente</a>
+                    }
 
-        @if (pagina > 1)
-            {
-                <a asp-action="Anterior">Anterior</a>
-            }
-            @if (total_paginas > 0)
-            {
-              <span>@pagina / @total_paginas</span>
-            }
-            @if (pagina < total_paginas)
-            {
-                <a asp-action="Siguiente">Siguiente</a>
-            }
+                    @if (total_paginas == 0)
+                    {
+                        <span>Pág. @pagina de @total_paginas</span>
+                    }
+                }
+                else
+                {
+                   <div class="p-2 bd-highlight">No hay novedades para el criterio seleccionado</div>
+                }
+
+           </div>
 
             @if (@Model != null)
             {
@@ -170,7 +168,7 @@
                         <div class="table-responsive">
 
 
-                            <table class="table table-hover">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Empresa</th>
@@ -216,12 +214,11 @@
                                 @item.categoria
                             </td>
 
-                            <td>
+
                                 <td>
                                     <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
                                     <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="A" asp-route-empresa_id=@item.empresa_id asp-route-nro_legajo=@item.nro_legajo asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id asp-route-local_id=@item.local_id asp-route-apellido="@item.apellido" asp-route-origen="L"><i data-mdb-toggle='tooltip' title='Ingresar Novedad' class='bi  bi-calendar2-plus'></i></a>
-@*                                    <a asp-controller="Novedad" asp-action="Index" asp-route-modo="E" asp-route-empresa_id=@item.empresa_id asp-route-nro_legajo=@item.nro_legajo asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id asp-route-local_id=@item.local_id asp-route-apellido="@item.apellido"><i data-mdb-toggle='tooltip' title='Ingresar Novedad' class='bi  bi-calendar2-plus'></i></a>
-*@                                    @if (_perfil_id <= 3)
+                                     @if (_perfil_id <= 3)
                                     {
                                         <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
                                     }
