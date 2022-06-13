@@ -635,7 +635,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id, string origen, int empleado_id)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id, string origen, int? empleado_id)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -660,6 +660,8 @@ namespace RRHH.Controllers
 
                 ViewData["EMPRESA_ID"] = novedad.empresa_id;
                 ViewData["NRO_LEGAJO"] = novedad.nro_legajo;
+                ViewData["FiltroActual"] = novedad.nro_legajo;
+                ViewData["EmpleadoActual"] = novedad.legajo_id;
 
                 return View(novedad);
             }
@@ -673,11 +675,12 @@ namespace RRHH.Controllers
                 if (ubicacion_id != null) novedad.ubicacion_id = ubicacion_id.Value;
                 if (sector_id != null) novedad.sector_id = sector_id.Value;
                 if (local_id != null) novedad.local_id = local_id.Value;
+                if (empleado_id != null) novedad.legajo_id = empleado_id.Value;
 
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;
                 legajoRepo = new LegajoRepo();
-                legajo = legajoRepo.Obtener(empleado_id);
+                legajo = legajoRepo.Obtener(empleado_id.Value);
 
 
                 if (legajo != null)
@@ -711,11 +714,11 @@ namespace RRHH.Controllers
 
             ViewData["MODO"] = modo;
             
-            Legajo legajo = new Legajo();
-            ILegajoRepo legajoRepo;
-            legajoRepo = new LegajoRepo();
-            legajo = legajoRepo.ObtenerPorNro(novedad.empresa_id.Value, novedad.nro_legajo.Value);
-            novedad.legajo_id = legajo.id;
+            //Legajo legajo = new Legajo();
+            //ILegajoRepo legajoRepo;
+            //legajoRepo = new LegajoRepo();
+            //legajo = legajoRepo.ObtenerPorNro(novedad.empresa_id.Value, novedad.nro_legajo.Value);
+            //novedad.legajo_id = legajo.id;
 
             //if (modo=="S")
             //    return RedirectToAction("Index", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo = novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });

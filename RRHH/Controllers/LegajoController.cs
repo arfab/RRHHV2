@@ -716,6 +716,29 @@ namespace RRHH.Controllers
             return Json(new SelectList(l, "id", "descripcion"));
         }
 
+
+        [HttpGet]
+        public JsonResult ObtenerLegajoPorID(int id)
+        {
+            ILegajoRepo legajoRepo;
+
+            legajoRepo = new LegajoRepo();
+
+            Legajo legajo = new Legajo();
+
+            legajo = legajoRepo.Obtener(id);
+
+            if (legajo == null)
+            {
+                legajo = new Legajo();
+                legajo.apellido = "";
+                legajo.nombre = "";
+            }
+
+            return Json(legajo);
+        }
+
+
         public Boolean valida(Legajo legajo, string modo)
         {
 
