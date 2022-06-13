@@ -102,7 +102,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int empleado_id, string filtro)
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
         {
 
 
@@ -123,7 +123,7 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL");
             if (HttpContext.Session.GetString("APELLIDO_ACTUAL") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL");
 
-            if (HttpContext.Session.GetInt32("EMPLEADO_ACTUAL") != null) empleado_id = (int)HttpContext.Session.GetInt32("EMPLEADO_ACTUAL");
+            if (HttpContext.Session.GetInt32("EMPLEADO_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_ACTUAL");
             if (HttpContext.Session.GetString("FILTRO_ACTUAL") != null) filtro = HttpContext.Session.GetString("FILTRO_ACTUAL");
 
 
@@ -185,7 +185,7 @@ namespace RRHH.Controllers
                 ViewData["LocalActual"] = local_id;
                 ViewData["ApellidoActual"] = apellido;
 
-                ViewData["EmpleadoActual"] = empleado_id;
+                ViewData["EmpleadoActual"] = legajo_id;
                 ViewData["FiltroActual"] = filtro;
 
                 Legajo legajo = new Legajo();
@@ -193,7 +193,7 @@ namespace RRHH.Controllers
                 legajoRepo = new LegajoRepo();
                 // legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
 
-                legajo = legajoRepo.Obtener(empleado_id);
+                legajo = legajoRepo.Obtener(legajo_id);
 
 
                 if (legajo != null)
@@ -263,7 +263,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int empleado_id, string filtro)
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -287,7 +287,7 @@ namespace RRHH.Controllers
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
                 ViewData["LegajoActual"] = nro_legajo;                
                 ViewData["ApellidoActual"] = apellido;
-                ViewData["EmpleadoActual"] = empleado_id;
+                ViewData["EmpleadoActual"] = legajo_id;
                 ViewData["FiltroActual"] = filtro;
 
                 Legajo legajo = new Legajo();
@@ -295,7 +295,7 @@ namespace RRHH.Controllers
                 legajoRepo = new LegajoRepo();
                // legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
 
-                legajo = legajoRepo.Obtener(empleado_id);
+                legajo = legajoRepo.Obtener(legajo_id);
 
 
                 if (legajo != null)
@@ -340,7 +340,7 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
                 HttpContext.Session.SetString("APELLIDO_ACTUAL", (apellido==null)?"":apellido);
 
-                HttpContext.Session.SetInt32("EMPLEADO_ACTUAL", empleado_id);
+                HttpContext.Session.SetInt32("EMPLEADO_ACTUAL", legajo_id);
                 HttpContext.Session.SetString("FILTRO_ACTUAL", (filtro == null) ? "" : filtro);
 
 
@@ -429,7 +429,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public void  ExportarExcel(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido, int empleado_id)
+        public void  ExportarExcel(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido, int legajo_id)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -443,7 +443,7 @@ namespace RRHH.Controllers
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;
                 legajoRepo = new LegajoRepo();
-                legajo = legajoRepo.Obtener(empleado_id);
+                legajo = legajoRepo.Obtener(legajo_id);
                 if (legajo != null)
                 {
                     nro_legajo = legajo.nro_legajo.Value;
@@ -635,7 +635,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id, string origen, int? empleado_id)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id,  int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -675,12 +675,12 @@ namespace RRHH.Controllers
                 if (ubicacion_id != null) novedad.ubicacion_id = ubicacion_id.Value;
                 if (sector_id != null) novedad.sector_id = sector_id.Value;
                 if (local_id != null) novedad.local_id = local_id.Value;
-                if (empleado_id != null) novedad.legajo_id = empleado_id.Value;
+                if (legajo_id != null) novedad.legajo_id = legajo_id.Value;
 
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;
                 legajoRepo = new LegajoRepo();
-                legajo = legajoRepo.Obtener(empleado_id.Value);
+                legajo = legajoRepo.Obtener(legajo_id.Value);
 
 
                 if (legajo != null)
@@ -955,7 +955,7 @@ namespace RRHH.Controllers
         public Boolean valida(Novedad novedad)
         {
 
-            if (novedad.nro_legajo == null) return false;
+        //    if (novedad.nro_legajo == null) return false;
 
             LegajoRepo legajoRepo;
 

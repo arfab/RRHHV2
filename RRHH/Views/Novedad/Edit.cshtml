@@ -21,7 +21,7 @@
 			</div>
 			<div class="col-sm-4 col-xs-6 mb-3">
                 <label for="empresa_id">Empleado</label>
-                <select  data-filter="model" class="form-control" asp-for="legajo_id" name="empleado_id" id="empleado_id" value="@ViewData["EmpleadoActual"]" ></select>           
+                <select  data-filter="model" class="form-control" asp-for="legajo_id" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
 
           </div>  
@@ -492,24 +492,24 @@ $(document).ready(function () {
         ObtenerEmpleados($("#filtro").val());       
      });
 
-     //$("#empleado_id").load(function() {
+     //$("#legajo_id").load(function() {
   
-     //   if ($("#empleado_id").val() > 0) {
-     //        ObtenerLegajoPorID($("#empleado_id").val());
+     //   if ($("#legajo_id").val() > 0) {
+     //        ObtenerLegajoPorID($("#legajo_id").val());
      //    }
      //});
 
-     $("#empleado_id").change(function () {
+     $("#legajo_id").change(function () {
 
-        if ($("#empleado_id").val() > 0) {
-             ObtenerLegajoPorID($("#empleado_id").val());
+        if ($("#legajo_id").val() > 0) {
+             ObtenerLegajoPorID($("#legajo_id").val());
          }
     });
 
-     $("#empleado_id").focusout(function () {
+     $("#legajo_id").focusout(function () {
 
-        if ($("#empleado_id").val() > 0) {
-             ObtenerLegajoPorID($("#empleado_id").val());
+        if ($("#legajo_id").val() > 0) {
+             ObtenerLegajoPorID($("#legajo_id").val());
          }
     });
 
@@ -864,7 +864,7 @@ var ObtenerEmpleados = function (filtro) {
                 filtro: filtro
             },
             success: function (data) {
-                $('#empleado_id').find('option').remove()
+                $('#legajo_id').find('option').remove()
                 if (data[0].value > 0) { 
                    ObtenerLegajoPorID(data[0].value);
                 }
@@ -872,9 +872,9 @@ var ObtenerEmpleados = function (filtro) {
                     function (index, item) {    
                        
                         if (item.value==CodEmpleado || CodEmpleado==null && index==0)
-                          $('#empleado_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                          $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
                          else 
-                          $('#empleado_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                          $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                     }
                     );
             },

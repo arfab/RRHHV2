@@ -109,7 +109,7 @@
 			</div>
 			<div class="col-sm-4 col-xs-6 mb-3">
                 <label for="empresa_id">Empleado</label>
-                <select  data-filter="model" class="form-control" name="empleado_id" id="empleado_id" value="@ViewData["EmpleadoActual"]" ></select>           
+                <select  data-filter="model" class="form-control" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
             <div class="col-sm-4 col-xs-6 mb-3">
                 <div class="row" >
@@ -156,7 +156,7 @@
 
                   @if (_perfil_id <= 3)
                     {
-                      <a type="button" id="cmdNuevo" class="btn btn-outline-primary " asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-empleado_id="@ViewData["EmpleadoActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>                     
+                      <a type="button" id="cmdNuevo" class="btn btn-outline-primary " asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-legajo_id="@ViewData["EmpleadoActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>                     
                     }
 
 			</div>
@@ -531,7 +531,7 @@ var ObtenerEmpresas = function () {
                 filtro: filtro
             },
             success: function (data) {
-                $('#empleado_id').find('option').remove()
+                $('#legajo_id').find('option').remove()
                 if (data[0].value > 0) { 
                    $('#txtSelectedFechaNovedadDesde').val('');
                    $('#txtSelectedFechaNovedadHasta').val('');
@@ -539,9 +539,9 @@ var ObtenerEmpresas = function () {
                 $(data).each(
                     function (index, item) {            
                         if (item.value==CodEmpleado)
-                          $('#empleado_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                          $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
                          else 
-                          $('#empleado_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                          $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                     }
                     );  
 
