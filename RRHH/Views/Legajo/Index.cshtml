@@ -20,9 +20,22 @@
  <div class="container">
      <div class="jumbotron text-center Titulo bottom-buffer ">
       <h2>Legajos</h2>
+      <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a> | <a href="#" onclick='ToggleImportarLegajos()'>Importar de Excel</a>
     </div>
 
       <center>
+         @if (_perfil_id <=3)
+         {
+           <div class="row bottom-buffer" id="divImportarLegajos">
+              <div class="col bottom-buffer">
+                 <div class="btns2">             
+                     <input type="file" name="file" />
+                      <button id="btnImportar" type="submit" asp-action="importar" class="btn btn-outline-success">Importar</button>
+                 </div>
+              </div>
+            </div>
+         }
+@*
 
             <div class="d-flex justify-content-center align-items-center container ">
 
@@ -32,26 +45,58 @@
                       <select  class="form-control" name="ubicacion_id" id="ubicacion_id" value="@ViewData["UBICACION_ID"]"></select>
                       <span class="input-group-text">Sector/Local</span>            
                       <select  class="form-control" name="sector_id" id="sector_id" value="@ViewData["SECTOR_ID"]"></select>   
-     @*                 <span class="input-group-text">Local</span>            
-                      <select  class="form-control" name="local_id" id="local_id" ></select>  
-    *@            </div>
-            </div>
+               </div>
+            </div>*@
 
-            <div class="d-flex justify-content-center align-items-center container ">
+            <div class="d-flex justify-content-center align-items-center container " hidden >
 
-                <div class="input-group mb-3">
+                <div class="input-group mb-3" hidden>
                     <span class="input-group-text">Empresa</span>            
                     <select  class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EMPRESA_ID"]" ></select>           		       
                     <span class="input-group-text">Legajo:</span>
                      <input name="nro_legajo" id="nro_legajo" value="@ViewData["NRO_LEGAJO"]" type="number" class="form-control" />   
                      <span class="input-group-text">Apellido:</span>
                      <input name="apellido" id="apellido" value="@ViewData["APELLIDO"]" class="form-control" />   
-                     <input type="submit" value="Buscar"  asp-action="Index" class="btn btn-outline-primary" />
-                     <input type="submit" value="Resetear" asp-action="Reset" class="btn btn-outline-primary" />
+@*                     <input type="submit" value="Buscar"  asp-action="Index" class="btn btn-outline-primary" />
+                     <input type="submit" value="Resetear" asp-action="Reset" class="btn btn-outline-primary" />*@
 
                 </div>
             </div>
 
+
+           <div class="row mb-3" >
+             <div class="col-sm-4 col-xs-6 mb-3">
+                  <label for="filtro">Legajo / Apellido</label>
+                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+			</div>
+			<div class="col-sm-4 col-xs-6 mb-3">
+                <label for="empresa_id">Empleado</label>
+                <select  data-filter="model" class="form-control" name="empleado_id" id="empleado_id" value="@ViewData["EmpleadoActual"]" ></select>           
+			</div>
+
+          </div>  
+
+         <div class="row mb-3" id="divBusquedaAvanzada" >
+            <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="ubicacion_id">Ubicación</label>
+			   <select name="ubicacion_id" id="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UBICACION_ID"]"></select>
+			</div>
+             <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="sector_id">Sector/Local</label>
+			   <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SECTOR_ID"]"></select>
+			</div>
+         </div>
+
+         <div class="row mb-3" >
+           <div class="col">
+             <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
+             <input type="submit" value="X" asp-action="Reset" class="btn btn-secondary" title="Limpiar todos los datos de la búsqueda"  />
+              @if (_perfil_id <=3)
+             {
+               <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Legajo" asp-action="Edit" asp-route-modo="A">NUEVO LEGAJO</a>
+             }
+           </div>
+         </div>
 
         <div class="row">
             <div class="col bottom-buffer">
@@ -59,7 +104,7 @@
             </div>
         </div>
 
-         @if (_perfil_id <=3)
+@*         @if (_perfil_id <=3)
          {
           <div class="row bottom-buffer">
             <div class="col bottom-buffer">
@@ -77,7 +122,7 @@
             </div>
 
                 </div>
-            }
+            }*@
 
             @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
@@ -210,11 +255,20 @@
   $(document).ready(function() {
 
     var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+    var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+
 
     if ($("#nro_legajo").val() == 0) 
     {
         $("#nro_legajo").val('');
     }
+
+     if (CodUbicacion>0)
+       $("#divBusquedaAvanzada").show();
+     else
+       $("#divBusquedaAvanzada").hide();
+
+     $("#divImportarLegajos").hide();
 
       ObtenerEmpresas();
 
@@ -240,6 +294,9 @@
                // $("#divLocal").hide();
            }
         }
+
+        ObtenerEmpleados(Filtro);
+
 
       // ObtenerSectores(1);
       //ObtenerLocales();
@@ -268,6 +325,8 @@
  
   });
 
+
+ 
     $("#ubicacion_id").change(function () {
        if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2) {
             ObtenerSectores($("#ubicacion_id").val());
@@ -290,6 +349,10 @@
            }
         }
       });
+
+     $("#filtro").change(function () {
+        ObtenerEmpleados($("#filtro").val());
+     });
 
       $("#nro_legajo").change(function () {
            if($("#nro_legajo").val()!='')
@@ -425,7 +488,47 @@
       });
     }
 	
+  var ObtenerEmpleados = function (filtro) {
+         var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
 
+         $.ajax({
+            url: '@Url.Action("ObtenerEmpleados","Legajo")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                filtro: filtro
+            },
+            success: function (data) {
+                $('#empleado_id').find('option').remove()
+                if (data[0].value > 0) { 
+                   $('#txtSelectedFechaNovedadDesde').val('');
+                   $('#txtSelectedFechaNovedadHasta').val('');
+                }
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodEmpleado)
+                          $('#empleado_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                         else 
+                          $('#empleado_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    }
+                    );
+            },
+            error: function () {
+             
+            }
+      });
+    }
+
+    function ToggleBusquedaAvanzada(){   
+           $('#divBusquedaAvanzada').toggle();
+
+     }
+
+     function ToggleImportarLegajos(){   
+           $('#divImportarLegajos').toggle();
+
+     }
 
     function mostrarModalEliminar(nro_legajo){
       $("#hfID").val(nro_legajo);
