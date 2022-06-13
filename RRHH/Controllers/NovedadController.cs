@@ -172,11 +172,7 @@ namespace RRHH.Controllers
                     HttpContext.Session.SetInt32("PAG_NOVEDAD", 1);
                 }
 
-                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
-                ViewData["TOTAL_NOVEDADES"] = cant;
-
-                HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
-
+            
 
                 ViewData["EmpresaActual"] = empresa_id;
                 ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
@@ -247,6 +243,10 @@ namespace RRHH.Controllers
 
                 }
 
+                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                ViewData["TOTAL_NOVEDADES"] = cant;
+
+                HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
 
                 return View(novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
