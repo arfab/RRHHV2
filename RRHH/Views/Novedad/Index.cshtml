@@ -12,7 +12,7 @@
 }
 
 
- <form  method="post" enctype="multipart/form-data" class="form-floating">
+ <form id="form1" method="post" enctype="multipart/form-data" class="form-floating">
      
 
          
@@ -274,7 +274,7 @@
                                                 @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                                            @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                                                                @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                 }
                                             </td>
@@ -388,22 +388,24 @@ $(document).ready(function() {
         ObtenerEmpleados($("#filtro").val());
      });
 
-     
+    
 
-     $("#nro_legajo").change(function () {
-           if($("#nro_legajo").val()!='')
-         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
-     });
+     //$("#nro_legajo").change(function () {
+     //    if ($("#nro_legajo").val() != '')
+     //        ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+          
+     //});
       	
      $("#nro_legajo").focusout(function () {
-          if($("#nro_legajo").val()!='')
-         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+         if ($("#nro_legajo").val() != '')
+             ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+
      });
 
-      $("#empresa_id").change(function () {
-         if($("#nro_legajo").val()!='')
-         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
-     });
+     // $("#empresa_id").change(function () {
+     //    if($("#nro_legajo").val()!='')
+     //    ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+     //});
 
 
      $("#empresa_id").focusout(function () {
@@ -509,6 +511,7 @@ var ObtenerEmpresas = function () {
                 $('#empresa_id').val(data.empresa_id);
                 $('#txtSelectedFechaNovedadDesde').val('');
                 $('#txtSelectedFechaNovedadHasta').val('');
+               
             },
             error: function () {
              
@@ -540,7 +543,8 @@ var ObtenerEmpresas = function () {
                          else 
                           $('#empleado_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                     }
-                    );
+                    );  
+
             },
             error: function () {
              
