@@ -251,7 +251,8 @@ $(document).ready(function () {
            }
         }
    
-    ObtenerEmpresas();
+    //ObtenerEmpresas();
+    
     ObtenerResponsables();
     ObtenerCategoriasNovedad();
     ObtenerTiposNovedad();
@@ -592,27 +593,27 @@ $(document).ready(function () {
   }
 
 
-   var ObtenerEmpresas = function () {
-             var CodEmpresa =@Html.Raw(Json.Serialize(Model.empresa_id));
-             $.ajax({
-                url: '@Url.Action("ObtenerEmpresas","Legajo")',
-                type: 'GET',
-                data: {
-                },
-                success: function (data) {
-                    $('#empresa_id').find('option').remove()
-                    $(data).each(
-                        function (index, item) {            
-                            if (item.value==CodEmpresa)
-                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                            else 
-                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
-                        });
-                },
-                error: function () {
-                }
-          });
-        }
+   //var ObtenerEmpresas = function () {
+   //          var CodEmpresa =@Html.Raw(Json.Serialize(Model.empresa_id));
+   //          $.ajax({
+   //             url: '@Url.Action("ObtenerEmpresas","Legajo")',
+   //             type: 'GET',
+   //             data: {
+   //             },
+   //             success: function (data) {
+   //                 $('#empresa_id').find('option').remove()
+   //                 $(data).each(
+   //                     function (index, item) {            
+   //                         if (item.value==CodEmpresa)
+   //                           $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+   //                         else 
+   //                           $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+   //                     });
+   //             },
+   //             error: function () {
+   //             }
+   //       });
+   //     }
 
   var ObtenerCategoriasNovedad = function () {
          var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_novedad_id));
