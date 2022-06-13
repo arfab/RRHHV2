@@ -48,7 +48,7 @@
                </div>
             </div>*@
 
-            <div class="d-flex justify-content-center align-items-center container " hidden >
+@*            <div class="d-flex justify-content-center align-items-center container " hidden >
 
                 <div class="input-group mb-3" hidden>
                     <span class="input-group-text">Empresa</span>            
@@ -57,11 +57,8 @@
                      <input name="nro_legajo" id="nro_legajo" value="@ViewData["NRO_LEGAJO"]" type="number" class="form-control" />   
                      <span class="input-group-text">Apellido:</span>
                      <input name="apellido" id="apellido" value="@ViewData["APELLIDO"]" class="form-control" />   
-@*                     <input type="submit" value="Buscar"  asp-action="Index" class="btn btn-outline-primary" />
-                     <input type="submit" value="Resetear" asp-action="Reset" class="btn btn-outline-primary" />*@
-
                 </div>
-            </div>
+            </div>*@
 
 
            <div class="row mb-3" >
@@ -69,7 +66,7 @@
                   <label for="filtro">Legajo / Apellido</label>
                   <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
 			</div>
-			<div class="col-lg-6 col-xs-6 mb-3">
+			<div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
                 <label for="empresa_id">Empleado</label>
                 <select  data-filter="model" class="form-control" name="empleado_id" id="empleado_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
@@ -168,23 +165,23 @@
                         <div class="table-responsive">
 
 
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Empresa</th>
-                                        <th>Nro. Legajo</th>
-                                        <th>Nombre</th>
-                                        <th>Apellido</th>
-                <th>Ubicación</th>
-                <th>Sector/Local</th>
-                <th>Categoría</th>
-                <th></th>
-                </tr>
-                </thead>
-                <tbody>
+                 <table class="table table-bordered table-hover">
+                 <thead>
+                        <tr>
+                          <th>Empresa</th>
+                          <th>Nro. Legajo</th>
+                          <th>Nombre</th>
+                          <th>Apellido</th>
+                           <th>Ubicación</th>
+                           <th>Sector/Local</th>
+                           <th>Categoría</th>
+                           <th></th>
+                         </tr>
+                 </thead>
+                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
+                        <tr style="cursor: pointer;"  onclick="location.href = '@(Url.Action("Edit", "Legajo", new { modo="E", id=@item.id }))'">
                             <td>
                                 @item.empresa
                             </td>
@@ -217,7 +214,7 @@
 
                                 <td>
                                     <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
-                                    <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="A" asp-route-empresa_id=@item.empresa_id asp-route-nro_legajo=@item.nro_legajo asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id asp-route-local_id=@item.local_id asp-route-apellido="@item.apellido" asp-route-origen="L"><i data-mdb-toggle='tooltip' title='Ingresar Novedad' class='bi  bi-calendar2-plus'></i></a>
+                                    <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="A" asp-route-legajo_id=@item.id  asp-route-filtro=@item.nro_legajo asp-route-empresa_id=@item.empresa_id asp-route-nro_legajo=@item.nro_legajo asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id asp-route-local_id=@item.local_id asp-route-apellido="@item.apellido" asp-route-origen="L"><i data-mdb-toggle='tooltip' title='Ingresar Novedad' class='bi  bi-calendar2-plus'></i></a>
                                      @if (_perfil_id <= 3)
                                     {
                                         <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
@@ -309,7 +306,16 @@
            }
         }
 
-        ObtenerEmpleados(Filtro);
+        
+       if (Filtro != null) { 
+         $("#divEmpleado").show();
+       }
+       else { 
+         $("#divEmpleado").hide();
+         $("#legajo_id").val(-1).change();
+       }
+
+       ObtenerEmpleados(Filtro);
 
 
       // ObtenerSectores(1);
@@ -365,6 +371,16 @@
       });
 
      $("#filtro").change(function () {
+
+         
+         if ($("#filtro").val() != '') {            
+             $("#divEmpleado").show();
+         }
+         else {
+           $("#divEmpleado").hide();
+           $("#legajo_id").val(-1).change();
+         }
+
         ObtenerEmpleados($("#filtro").val());
      });
 

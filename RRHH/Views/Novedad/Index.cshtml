@@ -35,7 +35,7 @@
           </div>
 
  
-          <div class="row mb-3"  hidden >
+@*          <div class="row mb-3"  hidden >
 			<div class="col-sm-4 col-xs-6 mb-3">
                 <label for="empresa_id">Empresa</label>
                 <select  data-filter="model" class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EmpresaActual"]" ></select>           
@@ -48,14 +48,14 @@
                   <label for="apellido">Apellido</label>
                   <input name="apellido" id="apellido"  placeholder="Apellido" value="@ViewData["ApellidoActual"]" class="form-control" />                                          
 			</div>
-	     </div>
+	     </div>*@
          <div class="row mb-3" >
              <div class="col-lg-2 col-xs-6 mb-3">
                   <label for="filtro">Legajo / Apellido</label>
                   <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
 			</div>
-			<div class="col-lg-6 col-xs-6 mb-3">
-                <label for="empresa_id">Empleado</label>
+			<div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
+                <label for="legajo_id">Empleado</label>
                 <select  data-filter="model" class="form-control" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
             <div class="col-lg-4 col-xs-6 mb-3">
@@ -95,7 +95,7 @@
 
                   @if (_perfil_id <= 3)
                     {
-                      <a type="button" id="cmdNuevo" class="btn btn-outline-primary " asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"  asp-route-nro_legajo="@ViewData["LegajoActual"]" asp-route-empresa_id="@ViewData["EmpresaActual"]" asp-route-legajo_id="@ViewData["EmpleadoActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>                     
+                      <a type="button" id="cmdNuevo" class="btn btn-outline-primary " asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"   asp-route-legajo_id="@ViewData["EmpleadoActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>                     
                     }
 
 			</div>
@@ -145,7 +145,7 @@
                 {
                     @if (pagina > 1)
                     {
-                        <a asp-action="Anterior">Anterior</a>
+                       <a class="p-2 bd-highlight" asp-action="Anterior">Anterior</a>
                     }
                     @if (total_paginas > 0)
                     {
@@ -153,7 +153,7 @@
                     }
                     @if (pagina < total_paginas)
                     {
-                        <a asp-action="Siguiente">Siguiente</a>
+                        <a class="p-2 bd-highlight" asp-action="Siguiente">Siguiente</a>
                     }
 
                     @if (total_paginas == 0)
@@ -175,9 +175,9 @@
                         <div class="table-responsive">
 
 
-                            <table class="table table-bordered">
+                            <table class="table table-bordered table-hover">
                                 <thead>
-                                    <tr>
+                                    <tr >
                                         <th>Nro. Legajo</th>
                                         <th>Apellido</th>
                                         <th>Nombre</th>
@@ -196,7 +196,7 @@
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        <tr style="background:@(item.categoria_novedad_id ==1 ? "white" : "lightgray");">
+                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="E", id=@item.id }))'">
                                             <td>
                                                 @item.nro_legajo
                                             </td>
@@ -235,7 +235,7 @@
                                                 @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                                                                        @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                         @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                 }
                                             </td>
@@ -312,6 +312,7 @@ $(document).ready(function() {
         $("#nro_legajo").val('');
     }
 
+
      if (CodCategoriaNovedad>0 || CodTipoNovedad>0 || CodTipoResolucion>0)
        $("#divBusquedaAvanzada").show();
      else
@@ -324,9 +325,18 @@ $(document).ready(function() {
     ObtenerTiposNovedad();
     ObtenerTiposResolucion();
 
-    ObtenerEmpleados(Filtro);
 
+    if (Filtro != null) { 
+        $("#divEmpleado").show();
 
+    }
+    else { 
+       $("#divEmpleado").hide();
+       $("#legajo_id").val(-1).change();
+    }
+
+       ObtenerEmpleados(Filtro);
+  
        $('#txtSelectedFechaNovedadDesde').datepicker({format: 'dd/mm/yyyy' });
         $('#txtSelectedFechaNovedadHasta').datepicker({format: 'dd/mm/yyyy' });
 
@@ -344,7 +354,17 @@ $(document).ready(function() {
 });
 
      $("#filtro").change(function () {
-        ObtenerEmpleados($("#filtro").val());
+
+         if ($("#filtro").val() != '') {            
+             $("#divEmpleado").show();
+         }
+         else {
+           $("#divEmpleado").hide();
+           $("#legajo_id").val(-1).change();
+         }
+
+          ObtenerEmpleados($("#filtro").val());
+
      });
 
     

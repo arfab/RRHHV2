@@ -116,12 +116,14 @@ namespace RRHH.Controllers
             DateTime? fecha_novedad_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE"));
             DateTime? fecha_novedad_hasta = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_HASTA"));
 
-            if (empresa_id > 0) HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
-            if (nro_legajo > 0) HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
+            //if (empresa_id > 0) HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
+            //if (nro_legajo > 0) HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
+
             if (apellido != null) HttpContext.Session.SetString("APELLIDO_ACTUAL", apellido);
 
-            if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL");
-            if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL");
+            //if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL");
+            //if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL");
+
             if (HttpContext.Session.GetString("APELLIDO_ACTUAL") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL");
 
             if (HttpContext.Session.GetInt32("EMPLEADO_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_ACTUAL");
@@ -180,8 +182,8 @@ namespace RRHH.Controllers
                 ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
-                ViewData["EmpresaActual"] = empresa_id;
-                ViewData["LegajoActual"] = nro_legajo;
+                //ViewData["EmpresaActual"] = empresa_id;
+                //ViewData["LegajoActual"] = nro_legajo;
                 ViewData["UbicacionActual"] = ubicacion_id;
                 ViewData["SectorActual"] = sector_id;
                 ViewData["LocalActual"] = local_id;
@@ -283,11 +285,11 @@ namespace RRHH.Controllers
 
 
 
-                ViewData["EmpresaActual"] = empresa_id;
+                //ViewData["EmpresaActual"] = empresa_id;
                 ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
-                ViewData["LegajoActual"] = nro_legajo;                
+                //ViewData["LegajoActual"] = nro_legajo;                
                 ViewData["ApellidoActual"] = apellido;
                 ViewData["EmpleadoActual"] = legajo_id;
                 ViewData["FiltroActual"] = filtro;
@@ -693,7 +695,8 @@ namespace RRHH.Controllers
 
                     ViewData["EMPRESA_ID"] = novedad.empresa_id;
                     ViewData["NRO_LEGAJO"] = novedad.nro_legajo;
-
+                    ViewData["FiltroActual"] = novedad.nro_legajo;
+                    ViewData["EmpleadoActual"] = novedad.legajo_id;
                 }
 
                 return View(novedad);
