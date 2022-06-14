@@ -8,9 +8,11 @@
     ViewData["Title"] = "Novedad";
     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
     var _origen = (string)ViewData["ORIGEN"];
+    var _modo = (string)ViewData["MODO"];
+
 }
 
-<form  method="post">
+<form  method="post" id="form1">
 <div class="container">
 <h2>Novedad</h2>
 
@@ -139,13 +141,11 @@
 
            <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
+                <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
 
-                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
-
-                       @if (_perfil_id <=3) {
-                        <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
+                 <a id="grabar_id" value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
 @*                         <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success">Grabar</button>
-*@                       }
+*@                      
                 </div>
                  <div class="col bottom-buffer">
                      Ultima modificación: @Model.usuario (@Model.fecha_alta)
@@ -223,6 +223,17 @@ $(document).ready(function () {
 
 
      var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+     var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+
+    if (modo == "V") {
+        $("#form1 :input").prop("disabled", true);
+        $("#grabar_id").hide();
+    }
+    else {
+        $("#form1 :input").prop("disabled", false);
+        $("#grabar_id").show();
+    }
+
 
     $("#apellido").text('');
     $("#nombre").text('');
@@ -581,11 +592,19 @@ $(document).ready(function () {
     });
 
   function mostrarModalSalida(){
-       $("#mdSalir").modal('show');
-    //if ($("#btnGrabar").is(":visible"))
-    //  $("#mdSalir").modal('show');
-    //else 
-    //  window.location.href = "/Novedad/Index";
+      var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+
+      if ($("#grabar_id").is(":visible"))
+        $("#mdSalir").modal('show');
+       else {
+         var url;
+         if (origen == "L") 
+           url = "@Url.Action("Index", "Legajo")";
+         else 
+           url = "@Url.Action("Index", "Novedad")"; 
+         window.location.href = url;
+       }
+       //$("#mdSalir").modal('show');
   }
 
   function mostrarModalGrabar(){

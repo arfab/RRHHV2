@@ -304,7 +304,7 @@ namespace RRHH.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int? id, string modo)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -323,7 +323,7 @@ namespace RRHH.Controllers
 
                 //ViewData["ID"] = nro_legajo.Value;
 
-                ViewData["MODO"] = "E";
+                ViewData["MODO"] = (modo == null) ? "E" : modo;
 
                 ViewData["APELLIDO"] = legajo.apellido;
                 ViewData["NRO_LEGAJO"] = legajo.nro_legajo;

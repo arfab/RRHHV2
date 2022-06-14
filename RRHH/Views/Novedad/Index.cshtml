@@ -196,7 +196,7 @@
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="E", id=@item.id }))'">
+                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
                                             <td>
                                                 @item.nro_legajo
                                             </td>

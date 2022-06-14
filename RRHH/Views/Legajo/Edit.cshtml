@@ -9,7 +9,7 @@
     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 }
 
-<form  method="post">
+<form  method="post" id="form1">
 <div class="container">
 <h2>Legajo</h2>
 
@@ -174,8 +174,18 @@
         var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
 
         if (Modo == "E") {
-           $('#nro_legajo').prop('readonly', true);
-         }
+            $('#nro_legajo').prop('readonly', true);
+        }
+        else {  
+          if (Modo == "V") {
+            $("#form1 :input").prop("disabled", true);
+            $("#btnGrabar").hide();
+          }
+          else {
+            $("#form1 :input").prop("disabled", false);
+            $("#btnGrabar").show();
+          }
+        }
 
         ObtenerUbicaciones();
     
