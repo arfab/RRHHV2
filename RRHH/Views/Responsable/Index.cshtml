@@ -23,7 +23,7 @@
           <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
-                    <a type="button" id="cmdNuevo" class="btn btn-outline-primary" asp-controller="Responsable" asp-action="Edit">NUEVO RESPONSABLE</a>
+                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Responsable" asp-action="Edit">NUEVO RESPONSABLE</a>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 <div class="table-responsive">
 
 
-                <table class="table table-hover">
+                <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -63,7 +63,6 @@
                       <td>
                           @item.apellido
                      </td> 
-                     <td>
                         <td>
                           <a asp-controller="Responsable" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el responsable' class='bi bi-pencil-square'></i></a>
                           <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el responsable'  class='bi bi-x-circle'></i></a>
