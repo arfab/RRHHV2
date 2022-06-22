@@ -73,7 +73,7 @@
           </div>  
 
           <div class="row mb-3" id="divBusquedaAvanzada" >
-			<div class="col-sm-4 col-xs-6 mb-3">
+			<div class="col-sm-4 col-xs-6 mb-3" hidden>
                 <label for="categoria_novedad_id">Categoría</label>
 				<select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
 			</div>
@@ -140,7 +140,7 @@
                 </div>
             }*@
 
-            <div class="d-flex d-flex justify-content-center">
+            @*<div class="d-flex d-flex justify-content-center">
                 @if (@ViewBag.Message==null)
                 {
                     @if (pagina > 1)
@@ -166,8 +166,11 @@
                    <div class="p-2 bd-highlight">No hay novedades para el criterio seleccionado</div>
                 }
 
-           </div>
+           </div>*@
 
+            <div class="d-flex d-flex justify-content-left">
+                 <span style="font-weight: bold;">Sanciones</span>
+            </div>
             @if (@Model != null && Model.Count()>0)
             {
                 <div class="row">
@@ -196,8 +199,12 @@
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-@*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
-*@                                        <tr style="background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");" >
+                                        @if (item.categoria_novedad_id !=1)
+                                        {
+                                            continue;
+                                        }
+                                        @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
+*@                                        <tr  >
 
                                             <td>
                                                 @item.nro_legajo
@@ -237,7 +244,7 @@
                                                 @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                         @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                             @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                 }
                                             </td>
@@ -263,6 +270,97 @@
             </div>
          </div>
          }
+
+
+         <div class="d-flex d-flex justify-content-left">
+             <span style="font-weight: bold;">Felicitaciones</span>
+         </div>
+         @if (@Model != null && Model.Count()>0)
+            {
+                <div class="row">
+                    <div class="col bottom-buffer">
+                        <div class="table-responsive">
+
+
+                            <table class="table table-bordered table-hover table-condensed">
+                                <thead>
+                                    <tr >
+                                        <th>Nro. Legajo</th>
+                                        <th>Apellido</th>
+                                        <th>Nombre</th>
+                                        <th>Ubicacion</th>
+                                        <th>Sector/Local</th>
+                                        <th>Responsable</th>
+                                        <th>Fecha Novedad</th>
+                                        <th>Tipo Novedad</th>
+                                        <th>Observaciones</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        @if (item.categoria_novedad_id !=2)
+                                        {
+                                            continue;
+                                        }
+                                        @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
+*@                                        <tr  >
+
+                                            <td>
+                                                @item.nro_legajo
+                                            </td>
+                                            <td>
+                                                @item.apellido
+                                            </td>
+                                            <td>
+                                                @item.nombre
+                                            </td>
+                                            <td>
+                                                @item.ubicacion
+                                            </td>
+                                            <td>
+                                                @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
+                                                {
+                                                    @item.sector
+                                                }
+                                                else
+                                                {
+                                                    @item.local
+                                                }
+                                            </td>
+                                            <td>
+                                                @item.responsable
+                                            </td>
+                                            <td>
+                                                @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
+                                            </td>
+                                            @*<td>
+                                                @item.categoria_novedad
+                                            </td>*@
+                                            <td>
+                                                @item.tipo_novedad
+                                            </td>
+                                            <td>
+                                                @item.observacion
+                                            </td>
+                                                <td>
+                                                    <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
+                                                    @if (_perfil_id <= 3)
+                                                    {
+                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
+                                                    }
+                                                </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                </table>
+              </div>
+            </div>
+         </div>
+         }
+
          </center>
 
 

@@ -460,15 +460,20 @@ namespace RRHH.Controllers
                 novedadRepo = new NovedadRepo();
 
                
-                IEnumerable <Novedad> l= novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta,(apellido == null) ? "" : apellido);
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("Novedades");
-                    
+
+                    IEnumerable<Novedad> l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+
+
                     var currentRow = 1;
+                    worksheet.Cell(currentRow, 1).Value = "Sanciones";
+                    worksheet.Cell(currentRow, 1).Style.Font.SetBold();
+                    currentRow += 1;
                     for (int i = 1; i <= 11; i++)
                     {
-                        worksheet.Cell(1, i).Style.Font.SetBold();
+                        worksheet.Cell(currentRow, i).Style.Font.SetBold();
                     }
                     worksheet.Cell(currentRow, 1).Value = "Legajo";
                     worksheet.Cell(currentRow, 2).Value = "Apellido";
@@ -477,12 +482,45 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 5).Value = "Sector";
                     worksheet.Cell(currentRow, 6).Value = "Responsable";
                     worksheet.Cell(currentRow, 7).Value = "Fecha Novedad";
-                    worksheet.Cell(currentRow, 8).Value = "Categoría Novedad";
-                    worksheet.Cell(currentRow, 9).Value = "Tipo Novedad";
-                    worksheet.Cell(currentRow, 10).Value = "Fecha Resolución";
-                    worksheet.Cell(currentRow, 11).Value = "Tipo Resolución";
-                    worksheet.Cell(currentRow, 12).Value = "Observaciones";
+                    worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
+                    worksheet.Cell(currentRow, 9).Value = "Observaciones";
 
+                    foreach (var item in l)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
+                        worksheet.Cell(currentRow, 2).Value = item.apellido;
+                        worksheet.Cell(currentRow, 3).Value = item.nombre;
+                        worksheet.Cell(currentRow, 4).Value = item.ubicacion;
+                        worksheet.Cell(currentRow, 5).Value = item.sector;
+                        worksheet.Cell(currentRow, 6).Value = item.responsable;
+                        worksheet.Cell(currentRow, 7).Value = item.fecha_novedad;
+                        worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
+                        worksheet.Cell(currentRow, 9).Value = item.observacion;
+
+                    }
+
+                     l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+
+                    currentRow += 2;
+                    worksheet.Cell(currentRow, 1).Value = "Felicitaciones";
+                    worksheet.Cell(currentRow, 1).Style.Font.SetBold();
+                    currentRow += 1;
+                    for (int i = 1; i <= 11; i++)
+                    {
+                        worksheet.Cell(currentRow, i).Style.Font.SetBold();
+                    }
+                   
+                    worksheet.Cell(currentRow, 1).Value = "Legajo";
+                    worksheet.Cell(currentRow, 2).Value = "Apellido";
+                    worksheet.Cell(currentRow, 3).Value = "Nombre";
+                    worksheet.Cell(currentRow, 4).Value = "Ubicacion";
+                    worksheet.Cell(currentRow, 5).Value = "Sector";
+                    worksheet.Cell(currentRow, 6).Value = "Responsable";
+                    worksheet.Cell(currentRow, 7).Value = "Fecha Novedad";
+                    worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
+                    worksheet.Cell(currentRow, 9).Value = "Observaciones";
+                    currentRow += 1;
                     foreach (var item in l)
                     {
                         currentRow++;
