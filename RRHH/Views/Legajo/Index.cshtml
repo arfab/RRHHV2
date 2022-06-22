@@ -181,7 +181,9 @@
                  <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr style="cursor: pointer;"  onclick="location.href = '@(Url.Action("Edit", "Legajo", new { modo="V", id=@item.id }))'">
+@*                        <tr style="cursor: pointer;"  onclick="location.href = '@(Url.Action("Edit", "Legajo", new { modo="V", id=@item.id }))'">
+*@                        <tr >
+
                             <td>
                                 @item.empresa
                             </td>
