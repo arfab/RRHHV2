@@ -17,7 +17,7 @@
 
          
 
- <div class="container">
+ <div class="container-fluid">
      <div class="jumbotron text-center Titulo bottom-buffer ">
       <h2>Listado de Novedades</h2>
       <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a> | <a href="#" onclick='ToggleImportarNovedades()'>Importar de Excel</a>
@@ -175,7 +175,7 @@
                         <div class="table-responsive">
 
 
-                            <table class="table table-bordered table-hover">
+                            <table class="table table-bordered table-hover table-condensed">
                                 <thead>
                                     <tr >
                                         <th>Nro. Legajo</th>
@@ -189,7 +189,7 @@
                                         <th>Tipo Novedad</th>
                                         <th>Fecha Resolución</th>
                                         <th>Tipo Resolución</th>
-                                       @* <th>Observaciones</th>*@
+                                        <th>Observaciones</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -244,9 +244,9 @@
                                             <td>
                                                 @item.tipo_resolucion
                                             </td>
-                                           @* <td>
+                                            <td>
                                                 @item.observacion
-                                            </td>*@
+                                            </td>
                                                 <td>
                                                     <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
                                                     @if (_perfil_id <= 3)
