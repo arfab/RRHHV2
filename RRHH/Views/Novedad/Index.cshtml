@@ -9,6 +9,8 @@
     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
     var pagina = @HttpContextAccessor.HttpContext.Session.GetInt32("PAG_NOVEDAD");
     var total_paginas = @HttpContextAccessor.HttpContext.Session.GetInt32("TOT_PAG_NOVEDAD");
+    var fel = ViewData["FELICITACIONES"];
+    var total_fel = ViewData["TOTAL_FELICITACIONES"];
 }
 
 
@@ -169,18 +171,20 @@
 
            </div>*@
 
-            <div class="d-flex d-flex justify-content-left">
-                 <span style="font-weight: bold;">Sanciones</span>
-            </div>
             <div id="divPrint">
+                
+            
             @if (@Model != null && Model.Count()>0)
             {
+               <div class="d-flex d-flex justify-content-left">
+                 <span style="font-weight: bold;">Sanciones</span>
+               </div>
                 <div class="row">
                     <div class="col bottom-buffer">
                         <div class="table-responsive">
 
 
-                            <table class="table table-bordered table-hover table-condensed">
+                            <table id="tablaSanciones" class="table table-bordered table-hover table-condensed">
                                 <thead>
                                     <tr >
                                         <th>Nro. Legajo</th>
@@ -272,19 +276,22 @@
             </div>
          </div>
          }
+               
 
-
-         <div class="d-flex d-flex justify-content-left">
-             <span style="font-weight: bold;">Felicitaciones</span>
-         </div>
-         @if (@Model != null && Model.Count()>0)
+         @if ( (int) total_fel>0)
             {
+                
+
+
+                <div class="d-flex d-flex justify-content-left">
+                   <span style="font-weight: bold;">Felicitaciones</span>
+               </div>
                 <div class="row">
                     <div class="col bottom-buffer">
                         <div class="table-responsive">
 
 
-                            <table class="table table-bordered table-hover table-condensed">
+                            <table id="tablaFelicitaciones" class="table table-bordered table-hover table-condensed">
                                 <thead>
                                     <tr >
                                         <th>Nro. Legajo</th>
@@ -300,12 +307,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model)
+                                    @foreach (var item in (IEnumerable<RRHH.Models.Novedad>) fel)
                                     {
-                                        @if (item.categoria_novedad_id !=2)
+
+                                      @*  @if (item.categoria_novedad_id !=2)
                                         {
                                             continue;
-                                        }
+                                        }*@
                                         @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
 *@                                        <tr  >
 
@@ -668,14 +676,29 @@ var ObtenerEmpresas = function () {
 
      });
 
-     function printData()
-{
-   var divToPrint=document.getElementById("divPrint");
-   newWin= window.open("");
-   newWin.document.write(divToPrint.outerHTML);
-   newWin.print();
-   newWin.close();
-}
+   function printData()
+   {
+     $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").hide();
+     $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").hide();
+     var divToPrint=document.getElementById("divPrint");
+     var htmlToPrint = '' +
+        '<style type="text/css">' +
+        'table , table th, table td {' +
+        'font-size: 10px;' + 
+        'border:1px solid;' +
+        'border-collapse: collapse;' +
+        'padding:0.5em;' +
+        '}' +
+        '</style>';
+     htmlToPrint += divToPrint.outerHTML;
+     newWin= window.open("");
+     newWin.document.write( htmlToPrint);
+     newWin.print();
+     newWin.close();
+     $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").show();
+     $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").show();
+
+  }
 
 $('#btnImprimir').on('click',function(){
 printData();
