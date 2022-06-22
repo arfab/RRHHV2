@@ -92,6 +92,7 @@
                  <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
                  <input type="submit" value="Limpiar" asp-action="Reset" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
                  <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-primary" />
+                 <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
                   @if (_perfil_id <= 3)
                     {
@@ -171,6 +172,7 @@
             <div class="d-flex d-flex justify-content-left">
                  <span style="font-weight: bold;">Sanciones</span>
             </div>
+            <div id="divPrint">
             @if (@Model != null && Model.Count()>0)
             {
                 <div class="row">
@@ -360,7 +362,7 @@
             </div>
          </div>
          }
-
+         </div>
          </center>
 
 
@@ -665,7 +667,24 @@ var ObtenerEmpresas = function () {
         });
 
      });
+
+     function printData()
+{
+   var divToPrint=document.getElementById("divPrint");
+   newWin= window.open("");
+   newWin.document.write(divToPrint.outerHTML);
+   newWin.print();
+   newWin.close();
+}
+
+$('#btnImprimir').on('click',function(){
+printData();
+})
+
 </script>
+
+
+
 
 @*@if (ViewBag.Message != null)
 {
