@@ -420,7 +420,7 @@ namespace RRHH.Controllers
 
                // novedades = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
                
-                if (novedades.Count() == 0)
+                if (novedades.Count() == 0 && cantFelicitaciones==0)
                 {
                     ViewBag.Message = "No existen novedades para el criterio seleccionado";
                     return View();
