@@ -12,33 +12,41 @@ namespace RRHH.Repository
         public string Insertar(Legajo legajo)
         {
             int icantFilas;
-            using (var con = new SqlConnection(strConnectionString))
+
+            try
             {
-                if (con.State == ConnectionState.Closed)
-                    con.Open();
+                using (var con = new SqlConnection(strConnectionString))
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
 
 
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@nro_legajo", legajo.nro_legajo);
-                parameters.Add("@apellido", legajo.apellido);
-                parameters.Add("@nombre", legajo.nombre);
-                parameters.Add("@dni", legajo.dni);
-                parameters.Add("@genero_id", legajo.genero_id);
-                parameters.Add("@empresa_id", legajo.empresa_id);
-                parameters.Add("@ubicacion_id", legajo.ubicacion_id);
-                parameters.Add("@sector_id", legajo.sector_id);
-                parameters.Add("@local_id", legajo.local_id);
-                parameters.Add("@categoria_id", legajo.categoria_id);
-                parameters.Add("@funcion_id", (legajo.funcion_id <= 0) ? null : legajo.funcion_id);
-                parameters.Add("@observacion", legajo.observacion);
-                parameters.Add("@activo", 1);
-                parameters.Add("@fecha_alta", legajo.fecha_alta);
-                parameters.Add("@fecha_baja", legajo.fecha_baja);
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@nro_legajo", legajo.nro_legajo);
+                    parameters.Add("@apellido", legajo.apellido);
+                    parameters.Add("@nombre", legajo.nombre);
+                    parameters.Add("@dni", legajo.dni);
+                    parameters.Add("@genero_id", legajo.genero_id);
+                    parameters.Add("@empresa_id", legajo.empresa_id);
+                    parameters.Add("@ubicacion_id", legajo.ubicacion_id);
+                    parameters.Add("@sector_id", legajo.sector_id);
+                    parameters.Add("@local_id", legajo.local_id);
+                    parameters.Add("@categoria_id", legajo.categoria_id);
+                    parameters.Add("@funcion_id", (legajo.funcion_id <= 0) ? null : legajo.funcion_id);
+                    parameters.Add("@observacion", legajo.observacion);
+                    parameters.Add("@activo", 1);
+                    parameters.Add("@fecha_alta", legajo.fecha_alta);
+                    parameters.Add("@fecha_baja", legajo.fecha_baja);
 
 
-                icantFilas = con.Execute("spLegajoInsertar", parameters, commandType: CommandType.StoredProcedure);
+                    icantFilas = con.Execute("spLegajoInsertar", parameters, commandType: CommandType.StoredProcedure);
 
 
+                }
+            }
+            catch (SqlException e)
+            {
+                    return "Error";
             }
             return "";
         }

@@ -415,7 +415,7 @@ namespace RRHH.Controllers
 
             DataTable dt = new DataTable();
             //Checking file content length and Extension must be .xlsx  
-            if (file != null && System.IO.Path.GetExtension(file.FileName).ToLower() == ".xlsx")
+            if (file != null && System.IO.Path.GetExtension(file.FileName).ToLower() == ".xlsm")
             {
 
                 string fileName = Path.GetFileName(file.FileName);
@@ -472,13 +472,16 @@ namespace RRHH.Controllers
                     }
 
 
-
+                    int fila = 1;
                     foreach (DataRow dr in dt.Rows)
                     {
+                        fila ++;
                         LegajoRepo legajoRepo = new LegajoRepo();
                         Legajo legajo = new Legajo();
 
-                        string fecha_alta = dr[4].ToString();
+                        int iUbicacion = -1;
+
+                        string fecha_alta = dr[5].ToString();
                         string dia_alta = "";
                         string mes_alta = "";
                         string anio_alta = "";
@@ -490,7 +493,7 @@ namespace RRHH.Controllers
                             fecha_alta = anio_alta + "-" + mes_alta + "-" + dia_alta;
                         }
 
-                        string fecha_baja = dr[5].ToString();
+                        string fecha_baja = dr[6].ToString();
                         string dia_baja = "";
                         string mes_baja = "";
                         string anio_baja = "";
@@ -502,30 +505,60 @@ namespace RRHH.Controllers
                             fecha_baja = anio_baja + "-" + mes_baja + "-" + dia_baja;
                         }
 
+                        switch (dr[7].ToString().ToUpper())
+                        {
+                            case "FABRICA":
+                                iUbicacion = 1;
+                                break;
+                            case "EDIFICIO":
+                                iUbicacion = 2;
+                                break;
+                            case "LOCAL":
+                                iUbicacion = 3;
+                                break;
+                            default:
+                                iUbicacion = -1;
+                                break;
+                        }
+
+
                         legajo = legajoRepo.ObtenerDeImportacion(
                                   dr[1].ToString(), 
                                   dr[2].ToString(), 
                                   dr[3].ToString(), 
                                   dr[0].ToString(), 
-                                  dr[6].ToString(), 
-                                  dr[7].ToString(), 
-                                  dr[8].ToString(),
+                                  dr[8].ToString(), 
+                                  dr[9].ToString(), 
+                                  dr[10].ToString(),
                                   fecha_alta,
                                   fecha_baja,
-                                  dr[10].ToString(),
-                                  dr[9].ToString(),
-                                  dr[11].ToString()
+                                  dr[4].ToString(),
+                                  dr[11].ToString(),
+                                  iUbicacion.ToString()
                                   );
 
                         if (legajo == null)
+                        {
                             ViewBag.Message = "ERROR";
+                            worksheet.Cell(fila,"M").Value = "ERROR";
+                        }
                         else
                         {
-                            legajoRepo.Insertar(legajo);
-                            ViewBag.Message = "OK";
+                            if (legajoRepo.Insertar(legajo) == "")
+                            {
+                                ViewBag.Message = "OK";
+                                worksheet.Cell(fila, "M").Value = "OK";
+                            }
+                            else
+                            {
+                                ViewBag.Message = "ERROR";
+                                worksheet.Cell(fila, "M").Value = "ERROR";
+                            }
                         }
                     }
 
+                    workbook.Save();
+                    //workbook.SaveAs(Path.Combine(path, "Salida.xlsm"));
                 }
             }
             else
