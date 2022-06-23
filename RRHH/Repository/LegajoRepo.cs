@@ -141,6 +141,7 @@ namespace RRHH.Repository
                 parameter.Add("@ubicacion_id", ubicacion_id);
                 parameter.Add("@sector_id", sector_id);
                 parameter.Add("@apellido", sApellido);
+                parameter.Add("@activo", activo);
 
 
                 return con.Query<Legajo>("spLegajoObtenerPag", parameter, commandType: CommandType.StoredProcedure).ToList();
@@ -162,6 +163,7 @@ namespace RRHH.Repository
                 parameter.Add("@ubicacion_id", ubicacion_id);
                 parameter.Add("@sector_id", sector_id);
                 parameter.Add("@apellido", sApellido);
+                parameter.Add("@activo", activo);
 
 
                 return con.QuerySingle<int>("spLegajoObtenerCantidad", parameter, commandType: CommandType.StoredProcedure);

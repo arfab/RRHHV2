@@ -62,15 +62,22 @@
 
 
            <div class="row mb-3" >
-             <div class="col-lg-2 col-xs-6 mb-3">
+             <div class="col-lg-2 col-xs-4 mb-3">
                   <label for="filtro">Legajo / Apellido</label>
                   <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
 			</div>
-			<div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
+			<div class="col-lg-6 col-xs-4 mb-3" id="divEmpleado">
                 <label for="empresa_id">Empleado</label>
                 <select  data-filter="model" class="form-control" name="empleado_id" id="empleado_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
-
+            <div class="col-lg-4 col-xs-4 mb-3" id="divActivo">
+                <label for="activo">Estado</label>
+                <select  data-filter="model" class="form-control" name="activo" id="activo" value="@ViewData["ActivoActual"]" >
+                  <option value="-1">Todos</option>
+                  <option value="1">Activos</option>
+                  <option value="0">Inactivos</option>
+                </select>           
+            </div>
           </div>  
 
          <div class="row mb-3" id="divBusquedaAvanzada" >
@@ -269,7 +276,9 @@
 
     var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
     var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+    var Activo = @Html.Raw(Json.Serialize(ViewData["ActivoActual"]));
 
+    $("#activo").val(Activo);
 
     if ($("#nro_legajo").val() == 0) 
     {

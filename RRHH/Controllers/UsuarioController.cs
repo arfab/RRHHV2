@@ -83,6 +83,7 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetString("NOMBRE", (string.IsNullOrEmpty(usuario.Nombre)) ? "" : usuario.Nombre);
                 HttpContext.Session.SetInt32("PERFIL_ID", usuario.perfil_id);
                 HttpContext.Session.SetString("PERFIL", usuario.perfil_descripcion);
+                HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", -1);
 
 
 

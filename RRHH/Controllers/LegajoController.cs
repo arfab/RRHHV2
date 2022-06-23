@@ -54,6 +54,7 @@ namespace RRHH.Controllers
 
                 ViewData["EmpleadoActual"] = -1;
                 ViewData["FiltroActual"] = "";
+                ViewData["ActivoActual"] = -1;
 
                 HttpContext.Session.SetString("EMPRESA_ACTUAL_LEGAJO", "");
                 HttpContext.Session.SetString("LEGAJO_ACTUAL_LEGAJO", "");
@@ -63,6 +64,7 @@ namespace RRHH.Controllers
 
                 HttpContext.Session.SetString("EMPLEADO_ACTUAL_LEGAJO", "");
                 HttpContext.Session.SetString("FILTRO_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("ACTIVO_ACTUAL_LEGAJO", "");
 
                 HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
@@ -81,7 +83,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int empleado_id, string filtro, int modo) 
+        public IActionResult Index(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int empleado_id, string filtro, int activo, int modo) 
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -103,6 +105,7 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("EMPLEADO_ACTUAL_LEGAJO") != null) empleado_id = (int)HttpContext.Session.GetInt32("EMPLEADO_ACTUAL_LEGAJO");
             if (HttpContext.Session.GetString("FILTRO_ACTUAL_LEGAJO") != null) filtro = HttpContext.Session.GetString("FILTRO_ACTUAL_LEGAJO");
 
+            if (HttpContext.Session.GetInt32("ACTIVO_ACTUAL_LEGAJO") != null) activo = (int)HttpContext.Session.GetInt32("ACTIVO_ACTUAL_LEGAJO");
 
 
             if (perfil_id > 0 && perfil_id <= 3)
@@ -123,6 +126,7 @@ namespace RRHH.Controllers
 
                 ViewData["EmpleadoActual"] = empleado_id;
                 ViewData["FiltroActual"] = filtro;
+                ViewData["ActivoActual"] = activo;
 
                 Legajo legajo = new Legajo();
                 legajo = legajoRepo.Obtener(empleado_id);
@@ -145,12 +149,12 @@ namespace RRHH.Controllers
                     HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
                 }
 
-                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido,-1);
+                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido,activo);
                 ViewData["TOTAL_LEGAJOS"] = cant;
 
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value,(empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido, -1);
+                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value,(empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido, activo);
                 return View(legajos);
 
                 //if (nro_legajo > 0 && empresa_id > 0 || apellido != null)
@@ -168,7 +172,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int empleado_id, string filtro)
+        public IActionResult Index(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int empleado_id, string filtro, int activo)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -194,6 +198,7 @@ namespace RRHH.Controllers
 
                 ViewData["EmpleadoActual"] = empleado_id;
                 ViewData["FiltroActual"] = filtro;
+                ViewData["ActivoActual"] = activo;
 
                 Legajo legajo = new Legajo();
                 legajo = legajoRepo.Obtener(empleado_id);
@@ -219,6 +224,7 @@ namespace RRHH.Controllers
 
                 HttpContext.Session.SetInt32("EMPLEADO_ACTUAL_LEGAJO", empleado_id);
                 HttpContext.Session.SetString("FILTRO_ACTUAL_LEGAJO", (filtro == null) ? "" : filtro);
+                HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", activo);
 
 
 
@@ -254,12 +260,12 @@ namespace RRHH.Controllers
                 //    HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
                 //}
 
-                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido, -1);
+                int cant = legajoRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido, activo);
                 ViewData["TOTAL_LEGAJOS"] = cant;
 
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value, (empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido, -1);
+                legajos = legajoRepo.ObtenerPagina(pag_legajo.Value, (empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido, activo);
 
 
                // legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
