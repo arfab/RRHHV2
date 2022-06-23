@@ -87,7 +87,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Legajo> ObtenerTodos(int empresa_id, int iNroLegajo, int ubicacion_id, int sector_id, string sApellido)
+        public IEnumerable<Legajo> ObtenerTodos(int empresa_id, int iNroLegajo, int ubicacion_id, int sector_id, string sApellido, int activo)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -101,6 +101,7 @@ namespace RRHH.Repository
                 parameter.Add("@ubicacion_id", ubicacion_id);
                 parameter.Add("@sector_id", sector_id);
                 parameter.Add("@apellido", sApellido);
+                parameter.Add("@activo", activo);
 
 
                 return con.Query<Legajo>("spLegajoObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();

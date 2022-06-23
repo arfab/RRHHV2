@@ -22,8 +22,12 @@
  <div class="container-fluid">
      <div class="jumbotron text-center Titulo bottom-buffer ">
       <h2>Listado de Novedades</h2>
-      <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a> | <a href="#" onclick='ToggleImportarNovedades()'>Importar de Excel</a>
-    </div>
+      <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a>
+      @if (_perfil_id <= 3)
+      {
+        <span>  |  </span><a href="#" onclick='ToggleImportarNovedades()'>Importar de Excel</a>
+      }
+      </div>
 
       <center>
 
@@ -177,7 +181,7 @@
             @if (@Model != null && Model.Count()>0)
             {
                <div class="d-flex d-flex justify-content-left">
-                 <span style="font-weight: bold;">Sanciones</span>
+                 <span id="spanSanciones" style="font-weight: bold; padding-bottom:10px;">Sanciones</span>
                </div>
                 <div class="row">
                     <div class="col bottom-buffer">
@@ -198,6 +202,7 @@
                                         <th>Tipo Novedad</th>
                                         <th>Fecha Resolución</th>
                                         <th>Tipo Resolución</th>
+                                        <th>Días</th>
                                         <th>Observaciones</th>
                                         <th></th>
                                     </tr>
@@ -250,12 +255,15 @@
                                                 @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                             @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                 @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                 }
                                             </td>
                                             <td>
                                                 @item.tipo_resolucion
+                                            </td>
+                                            <td>
+                                                @item.dias
                                             </td>
                                             <td>
                                                 @item.observacion
@@ -284,7 +292,7 @@
 
 
                 <div class="d-flex d-flex justify-content-left">
-                   <span style="font-weight: bold;">Felicitaciones</span>
+                   <span id="spanFelicitaciones" style="font-weight: bold; padding-bottom:10px; padding-top:20px;">Felicitaciones</span>
                </div>
                 <div class="row">
                     <div class="col bottom-buffer">
@@ -688,7 +696,13 @@ var ObtenerEmpresas = function () {
         'border:1px solid;' +
         'border-collapse: collapse;' +
         'padding:0.5em;' +
-        '}' +
+        '} ' +
+        '#spanSanciones  {' +
+        'display:inline-block;' +
+         '} ' +
+        '#spanFelicitaciones  {' +
+        'display:inline-block;' +
+         '} ' +
         '</style>';
      htmlToPrint += divToPrint.outerHTML;
      newWin= window.open("");

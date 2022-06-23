@@ -95,7 +95,9 @@
            <div class="col">
              <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
              <input type="submit" value="Limpiar" asp-action="Reset" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
-              @if (_perfil_id <=3)
+             <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-primary" />
+
+             @if (_perfil_id <=3)
              {
                <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Legajo" asp-action="Edit" asp-route-modo="A">NUEVO LEGAJO</a>
              }
@@ -172,7 +174,7 @@
                         <div class="table-responsive">
 
 
-                 <table class="table table-bordered table-hover">
+                 <table class="table table-bordered table-hover table-condensed">
                  <thead>
                         <tr>
                           <th>Empresa</th>
@@ -182,6 +184,8 @@
                            <th>Ubicación</th>
                            <th>Sector/Local</th>
                            <th>Categoría</th>
+                           <th>F. Ingreso</th>
+                           <th>F. Baja</th>
                            <th></th>
                          </tr>
                  </thead>
@@ -219,7 +223,12 @@
                             <td>
                                 @item.categoria
                             </td>
-
+                             <td>
+                                @Convert.ToDateTime(item.fecha_alta).ToString("dd/MM/yyyy")
+                            </td>
+                             <td>
+                               @Convert.ToDateTime(item.fecha_baja).ToString("dd/MM/yyyy")
+                            </td>
 
                                 <td>
                                     <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>

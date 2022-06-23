@@ -506,7 +506,9 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 6).Value = "Responsable";
                     worksheet.Cell(currentRow, 7).Value = "Fecha Novedad";
                     worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
-                    worksheet.Cell(currentRow, 9).Value = "Observaciones";
+                    worksheet.Cell(currentRow, 9).Value = "Fecha Resolución";
+                    worksheet.Cell(currentRow, 10).Value = "Tipo Resolución";
+                    worksheet.Cell(currentRow, 11).Value = "Observaciones";
 
                     foreach (var item in l)
                     {
@@ -519,11 +521,14 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 6).Value = item.responsable;
                         worksheet.Cell(currentRow, 7).Value = item.fecha_novedad;
                         worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
-                        worksheet.Cell(currentRow, 9).Value = item.observacion;
+                        worksheet.Cell(currentRow, 9).Value = item.fecha_resolucion;
+                        worksheet.Cell(currentRow, 10).Value = item.tipo_resolucion;
+                        worksheet.Cell(currentRow, 11).Value = item.observacion;
+
 
                     }
 
-                     l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+                    l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
 
                     currentRow += 2;
                     worksheet.Cell(currentRow, 1).Value = "Felicitaciones";
@@ -554,11 +559,8 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 5).Value = item.sector;
                         worksheet.Cell(currentRow, 6).Value = item.responsable;
                         worksheet.Cell(currentRow, 7).Value = item.fecha_novedad;
-                        worksheet.Cell(currentRow, 8).Value = item.categoria_novedad;
-                        worksheet.Cell(currentRow, 9).Value = item.tipo_novedad;
-                        worksheet.Cell(currentRow, 10).Value = item.fecha_resolucion;
-                        worksheet.Cell(currentRow, 11).Value = item.tipo_resolucion;
-                        worksheet.Cell(currentRow, 12).Value = item.observacion;
+                        worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
+                        worksheet.Cell(currentRow, 9).Value = item.observacion;
 
                     }
 
@@ -1037,6 +1039,7 @@ namespace RRHH.Controllers
             //if (novedad.responsable_id <= 0) return false;
             if (novedad.ubicacion_id < 0) return false;
 
+          
             return true;
 
         }

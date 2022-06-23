@@ -96,5 +96,34 @@ namespace RRHH.Controllers
 
             return View(tipoResolucion);
         }
+
+        public IActionResult Delete(int hfID)
+        {
+            string sret;
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+
+            ITipoResolucionRepo tipoResolucionRepo;
+
+            tipoResolucionRepo = new TipoResolucionRepo();
+
+            sret = tipoResolucionRepo.Eliminar(hfID);
+
+
+            if (sret == "")
+            {
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
     }
 }

@@ -607,6 +607,98 @@ namespace RRHH.Controllers
         }
 
 
+        [HttpPost]
+        public void ExportarExcel(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int empleado_id, string filtro, int activo)
+        {
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return;
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            Legajo legajo = new Legajo();
+            ILegajoRepo legajoRepo;
+            legajoRepo = new LegajoRepo();
+            legajo = legajoRepo.Obtener(empleado_id);
+
+            if (perfil_id > 0)
+            {
+
+      
+
+                if (legajo != null)
+                {
+                    nro_legajo = legajo.nro_legajo.Value;
+                    empresa_id = legajo.empresa_id.Value;
+                    apellido = legajo.apellido;
+                }
+
+
+
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Legajos");
+
+                    IEnumerable<Legajo> l = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido, activo);
+
+
+                    var currentRow = 1;
+                    //worksheet.Cell(currentRow, 1).Value = "Sanciones";
+                    //worksheet.Cell(currentRow, 1).Style.Font.SetBold();
+                    //currentRow += 1;
+                    for (int i = 1; i <= 11; i++)
+                    {
+                        worksheet.Cell(currentRow, i).Style.Font.SetBold();
+                    }
+                    worksheet.Cell(currentRow, 1).Value = "Empresa";
+                    worksheet.Cell(currentRow, 2).Value = "Nro. Legajo";
+                    worksheet.Cell(currentRow, 3).Value = "Nombre";
+                    worksheet.Cell(currentRow, 4).Value = "Apellido";
+                    worksheet.Cell(currentRow, 5).Value = "Ubicacion    ";
+                    worksheet.Cell(currentRow, 6).Value = "Sector/Local";
+                    worksheet.Cell(currentRow, 7).Value = "Categoria";
+                    worksheet.Cell(currentRow, 8).Value = "F. Ingreso";
+                    worksheet.Cell(currentRow, 9).Value = "F. Baja";
+
+
+                    foreach (var item in l)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = item.empresa;
+                        worksheet.Cell(currentRow, 2).Value = item.nro_legajo;
+                        worksheet.Cell(currentRow, 3).Value = item.nombre;
+                        worksheet.Cell(currentRow, 4).Value = item.apellido;
+                        worksheet.Cell(currentRow, 5).Value = item.ubicacion;
+                        worksheet.Cell(currentRow, 6).Value = (item.ubicacion_id==3)?item.local:item.sector;
+                        worksheet.Cell(currentRow, 7).Value = item.categoria;
+                        worksheet.Cell(currentRow, 8).Value = item.fecha_alta;
+                        worksheet.Cell(currentRow, 9).Value = item.fecha_baja;
+
+
+
+                    }
+
+
+
+                    worksheet.Columns().AdjustToContents();
+
+                    using var stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    Response.Clear();
+                    Response.Headers.Add("content-disposition", "attachment;filename=Legajos.xls");
+                    Response.ContentType = "application/xls";
+                    Response.Body.WriteAsync(content);
+                    Response.Body.Flush();
+                }
+            }
+
+
+            return;
+        }
+
+
 
         [HttpGet]
         public JsonResult ObtenerSectores(int ubicacion_id)

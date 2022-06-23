@@ -86,6 +86,9 @@ namespace RRHH.Repository
         {
 
             int icantFilas;
+            try
+            {
+
             using (var con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
@@ -97,6 +100,15 @@ namespace RRHH.Repository
 
                 icantFilas = con.Execute("spFuncionEliminar", parameters2, commandType: CommandType.StoredProcedure);
 
+
+            }
+            }
+            catch (SqlException e)
+            {
+                if (e.Number == 547)
+                    return "No se puede borrar la tarea. Existen datos cargados asociados al mismo.";
+                else
+                    return "Error en la base de datos.";
 
             }
 

@@ -86,7 +86,9 @@ namespace RRHH.Repository
         {
 
             int icantFilas;
-            using (var con = new SqlConnection(strConnectionString))
+            try
+            {
+             using (var con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
@@ -97,6 +99,15 @@ namespace RRHH.Repository
 
                 icantFilas = con.Execute("spCategoriaEliminar", parameters2, commandType: CommandType.StoredProcedure);
 
+
+            }
+            }
+            catch (SqlException e)
+            {
+                if (e.Number == 547)
+                    return "No se puede borrar la categoría. Existen datos cargados asociados al mismo.";
+                else
+                    return "Error en la base de datos.";
 
             }
 
