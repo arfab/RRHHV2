@@ -204,10 +204,12 @@ namespace RRHH.Repository
 
         }
 
-        public Legajo ObtenerDeImportacion(string nro_legajo, string apellido, string nombre, string empresa, string sector, string categoria, string funcion, string fecha_alta, string fecha_baja, string genero, string observacion, string ubicacion_id )
+        public int ObtenerDeImportacion(string nro_legajo, string apellido, string nombre, string empresa, string sector, string categoria, string funcion, string fecha_alta, string fecha_baja, string genero, string observacion, string ubicacion_id, ref  Legajo legajo )
         {
 
-            using (IDbConnection con = new SqlConnection(strConnectionString))
+            try
+            {
+                using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
@@ -229,11 +231,19 @@ namespace RRHH.Repository
                 parameter.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
-                return con.QuerySingleOrDefault<Legajo>("spLegajoObtenerDeImportacion", parameter, commandType: CommandType.StoredProcedure);
+                legajo = con.QuerySingleOrDefault<Legajo>("spLegajoObtenerDeImportacion", parameter, commandType: CommandType.StoredProcedure);
 
-               // if (parameter.Get<int>("@retValue") < 0) return "Error al importar";
+                return parameter.Get<int>("@retValue");
+              
 
             }
+            }
+            catch (SqlException e)
+            {
+                 return -999;
+
+            }
+
 
         }
 

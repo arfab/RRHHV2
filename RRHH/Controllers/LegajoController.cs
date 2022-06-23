@@ -408,6 +408,8 @@ namespace RRHH.Controllers
             string wwwPath = this.Environment.WebRootPath;
             string contentPath = this.Environment.ContentRootPath;
             string path = Path.Combine(this.Environment.WebRootPath, "Uploads");
+            string guid = Guid.NewGuid().ToString();
+
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -418,10 +420,11 @@ namespace RRHH.Controllers
             if (file != null && System.IO.Path.GetExtension(file.FileName).ToLower() == ".xlsm")
             {
 
-                string fileName = Path.GetFileName(file.FileName);
-              
+                //string fileName = Path.GetFileName(file.FileName);
 
-                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                string fileName = Path.GetFileNameWithoutExtension(file.FileName) + "_" + guid + System.IO.Path.GetExtension(file.FileName).ToLower();
+
+                using (FileStream stream = new FileStream(Path.Combine(path, fileName ), FileMode.Create))
                 {
                     file.CopyTo(stream);
                 }
@@ -430,7 +433,7 @@ namespace RRHH.Controllers
                 ////Saving the file  
                 //file.SaveAs(path);
                 ////Started reading the Excel file.  
-                using (XLWorkbook workbook = new XLWorkbook(Path.Combine(path, file.FileName)))
+                using (XLWorkbook workbook = new XLWorkbook(Path.Combine(path, fileName)))
                 {
                     IXLWorksheet worksheet = workbook.Worksheet(1);
                     bool FirstRow = true;
@@ -471,7 +474,7 @@ namespace RRHH.Controllers
                         ViewBag.Message = "Empty Excel File!";
                     }
 
-
+                    int errores = 0;
                     int fila = 1;
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -521,8 +524,8 @@ namespace RRHH.Controllers
                                 break;
                         }
 
-
-                        legajo = legajoRepo.ObtenerDeImportacion(
+                        string sError = "";
+                        int ret = legajoRepo.ObtenerDeImportacion(
                                   dr[1].ToString(), 
                                   dr[2].ToString(), 
                                   dr[3].ToString(), 
@@ -534,19 +537,32 @@ namespace RRHH.Controllers
                                   fecha_baja,
                                   dr[4].ToString(),
                                   dr[11].ToString(),
-                                  iUbicacion.ToString()
+                                  iUbicacion.ToString(),
+                                  ref legajo
                                   );
 
-                        if (legajo == null)
+                        if (ret<0)
                         {
-                            ViewBag.Message = "ERROR";
-                            worksheet.Cell(fila,"M").Value = "ERROR";
+                            errores++;
+                            switch (ret)
+                            {
+                                case -1:
+                                    sError="El legajo ya existe";
+                                    break;
+                               
+                                default:
+                                    sError = "Error";
+                                    break;
+                            }
+
+                            // ViewBag.Message = "ERROR";
+                            worksheet.Cell(fila,"M").Value = sError;
                         }
                         else
                         {
                             if (legajoRepo.Insertar(legajo) == "")
                             {
-                                ViewBag.Message = "OK";
+                               // ViewBag.Message = "OK";
                                 worksheet.Cell(fila, "M").Value = "OK";
                             }
                             else
@@ -558,6 +574,19 @@ namespace RRHH.Controllers
                     }
 
                     workbook.Save();
+
+                    Importacion imp = new Importacion();
+                    IImportacionRepo importacionRepo;
+
+                    importacionRepo = new ImportacionRepo();
+
+                    imp.tipo = "L";
+                    imp.nombre_archivo = Path.Combine("\\Uploads", fileName);
+                    imp.cantidad = fila - 1;
+                    imp.errores = errores;
+
+                    importacionRepo.Insertar(imp);
+
                     //workbook.SaveAs(Path.Combine(path, "Salida.xlsm"));
                 }
             }

@@ -13,6 +13,8 @@ namespace RRHH.Repository
         public int ObtenerCantidad(int empresa_id, int iNroLegajo, int ubicacion_id, int sector_id, string sApellido);
         public IEnumerable<Legajo> ObtenerPorFiltro(string sFiltro);
 
+        public int ObtenerDeImportacion(string nro_legajo, string apellido, string nombre, string empresa, string sector, string categoria, string funcion, string fecha_alta, string fecha_baja, string genero, string observacion, string ubicacion_id,ref Legajo legajo);
+
         public string Eliminar(int id);
     }
 }
