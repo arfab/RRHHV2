@@ -133,8 +133,14 @@ namespace RRHH.Controllers
 
             IEnumerable<Models.Novedad> lFelicitaciones;
 
-            DateTime? fecha_novedad_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE"));
-            DateTime? fecha_novedad_hasta = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_HASTA"));
+            DateTime? fecha_novedad_desde=null;
+            DateTime? fecha_novedad_hasta=null;
+
+            if (HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE")!=null && HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE")!="")
+                fecha_novedad_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE"));
+            
+            if (HttpContext.Session.GetString("FECHA_NOVEDAD_HASTA") != null && HttpContext.Session.GetString("FECHA_NOVEDAD_HASTA") != "")
+                fecha_novedad_hasta = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_NOVEDAD_HASTA"));
 
             //if (empresa_id > 0) HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
             //if (nro_legajo > 0) HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
