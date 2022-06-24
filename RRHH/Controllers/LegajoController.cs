@@ -490,29 +490,53 @@ namespace RRHH.Controllers
 
                         int iUbicacion = -1;
 
-                        string fecha_alta = dr[5].ToString();
-                        string dia_alta = "";
-                        string mes_alta = "";
-                        string anio_alta = "";
-                        if (fecha_alta!="")
+                        string fecha_alta;
+
+                        try
                         {
-                            dia_alta = fecha_alta.Substring(0, fecha_alta.IndexOf("/")).PadLeft(2, '0');
-                            mes_alta = fecha_alta.Substring(fecha_alta.IndexOf("/") + 1, fecha_alta.LastIndexOf("/") - fecha_alta.IndexOf("/") - 1).PadLeft(2, '0');
-                            anio_alta = fecha_alta.Substring(fecha_alta.LastIndexOf("/") + 1, 4);
-                            fecha_alta = anio_alta + "-" + mes_alta + "-" + dia_alta;
+                            DateTime f = DateTime.Parse(dr[5].ToString());
+                            fecha_alta = f.Year + "-" + f.Month.ToString().PadLeft(2, '0') + "-" + f.Day.ToString().PadLeft(2, '0');
+                        }
+                        catch (Exception)
+                        {
+                            fecha_alta = "";
                         }
 
-                        string fecha_baja = dr[6].ToString();
-                        string dia_baja = "";
-                        string mes_baja = "";
-                        string anio_baja = "";
-                        if (fecha_baja != "")
+                        string fecha_baja;
+
+                        try
                         {
-                            dia_baja = fecha_baja.Substring(0, fecha_baja.IndexOf("/")).PadLeft(2, '0');
-                            mes_baja = fecha_baja.Substring(fecha_baja.IndexOf("/") + 1, fecha_baja.LastIndexOf("/") - fecha_baja.IndexOf("/") - 1).PadLeft(2, '0');
-                            anio_baja = fecha_baja.Substring(fecha_baja.LastIndexOf("/") + 1, 4);
-                            fecha_baja = anio_baja + "-" + mes_baja + "-" + dia_baja;
+                            DateTime f = DateTime.Parse(dr[6].ToString());
+                            fecha_baja = f.Year + "-" + f.Month.ToString().PadLeft(2, '0') + "-" + f.Day.ToString().PadLeft(2, '0');
                         }
+                        catch (Exception)
+                        {
+                            fecha_baja = "";
+                        }
+
+                        //string fecha_alta = dr[5].ToString();
+                        //string dia_alta = "";
+                        //string mes_alta = "";
+                        //string anio_alta = "";
+                        //if (fecha_alta!="")
+                        //{
+                        //    dia_alta = fecha_alta.Substring(0, fecha_alta.IndexOf("/")).PadLeft(2, '0');
+                        //    mes_alta = fecha_alta.Substring(fecha_alta.IndexOf("/") + 1, fecha_alta.LastIndexOf("/") - fecha_alta.IndexOf("/") - 1).PadLeft(2, '0');
+                        //    anio_alta = fecha_alta.Substring(fecha_alta.LastIndexOf("/") + 1, 4);
+                        //    fecha_alta = anio_alta + "-" + mes_alta + "-" + dia_alta;
+                        //}
+
+                        //string fecha_baja = dr[6].ToString();
+                        //string dia_baja = "";
+                        //string mes_baja = "";
+                        //string anio_baja = "";
+                        //if (fecha_baja != "")
+                        //{
+                        //    dia_baja = fecha_baja.Substring(0, fecha_baja.IndexOf("/")).PadLeft(2, '0');
+                        //    mes_baja = fecha_baja.Substring(fecha_baja.IndexOf("/") + 1, fecha_baja.LastIndexOf("/") - fecha_baja.IndexOf("/") - 1).PadLeft(2, '0');
+                        //    anio_baja = fecha_baja.Substring(fecha_baja.LastIndexOf("/") + 1, 4);
+                        //    fecha_baja = anio_baja + "-" + mes_baja + "-" + dia_baja;
+                        //}
 
                         switch (dr[7].ToString().ToUpper())
                         {

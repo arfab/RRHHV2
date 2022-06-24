@@ -230,7 +230,7 @@
                                @Convert.ToDateTime(item.fecha_baja).ToString("dd/MM/yyyy")
                             </td>
 
-                                <td>
+                                <td style="font-size:16px;">
                                     <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
                                     <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="A" asp-route-legajo_id=@item.id  asp-route-filtro=@item.nro_legajo asp-route-empresa_id=@item.empresa_id asp-route-nro_legajo=@item.nro_legajo asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id asp-route-local_id=@item.local_id asp-route-apellido="@item.apellido" asp-route-origen="L"><i data-mdb-toggle='tooltip' title='Ingresar Novedad' class='bi  bi-calendar2-plus'></i></a>
                                      @if (_perfil_id <= 3)

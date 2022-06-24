@@ -245,10 +245,10 @@
                                             <th>Ubicacion</th>*@
                                             <th>Sector/Local</th>
                                             <th>Responsable</th>
-                                            <th>Fecha Novedad</th>
+                                            <th>F. Novedad</th>
                                             @*<th>Categoría Novedad</th>*@
                                             <th>Tipo Novedad</th>
-                                            <th>Fecha Resolución</th>
+                                            <th>F. Resolución</th>
                                             <th>Tipo Resolución</th>
                                             <th>Días</th>
                                             <th>Observaciones</th>
@@ -304,7 +304,7 @@
                                                     @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                                 @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                                         @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                     }
                                                 </td>
@@ -314,15 +314,15 @@
                                                 <td>
                                                     @item.dias
                                                 </td>
-                                                <td>
+                                                <td style="width:50%;">
                                                     @item.observacion
                                                 </td>
-                                                    <td>
+                                                    <td style="font-size:16px;">
                                                     
                                                     @if (_perfil_id <= 3)
                                                     {
                                                         <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
-                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
+                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad' class='bi bi-x-circle'></i></a>
                                                     }
                                                     else
                                                     {
@@ -362,7 +362,7 @@
                                             <th>Ubicacion</th>*@
                                             <th>Sector/Local</th>
                                             <th>Responsable</th>
-                                            <th>Fecha Novedad</th>
+                                            <th>F. Novedad</th>
                                             <th>Tipo Novedad</th>
                                             <th>Observaciones</th>
                                             <th></th>
@@ -413,10 +413,10 @@
                                                 <td>
                                                     @item.tipo_novedad
                                                 </td>
-                                                <td>
+                                                <td style="width:50%;">
                                                     @item.observacion
                                                 </td>
-                                                    <td>
+                                                    <td style="font-size:16px;">
                                                    
                                                     @if (_perfil_id <= 3)
                                                     {
