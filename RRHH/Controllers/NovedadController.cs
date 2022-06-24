@@ -45,10 +45,14 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
-                DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                DateTime fechaHasta = DateTime.Now;
+                //DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); 
+                //DateTime fechaHasta = DateTime.Now;
 
-           
+
+                DateTime fechaDesde = new DateTime();
+                DateTime fechaHasta = new DateTime();
+
+
                 ViewData["EmpresaActual"] = -1;
                 ViewData["CategoriaNovedadActual"] = -1;
                 ViewData["TipoNovedadActual"] = -1;
@@ -59,8 +63,13 @@ namespace RRHH.Controllers
                 ViewData["SectorActual"] = -1;
                 ViewData["LocalActual"] = -1;
                 ViewData["ApellidoActual"] = "";
-                ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
-                ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
+
+
+                ViewData["FechaNovedadDesdeActual"] = "";
+                ViewData["FechaNovedadHastaActual"] = "";
+
+                //ViewData["FechaNovedadDesdeActual"] = fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year;
+                //ViewData["FechaNovedadHastaActual"] = fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year;
 
                 ViewData["EmpleadoActual"] = -1;
                 ViewData["FiltroActual"] = "";
@@ -73,8 +82,12 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetString("TIPO_NOVEDAD_ACTUAL", "");
                 HttpContext.Session.SetString("TIPO_RESOLUCION_ACTUAL", "");
 
-                HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year);
-                HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year);
+                HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE","");
+                HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA","");
+
+
+                //HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fechaDesde.Day.ToString().PadLeft(2, '0') + "/" + fechaDesde.Month.ToString().PadLeft(2, '0') + "/" + fechaDesde.Year);
+                //HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fechaHasta.Day.ToString().PadLeft(2, '0') + "/" + fechaHasta.Month.ToString().PadLeft(2, '0') + "/" + fechaHasta.Year);
 
                 HttpContext.Session.SetString("EMPLEADO_ACTUAL", "");
                 HttpContext.Session.SetString("FILTRO_ACTUAL", "");
@@ -88,18 +101,18 @@ namespace RRHH.Controllers
                 //else
 
 
-                int cant = novedadRepo.ObtenerCantidad(-1, 1, -1, -1,  -1, fechaDesde, fechaHasta,  "" );
+                int cant = novedadRepo.ObtenerCantidad(-1, 1, -1, -1,  -2, fechaDesde, fechaHasta,  "" );
                 ViewData["TOTAL_NOVEDADES"] = cant;
 
-                int cantFelicitaciones = novedadRepo.ObtenerCantidad(-1, 2, -1, -1, -1, fechaDesde, fechaHasta, "");
+                int cantFelicitaciones = novedadRepo.ObtenerCantidad(-1, 2, -1, -1, -2, fechaDesde, fechaHasta, "");
                 ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
 
                 HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                lFelicitaciones = novedadRepo.ObtenerPagina(1, -1, 2, -1, -1, -1, fechaDesde, fechaHasta, "");
+                lFelicitaciones = novedadRepo.ObtenerPagina(1, -1, 2, -1, -1, -2, fechaDesde, fechaHasta, "");
                 ViewData["FELICITACIONES"] = lFelicitaciones;
 
-                return View("Index",novedadRepo.ObtenerPagina(1, -1, 1, -1, -1, -1 , fechaDesde, fechaHasta,  ""));
+                return View("Index",novedadRepo.ObtenerPagina(1, -1, 1, -1, -1, -2 , fechaDesde, fechaHasta,  ""));
             }
 
             return View("Index");
@@ -150,10 +163,12 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
-                DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); 
-                DateTime fechaHasta = DateTime.Now;
+                //DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); 
+                //DateTime fechaHasta = DateTime.Now;
 
-                
+
+                DateTime fechaDesde = new DateTime();
+                DateTime fechaHasta = new DateTime();
 
                 if (fecha_novedad_desde != null)
                   if(fecha_novedad_desde.Value.Year > 2002)
@@ -214,16 +229,19 @@ namespace RRHH.Controllers
                     ViewData["EmpresaActual"] = legajo.empresa_id;
                     ViewData["LegajoActual"] = legajo.nro_legajo;
                 }
+               
 
 
-                if (empresa_id > 0 && nro_legajo > 0)
-                {
-                    fechaDesde= new DateTime(1, 1, 1);
-                    fechaHasta = new DateTime(1, 1, 1);
-                    ViewData["FechaNovedadDesdeActual"] = "";
-                    ViewData["FechaNovedadHastaActual"] = "";
-                }
-                else {
+
+                //if (empresa_id > 0 && nro_legajo > 0)
+                //{
+                //    fechaDesde = new DateTime(1, 1, 1);
+                //    fechaHasta = new DateTime(1, 1, 1);
+                //    ViewData["FechaNovedadDesdeActual"] = "";
+                //    ViewData["FechaNovedadHastaActual"] = "";
+                //}
+                //else {
+                    
                     if (fechaDesde.Year<2002) {
                         fechaDesde = new DateTime(1, 1, 1);
 
@@ -248,22 +266,22 @@ namespace RRHH.Controllers
                     }
 
 
-                }
+                //}
 
-                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["TOTAL_NOVEDADES"] = cant;
 
-                int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
 
 
                 HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["FELICITACIONES"] = lFelicitaciones;
 
 
-                return View(novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
+                return View(novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
 
 
                 //if (nro_legajo > 0 && empresa_id > 0) {
@@ -328,6 +346,7 @@ namespace RRHH.Controllers
                     nro_legajo = legajo.nro_legajo.Value;
                     empresa_id = legajo.empresa_id.Value;
                 }
+                
 
                 if (fecha_novedad_desde.Year < 2002)
                 {
@@ -401,25 +420,31 @@ namespace RRHH.Controllers
                     HttpContext.Session.SetInt32("PAG_NOVEDAD", 1);
                 }
 
-                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
                 ViewData["TOTAL_NOVEDADES"] = cant;
 
 
-                int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id,2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+                int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id,2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
                 ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
 
                 HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
 
-                lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+                lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
                 ViewData["FELICITACIONES"] = lFelicitaciones;
 
 
 
-                novedades = novedadRepo.ObtenerPagina(pag_novedad.Value,(empresa_id == 0) ? -1 : empresa_id,1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+                novedades = novedadRepo.ObtenerPagina(pag_novedad.Value,(empresa_id == 0) ? -1 : empresa_id,1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
 
-               // novedades = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
-               
+                if (nro_legajo<=0)
+                {
+                    ViewBag.Message = "Debe especificar un legajo";
+                    return View();
+                }
+
+                // novedades = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+
                 if (novedades.Count() == 0 && cantFelicitaciones==0)
                 {
                     ViewBag.Message = "No existen novedades para el criterio seleccionado";

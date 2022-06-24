@@ -606,8 +606,8 @@ var ObtenerEmpresas = function () {
             success: function (data) {
                 $('#apellido').val(data.apellido);
                 $('#empresa_id').val(data.empresa_id);
-                $('#txtSelectedFechaNovedadDesde').val('');
-                $('#txtSelectedFechaNovedadHasta').val('');
+                //$('#txtSelectedFechaNovedadDesde').val('');
+                //$('#txtSelectedFechaNovedadHasta').val('');
                
             },
             error: function () {
@@ -629,10 +629,10 @@ var ObtenerEmpresas = function () {
             },
             success: function (data) {
                 $('#legajo_id').find('option').remove()
-                if (data[0].value > 0) { 
-                   $('#txtSelectedFechaNovedadDesde').val('');
-                   $('#txtSelectedFechaNovedadHasta').val('');
-                }
+                //if (data[0].value > 0) { 
+                //   $('#txtSelectedFechaNovedadDesde').val('');
+                //   $('#txtSelectedFechaNovedadHasta').val('');
+                //}
                 $(data).each(
                     function (index, item) {            
                         if (item.value==CodEmpleado)

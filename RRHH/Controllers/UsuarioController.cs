@@ -46,6 +46,18 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("NOMBRE", "");
             HttpContext.Session.SetString("PERFIL_ID", "");
             HttpContext.Session.SetString("ID", "");
+
+            HttpContext.Session.SetString("EMPRESA_ACTUAL", "");
+            HttpContext.Session.SetString("LEGAJO_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_ACTUAL", "");
+
+            HttpContext.Session.SetString("CATEGORIA_NOVEDAD_ACTUAL", "");
+            HttpContext.Session.SetString("TIPO_NOVEDAD_ACTUAL", "");
+            HttpContext.Session.SetString("TIPO_RESOLUCION_ACTUAL", "");
+
+
+            HttpContext.Session.SetString("EMPLEADO_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_ACTUAL", "");
             //HttpContext.Session.SetString("EMAIL", "");
             //HttpContext.Session.SetString("ID_ROL", "");
             //HttpContext.Session.SetString("ROL_CODIGO", "");
