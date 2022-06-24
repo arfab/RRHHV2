@@ -836,7 +836,7 @@ namespace RRHH.Controllers
 
                 if (sret == "")
                 {
-                    return RedirectToAction("Reset", "Novedad");
+                    return RedirectToAction("Index", "Novedad");
 
                    // return RedirectToAction("Reset", "Novedad", new { empresa_id = novedad.empresa_id, nro_legajo= novedad.nro_legajo, ubicacion_id = novedad.ubicacion_id, sectori_id = novedad.sector_id, local_id = novedad.local_id });
                    
