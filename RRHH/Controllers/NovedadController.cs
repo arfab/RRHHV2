@@ -454,6 +454,8 @@ namespace RRHH.Controllers
                     return View();
                 }
 
+                //return RedirectToAction("Index", novedades);
+
                 return View(novedades);
             }
 
