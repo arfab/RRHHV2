@@ -1100,6 +1100,8 @@ namespace RRHH.Controllers
             string wwwPath = this.Environment.WebRootPath;
             string contentPath = this.Environment.ContentRootPath;
             string path = Path.Combine(this.Environment.WebRootPath, "Uploads");
+            string guid = Guid.NewGuid().ToString();
+
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -1110,8 +1112,9 @@ namespace RRHH.Controllers
             if (file != null && System.IO.Path.GetExtension(file.FileName).ToLower() == ".xlsx")
             {
 
-                string fileName = Path.GetFileName(file.FileName);
+                //string fileName = Path.GetFileName(file.FileName);
 
+                string fileName = Path.GetFileNameWithoutExtension(file.FileName) + "_" + guid + System.IO.Path.GetExtension(file.FileName).ToLower();
 
                 using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                 {
@@ -1122,7 +1125,7 @@ namespace RRHH.Controllers
                 ////Saving the file  
                 //file.SaveAs(path);
                 ////Started reading the Excel file.  
-                using (XLWorkbook workbook = new XLWorkbook(Path.Combine(path, file.FileName)))
+                using (XLWorkbook workbook = new XLWorkbook(Path.Combine(path, fileName)))
                 {
                     IXLWorksheet worksheet = workbook.Worksheet(1);
                     bool FirstRow = true;
@@ -1164,11 +1167,17 @@ namespace RRHH.Controllers
                     }
 
 
-
+                    int errores = 0;
+                    int fila = 1;
                     foreach (DataRow dr in dt.Rows)
                     {
+                        fila++;
                         NovedadRepo novedadRepo = new NovedadRepo();
                         Novedad novedad = new Novedad();
+
+
+                        int iUbicacion = -1;
+                        int iCategoriaNovedad = -1;
 
                         string fecha_novedad = dr[7].ToString();
                         string dia_novedad = "";
@@ -1194,30 +1203,104 @@ namespace RRHH.Controllers
                             fecha_resolucion = anio_resolucion + "-" + mes_resolucion + "-" + dia_resolucion;
                         }
 
-                        novedad = novedadRepo.ObtenerDeImportacion(
+                        switch (dr[0].ToString().ToUpper())
+                        {
+                            case "SANCION":
+                                iCategoriaNovedad = 1;
+                                break;
+                            case "FELICITACION":
+                                iCategoriaNovedad = 2;
+                                break;
+                            default:
+                                iCategoriaNovedad = -1;
+                                break;
+                        }
+
+                        switch (dr[3].ToString().ToUpper())
+                        {
+                            case "FABRICA":
+                                iUbicacion = 1;
+                                break;
+                            case "EDIFICIO":
+                                iUbicacion = 2;
+                                break;
+                            case "LOCAL":
+                                iUbicacion = 3;
+                                break;
+                            default:
+                                iUbicacion = -1;
+                                break;
+                        }
+
+
+
+
+                        string sError = "";
+                        int ret = novedadRepo.ObtenerDeImportacion(
                                   dr[1].ToString(),
                                   dr[2].ToString(),
-                                  dr[3].ToString(),
+                                  iUbicacion.ToString(),
                                   dr[4].ToString(),
                                   dr[5].ToString(),
                                   dr[6].ToString(),
-                                  dr[0].ToString(),
+                                  iCategoriaNovedad.ToString(),
                                   dr[8].ToString(),
                                   fecha_novedad,
                                   dr[10].ToString(),
                                   fecha_resolucion,
                                   dr[11].ToString(),
-                                  dr[12].ToString()
+                                  dr[12].ToString(),
+                                  ref novedad
                                   );
 
-                        if (novedad == null)
-                            ViewBag.Message = "ERROR";
+
+                        if (ret < 0)
+                        {
+                            errores++;
+                            switch (ret)
+                            {
+                                case -1:
+                                    sError = "El legajo no existe";
+                                    break;
+
+                                default:
+                                    sError = "Error";
+                                    break;
+                            }
+
+                            // ViewBag.Message = "ERROR";
+                            worksheet.Cell(fila, "N").Value = sError;
+                        }
                         else
                         {
-                            novedadRepo.Insertar(novedad, (int)novedad.usuario_id);
-                            ViewBag.Message = "OK";
+                            if (novedadRepo.Insertar(novedad, (int)novedad.usuario_id) == "")
+                            {
+                                // ViewBag.Message = "OK";
+                                worksheet.Cell(fila, "N").Value = "OK";
+                            }
+                            else
+                            {
+                                ViewBag.Message = "ERROR";
+                                worksheet.Cell(fila, "N").Value = "ERROR";
+                            }
                         }
+
+                       
                     }
+
+                    workbook.Save();
+
+                    Importacion imp = new Importacion();
+                    IImportacionRepo importacionRepo;
+
+                    importacionRepo = new ImportacionRepo();
+
+                    imp.tipo = "N";
+                    imp.nombre_archivo = Path.Combine("\\Uploads", fileName);
+                    imp.cantidad = fila - 1;
+                    imp.errores = errores;
+
+                    importacionRepo.Insertar(imp);
 
                 }
             }

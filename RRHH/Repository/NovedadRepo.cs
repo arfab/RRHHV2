@@ -173,10 +173,12 @@ namespace RRHH.Repository
         }
 
 
-        public Novedad ObtenerDeImportacion(string empresa, string nro_legajo, string ubicacion_id,  string sector, string responsable, string concepto, string categoria_novedad, string tipo_novedad, string fecha_novedad, string tipo_resolucion,  string fecha_resolucion, string dias, string observacion)
+        public int ObtenerDeImportacion(string empresa, string nro_legajo, string ubicacion_id,  string sector, string responsable, string concepto, string categoria_novedad, string tipo_novedad, string fecha_novedad, string tipo_resolucion,  string fecha_resolucion, string dias, string observacion, ref  Novedad nov)
         {
 
-            using (IDbConnection con = new SqlConnection(strConnectionString))
+            try
+            {
+             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
@@ -199,15 +201,20 @@ namespace RRHH.Repository
                
                 parameter.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
-                Novedad novedad = new Novedad();
+                nov =  con.QuerySingleOrDefault<Novedad>("spNovedadObtenerDeImportacion", parameter, commandType: CommandType.StoredProcedure);
 
-                novedad =  con.QuerySingleOrDefault<Novedad>("spNovedadObtenerDeImportacion", parameter, commandType: CommandType.StoredProcedure);
+               return parameter.Get<int>("@retValue");
 
-                return novedad;
+                }
+            }
+            catch (SqlException e)
+            {
+                 return -999;
 
             }
 
-        }
+
+}
 
 
 
