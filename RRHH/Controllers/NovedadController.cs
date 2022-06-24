@@ -1191,29 +1191,52 @@ namespace RRHH.Controllers
                         int iUbicacion = -1;
                         int iCategoriaNovedad = -1;
 
-                        string fecha_novedad = dr[7].ToString();
-                        string dia_novedad = "";
-                        string mes_novedad = "";
-                        string anio_novedad = "";
-                        if (fecha_novedad != "")
+                        string fecha_novedad;
+                        try
                         {
-                            dia_novedad = fecha_novedad.Substring(0, fecha_novedad.IndexOf("/")).PadLeft(2, '0');
-                            mes_novedad = fecha_novedad.Substring(fecha_novedad.IndexOf("/") + 1, fecha_novedad.LastIndexOf("/") - fecha_novedad.IndexOf("/") - 1).PadLeft(2, '0');
-                            anio_novedad = fecha_novedad.Substring(fecha_novedad.LastIndexOf("/") + 1, 4);
-                            fecha_novedad = anio_novedad + "-" + mes_novedad + "-" + dia_novedad;
+                            DateTime f = DateTime.Parse(dr[7].ToString());
+                            fecha_novedad = f.Year + "-" + f.Month.ToString().PadLeft(2, '0') + "-" + f.Day.ToString().PadLeft(2, '0');
+                        }
+                        catch (Exception)
+                        {
+                            fecha_novedad = "";
                         }
 
-                        string fecha_resolucion = dr[9].ToString();
-                        string dia_resolucion = "";
-                        string mes_resolucion = "";
-                        string anio_resolucion = "";
-                        if (fecha_resolucion != "")
+                        string fecha_resolucion;
+                        try
                         {
-                            dia_resolucion = fecha_resolucion.Substring(0, fecha_resolucion.IndexOf("/")).PadLeft(2, '0');
-                            mes_resolucion = fecha_resolucion.Substring(fecha_resolucion.IndexOf("/") + 1, fecha_resolucion.LastIndexOf("/") - fecha_resolucion.IndexOf("/") - 1).PadLeft(2, '0');
-                            anio_resolucion = fecha_resolucion.Substring(fecha_resolucion.LastIndexOf("/") + 1, 4);
-                            fecha_resolucion = anio_resolucion + "-" + mes_resolucion + "-" + dia_resolucion;
+                            DateTime f = DateTime.Parse(dr[9].ToString());
+                            fecha_resolucion = f.Year + "-" + f.Month.ToString().PadLeft(2, '0') + "-" + f.Day.ToString().PadLeft(2, '0');
                         }
+                        catch (Exception)
+                        {
+                            fecha_resolucion = "";
+                        }
+
+
+                        //string fecha_novedad = dr[7].ToString();
+                        //string dia_novedad = "";
+                        //string mes_novedad = "";
+                        //string anio_novedad = "";
+                        //if (fecha_novedad != "")
+                        //{
+                        //    dia_novedad = fecha_novedad.Substring(0, fecha_novedad.IndexOf("/")).PadLeft(2, '0');
+                        //    mes_novedad = fecha_novedad.Substring(fecha_novedad.IndexOf("/") + 1, fecha_novedad.LastIndexOf("/") - fecha_novedad.IndexOf("/") - 1).PadLeft(2, '0');
+                        //    anio_novedad = fecha_novedad.Substring(fecha_novedad.LastIndexOf("/") + 1, 4);
+                        //    fecha_novedad = anio_novedad + "-" + mes_novedad + "-" + dia_novedad;
+                        //}
+
+                        //string fecha_resolucion = dr[9].ToString();
+                        //string dia_resolucion = "";
+                        //string mes_resolucion = "";
+                        //string anio_resolucion = "";
+                        //if (fecha_resolucion != "")
+                        //{
+                        //    dia_resolucion = fecha_resolucion.Substring(0, fecha_resolucion.IndexOf("/")).PadLeft(2, '0');
+                        //    mes_resolucion = fecha_resolucion.Substring(fecha_resolucion.IndexOf("/") + 1, fecha_resolucion.LastIndexOf("/") - fecha_resolucion.IndexOf("/") - 1).PadLeft(2, '0');
+                        //    anio_resolucion = fecha_resolucion.Substring(fecha_resolucion.LastIndexOf("/") + 1, 4);
+                        //    fecha_resolucion = anio_resolucion + "-" + mes_resolucion + "-" + dia_resolucion;
+                        //}
 
                         switch (dr[0].ToString().ToUpper())
                         {
