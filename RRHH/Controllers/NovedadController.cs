@@ -740,6 +740,12 @@ namespace RRHH.Controllers
 
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            if (perfil_id>3 && modo!="V") return RedirectToAction("Login", "Usuario");
+
+
+
             Novedad novedad = new Novedad();
 
             ViewData["ORIGEN"] = origen;

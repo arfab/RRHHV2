@@ -241,8 +241,8 @@
                                         <tr >
 @*                                            <th>Nro. Legajo</th>
                                             <th>Apellido</th>
-                                            <th>Nombre</th>*@
-                                            <th>Ubicacion</th>
+                                            <th>Nombre</th>
+                                            <th>Ubicacion</th>*@
                                             <th>Sector/Local</th>
                                             <th>Responsable</th>
                                             <th>Fecha Novedad</th>
@@ -274,10 +274,10 @@
                                                 </td>
                                                 <td>
                                                     @item.nombre
-                                                </td>*@
+                                                </td>
                                                 <td>
                                                     @item.ubicacion
-                                                </td>
+                                                </td>*@
                                                 <td>
                                                     @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
                                                 {
@@ -318,12 +318,17 @@
                                                     @item.observacion
                                                 </td>
                                                     <td>
-                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
-                                                        @if (_perfil_id <= 3)
+                                                    
+                                                    @if (_perfil_id <= 3)
                                                     {
-                                                            <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
+                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
+                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
                                                     }
-                                                    </td>
+                                                    else
+                                                    {
+                                                       <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="V" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Ver la novedad' class='bi bi-eye'></i></a>                                                        
+                                                    }
+                                                </td>
                                             </tr>
 
                                     }
@@ -353,8 +358,8 @@
                                         <tr >
 @*                                            <th>Nro. Legajo</th>
                                             <th>Apellido</th>
-                                            <th>Nombre</th>*@
-                                            <th>Ubicacion</th>
+                                            <th>Nombre</th>
+                                            <th>Ubicacion</th>*@
                                             <th>Sector/Local</th>
                                             <th>Responsable</th>
                                             <th>Fecha Novedad</th>
@@ -382,10 +387,10 @@
                                                 </td>
                                                 <td>
                                                     @item.nombre
-                                                </td>*@
+                                                </td>
                                                 <td>
                                                     @item.ubicacion
-                                                </td>
+                                                </td>*@
                                                 <td>
                                                     @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
                                                 {
@@ -412,12 +417,17 @@
                                                     @item.observacion
                                                 </td>
                                                     <td>
-                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
-                                                        @if (_perfil_id <= 3)
+                                                   
+                                                    @if (_perfil_id <= 3)
                                                     {
-                                                            <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
+                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
+                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
                                                     }
-                                                    </td>
+                                                    else
+                                                    {
+                                                         <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="V" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Ver la novedad' class='bi bi-eye'></i></a>                                                        
+                                                    }
+                                                </td>
                                             </tr>
 
                                     }
