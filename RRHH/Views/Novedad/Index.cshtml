@@ -11,37 +11,40 @@
     var total_paginas = @HttpContextAccessor.HttpContext.Session.GetInt32("TOT_PAG_NOVEDAD");
     var fel = ViewData["FELICITACIONES"];
     var total_fel = ViewData["TOTAL_FELICITACIONES"];
-}
+
+    var legajo =  (RRHH.Models.Legajo) ViewData["LEGAJO"];
+              
+    }
 
 
- <form id="form1" method="post" enctype="multipart/form-data" class="form-floating">
-     
-
+     <form id="form1" method="post" enctype="multipart/form-data" class="form-floating">
          
 
- <div class="container-fluid">
-     <div class="jumbotron text-center Titulo bottom-buffer ">
-      <h2>Listado de Novedades</h2>
-      <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a>
-      @if (_perfil_id <= 3)
+             
+
+     <div class="container-fluid">
+         <div class="jumbotron text-center Titulo bottom-buffer ">
+          <h2>Listado de Novedades</h2>
+          <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a>
+          @if (_perfil_id <= 3)
       {
-        <span>  |  </span><a href="#" onclick='ToggleImportarNovedades()'>Importar de Excel</a>
+            <span>  |  </span><a href="#" onclick='ToggleImportarNovedades()'>Importar de Excel</a>
       }
-      </div>
-
-      <center>
-
-           <div class="row bottom-buffer" id="divImportarNovedades">
-              <div class="col bottom-buffer">
-                 <div class="btns2">             
-                     <input type="file" name="file" />
-                      <button id="btnImportar" type="submit" asp-action="importar" class="btn btn-outline-success">Importar</button>
-                 </div>
-              </div>
           </div>
 
- 
-@*          <div class="row mb-3"  hidden >
+          <center>
+
+               <div class="row bottom-buffer" id="divImportarNovedades">
+                  <div class="col bottom-buffer">
+                     <div class="btns2">             
+                         <input type="file" name="file" />
+                          <button id="btnImportar" type="submit" asp-action="importar" class="btn btn-outline-success">Importar</button>
+                     </div>
+                  </div>
+              </div>
+
+     
+    @*          <div class="row mb-3"  hidden >
 			<div class="col-sm-4 col-xs-6 mb-3">
                 <label for="empresa_id">Empresa</label>
                 <select  data-filter="model" class="form-control" name="empresa_id" id="empresa_id" value="@ViewData["EmpresaActual"]" ></select>           
@@ -55,77 +58,77 @@
                   <input name="apellido" id="apellido"  placeholder="Apellido" value="@ViewData["ApellidoActual"]" class="form-control" />                                          
 			</div>
 	     </div>*@
-         <div class="row mb-3" >
-             <div class="col-lg-2 col-xs-6 mb-3">
-                  <label for="filtro">Legajo / Apellido</label>
-                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
-			</div>
-			<div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
-                <label for="legajo_id">Empleado</label>
-                <select  data-filter="model" class="form-control" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
-			</div>
-            <div class="col-lg-4 col-xs-6 mb-3">
-                <div class="row" >
-                    <div class="col" >
-                        <label for="txtSelectedFechaNovedadDesde">Desde</label>
-                        <input type="text" id="txtSelectedFechaNovedadDesde" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  />
-                    </div>
-                     <div class="col" >
-                       <label for="txtSelectedFechaNovedadHasta">Hasta</label>
-                       <input type="text" id="txtSelectedFechaNovedadHasta" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]" />
-                  </div>
+             <div class="row mb-3" >
+                 <div class="col-lg-2 col-xs-6 mb-3">
+                      <label for="filtro">Legajo / Apellido</label>
+                      <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
                 </div>
-            </div>
-          </div>  
+                <div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
+                    <label for="legajo_id">Empleado</label>
+                    <select  data-filter="model" class="form-control" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+                </div>
+                <div class="col-lg-4 col-xs-6 mb-3">
+                    <div class="row" >
+                        <div class="col" >
+                            <label for="txtSelectedFechaNovedadDesde">Desde</label>
+                            <input type="text" id="txtSelectedFechaNovedadDesde" class="form-control" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  />
+                        </div>
+                         <div class="col" >
+                           <label for="txtSelectedFechaNovedadHasta">Hasta</label>
+                           <input type="text" id="txtSelectedFechaNovedadHasta" class="form-control" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]" />
+                      </div>
+                    </div>
+                </div>
+              </div>  
 
-          <div class="row mb-3" id="divBusquedaAvanzada" >
-			<div class="col-sm-4 col-xs-6 mb-3" hidden>
-                <label for="categoria_novedad_id">Categoría</label>
-				<select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
-			</div>
-			<div class="col-sm-4 col-xs-6 mb-3">
-                <label for="tipo_novedad_id">Tipo de novedad</label>
-				<select name="tipo_novedad_id" id="tipo_novedad_id" data-filter="model" class="filter-model filter form-control"></select>
-			</div>
-			<div class="col-sm-4 col-xs-6 mb-3">
-                <label for="tipo_resolucion_id">Tipo de resolución</label>
-				<select  name="tipo_resolucion_id" id="tipo_resolucion_id" data-filter="type" class="filter-type filter form-control"></select>
-			</div>
-	      </div>
-           
-         <div class="row mb-3" >
-			<div class="col">
-                 <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
-                 <input type="submit" value="Limpiar" asp-action="Reset" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
-                 <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-primary" />
-                 <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
+              <div class="row mb-3" id="divBusquedaAvanzada" >
+                <div class="col-sm-4 col-xs-6 mb-3" hidden>
+                    <label for="categoria_novedad_id">Categoría</label>
+                    <select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
+                </div>
+                <div class="col-sm-4 col-xs-6 mb-3">
+                    <label for="tipo_novedad_id">Tipo de novedad</label>
+                    <select name="tipo_novedad_id" id="tipo_novedad_id" data-filter="model" class="filter-model filter form-control"></select>
+                </div>
+                <div class="col-sm-4 col-xs-6 mb-3">
+                    <label for="tipo_resolucion_id">Tipo de resolución</label>
+                    <select  name="tipo_resolucion_id" id="tipo_resolucion_id" data-filter="type" class="filter-type filter form-control"></select>
+                </div>
+              </div>
+               
+             <div class="row mb-3" >
+                <div class="col">
+                     <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
+                     <input type="submit" value="Limpiar" asp-action="Reset" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+                     <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-primary" />
+                     <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
-                  @if (_perfil_id <= 3)
+                      @if (_perfil_id <= 3)
                     {
-                      <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"   asp-route-legajo_id="@ViewData["EmpleadoActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>                     
+                          <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"   asp-route-legajo_id="@ViewData["EmpleadoActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR NOVEDAD</a>                     
                     }
 
-			</div>
-	     </div>
+                </div>
+             </div>
 
 
-     <div class="row">
-            <div class="col bottom-buffer">
-                <span id="spanTitulo"></span>
+         <div class="row">
+                <div class="col bottom-buffer">
+                    <span id="spanTitulo"></span>
+                </div>
             </div>
-        </div>
 
-         
-    
+             
+        
 
-       @* <div class="d-flex justify-content-center align-items-center container ">
+           @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
                 <div class="col bottom-buffer badge bg-secondary">
                     <span id="spanCantidad" class="BarraCantidad">Cantidad  de usuarios: @Model.Count()</span>
                 </div>
             </div>
         </div>*@
-           @* @if (@ViewBag.Message==null)
+               @* @if (@ViewBag.Message==null)
             {
                   <div class="d-flex flex-row-reverse bd-highlight">
                      <div class="p-2 bd-highlight">Cantidad: @ViewData["TOTAL_NOVEDADES"]</div>
@@ -147,7 +150,7 @@
                 </div>
             }*@
 
-            @*<div class="d-flex d-flex justify-content-center">
+                @*<div class="d-flex d-flex justify-content-center">
                 @if (@ViewBag.Message==null)
                 {
                     @if (pagina > 1)
@@ -175,357 +178,423 @@
 
            </div>*@
 
-            <div id="divPrint">
-                
-            
-            @if (@Model != null && Model.Count()>0)
+                <div id="divPrint">
+                @if (@legajo != null)
+                {
+                    <table id="tablaLegajo" class="table table-bordered table-hover table-condensed">
+                        <thead>
+                            <tr >
+                                <th>Empresa</th>
+                                <th>Nro. Legajo</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Ubicación</th>
+                                <th>Sector/Local</th>
+                                <th>Categoría</th>
+                                <th>F. Ingreso</th>
+                                <th>F. Baja</th>                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr >
+                                <td>@legajo.empresa</td>
+                                <td>@legajo.nro_legajo</td>
+                                <td>@legajo.nombre</td>
+                                <td>@legajo.apellido</td>
+                                <td>@legajo.ubicacion</td>
+                                @if (legajo.ubicacion_id.Value==3)
+                                {
+                                   <td>@legajo.local</td>    
+                                }
+                                else
+                                 {
+                                    <td>@legajo.sector</td>
+                                 }
+                                 <td>@legajo.categoria</td>
+                                 <td> @Convert.ToDateTime(@legajo.fecha_alta).ToString("dd/MM/yyyy")</td>
+                                 @if (legajo.fecha_baja!=null){
+                                     <td> @Convert.ToDateTime(@legajo.fecha_baja).ToString("dd/MM/yyyy")</td>
+                                 }
+                                 else
+                                 {
+                                    <td></td>
+                                 }
+                                 
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                @if (@Model != null && Model.Count()>0)
             {
-               <div class="d-flex d-flex justify-content-left">
-                 <span id="spanSanciones" style="font-weight: bold; padding-bottom:10px;">Sanciones</span>
-               </div>
-                <div class="row">
-                    <div class="col bottom-buffer">
-                        <div class="table-responsive">
+                   <div class="d-flex d-flex justify-content-left">
+                     <span id="spanSanciones" style="font-weight: bold; padding-bottom:10px;  padding-top:10px;">Sanciones</span>
+                   </div>
+                    <div class="row">
+                        <div class="col bottom-buffer">
+                            <div class="table-responsive">
 
 
-                            <table id="tablaSanciones" class="table table-bordered table-hover table-condensed">
-                                <thead>
-                                    <tr >
-                                        <th>Nro. Legajo</th>
-                                        <th>Apellido</th>
-                                        <th>Nombre</th>
-                                        <th>Ubicacion</th>
-                                        <th>Sector/Local</th>
-                                        <th>Responsable</th>
-                                        <th>Fecha Novedad</th>
-                                        @*<th>Categoría Novedad</th>*@
-                                        <th>Tipo Novedad</th>
-                                        <th>Fecha Resolución</th>
-                                        <th>Tipo Resolución</th>
-                                        <th>Días</th>
-                                        <th>Observaciones</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
+                                <table id="tablaSanciones" class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                       
+                                        <tr >
+                                            <th>Nro. Legajo</th>
+                                            <th>Apellido</th>
+                                            <th>Nombre</th>
+                                            <th>Ubicacion</th>
+                                            <th>Sector/Local</th>
+                                            <th>Responsable</th>
+                                            <th>Fecha Novedad</th>
+                                            @*<th>Categoría Novedad</th>*@
+                                            <th>Tipo Novedad</th>
+                                            <th>Fecha Resolución</th>
+                                            <th>Tipo Resolución</th>
+                                            <th>Días</th>
+                                            <th>Observaciones</th>
+                                            <th></th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
                                     {
-                                        @if (item.categoria_novedad_id !=1)
+                                            @if (item.categoria_novedad_id !=1)
                                         {
                                             continue;
                                         }
-                                        @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
+                                            @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
 *@                                        <tr  >
 
-                                            <td>
-                                                @item.nro_legajo
-                                            </td>
-                                            <td>
-                                                @item.apellido
-                                            </td>
-                                            <td>
-                                                @item.nombre
-                                            </td>
-                                            <td>
-                                                @item.ubicacion
-                                            </td>
-                                            <td>
-                                                @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
+                                                <td>
+                                                    @item.nro_legajo
+                                                </td>
+                                                <td>
+                                                    @item.apellido
+                                                </td>
+                                                <td>
+                                                    @item.nombre
+                                                </td>
+                                                <td>
+                                                    @item.ubicacion
+                                                </td>
+                                                <td>
+                                                    @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
                                                 {
-                                                    @item.sector
+                                                        @item.sector
                                                 }
                                                 else
                                                 {
-                                                    @item.local
+                                                        @item.local
                                                 }
-                                            </td>
-                                            <td>
-                                                @item.responsable
-                                            </td>
-                                            <td>
-                                                @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
-                                            </td>
-                                            @*<td>
+                                                </td>
+                                                <td>
+                                                    @item.responsable
+                                                </td>
+                                                <td>
+                                                    @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
+                                                </td>
+                                                @*<td>
                                                 @item.categoria_novedad
                                             </td>*@
-                                            <td>
-                                                @item.tipo_novedad
-                                            </td>
-                                            <td>
-                                                @{
+                                                <td>
+                                                    @item.tipo_novedad
+                                                </td>
+                                                <td>
+                                                    @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                 @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                                 @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
-                                                }
-                                            </td>
-                                            <td>
-                                                @item.tipo_resolucion
-                                            </td>
-                                            <td>
-                                                @item.dias
-                                            </td>
-                                            <td>
-                                                @item.observacion
-                                            </td>
-                                                <td>
-                                                    <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
-                                                    @if (_perfil_id <= 3)
-                                                    {
-                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
                                                     }
                                                 </td>
-                                        </tr>
+                                                <td>
+                                                    @item.tipo_resolucion
+                                                </td>
+                                                <td>
+                                                    @item.dias
+                                                </td>
+                                                <td>
+                                                    @item.observacion
+                                                </td>
+                                                    <td>
+                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
+                                                        @if (_perfil_id <= 3)
+                                                    {
+                                                            <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
+                                                    }
+                                                    </td>
+                                            </tr>
 
                                     }
-                                </tbody>
-                </table>
-              </div>
-            </div>
-         </div>
+                                    </tbody>
+                    </table>
+                  </div>
+                </div>
+             </div>
          }
-               
+                   
 
-         @if ( (int) total_fel>0)
+             @if ( (int) total_fel>0)
             {
                 
 
 
-                <div class="d-flex d-flex justify-content-left">
-                   <span id="spanFelicitaciones" style="font-weight: bold; padding-bottom:10px; padding-top:20px;">Felicitaciones</span>
-               </div>
-                <div class="row">
-                    <div class="col bottom-buffer">
-                        <div class="table-responsive">
+                    <div class="d-flex d-flex justify-content-left">
+                       <span id="spanFelicitaciones" style="font-weight: bold; padding-bottom:10px; padding-top:20px;">Felicitaciones</span>
+                   </div>
+                    <div class="row">
+                        <div class="col bottom-buffer">
+                            <div class="table-responsive">
 
 
-                            <table id="tablaFelicitaciones" class="table table-bordered table-hover table-condensed">
-                                <thead>
-                                    <tr >
-                                        <th>Nro. Legajo</th>
-                                        <th>Apellido</th>
-                                        <th>Nombre</th>
-                                        <th>Ubicacion</th>
-                                        <th>Sector/Local</th>
-                                        <th>Responsable</th>
-                                        <th>Fecha Novedad</th>
-                                        <th>Tipo Novedad</th>
-                                        <th>Observaciones</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in (IEnumerable<RRHH.Models.Novedad>) fel)
+                                <table id="tablaFelicitaciones" class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                        <tr >
+                                            <th>Nro. Legajo</th>
+                                            <th>Apellido</th>
+                                            <th>Nombre</th>
+                                            <th>Ubicacion</th>
+                                            <th>Sector/Local</th>
+                                            <th>Responsable</th>
+                                            <th>Fecha Novedad</th>
+                                            <th>Tipo Novedad</th>
+                                            <th>Observaciones</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in (IEnumerable<RRHH.Models.Novedad>) fel)
                                     {
 
-                                      @*  @if (item.categoria_novedad_id !=2)
+                                          @*  @if (item.categoria_novedad_id !=2)
                                         {
                                             continue;
                                         }*@
-                                        @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
+                                            @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
 *@                                        <tr  >
 
-                                            <td>
-                                                @item.nro_legajo
-                                            </td>
-                                            <td>
-                                                @item.apellido
-                                            </td>
-                                            <td>
-                                                @item.nombre
-                                            </td>
-                                            <td>
-                                                @item.ubicacion
-                                            </td>
-                                            <td>
-                                                @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
+                                                <td>
+                                                    @item.nro_legajo
+                                                </td>
+                                                <td>
+                                                    @item.apellido
+                                                </td>
+                                                <td>
+                                                    @item.nombre
+                                                </td>
+                                                <td>
+                                                    @item.ubicacion
+                                                </td>
+                                                <td>
+                                                    @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
                                                 {
-                                                    @item.sector
+                                                        @item.sector
                                                 }
                                                 else
                                                 {
-                                                    @item.local
+                                                        @item.local
                                                 }
-                                            </td>
-                                            <td>
-                                                @item.responsable
-                                            </td>
-                                            <td>
-                                                @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
-                                            </td>
-                                            @*<td>
+                                                </td>
+                                                <td>
+                                                    @item.responsable
+                                                </td>
+                                                <td>
+                                                    @Convert.ToDateTime(item.fecha_novedad).ToString("dd/MM/yyyy")
+                                                </td>
+                                                @*<td>
                                                 @item.categoria_novedad
                                             </td>*@
-                                            <td>
-                                                @item.tipo_novedad
-                                            </td>
-                                            <td>
-                                                @item.observacion
-                                            </td>
                                                 <td>
-                                                    <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
-                                                    @if (_perfil_id <= 3)
-                                                    {
-                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
-                                                    }
+                                                    @item.tipo_novedad
                                                 </td>
-                                        </tr>
+                                                <td>
+                                                    @item.observacion
+                                                </td>
+                                                    <td>
+                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
+                                                        @if (_perfil_id <= 3)
+                                                    {
+                                                            <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad'  class='bi bi-x-circle'></i></a>
+                                                    }
+                                                    </td>
+                                            </tr>
 
                                     }
-                                </tbody>
-                </table>
-              </div>
-            </div>
-         </div>
+                                    </tbody>
+                    </table>
+                  </div>
+                </div>
+             </div>
          }
-         </div>
-         </center>
+             </div>
+             </center>
 
 
 
-    <!-- Modal Eliminar Novedad -->
+        <!-- Modal Eliminar Novedad -->
 
-    <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  
+                            <div class="modal-header">
+                                <h5 class="modal-title">Novedad</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+
+                            <div class="modal-body">
+                                Se eliminará la novedad con todos sus datos. Está seguro?
+                                 <input id="hfID" name="hfID" type="hidden" >
+                            </div>
+                            <div class="modal-footer">
+                                 <button id="btnEliminar" type="submit" asp-action="Delete" value="" class="btn btn-outline-success"  >SI</button>
+                                 <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                            </div>
               
-                        <div class="modal-header">
-                            <h5 class="modal-title">Novedad</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
 
-
-                        <div class="modal-body">
-                            Se eliminará la novedad con todos sus datos. Está seguro?
-                             <input id="hfID" name="hfID" type="hidden" >
-                        </div>
-                        <div class="modal-footer">
-                             <button id="btnEliminar" type="submit" asp-action="Delete" value="" class="btn btn-outline-success"  >SI</button>
-                             <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
-                        </div>
-          
-
+                </div>
             </div>
         </div>
-    </div>
-    </div>
+        </div>
 
-</form>
-
-
- <script type="text/javascript">
-
-$(document).ready(function() {
-    var FechaNovedadDesde = @Html.Raw(Json.Serialize(ViewData["FechaNovedadDesdeActual"]));
-    var FechaNovedadHasta = @Html.Raw(Json.Serialize(ViewData["FechaNovedadHastaActual"]));
-
-    var CodCategoriaNovedad = @Html.Raw(Json.Serialize(ViewData["CategoriaNovedadActual"]));
-    var CodTipoNovedad = @Html.Raw(Json.Serialize(ViewData["TipoNovedadActual"]));
-    var CodTipoResolucion = @Html.Raw(Json.Serialize(ViewData["TipoResolucionActual"]));
-   
-    var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
-
-    if ($("#nro_legajo").val() <=0) 
-    {
-        $("#nro_legajo").val('');
-    }
+    </form>
 
 
-     if (CodCategoriaNovedad>0 || CodTipoNovedad>0 || CodTipoResolucion>0)
-       $("#divBusquedaAvanzada").show();
-     else
-       $("#divBusquedaAvanzada").hide();
+     <script type="text/javascript">
 
-    $("#divImportarNovedades").hide();
+    $(document).ready(function() {
+        var FechaNovedadDesde = @Html.Raw(Json.Serialize(ViewData["FechaNovedadDesdeActual"]));
+        var FechaNovedadHasta = @Html.Raw(Json.Serialize(ViewData["FechaNovedadHastaActual"]));
 
-    ObtenerEmpresas();
-    ObtenerCategoriasNovedad();
-    ObtenerTiposNovedad();
-    ObtenerTiposResolucion();
+        var CodCategoriaNovedad = @Html.Raw(Json.Serialize(ViewData["CategoriaNovedadActual"]));
+        var CodTipoNovedad = @Html.Raw(Json.Serialize(ViewData["TipoNovedadActual"]));
+        var CodTipoResolucion = @Html.Raw(Json.Serialize(ViewData["TipoResolucionActual"]));
+       
+        var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
 
-
-    if (Filtro != null && Filtro!='') { 
-        $("#divEmpleado").show();
-
-    }
-    else { 
-       $("#divEmpleado").hide();
-       $("#legajo_id").val(-1).change();
-    }
-
-       ObtenerEmpleados(Filtro);
-  
-       $('#txtSelectedFechaNovedadDesde').datepicker({format: 'dd/mm/yyyy' });
-        $('#txtSelectedFechaNovedadHasta').datepicker({format: 'dd/mm/yyyy' });
-
-        if (FechaNovedadDesde==null)
-          $('#txtSelectedFechaNovedadDesde').datepicker('setDate', "-0d");
-        else 
-          $('#txtSelectedFechaNovedadDesde').datepicker('setDate',FechaNovedadDesde);
-
-        if (FechaNovedadHasta==null)
-          $('#txtSelectedFechaNovedadHasta').datepicker('setDate', "-0d");
-        else 
-          $('#txtSelectedFechaNovedadHasta').datepicker('setDate',FechaNovedadHasta);
+        if ($("#nro_legajo").val() <=0) 
+        {
+            $("#nro_legajo").val('');
+        }
 
 
-});
+         if (CodCategoriaNovedad>0 || CodTipoNovedad>0 || CodTipoResolucion>0)
+           $("#divBusquedaAvanzada").show();
+         else
+           $("#divBusquedaAvanzada").hide();
 
-     $("#filtro").change(function () {
+        $("#divImportarNovedades").hide();
 
-         if ($("#filtro").val() != '') {            
-             $("#divEmpleado").show();
-         }
-         else {
+        ObtenerEmpresas();
+        ObtenerCategoriasNovedad();
+        ObtenerTiposNovedad();
+        ObtenerTiposResolucion();
+
+
+        if (Filtro != null && Filtro!='') { 
+            $("#divEmpleado").show();
+
+        }
+        else { 
            $("#divEmpleado").hide();
            $("#legajo_id").val(-1).change();
-         }
+        }
 
-          ObtenerEmpleados($("#filtro").val());
+           ObtenerEmpleados(Filtro);
+      
+           $('#txtSelectedFechaNovedadDesde').datepicker({format: 'dd/mm/yyyy' });
+            $('#txtSelectedFechaNovedadHasta').datepicker({format: 'dd/mm/yyyy' });
 
-     });
+            if (FechaNovedadDesde==null)
+              $('#txtSelectedFechaNovedadDesde').datepicker('setDate', "-0d");
+            else 
+              $('#txtSelectedFechaNovedadDesde').datepicker('setDate',FechaNovedadDesde);
 
-    
-
-     //$("#nro_legajo").change(function () {
-     //    if ($("#nro_legajo").val() != '')
-     //        ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
-          
-     //});
-      	
-     $("#nro_legajo").focusout(function () {
-         if ($("#nro_legajo").val() != '')
-             ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
-
-     });
-
-     // $("#empresa_id").change(function () {
-     //    if($("#nro_legajo").val()!='')
-     //    ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
-     //});
+            if (FechaNovedadHasta==null)
+              $('#txtSelectedFechaNovedadHasta').datepicker('setDate', "-0d");
+            else 
+              $('#txtSelectedFechaNovedadHasta').datepicker('setDate',FechaNovedadHasta);
 
 
-     $("#empresa_id").focusout(function () {
-         if($("#nro_legajo").val()!='')
-         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
-     });
+    });
+
+         $("#filtro").change(function () {
+
+             if ($("#filtro").val() != '') {            
+                 $("#divEmpleado").show();
+             }
+             else {
+               $("#divEmpleado").hide();
+               $("#legajo_id").val(-1).change();
+             }
+
+              ObtenerEmpleados($("#filtro").val());
+
+         });
+
+        
+
+         //$("#nro_legajo").change(function () {
+         //    if ($("#nro_legajo").val() != '')
+         //        ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+              
+         //});
+              
+         $("#nro_legajo").focusout(function () {
+             if ($("#nro_legajo").val() != '')
+                 ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+
+         });
+
+         // $("#empresa_id").change(function () {
+         //    if($("#nro_legajo").val()!='')
+         //    ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+         //});
 
 
-var ObtenerEmpresas = function () {
-             var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+         $("#empresa_id").focusout(function () {
+             if($("#nro_legajo").val()!='')
+             ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+         });
+
+
+    var ObtenerEmpresas = function () {
+                 var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+                 $.ajax({
+                    url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                    type: 'GET',
+                    data: {
+                    },
+                    success: function (data) {
+                        $('#empresa_id').find('option').remove()
+                        $(data).each(
+                            function (index, item) {            
+                                if (item.value==CodEmpresa)
+                                  $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                                else 
+                                  $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                            });
+                    },
+                    error: function () {
+                    }
+              });
+            }
+
+     var ObtenerCategoriasNovedad = function () {
+           var CodCategoria =@Html.Raw(Json.Serialize(ViewData["CategoriaNovedadActual"]));
              $.ajax({
-                url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                url: '@Url.Action("ObtenerCategoriasNovedad","Novedad")',
                 type: 'GET',
-                data: {
-                },
                 success: function (data) {
-                    $('#empresa_id').find('option').remove()
+                    $('#categoria_novedad_id').find('option').remove()
                     $(data).each(
                         function (index, item) {            
-                            if (item.value==CodEmpresa)
-                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            if (item.value==CodCategoria)
+                              $('#categoria_novedad_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
                             else 
-                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                              $('#categoria_novedad_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                         });
                 },
                 error: function () {
@@ -533,201 +602,190 @@ var ObtenerEmpresas = function () {
           });
         }
 
- var ObtenerCategoriasNovedad = function () {
-       var CodCategoria =@Html.Raw(Json.Serialize(ViewData["CategoriaNovedadActual"]));
-         $.ajax({
-            url: '@Url.Action("ObtenerCategoriasNovedad","Novedad")',
-            type: 'GET',
-            success: function (data) {
-                $('#categoria_novedad_id').find('option').remove()
-                $(data).each(
-                    function (index, item) {            
-                        if (item.value==CodCategoria)
-                          $('#categoria_novedad_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                        else 
-                          $('#categoria_novedad_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
-                    });
-            },
-            error: function () {
-            }
-      });
-    }
+        var ObtenerTiposNovedad = function () {
+             var CodTipo =@Html.Raw(Json.Serialize(ViewData["TipoNovedadActual"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerTiposNovedad","Novedad")',
+                type: 'GET',
+                success: function (data) {
+                    $('#tipo_novedad_id').find('option').remove()
+                   $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodTipo)
+                              $('#tipo_novedad_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#tipo_novedad_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
 
-    var ObtenerTiposNovedad = function () {
-         var CodTipo =@Html.Raw(Json.Serialize(ViewData["TipoNovedadActual"]));
-         $.ajax({
-            url: '@Url.Action("ObtenerTiposNovedad","Novedad")',
-            type: 'GET',
-            success: function (data) {
-                $('#tipo_novedad_id').find('option').remove()
-               $(data).each(
-                    function (index, item) {            
-                        if (item.value==CodTipo)
-                          $('#tipo_novedad_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                        else 
-                          $('#tipo_novedad_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
-                    });
-            },
-            error: function () {
-            }
-      });
-    }
+            var ObtenerTiposResolucion = function () {
+              var CodTipo =@Html.Raw(Json.Serialize(ViewData["TipoResolucionActual"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerTiposResolucion","Novedad")',
+                type: 'GET',
+                success: function (data) {
+                    $('#tipo_resolucion_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodTipo)
+                              $('#tipo_resolucion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#tipo_resolucion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
 
-        var ObtenerTiposResolucion = function () {
-          var CodTipo =@Html.Raw(Json.Serialize(ViewData["TipoResolucionActual"]));
-         $.ajax({
-            url: '@Url.Action("ObtenerTiposResolucion","Novedad")',
-            type: 'GET',
-            success: function (data) {
-                $('#tipo_resolucion_id').find('option').remove()
-                $(data).each(
-                    function (index, item) {            
-                        if (item.value==CodTipo)
-                          $('#tipo_resolucion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                        else 
-                          $('#tipo_resolucion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
-                    });
-            },
-            error: function () {
-            }
-      });
-    }
+         var ObtenerLegajo = function (empresa_id, nro_legajo) {
+             $.ajax({
+                url: '@Url.Action("ObtenerLegajo","Novedad")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    empresa_id: empresa_id,
+                    nro_legajo: nro_legajo
+                },
+                success: function (data) {
+                    $('#apellido').val(data.apellido);
+                    $('#empresa_id').val(data.empresa_id);
+                    //$('#txtSelectedFechaNovedadDesde').val('');
+                    //$('#txtSelectedFechaNovedadHasta').val('');
+                   
+                },
+                error: function () {
+                 
+                }
+          });
+        }
 
-     var ObtenerLegajo = function (empresa_id, nro_legajo) {
-         $.ajax({
-            url: '@Url.Action("ObtenerLegajo","Novedad")',
-            type: 'GET',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: {
-                empresa_id: empresa_id,
-                nro_legajo: nro_legajo
-            },
-            success: function (data) {
-                $('#apellido').val(data.apellido);
-                $('#empresa_id').val(data.empresa_id);
-                //$('#txtSelectedFechaNovedadDesde').val('');
-                //$('#txtSelectedFechaNovedadHasta').val('');
-               
-            },
-            error: function () {
-             
-            }
-      });
-    }
+        var ObtenerEmpleados = function (filtro) {
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
 
-    var ObtenerEmpleados = function (filtro) {
-         var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpleados","Legajo")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    filtro: filtro
+                },
+                success: function (data) {
+                    $('#legajo_id').find('option').remove()
+                    //if (data[0].value > 0) { 
+                    //   $('#txtSelectedFechaNovedadDesde').val('');
+                    //   $('#txtSelectedFechaNovedadHasta').val('');
+                    //}
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpleado)
+                              $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                             else 
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        }
+                        );  
 
-         $.ajax({
-            url: '@Url.Action("ObtenerEmpleados","Legajo")',
-            type: 'GET',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: {
-                filtro: filtro
-            },
-            success: function (data) {
-                $('#legajo_id').find('option').remove()
-                //if (data[0].value > 0) { 
-                //   $('#txtSelectedFechaNovedadDesde').val('');
-                //   $('#txtSelectedFechaNovedadHasta').val('');
-                //}
-                $(data).each(
-                    function (index, item) {            
-                        if (item.value==CodEmpleado)
-                          $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                         else 
-                          $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
-                    }
-                    );  
+                },
+                error: function () {
+                 
+                }
+          });
+        }
 
-            },
-            error: function () {
-             
-            }
-      });
-    }
+        function ToggleBusquedaAvanzada(){   
+               $('#divBusquedaAvanzada').toggle();
 
-    function ToggleBusquedaAvanzada(){   
-           $('#divBusquedaAvanzada').toggle();
+         }
 
-     }
+         function ToggleImportarNovedades(){   
+               $('#divImportarNovedades').toggle();
 
-     function ToggleImportarNovedades(){   
-           $('#divImportarNovedades').toggle();
+         }
 
-     }
+          function mostrarModalEliminar(nro_legajo){
+          $("#hfID").val(nro_legajo);
+          $("#mdEliminar").modal('show');
 
-      function mostrarModalEliminar(nro_legajo){
-      $("#hfID").val(nro_legajo);
-      $("#mdEliminar").modal('show');
+         }
+         $(function () {
+          $('#txtSelectedFechaNovedadDesde').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "es"
+            });
+         });
 
-     }
-     $(function () {
-      $('#txtSelectedFechaNovedadDesde').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        format: "dd/mm/yyyy",
-        language: "es"
-        });
-     });
+         
+         $(function () {
+          $('#txtSelectedFechaNovedadHasta').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "es"
+            });
 
-     
-     $(function () {
-      $('#txtSelectedFechaNovedadHasta').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        format: "dd/mm/yyyy",
-        language: "es"
-        });
+         });
 
-     });
+       function printData()
+       {
+         $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").hide();
+         $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").hide();
+         var divToPrint=document.getElementById("divPrint");
+         var htmlToPrint = '' +
+            '<style type="text/css">' +
+            'body {' +
+             'margin-top: 30px;' + 
+             'margin-bottom: 20px;' + 
+             '} ' +
+            'table , table th, table td {' +
+            'font-size: 10px;' + 
+            'border:1px solid;' +
+            'border-collapse: collapse;' +
+            'padding:0.5em;' +
+            '} ' +
+            'table {' +
+            'width: 100%;' + 
+            'margin-bottom: 20px;' + 
+            '} ' +
 
-   function printData()
-   {
-     $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").hide();
-     $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").hide();
-     var divToPrint=document.getElementById("divPrint");
-     var htmlToPrint = '' +
-        '<style type="text/css">' +
-        'table , table th, table td {' +
-        'font-size: 10px;' + 
-        'border:1px solid;' +
-        'border-collapse: collapse;' +
-        'padding:0.5em;' +
-        '} ' +
-        '#spanSanciones  {' +
-        'display:inline-block;' +
-         '} ' +
-        '#spanFelicitaciones  {' +
-        'display:inline-block;' +
-         '} ' +
-        '</style>';
-     htmlToPrint += divToPrint.outerHTML;
-     newWin= window.open("");
-     newWin.document.write( htmlToPrint);
-     newWin.print();
-     newWin.close();
-     $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").show();
-     $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").show();
+            '#spanSanciones  {' +
+            'display:inline-block;' +
+             '} ' +
+            '#spanFelicitaciones  {' +
+            'display:inline-block;' +
+             '} ' +
+            '</style>';
+         htmlToPrint += divToPrint.outerHTML;
+         newWin= window.open("");
+         newWin.document.write( htmlToPrint);
+         newWin.print();
+         newWin.close();
+         $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").show();
+         $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").show();
 
-  }
+      }
 
-$('#btnImprimir').on('click',function(){
-printData();
-})
+    $('#btnImprimir').on('click',function(){
+    printData();
+    })
 
-</script>
-
-
-
-
-@if (ViewBag.Message != null)
-{
-    <script type="text/javascript">
-            window.onload = function () {
-                alert("@ViewBag.Message");
-            };
     </script>
+
+
+
+
+    @if (ViewBag.Message != null)
+{
+        <script type="text/javascript">
+                window.onload = function () {
+                    alert("@ViewBag.Message");
+                };
+        </script>
 }

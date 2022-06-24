@@ -228,6 +228,7 @@ namespace RRHH.Controllers
 
                     ViewData["EmpresaActual"] = legajo.empresa_id;
                     ViewData["LegajoActual"] = legajo.nro_legajo;
+                    ViewData["Legajo"] = legajo;
                 }
                
 
@@ -345,6 +346,8 @@ namespace RRHH.Controllers
 
                     nro_legajo = legajo.nro_legajo.Value;
                     empresa_id = legajo.empresa_id.Value;
+
+                    ViewData["Legajo"] = legajo;
                 }
                 
 
