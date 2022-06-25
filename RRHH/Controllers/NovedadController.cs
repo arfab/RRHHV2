@@ -120,8 +120,32 @@ namespace RRHH.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult Limpiar(int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
+        {
 
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
+
+                HttpContext.Session.SetString("EMPRESA_ACTUAL", "");
+                HttpContext.Session.SetString("LEGAJO_ACTUAL", "");
+                HttpContext.Session.SetString("APELLIDO_ACTUAL", "");
+
+                HttpContext.Session.SetString("CATEGORIA_NOVEDAD_ACTUAL", "");
+                HttpContext.Session.SetString("TIPO_NOVEDAD_ACTUAL", "");
+                HttpContext.Session.SetString("TIPO_RESOLUCION_ACTUAL", "");
+
+                HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", "");
+                HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", "");
+
+                HttpContext.Session.SetString("EMPLEADO_ACTUAL", "");
+                HttpContext.Session.SetString("FILTRO_ACTUAL", "");
+
+                return RedirectToAction("Index", "Novedad");
+
+
+        }
+
+
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde)
         {
 
 
@@ -147,8 +171,6 @@ namespace RRHH.Controllers
 
             if (apellido != null) HttpContext.Session.SetString("APELLIDO_ACTUAL", apellido);
 
-            //if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL");
-            //if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL");
 
             if (HttpContext.Session.GetString("APELLIDO_ACTUAL") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL");
 
@@ -169,9 +191,6 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
-                //DateTime fechaDesde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); 
-                //DateTime fechaHasta = DateTime.Now;
-
 
                 DateTime fechaDesde = new DateTime();
                 DateTime fechaHasta = new DateTime();
@@ -190,7 +209,6 @@ namespace RRHH.Controllers
                           if (fecha_novedad_hasta.Value.Year != 1)
                         fechaHasta = new DateTime(1, 1, 1);
 
-               // if (fecha_novedad_hasta != null && fecha_novedad_hasta.Value.Year > 2002) fechaHasta = fecha_novedad_hasta.Value;
 
                 int? pag_novedad = HttpContext.Session.GetInt32("PAG_NOVEDAD");
 
@@ -206,8 +224,7 @@ namespace RRHH.Controllers
                 ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
-                //ViewData["EmpresaActual"] = empresa_id;
-                //ViewData["LegajoActual"] = nro_legajo;
+
                 ViewData["UbicacionActual"] = ubicacion_id;
                 ViewData["SectorActual"] = sector_id;
                 ViewData["LocalActual"] = local_id;
@@ -219,7 +236,6 @@ namespace RRHH.Controllers
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;
                 legajoRepo = new LegajoRepo();
-                // legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
 
                 legajo = legajoRepo.Obtener(legajo_id);
 
@@ -236,20 +252,30 @@ namespace RRHH.Controllers
                     ViewData["LegajoActual"] = legajo.nro_legajo;
                     ViewData["Legajo"] = legajo;
                 }
-               
+
+                if (nro_legajo > 0)
+                {
+                    if (empresa_id <= 0)
+                    {
+                        ViewBag.Message = "Debe seleccionar la empresa";
+                        return View();
+                    }
+                    else
+                    {
+
+                        if (legajo == null)
+                        {
+                            ViewBag.Message = "No existe el legajo para esa empresa";
+                            return View();
+                        }
+                    }
+
+
+                }
 
 
 
-                //if (empresa_id > 0 && nro_legajo > 0)
-                //{
-                //    fechaDesde = new DateTime(1, 1, 1);
-                //    fechaHasta = new DateTime(1, 1, 1);
-                //    ViewData["FechaNovedadDesdeActual"] = "";
-                //    ViewData["FechaNovedadHastaActual"] = "";
-                //}
-                //else {
-                    
-                    if (fechaDesde.Year<2002) {
+                if (fechaDesde.Year<2002) {
                         fechaDesde = new DateTime(1, 1, 1);
 
                         ViewData["FechaNovedadDesdeActual"] = "";
@@ -273,7 +299,6 @@ namespace RRHH.Controllers
                     }
 
 
-                //}
 
                 int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["TOTAL_NOVEDADES"] = cant;
@@ -287,188 +312,223 @@ namespace RRHH.Controllers
                 lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["FELICITACIONES"] = lFelicitaciones;
 
+                IEnumerable<Novedad> novedades;
 
-                return View(novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
+                novedades = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
 
 
-                //if (nro_legajo > 0 && empresa_id > 0) {
-                //    return View(novedadRepo.ObtenerPagina(pag_novedad.Value,-1, -1, -1, -1, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
+                if (desde == "busqueda")
+                {
+                    if (nro_legajo <= 0)
+                    {
+                        ViewBag.Message = "Debe especificar un legajo";
+                        return View();
+                    }
 
-                //    //return View(novedadRepo.ObtenerTodos(-1, -1, -1, -1, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido)); 
-                //}
-                //else
-                //    return View();
+
+                    if (novedades.Count() == 0 && cantFelicitaciones == 0)
+                    {
+                        ViewBag.Message = "No existen novedades para el criterio seleccionado";
+                        return View();
+                    }
+                }
+
+                // return View(novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido));
+
+                return View(novedades);
+
             }
 
-            return View();
+           
+
+           return View();
 
 
         }
 
-        [HttpPost]
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
-        {
-            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+        //[HttpPost]
+        //public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
+        //{
+        //    string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
-            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+        //    if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
-            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+        //    int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            if (perfil_id>0)
-            {
-                INovedadRepo novedadRepo;
+        //    if (perfil_id>0)
+        //    {
+        //        INovedadRepo novedadRepo;
 
-                novedadRepo = new NovedadRepo();
+        //        novedadRepo = new NovedadRepo();
 
-                IEnumerable<Novedad> novedades;
+        //        IEnumerable<Novedad> novedades;
 
-                IEnumerable<Models.Novedad> lFelicitaciones;
+        //        IEnumerable<Models.Novedad> lFelicitaciones;
 
-                //ViewData["EmpresaActual"] = empresa_id;
-                ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
-                ViewData["TipoNovedadActual"] = tipo_novedad_id;
-                ViewData["TipoResolucionActual"] = tipo_resolucion_id;
-                //ViewData["LegajoActual"] = nro_legajo;                
-                ViewData["ApellidoActual"] = apellido;
-                ViewData["EmpleadoActual"] = legajo_id;
-                ViewData["FiltroActual"] = filtro;
+        //        //ViewData["EmpresaActual"] = empresa_id;
+        //        ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
+        //        ViewData["TipoNovedadActual"] = tipo_novedad_id;
+        //        ViewData["TipoResolucionActual"] = tipo_resolucion_id;
+        //        //ViewData["LegajoActual"] = nro_legajo;                
+        //        ViewData["ApellidoActual"] = apellido;
+        //        ViewData["EmpleadoActual"] = legajo_id;
+        //        ViewData["FiltroActual"] = filtro;
 
-                Legajo legajo = new Legajo();
-                ILegajoRepo legajoRepo;
-                legajoRepo = new LegajoRepo();
-               // legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+        //        Legajo legajo = new Legajo();
+        //        ILegajoRepo legajoRepo;
+        //        legajoRepo = new LegajoRepo();
+        //       // legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
 
-                legajo = legajoRepo.Obtener(legajo_id);
+        //        legajo = legajoRepo.Obtener(legajo_id);
 
 
-                if (legajo != null)
-                {
-                    ViewData["UbicacionActual"] = legajo.ubicacion_id;
-                    ViewData["SectorActual"] = legajo.sector_id;
-                    ViewData["LocalActual"] = legajo.local_id;
+        //        if (legajo != null)
+        //        {
+        //            ViewData["UbicacionActual"] = legajo.ubicacion_id;
+        //            ViewData["SectorActual"] = legajo.sector_id;
+        //            ViewData["LocalActual"] = legajo.local_id;
 
-                    ViewData["EmpresaActual"] = legajo.empresa_id;
-                    ViewData["LegajoActual"] = legajo.nro_legajo;
+        //            ViewData["EmpresaActual"] = legajo.empresa_id;
+        //            ViewData["LegajoActual"] = legajo.nro_legajo;
 
-                    nro_legajo = legajo.nro_legajo.Value;
-                    empresa_id = legajo.empresa_id.Value;
+        //            nro_legajo = legajo.nro_legajo.Value;
+        //            empresa_id = legajo.empresa_id.Value;
 
-                    ViewData["Legajo"] = legajo;
-                }
+        //            ViewData["Legajo"] = legajo;
+        //        }
                 
 
-                if (fecha_novedad_desde.Year < 2002)
-                {
-                    ViewData["FechaNovedadDesdeActual"] = "";
-                }
-                else
-                {
-                    ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
+        //        if (fecha_novedad_desde.Year < 2002)
+        //        {
+        //            ViewData["FechaNovedadDesdeActual"] = "";
+        //        }
+        //        else
+        //        {
+        //            ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
 
-                }
+        //        }
 
-                if (fecha_novedad_hasta.Year < 2002)
-                {
-                    ViewData["FechaNovedadHastaActual"] = "";
-                }
-                else
-                {
-                    ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year;
+        //        if (fecha_novedad_hasta.Year < 2002)
+        //        {
+        //            ViewData["FechaNovedadHastaActual"] = "";
+        //        }
+        //        else
+        //        {
+        //            ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year;
 
-                }
+        //        }
 
-                //ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
-                //ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year;
+        //        //ViewData["FechaNovedadDesdeActual"] = fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year;
+        //        //ViewData["FechaNovedadHastaActual"] = fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year;
 
 
    
-                HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
-                HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
-                HttpContext.Session.SetString("APELLIDO_ACTUAL", (apellido==null)?"":apellido);
+        //        HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
+        //        HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
+        //        HttpContext.Session.SetString("APELLIDO_ACTUAL", (apellido==null)?"":apellido);
 
-                HttpContext.Session.SetInt32("EMPLEADO_ACTUAL", legajo_id);
-                HttpContext.Session.SetString("FILTRO_ACTUAL", (filtro == null) ? "" : filtro);
-
-
-                HttpContext.Session.SetInt32("CATEGORIA_NOVEDAD_ACTUAL", categoria_novedad_id);
-                HttpContext.Session.SetInt32("TIPO_NOVEDAD_ACTUAL", tipo_novedad_id);
-                HttpContext.Session.SetInt32("TIPO_RESOLUCION_ACTUAL", tipo_resolucion_id);
-
-                HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year);
-                HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year);
-
-                if (nro_legajo >0)
-                {
-                    if (empresa_id <= 0)
-                    {
-                        ViewBag.Message = "Debe seleccionar la empresa";
-                        return View();
-                    }
-                    else
-                    {
-                        //Legajo legajo = new Legajo();
-                        //ILegajoRepo legajoRepo;
-                        //legajoRepo = new LegajoRepo();
-                        //legajo = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
-
-                        if (legajo == null)
-                        {
-                            ViewBag.Message = "No existe el legajo para esa empresa";
-                            return View();
-                        }
-                    }
+        //        HttpContext.Session.SetInt32("EMPLEADO_ACTUAL", legajo_id);
+        //        HttpContext.Session.SetString("FILTRO_ACTUAL", (filtro == null) ? "" : filtro);
 
 
-                }
+        //        HttpContext.Session.SetInt32("CATEGORIA_NOVEDAD_ACTUAL", categoria_novedad_id);
+        //        HttpContext.Session.SetInt32("TIPO_NOVEDAD_ACTUAL", tipo_novedad_id);
+        //        HttpContext.Session.SetInt32("TIPO_RESOLUCION_ACTUAL", tipo_resolucion_id);
 
-                int? pag_novedad = HttpContext.Session.GetInt32("PAG_NOVEDAD");
+        //        HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year);
+        //        HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year);
 
-                if (pag_novedad == null)
-                {
-                    pag_novedad = 1;
-                    HttpContext.Session.SetInt32("PAG_NOVEDAD", 1);
-                }
+        //        if (nro_legajo >0)
+        //        {
+        //            if (empresa_id <= 0)
+        //            {
+        //                ViewBag.Message = "Debe seleccionar la empresa";
+        //                return View();
+        //            }
+        //            else
+        //            {
 
-                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
-                ViewData["TOTAL_NOVEDADES"] = cant;
+        //                if (legajo == null)
+        //                {
+        //                    ViewBag.Message = "No existe el legajo para esa empresa";
+        //                    return View();
+        //                }
+        //            }
 
 
-                int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id,2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
-                ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
+        //        }
 
-                HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
+        //        int? pag_novedad = HttpContext.Session.GetInt32("PAG_NOVEDAD");
+
+        //        if (pag_novedad == null)
+        //        {
+        //            pag_novedad = 1;
+        //            HttpContext.Session.SetInt32("PAG_NOVEDAD", 1);
+        //        }
+
+        //        int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+        //        ViewData["TOTAL_NOVEDADES"] = cant;
 
 
-                lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
-                ViewData["FELICITACIONES"] = lFelicitaciones;
+        //        int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id,2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+        //        ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
+
+        //        HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
+
+
+        //        lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+        //        ViewData["FELICITACIONES"] = lFelicitaciones;
 
 
 
-                novedades = novedadRepo.ObtenerPagina(pag_novedad.Value,(empresa_id == 0) ? -1 : empresa_id,1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+        //        novedades = novedadRepo.ObtenerPagina(pag_novedad.Value,(empresa_id == 0) ? -1 : empresa_id,1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
 
-                if (nro_legajo<=0)
-                {
-                    ViewBag.Message = "Debe especificar un legajo";
-                    return View();
-                }
+        //        if (nro_legajo<=0)
+        //        {
+        //            ViewBag.Message = "Debe especificar un legajo";
+        //            return View();
+        //        }
 
-                // novedades = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (categoria_novedad_id == 0) ? -1 : categoria_novedad_id, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
 
-                if (novedades.Count() == 0 && cantFelicitaciones==0)
-                {
-                    ViewBag.Message = "No existen novedades para el criterio seleccionado";
-                    return View();
-                }
+        //        if (novedades.Count() == 0 && cantFelicitaciones==0)
+        //        {
+        //            ViewBag.Message = "No existen novedades para el criterio seleccionado";
+        //            return View();
+        //        }
 
-                //return RedirectToAction("Index", novedades);
 
-                return View(novedades);
-            }
+        //        return View(novedades);
+        //    }
 
-            return View();
+        //    return View();
 
+
+        //}
+
+
+        [HttpPost]
+        public IActionResult Buscar(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
+        {
+
+            HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
+            HttpContext.Session.SetInt32("LEGAJO_ACTUAL", nro_legajo);
+            HttpContext.Session.SetString("APELLIDO_ACTUAL", (apellido == null) ? "" : apellido);
+
+            HttpContext.Session.SetInt32("EMPLEADO_ACTUAL", legajo_id);
+            HttpContext.Session.SetString("FILTRO_ACTUAL", (filtro == null) ? "" : filtro);
+
+
+            HttpContext.Session.SetInt32("CATEGORIA_NOVEDAD_ACTUAL", categoria_novedad_id);
+            HttpContext.Session.SetInt32("TIPO_NOVEDAD_ACTUAL", tipo_novedad_id);
+            HttpContext.Session.SetInt32("TIPO_RESOLUCION_ACTUAL", tipo_resolucion_id);
+
+            HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year);
+            HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year);
+          
+            return RedirectToAction("Index", "Novedad", new {desde="busqueda"});
 
         }
+
 
         [HttpGet]
         public IActionResult Siguiente()

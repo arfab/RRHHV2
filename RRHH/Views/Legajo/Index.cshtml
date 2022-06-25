@@ -93,8 +93,8 @@
 
          <div class="row mb-3" >
            <div class="col">
-             <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
-             <input type="submit" value="Limpiar" asp-action="Reset" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+             <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" class="btn btn-primary" />
+             <input type="submit" value="Limpiar" asp-action="Limpiar" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
              <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-primary" />
 
              @if (_perfil_id <=3)
@@ -162,7 +162,7 @@
                 }
                 else
                 {
-                   <div class="p-2 bd-highlight">No hay novedades para el criterio seleccionado</div>
+                   <div class="p-2 bd-highlight">No hay legajos para el criterio seleccionado</div>
                 }
 
            </div>

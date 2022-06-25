@@ -70,12 +70,12 @@
                 <div class="col-lg-4 col-xs-6 mb-3">
                     <div class="row" >
                         <div class="col" >
-                            <label for="txtSelectedFechaNovedadDesde">Desde</label>
-                            <input type="text" id="txtSelectedFechaNovedadDesde" class="form-control" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  />
+                            <label for="fecha_novedad_desde">Desde</label>
+                            <input type="text" id="fecha_novedad_desde" class="form-control" name="fecha_novedad_desde" value="@ViewData["FechaNovedadDesdeActual"]"  />
                         </div>
                          <div class="col" >
-                           <label for="txtSelectedFechaNovedadHasta">Hasta</label>
-                           <input type="text" id="txtSelectedFechaNovedadHasta" class="form-control" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]" />
+                           <label for="fecha_novedad_hasta">Hasta</label>
+                           <input type="text" id="fecha_novedad_hasta" class="form-control" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]" />
                       </div>
                     </div>
                 </div>
@@ -98,9 +98,9 @@
                
              <div class="row mb-3" >
                 <div class="col">
-                     <input type="submit" value="Buscar" id="buscar" asp-action="Index"  class="btn btn-primary" />
-                     <input type="submit" value="Limpiar" asp-action="Reset" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
-                     <input type="submit" asp-action="ExportarExcel" value="Exportar a Excel" class="btn btn-primary" />
+                     <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" class="btn btn-primary" />
+                     <input type="submit" value="Limpiar" asp-action="Limpiar" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+                     <input type="submit" asp-action="ExportarExcel"   value="Exportar a Excel" class="btn btn-primary" />
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
                       @if (_perfil_id <= 3)
@@ -514,18 +514,18 @@
 
            ObtenerEmpleados(Filtro);
       
-           $('#txtSelectedFechaNovedadDesde').datepicker({format: 'dd/mm/yyyy' });
-            $('#txtSelectedFechaNovedadHasta').datepicker({format: 'dd/mm/yyyy' });
+           $('#fecha_novedad_desde').datepicker({format: 'dd/mm/yyyy' });
+            $('#fecha_novedad_hasta').datepicker({format: 'dd/mm/yyyy' });
 
             if (FechaNovedadDesde==null)
-              $('#txtSelectedFechaNovedadDesde').datepicker('setDate', "-0d");
+              $('#fecha_novedad_desde').datepicker('setDate', "-0d");
             else 
-              $('#txtSelectedFechaNovedadDesde').datepicker('setDate',FechaNovedadDesde);
+              $('#fecha_novedad_desde').datepicker('setDate',FechaNovedadDesde);
 
             if (FechaNovedadHasta==null)
-              $('#txtSelectedFechaNovedadHasta').datepicker('setDate', "-0d");
+              $('#fecha_novedad_hasta').datepicker('setDate', "-0d");
             else 
-              $('#txtSelectedFechaNovedadHasta').datepicker('setDate',FechaNovedadHasta);
+              $('#fecha_novedad_hasta').datepicker('setDate',FechaNovedadHasta);
 
 
     });
@@ -665,8 +665,8 @@
                 success: function (data) {
                     $('#apellido').val(data.apellido);
                     $('#empresa_id').val(data.empresa_id);
-                    //$('#txtSelectedFechaNovedadDesde').val('');
-                    //$('#txtSelectedFechaNovedadHasta').val('');
+                    //$('#fecha_novedad_desde').val('');
+                    //$('#fecha_novedad_hasta').val('');
                    
                 },
                 error: function () {
@@ -689,8 +689,8 @@
                 success: function (data) {
                     $('#legajo_id').find('option').remove()
                     //if (data[0].value > 0) { 
-                    //   $('#txtSelectedFechaNovedadDesde').val('');
-                    //   $('#txtSelectedFechaNovedadHasta').val('');
+                    //   $('#fecha_novedad_desde').val('');
+                    //   $('#fecha_novedad_hasta').val('');
                     //}
                     $(data).each(
                         function (index, item) {            
@@ -724,7 +724,7 @@
 
          }
          $(function () {
-          $('#txtSelectedFechaNovedadDesde').datepicker({
+          $('#fecha_novedad_desde').datepicker({
             changeMonth: true,
             changeYear: true,
             format: "dd/mm/yyyy",
@@ -734,7 +734,7 @@
 
          
          $(function () {
-          $('#txtSelectedFechaNovedadHasta').datepicker({
+          $('#fecha_novedad_hasta').datepicker({
             changeMonth: true,
             changeYear: true,
             format: "dd/mm/yyyy",

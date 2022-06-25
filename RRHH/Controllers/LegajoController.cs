@@ -83,7 +83,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int empleado_id, string filtro, int activo, int modo) 
+        public IActionResult Index(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int empleado_id, string filtro, int activo, int modo, string desde="") 
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -141,6 +141,33 @@ namespace RRHH.Controllers
                     apellido = legajo.apellido;
                 }
 
+                if (nro_legajo > 0)
+                {
+                    if (empresa_id <= 0)
+                    {
+                        ViewBag.Message = "Debe seleccionar la empresa";
+                        return View();
+                    }
+                    else
+                    {
+                        Legajo legajo2 = new Legajo();
+                        legajo2 = legajoRepo.ObtenerPorNro(empresa_id, nro_legajo);
+
+                        if (legajo2 == null)
+                        {
+                            ViewBag.Message = "No existe el legajo para esa empresa";
+                            return View();
+                        }
+                    }
+
+
+                }
+
+               if (desde == "busqueda") { 
+                    HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
+                    HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", 1);
+               }
+
                 int? pag_legajo = HttpContext.Session.GetInt32("PAG_LEGAJO");
 
                 if (pag_legajo == null)
@@ -155,15 +182,18 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetInt32("TOT_PAG_LEGAJO", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
                 legajos = legajoRepo.ObtenerPagina(pag_legajo.Value,(empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (apellido == null) ? "" : apellido, activo);
+
+                if (desde == "busqueda")
+                {
+                    if (legajos.Count() == 0)
+                    {
+                        ViewBag.Message = "No existen legajos para el criterio seleccionado";
+                        return View();
+                    }
+                }
+
                 return View(legajos);
 
-                //if (nro_legajo > 0 && empresa_id > 0 || apellido != null)
-                //{
-                //    legajos = legajoRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, (nro_legajo == 0) ? -1 : nro_legajo, (apellido == null) ? "" : apellido);
-                //    return View(legajos);
-                //}
-                //else
-                //    return View();
             }
 
             return RedirectToAction("Login", "Usuario");
@@ -287,7 +317,49 @@ namespace RRHH.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
+        public IActionResult Buscar(int empresa_id, int nro_legajo, int ubicacion_id, int sector_id, string apellido, int empleado_id, string filtro, int activo)
+        {
+
+            HttpContext.Session.SetString("APELLIDO_ACTUAL_LEGAJO", (apellido == null) ? "" : apellido);
+
+            HttpContext.Session.SetInt32("UBICACION_ACTUAL_LEGAJO", ubicacion_id);
+
+            HttpContext.Session.SetInt32("SECTOR_ACTUAL_LEGAJO", sector_id);
+
+            HttpContext.Session.SetInt32("EMPLEADO_ACTUAL_LEGAJO", empleado_id);
+            HttpContext.Session.SetString("FILTRO_ACTUAL_LEGAJO", (filtro == null) ? "" : filtro);
+            HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", activo);
+
+            return RedirectToAction("Index", "Legajo", new { desde = "busqueda" });
+
+        }
+
+        [HttpPost]
+        public IActionResult Limpiar(int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
+        {
+
+            HttpContext.Session.SetString("EMPRESA_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("LEGAJO_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("APELLIDO_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("UBICACION_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("SECTOR_ACTUAL_LEGAJO", "");
+
+            HttpContext.Session.SetString("EMPLEADO_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("FILTRO_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", -1);
+
+            HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
+
+
+            return RedirectToAction("Index", "Legajo");
+
+
+            }
+
+
+
+            [HttpGet]
         public IActionResult Siguiente()
         {
             int pag_legajo = HttpContext.Session.GetInt32("PAG_LEGAJO").GetValueOrDefault();
