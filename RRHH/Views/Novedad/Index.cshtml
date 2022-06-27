@@ -179,8 +179,25 @@
            </div>*@
 
                 <div id="divPrint">
+
+                   
                 @if (@legajo != null)
                 {
+
+                    <div class="row" id="divCabecera" style="margin-bottom:10px;">
+                      <div class="col bottom-buffer">
+                        
+                          <div style="background-color: white ; padding: 2px; border: 1px solid black; text-align:center;">
+                           <img id="logo" src="~/img/logo.png" style="height:40px;vertical-align:middle;"  alt="..."> <span style="vertical-align:auto;">NOVEDADES</span>
+                         </div>
+                       
+                        </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col bottom-buffer">
+                        <div class="table-responsive">
+
                     <table id="tablaLegajo" class="table table-bordered table-hover table-condensed">
                         <thead>
                             <tr >
@@ -224,12 +241,19 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div></div></div>
                 }
                 @if (@Model != null && Model.Count()>0)
             {
-                   <div class="d-flex d-flex justify-content-left">
-                     <span id="spanSanciones" style="font-weight: bold; padding-bottom:10px;  padding-top:10px;">Sanciones</span>
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col bottom-buffer">
+                             <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+                             <span style="vertical-align:auto;">SANCIONES</span>
+                         </div>
+                          @*<span id="spanSanciones" style="font-weight: bold; padding-bottom:10px;  padding-top:10px; border: 1px solid black; text-align:center;">Sanciones</span>*@
+                       </div>
                    </div>
+                   
                     <div class="row">
                         <div class="col bottom-buffer">
                             <div class="table-responsive">
@@ -304,7 +328,7 @@
                                                     @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                                         @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                                                                                             @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                     }
                                                 </td>
@@ -344,10 +368,19 @@
             {
                 
 
-
+@*
                     <div class="d-flex d-flex justify-content-left">
                        <span id="spanFelicitaciones" style="font-weight: bold; padding-bottom:10px; padding-top:20px;">Felicitaciones</span>
+                   </div>*@
+
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col bottom-buffer">
+                             <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+                             <span style="vertical-align:auto;">FELICITACIONES</span>
+                         </div>
+                       </div>
                    </div>
+
                     <div class="row">
                         <div class="col bottom-buffer">
                             <div class="table-responsive">
@@ -745,8 +778,11 @@
 
        function printData()
        {
+          
          $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").hide();
          $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").hide();
+         //$("#divCabecera").show();
+
          var divToPrint=document.getElementById("divPrint");
          var htmlToPrint = '' +
             '<style type="text/css">' +
@@ -764,21 +800,41 @@
             'width: 100%;' + 
             'margin-bottom: 20px;' + 
             '} ' +
-
-            '#spanSanciones  {' +
-            'display:inline-block;' +
-             '} ' +
-            '#spanFelicitaciones  {' +
-            'display:inline-block;' +
-             '} ' +
+            //'#spanSanciones  {' +
+            //'display:inline-block;' +
+            // '} ' +
+            //'#spanFelicitaciones  {' +
+            //'display:inline-block;' +
+            // '} ' +
             '</style>';
          htmlToPrint += divToPrint.outerHTML;
          newWin= window.open("");
-         newWin.document.write( htmlToPrint);
-         newWin.print();
-         newWin.close();
+         //newWin.document.write( htmlToPrint);
+         //newWin.document.close();
+         //newWin.print();
+         //newWin.close();
          $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").show();
          $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").show();
+         //$("#divCabecera").hide();
+
+         var is_chrome = Boolean(newWin.chrome);
+         newWin.document.write(htmlToPrint);
+         newWin.document.close(); // necessary for IE >= 10 and necessary before onload for chrome
+
+       if (is_chrome) {
+        newWin.onload = function() { // wait until all resources loaded 
+            newWin.focus(); // necessary for IE >= 10
+            newWin.print();  // change window to mywindow
+            newWin.close();// change window to mywindow
+        };
+    }
+    else {
+        newWin.document.close(); // necessary for IE >= 10
+        newWin.focus(); // necessary for IE >= 10
+        newWin.print();
+        newWin.close();
+    }
+
 
       }
 
