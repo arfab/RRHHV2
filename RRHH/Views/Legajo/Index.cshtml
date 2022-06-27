@@ -502,7 +502,7 @@
         }
 
         var ObtenerLocales = function () {
-             var CodLocal = @Html.Raw(Json.Serialize(ViewData["LocalActual"]));
+             var CodLocal = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
              $.ajax({
                 url: '@Url.Action("ObtenerLocales","Legajo")',
                 type: 'GET',
