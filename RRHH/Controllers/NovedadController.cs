@@ -1325,22 +1325,27 @@ namespace RRHH.Controllers
                         if (iUbicacion==-1)
                         {
                             worksheet.Cell(fila, "N").Value = "Ubicación inválida";
+                            errores++;
                         }
-                        if (iCategoriaNovedad == -1)
+                        else if(iCategoriaNovedad == -1)
                         {
                             worksheet.Cell(fila, "N").Value = "Categoría novedad inválida";
+                            errores++;
                         }
                         else if (nro_legajo == "ERR")
                         {
                             worksheet.Cell(fila, "N").Value = "Nro. de legajo inválido";
+                            errores++;
                         }
                         else if (fecha_novedad == "ERR" || fecha_novedad == "")
                         {
                             worksheet.Cell(fila, "N").Value = "Fecha novedad inválida";
+                            errores++;
                         }
                         else if (fecha_resolucion == "ERR")
                         {
                             worksheet.Cell(fila, "N").Value = "Fecha resolución inválida";
+                            errores++;
                         }
 
                         else
