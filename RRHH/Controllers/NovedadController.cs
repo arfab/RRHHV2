@@ -1250,6 +1250,17 @@ namespace RRHH.Controllers
                         NovedadRepo novedadRepo = new NovedadRepo();
                         Novedad novedad = new Novedad();
 
+                        string nro_legajo= dr[2].ToString();
+                        try
+                        {
+                            int nleg = Int32.Parse(nro_legajo);
+
+                        }
+                        catch (Exception)
+                        {
+                            nro_legajo = "ERR";
+                        }
+
 
                         int iUbicacion = -1;
                         int iCategoriaNovedad = -1;
@@ -1262,44 +1273,23 @@ namespace RRHH.Controllers
                         }
                         catch (Exception)
                         {
-                            fecha_novedad = "";
+                            fecha_novedad = "ERR";
                         }
 
-                        string fecha_resolucion;
-                        try
-                        {
-                            DateTime f = DateTime.Parse(dr[9].ToString());
-                            fecha_resolucion = f.Year + "-" + f.Month.ToString().PadLeft(2, '0') + "-" + f.Day.ToString().PadLeft(2, '0');
+                        string fecha_resolucion="";
+
+                        if (dr[9].ToString() != "" ) {
+                            try
+                            {
+                                DateTime f = DateTime.Parse(dr[9].ToString());
+                                fecha_resolucion = f.Year + "-" + f.Month.ToString().PadLeft(2, '0') + "-" + f.Day.ToString().PadLeft(2, '0');
+                            }
+                            catch (Exception)
+                            {
+                                fecha_resolucion = "ERR";
+                            }
                         }
-                        catch (Exception)
-                        {
-                            fecha_resolucion = "";
-                        }
 
-
-                        //string fecha_novedad = dr[7].ToString();
-                        //string dia_novedad = "";
-                        //string mes_novedad = "";
-                        //string anio_novedad = "";
-                        //if (fecha_novedad != "")
-                        //{
-                        //    dia_novedad = fecha_novedad.Substring(0, fecha_novedad.IndexOf("/")).PadLeft(2, '0');
-                        //    mes_novedad = fecha_novedad.Substring(fecha_novedad.IndexOf("/") + 1, fecha_novedad.LastIndexOf("/") - fecha_novedad.IndexOf("/") - 1).PadLeft(2, '0');
-                        //    anio_novedad = fecha_novedad.Substring(fecha_novedad.LastIndexOf("/") + 1, 4);
-                        //    fecha_novedad = anio_novedad + "-" + mes_novedad + "-" + dia_novedad;
-                        //}
-
-                        //string fecha_resolucion = dr[9].ToString();
-                        //string dia_resolucion = "";
-                        //string mes_resolucion = "";
-                        //string anio_resolucion = "";
-                        //if (fecha_resolucion != "")
-                        //{
-                        //    dia_resolucion = fecha_resolucion.Substring(0, fecha_resolucion.IndexOf("/")).PadLeft(2, '0');
-                        //    mes_resolucion = fecha_resolucion.Substring(fecha_resolucion.IndexOf("/") + 1, fecha_resolucion.LastIndexOf("/") - fecha_resolucion.IndexOf("/") - 1).PadLeft(2, '0');
-                        //    anio_resolucion = fecha_resolucion.Substring(fecha_resolucion.LastIndexOf("/") + 1, 4);
-                        //    fecha_resolucion = anio_resolucion + "-" + mes_resolucion + "-" + dia_resolucion;
-                        //}
 
                         switch (dr[0].ToString().ToUpper())
                         {
@@ -1332,56 +1322,108 @@ namespace RRHH.Controllers
 
 
 
-
-                        string sError = "";
-                        int ret = novedadRepo.ObtenerDeImportacion(
-                                  dr[1].ToString(),
-                                  dr[2].ToString(),
-                                  iUbicacion.ToString(),
-                                  dr[4].ToString(),
-                                  dr[5].ToString(),
-                                  dr[6].ToString(),
-                                  iCategoriaNovedad.ToString(),
-                                  dr[8].ToString(),
-                                  fecha_novedad,
-                                  dr[10].ToString(),
-                                  fecha_resolucion,
-                                  dr[11].ToString(),
-                                  dr[12].ToString(),
-                                  ref novedad
-                                  );
-
-
-                        if (ret < 0)
+                        if (iUbicacion==-1)
                         {
-                            errores++;
-                            switch (ret)
-                            {
-                                case -1:
-                                    sError = "El legajo no existe";
-                                    break;
-
-                                default:
-                                    sError = "Error";
-                                    break;
-                            }
-
-                            // ViewBag.Message = "ERROR";
-                            worksheet.Cell(fila, "N").Value = sError;
+                            worksheet.Cell(fila, "N").Value = "Ubicación inválida";
                         }
+                        if (iCategoriaNovedad == -1)
+                        {
+                            worksheet.Cell(fila, "N").Value = "Categoría novedad inválida";
+                        }
+                        else if (nro_legajo == "ERR")
+                        {
+                            worksheet.Cell(fila, "N").Value = "Nro. de legajo inválido";
+                        }
+                        else if (fecha_novedad == "ERR" || fecha_novedad == "")
+                        {
+                            worksheet.Cell(fila, "N").Value = "Fecha novedad inválida";
+                        }
+                        else if (fecha_resolucion == "ERR")
+                        {
+                            worksheet.Cell(fila, "N").Value = "Fecha resolución inválida";
+                        }
+
                         else
                         {
-                            if (novedadRepo.Insertar(novedad, usuario_id.Value) == "")
+                            string sError = "";
+                            int ret = novedadRepo.ObtenerDeImportacion(
+                                      dr[1].ToString(),
+                                      dr[2].ToString(),
+                                      iUbicacion.ToString(),
+                                      dr[4].ToString(),
+                                      dr[5].ToString(),
+                                      dr[6].ToString(),
+                                      iCategoriaNovedad.ToString(),
+                                      dr[8].ToString(),
+                                      fecha_novedad,
+                                      dr[10].ToString(),
+                                      fecha_resolucion,
+                                      dr[11].ToString(),
+                                      dr[12].ToString(),
+                                      ref novedad
+                                      );
+
+
+                            if (ret < 0)
                             {
-                                // ViewBag.Message = "OK";
-                                worksheet.Cell(fila, "N").Value = "OK";
+                                errores++;
+                                switch (ret)
+                                {
+                                    case -1:
+                                        sError = "El legajo no existe";
+                                        break;
+
+                                    case -2:
+                                        sError = "Empresa inválida";
+                                        break;
+
+                                    case -3:
+                                        sError = "Sector/Local inválido";
+                                        break;
+
+
+                                    case -4:
+                                        sError = "Responsable inválido";
+                                        break;
+
+
+                                    case -5:
+                                        sError = "Tipo de novedad inválido";
+                                        break;
+
+
+                                    case -6:
+                                        sError = "Tipo de resolución inválido";
+                                        break;
+
+
+                                    case -7:
+                                        sError = "Error en tipo/fecha resolución";
+                                        break;
+
+                                    default:
+                                        sError = "Error";
+                                        break;
+                                }
+
+                                // ViewBag.Message = "ERROR";
+                                worksheet.Cell(fila, "N").Value = sError;
                             }
                             else
                             {
-                                ViewBag.Message = "ERROR";
-                                worksheet.Cell(fila, "N").Value = "ERROR";
+                                if (novedadRepo.Insertar(novedad, usuario_id.Value) == "")
+                                {
+                                    // ViewBag.Message = "OK";
+                                    worksheet.Cell(fila, "N").Value = "OK";
+                                }
+                                else
+                                {
+                                    ViewBag.Message = "ERROR";
+                                    worksheet.Cell(fila, "N").Value = "ERROR";
+                                }
                             }
                         }
+                       
 
                        
                     }
