@@ -1168,6 +1168,9 @@ namespace RRHH.Controllers
         [HttpPost]
         public ActionResult Importar(IFormFile file)
         {
+            int? usuario_id = HttpContext.Session.GetInt32("UID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
             string wwwPath = this.Environment.WebRootPath;
             string contentPath = this.Environment.ContentRootPath;
@@ -1368,7 +1371,7 @@ namespace RRHH.Controllers
                         }
                         else
                         {
-                            if (novedadRepo.Insertar(novedad, (int)novedad.usuario_id) == "")
+                            if (novedadRepo.Insertar(novedad, usuario_id.Value) == "")
                             {
                                 // ViewBag.Message = "OK";
                                 worksheet.Cell(fila, "N").Value = "OK";

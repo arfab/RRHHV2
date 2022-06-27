@@ -41,6 +41,7 @@ namespace RRHH.Controllers
         public IActionResult Logout()
         {
 
+            HttpContext.Session.SetString("UID", "");
             HttpContext.Session.SetString("USUARIO_ID", "");
             HttpContext.Session.SetString("APELLIDO", "");
             HttpContext.Session.SetString("NOMBRE", "");
