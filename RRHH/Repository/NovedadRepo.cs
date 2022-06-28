@@ -29,6 +29,8 @@ namespace RRHH.Repository
                 parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id > 0) ? novedad.tipo_resolucion_id : null);
                 parameters.Add("@concepto", novedad.concepto);
                 parameters.Add("@dias", novedad.dias);
+                parameters.Add("@descripcion", novedad.descripcion);
+                parameters.Add("@estado", novedad.estado);
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", novedad.fecha_novedad);
                 parameters.Add("@fecha_resolucion", (novedad.tipo_resolucion_id > 0) ? novedad.fecha_resolucion : null);
@@ -66,6 +68,8 @@ namespace RRHH.Repository
                 parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id > 0) ? novedad.tipo_resolucion_id : null);
                 parameters.Add("@concepto", novedad.concepto);
                 parameters.Add("@dias", novedad.dias);
+                parameters.Add("@descripcion", novedad.descripcion);
+                parameters.Add("@estado", novedad.estado);
                 parameters.Add("@observacion", novedad.observacion);
                 parameters.Add("@fecha_novedad", novedad.fecha_novedad);
                 parameters.Add("@fecha_resolucion", (novedad.tipo_resolucion_id>0)?novedad.fecha_resolucion:null);
@@ -173,7 +177,7 @@ namespace RRHH.Repository
         }
 
 
-        public int ObtenerDeImportacion(string empresa, string nro_legajo, string ubicacion_id,  string sector, string responsable, string concepto, string categoria_novedad, string tipo_novedad, string fecha_novedad, string tipo_resolucion,  string fecha_resolucion, string dias, string observacion, ref  Novedad nov)
+        public int ObtenerDeImportacion(string empresa, string nro_legajo, string ubicacion_id,  string sector, string responsable, string concepto, string categoria_novedad, string tipo_novedad, string fecha_novedad, string tipo_resolucion,  string fecha_resolucion, string dias, string descripcion, string estado, string observacion, ref  Novedad nov)
         {
 
             try
@@ -197,8 +201,10 @@ namespace RRHH.Repository
                 parameter.Add("@tipo_resolucion", tipo_resolucion);
                 parameter.Add("@str_fecha_resolucion", fecha_resolucion);
                 parameter.Add("@dias", dias);
+                parameter.Add("@descripcion", descripcion);
+                parameter.Add("@estado", estado);
                 parameter.Add("@observacion", observacion);
-               
+
                 parameter.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
                 nov =  con.QuerySingleOrDefault<Novedad>("spNovedadObtenerDeImportacion", parameter, commandType: CommandType.StoredProcedure);

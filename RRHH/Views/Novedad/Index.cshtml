@@ -251,7 +251,9 @@
                                             <th>F. Resolución</th>
                                             <th>Tipo Resolución</th>
                                             <th>Días</th>
-                                            <th>Observaciones</th>
+                                            <th>Descripción</th>
+                                            <th>Observación</th>
+                                            <th>Estado</th>
                                             <th></th>
                                         </tr>
 
@@ -315,7 +317,13 @@
                                                     @item.dias
                                                 </td>
                                                 <td style="width:50%;">
+                                                    @item.descripcion
+                                                </td>
+                                                <td ">
                                                     @item.observacion
+                                                </td>
+                                                <td ">
+                                                    @item.estado
                                                 </td>
                                                     <td style="font-size:16px;">
                                                     
@@ -364,7 +372,9 @@
                                             <th>Responsable</th>
                                             <th>F. Novedad</th>
                                             <th>Tipo Novedad</th>
-                                            <th>Observaciones</th>
+                                            <th>Descripción</th>
+                                            <th>Observación</th>
+                                            <th>Estado</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -413,8 +423,14 @@
                                                 <td>
                                                     @item.tipo_novedad
                                                 </td>
-                                                <td style="width:50%;">
+                                               <td style="width:50%;">
+                                                    @item.descripcion
+                                                </td>
+                                                <td ">
                                                     @item.observacion
+                                                </td>
+                                                <td ">
+                                                    @item.estado
                                                 </td>
                                                     <td style="font-size:16px;">
                                                    

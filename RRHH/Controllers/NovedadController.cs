@@ -1345,6 +1345,8 @@ namespace RRHH.Controllers
                                   fecha_resolucion,
                                   dr[11].ToString(),
                                   dr[12].ToString(),
+                                  dr[13].ToString(),
+                                  dr[14].ToString(),
                                   ref novedad
                                   );
 
@@ -1364,19 +1366,19 @@ namespace RRHH.Controllers
                             }
 
                             // ViewBag.Message = "ERROR";
-                            worksheet.Cell(fila, "N").Value = sError;
+                            worksheet.Cell(fila, "Z").Value = sError;
                         }
                         else
                         {
                             if (novedadRepo.Insertar(novedad, (int)novedad.usuario_id) == "")
                             {
                                 // ViewBag.Message = "OK";
-                                worksheet.Cell(fila, "N").Value = "OK";
+                                worksheet.Cell(fila, "Z").Value = "OK";
                             }
                             else
                             {
                                 ViewBag.Message = "ERROR";
-                                worksheet.Cell(fila, "N").Value = "ERROR";
+                                worksheet.Cell(fila, "Z").Value = "ERROR";
                             }
                         }
 

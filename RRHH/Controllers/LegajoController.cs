@@ -658,19 +658,19 @@ namespace RRHH.Controllers
                             }
 
                             // ViewBag.Message = "ERROR";
-                            worksheet.Cell(fila,"M").Value = sError;
+                            worksheet.Cell(fila,"Z").Value = sError;
                         }
                         else
                         {
                             if (legajoRepo.Insertar(legajo) == "")
                             {
                                // ViewBag.Message = "OK";
-                                worksheet.Cell(fila, "M").Value = "OK";
+                                worksheet.Cell(fila, "Z").Value = "OK";
                             }
                             else
                             {
                                 ViewBag.Message = "ERROR";
-                                worksheet.Cell(fila, "M").Value = "ERROR";
+                                worksheet.Cell(fila, "Z").Value = "ERROR";
                             }
                         }
                     }

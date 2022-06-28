@@ -132,12 +132,26 @@
 
            
           <div class="row">
-             <div class="col bottom-buffer"  id="divObservacion">
-                <label asp-for="observacion" class="control-label">Observación</label>
-                <input asp-for="observacion" class="form-control" id="observacion" />
-                 <span class="alert-danger" asp-validation-for="observacion"></span>
+             <div class="col bottom-buffer"  id="divDescripcion">
+                <label asp-for="descripcion" class="control-label">Descripcion</label>
+                <input asp-for="descripcion" class="form-control" id="descripcion" />
+                 <span class="alert-danger" asp-validation-for="descripcion"></span>
              </div>
           </div>
+
+           <div class="row">
+             <div class="col bottom-buffer"  id="divObservacion">
+                <label asp-for="observacion" class="control-label">Observación</label>
+                <input asp-for="observacion" type="text" class="form-control"  id="observacion"/>
+                <span class="alert-danger" asp-validation-for="observacion"></span>
+            </div>
+            <div class="col bottom-buffer"  id="divEstado">
+                <label asp-for="estado" class="control-label">Estado</label>
+                <input asp-for="estado" type="text" class="form-control"  id="estado"/>
+                <span class="alert-danger" asp-validation-for="estado"></span>
+            </div>
+           </div>
+
 
            <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
@@ -345,6 +359,10 @@ $(document).ready(function () {
       $("#divDias").hide();
 
 
+      $("#divDescripcion").show();
+
+      $("#divEstado").show();
+
       $("#divObservacion").show();
 
       if ($("#divTipoResolucion") >0) 
@@ -376,7 +394,9 @@ $(document).ready(function () {
 
 
       $("#observacion").val("");
+      $("#divDescripcion").show();
       $("#divObservacion").show();
+      $("#divEstado").show();
 
        $("#sector_id").val(-1);
        $("#divSector").hide();
@@ -400,6 +420,18 @@ $(document).ready(function () {
       $("#divDias").show();
 
 
+      $("#descripcion").val("");
+      $("#divDescripcion").show();
+
+      $("#estado").val("");
+      $("#divEstado").show();
+
+      $("#descripcion").val("");
+      $("#divDescripcion").show();
+
+      $("#estado").val("");
+      $("#divEstado").show();
+
       $("#observacion").val("");
       $("#divObservacion").show();
 
@@ -420,6 +452,8 @@ $(document).ready(function () {
       $("#divDias").show();
 
 
+      $("#divDescripcion").show();
+      $("#divEstado").show();
       $("#divObservacion").show();
 
       if ($("#divTipoResolucion") >0) 
@@ -448,10 +482,14 @@ $(document).ready(function () {
       $("#divDias").hide();
 
       
+      $("#descripcion").val("");
+      $("#divDescripcion").show();
+
+      $("#estado").val("");
+      $("#divEstado").show();
+
       $("#observacion").val("");
       $("#divObservacion").show();
-
-
 
       return;   
     }
@@ -468,6 +506,10 @@ $(document).ready(function () {
 
       $("#divDias").hide();
 
+
+      $("#divDescripcion").show();
+
+      $("#divEstado").show();
 
       $("#divObservacion").show();
 
