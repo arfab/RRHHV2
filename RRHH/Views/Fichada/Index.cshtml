@@ -1,0 +1,451 @@
+﻿@model IEnumerable<RRHH.Models.Fichada>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Index";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+    var pagina = @HttpContextAccessor.HttpContext.Session.GetInt32("PAG_FICHADA");
+    var total_paginas = @HttpContextAccessor.HttpContext.Session.GetInt32("TOT_PAG_FICHADA");
+    var legajo =  (RRHH.Models.Legajo) ViewData["LEGAJO"];
+          
+    }
+
+
+     <form id="form1" method="post" enctype="multipart/form-data" class="form-floating">
+         
+
+             
+
+     <div class="container-fluid">
+         <div class="jumbotron text-center Titulo bottom-buffer ">
+          <h2>Listado de Fichadas</h2>
+          </div>
+
+          <center>
+
+             <div class="row mb-3" >
+                 <div class="col-lg-2 col-xs-6 mb-3">
+                      <label for="filtro">Legajo / Apellido</label>
+                      <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+                </div>
+                <div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
+                    <label for="legajo_id">Empleado</label>
+                    <select  data-filter="model" class="form-control" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+                </div>
+                <div class="col-lg-4 col-xs-6 mb-3">
+                    <div class="row" >
+                        <div class="col" >
+                            <label for="fecha_novedad_desde">Desde</label>
+                            <input type="text" id="fecha_desde" class="form-control" name="fecha_desde" value="@ViewData["FechaDesdeActual"]"  />
+                        </div>
+                         <div class="col" >
+                           <label for="fecha_novedad_hasta">Hasta</label>
+                           <input type="text" id="fecha_hasta" class="form-control" name="fecha_hasta" value="@ViewData["FechaHastaActual"]" />
+                      </div>
+                    </div>
+                </div>
+              </div>  
+
+
+             <div class="row mb-3" >
+                <div class="col">
+                     <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" class="btn btn-primary" />
+                     <input type="submit" value="Limpiar" asp-action="Limpiar" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+                     <input type="submit" asp-action="ExportarExcel"   value="Exportar a Excel" class="btn btn-primary" />
+                     <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
+
+                    @* @if (_perfil_id <= 3)
+                     {
+                          <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="Novedad" asp-action="Edit" asp-route-modo="A"   asp-route-legajo_id="@ViewData["EmpleadoActual"]" asp-route-ubicacion_id="@ViewData["UbicacionActual"]" asp-route-sector_id="@ViewData["SectorActual"]" asp-route-local_id="@ViewData["LocalActual"]">INGRESAR FICHADA</a>                     
+                     }*@
+
+                </div>
+             </div>
+
+
+             <div class="row">
+                <div class="col bottom-buffer">
+                    <span id="spanTitulo"></span>
+                </div>
+            </div>
+
+        
+                <div id="divPrint">
+
+                   
+                @if (@legajo != null)
+                {
+
+                    <div class="row" id="divCabecera" style="margin-bottom:10px;">
+                      <div class="col bottom-buffer">
+                        
+                          <div style="background-color: white ; padding: 2px; border: 1px solid black; text-align:center;">
+                           <img id="logo" src="~/img/logo.png" style="height:40px;vertical-align:middle;"  alt="..."> <span style="vertical-align:auto;">FICHADAS</span>
+                         </div>
+                       
+                        </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col bottom-buffer">
+                        <div class="table-responsive">
+
+                    <table id="tablaLegajo" class="table table-bordered table-hover table-condensed">
+                        <thead>
+                            <tr >
+                                <th>Empresa</th>
+                                <th>Nro. Legajo</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Ubicación</th>
+                                <th>Sector/Local</th>
+                                <th>Categoría</th>
+                                <th>F. Ingreso</th>
+                                <th>F. Baja</th>                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr >
+                                <td>@legajo.empresa</td>
+                                <td>@legajo.nro_legajo</td>
+                                <td>@legajo.nombre</td>
+                                <td>@legajo.apellido</td>
+                                <td>@legajo.ubicacion</td>
+                                @if (legajo.ubicacion_id.Value==3)
+                                {
+                                   <td>@legajo.local</td>    
+                                }
+                                else
+                                 {
+                                    <td>@legajo.sector</td>
+                                 }
+                                 <td>@legajo.categoria</td>
+                                 <td> @Convert.ToDateTime(@legajo.fecha_alta).ToString("dd/MM/yyyy")</td>
+                                 @if (legajo.fecha_baja!=null){
+                                     <td> @Convert.ToDateTime(@legajo.fecha_baja).ToString("dd/MM/yyyy")</td>
+                                 }
+                                 else
+                                 {
+                                    <td></td>
+                                 }
+                                 
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div></div></div>
+                }
+                @if (@Model != null && Model.Count()>0)
+                {
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col bottom-buffer">
+                             <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+                             <span style="vertical-align:auto;">FICHADAS</span>
+                         </div>
+                       </div>
+                   </div>
+                   
+                    <div class="row">
+                        <div class="col bottom-buffer">
+                            <div class="table-responsive">
+
+
+                                <table id="tablaFichadas" class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                       
+                                        <tr >
+                                            <th>Dia</th>
+                                            <th>Fecha</th>
+                                            <th>Hora Entrada</th>
+                                            <th>Hora Salida</th>
+                                            <th>Hora Entrada</th>
+                                            <th>Hora Salida</th>
+                                            <th>Cant. Hs.</th>
+                                            <th></th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                      <tr>
+                             
+                                                <td>
+                                                  @item.DiaSemana()
+                                                </td>
+                                                <td>
+                                                    @Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy")
+                                                </td>
+                                                <td>
+                                                    @item.hora_entrada_1
+                                                </td>
+                                                <td>
+                                                    @item.hora_salida_1
+                                                </td>
+                                                <td>
+                                                    @item.hora_entrada_2
+                                                </td>
+                                                <td>
+                                                    @item.hora_salida_2
+                                                </td>
+                                                <td>
+                                                    @item.cantidad_horas
+                                                </td>
+
+                                                   <td style="font-size:16px;">
+                                                    
+@*                                                  @if (_perfil_id <= 3)
+                                                    {
+                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
+                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la novedad' class='bi bi-x-circle'></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                       <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="V" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Ver la novedad' class='bi bi-eye'></i></a>                                                        
+                                                    }*@
+                                                </td>
+                                            </tr>
+
+                                    }
+                                    </tbody>
+                    </table>
+                  </div>
+                </div>
+             </div>
+         }
+                   
+
+             </div>
+             </center>
+
+
+
+     
+
+    </form>
+
+
+     <script type="text/javascript">
+
+    $(document).ready(function() {
+        var FechaDesde = @Html.Raw(Json.Serialize(ViewData["FechaDesdeActual"]));
+        var FechaHasta = @Html.Raw(Json.Serialize(ViewData["FechaHastaActual"]));
+       
+        var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+
+        if ($("#nro_legajo").val() <=0) 
+        {
+            $("#nro_legajo").val('');
+        }
+
+
+        if (Filtro != null && Filtro!='') { 
+            $("#divEmpleado").show();
+
+        }
+        else { 
+           $("#divEmpleado").hide();
+           $("#legajo_id").val(-1).change();
+        }
+
+           ObtenerEmpleados(Filtro);
+      
+           $('#fecha_desde').datepicker({format: 'dd/mm/yyyy' });
+            $('#fecha_hasta').datepicker({format: 'dd/mm/yyyy' });
+
+            if (FechaDesde==null)
+              $('#fecha_desde').datepicker('setDate', "-0d");
+            else 
+              $('#fecha_desde').datepicker('setDate',FechaDesde);
+
+            if (FechaHasta==null)
+              $('#fecha_hasta').datepicker('setDate', "-0d");
+            else 
+              $('#fecha_hasta').datepicker('setDate',FechaHasta);
+
+
+    });
+
+         $("#filtro").change(function () {
+
+             if ($("#filtro").val() != '') {            
+                 $("#divEmpleado").show();
+             }
+             else {
+               $("#divEmpleado").hide();
+               $("#legajo_id").val(-1).change();
+             }
+
+              ObtenerEmpleados($("#filtro").val());
+
+         });
+
+        
+
+         $("#nro_legajo").focusout(function () {
+             if ($("#nro_legajo").val() != '')
+                 ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+
+         });
+
+
+
+         $("#empresa_id").focusout(function () {
+             if($("#nro_legajo").val()!='')
+             ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+         });
+
+
+   
+         var ObtenerLegajo = function (empresa_id, nro_legajo) {
+             $.ajax({
+                url: '@Url.Action("ObtenerLegajo","Novedad")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    empresa_id: empresa_id,
+                    nro_legajo: nro_legajo
+                },
+                success: function (data) {
+                    $('#apellido').val(data.apellido);
+                    $('#empresa_id').val(data.empresa_id);
+                   
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+        var ObtenerEmpleados = function (filtro) {
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpleados","Legajo")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    filtro: filtro
+                },
+                success: function (data) {
+                    $('#legajo_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpleado)
+                              $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                             else 
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        }
+                        );  
+
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+
+
+         $(function () {
+          $('#fecha_desde').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "es"
+            });
+         });
+
+         
+         $(function () {
+          $('#fecha_hasta').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "es"
+            });
+
+         });
+
+       function printData()
+       {
+          
+         $("#tablaFichadas th:last-child, #tablaFichadas td:last-child").hide();
+         //$("#divCabecera").show();
+
+         var divToPrint=document.getElementById("divPrint");
+         var htmlToPrint = '' +
+            '<style type="text/css">' +
+            'body {' +
+             'margin-top: 30px;' + 
+             'margin-bottom: 20px;' + 
+             '} ' +
+            'table , table th, table td {' +
+            'font-size: 10px;' + 
+            'border:1px solid;' +
+            'border-collapse: collapse;' +
+            'padding:0.5em;' +
+            '} ' +
+            'table {' +
+            'width: 100%;' + 
+            'margin-bottom: 20px;' + 
+            '} ' +
+            //'#spanSanciones  {' +
+            //'display:inline-block;' +
+            // '} ' +
+            //'#spanFelicitaciones  {' +
+            //'display:inline-block;' +
+            // '} ' +
+            '</style>';
+         htmlToPrint += divToPrint.outerHTML;
+         newWin= window.open("");
+         //newWin.document.write( htmlToPrint);
+         //newWin.document.close();
+         //newWin.print();
+         //newWin.close();
+         $("#tablaFichadas th:last-child, #tablaFichadas td:last-child").show();
+         //$("#divCabecera").hide();
+
+         var is_chrome = Boolean(newWin.chrome);
+         newWin.document.write(htmlToPrint);
+         newWin.document.close(); // necessary for IE >= 10 and necessary before onload for chrome
+
+       if (is_chrome) {
+        newWin.onload = function() { // wait until all resources loaded 
+            newWin.focus(); // necessary for IE >= 10
+            newWin.print();  // change window to mywindow
+            newWin.close();// change window to mywindow
+        };
+    }
+    else {
+        newWin.document.close(); // necessary for IE >= 10
+        newWin.focus(); // necessary for IE >= 10
+        newWin.print();
+        newWin.close();
+    }
+
+
+      }
+
+    $('#btnImprimir').on('click',function(){
+    printData();
+    })
+
+    </script>
+
+
+
+
+    @if (ViewBag.Message != null)
+{
+        <script type="text/javascript">
+                window.onload = function () {
+                    alert("@ViewBag.Message");
+                };
+        </script>
+}
