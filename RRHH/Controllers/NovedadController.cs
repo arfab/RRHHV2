@@ -1136,8 +1136,8 @@ namespace RRHH.Controllers
             if (novedad.categoria_novedad_id <= 0) return false;
 
             if (novedad.tipo_novedad_id <= 0) return false;
-            if (novedad.observacion == null) return false;
-            if (novedad.observacion.Trim()=="") return false;
+            if (novedad.descripcion == null) return false;
+            if (novedad.descripcion.Trim()=="") return false;
             //if (novedad.responsable_id <= 0) return false;
             if (novedad.ubicacion_id < 0) return false;
 
@@ -1324,27 +1324,27 @@ namespace RRHH.Controllers
 
                         if (iUbicacion==-1)
                         {
-                            worksheet.Cell(fila, "N").Value = "Ubicación inválida";
+                            worksheet.Cell(fila, "Z").Value = "Ubicación inválida";
                             errores++;
                         }
                         else if(iCategoriaNovedad == -1)
                         {
-                            worksheet.Cell(fila, "N").Value = "Categoría novedad inválida";
+                            worksheet.Cell(fila, "Z").Value = "Categoría novedad inválida";
                             errores++;
                         }
                         else if (nro_legajo == "ERR")
                         {
-                            worksheet.Cell(fila, "N").Value = "Nro. de legajo inválido";
+                            worksheet.Cell(fila, "Z").Value = "Nro. de legajo inválido";
                             errores++;
                         }
                         else if (fecha_novedad == "ERR" || fecha_novedad == "")
                         {
-                            worksheet.Cell(fila, "N").Value = "Fecha novedad inválida";
+                            worksheet.Cell(fila, "Z").Value = "Fecha novedad inválida";
                             errores++;
                         }
                         else if (fecha_resolucion == "ERR")
                         {
-                            worksheet.Cell(fila, "N").Value = "Fecha resolución inválida";
+                            worksheet.Cell(fila, "Z").Value = "Fecha resolución inválida";
                             errores++;
                         }
 
@@ -1365,6 +1365,8 @@ namespace RRHH.Controllers
                                       fecha_resolucion,
                                       dr[11].ToString(),
                                       dr[12].ToString(),
+                                      dr[13].ToString(),
+                                      dr[14].ToString(),
                                       ref novedad
                                       );
 
@@ -1412,19 +1414,19 @@ namespace RRHH.Controllers
                                 }
 
                                 // ViewBag.Message = "ERROR";
-                                worksheet.Cell(fila, "N").Value = sError;
+                                worksheet.Cell(fila, "Z").Value = sError;
                             }
                             else
                             {
                                 if (novedadRepo.Insertar(novedad, usuario_id.Value) == "")
                                 {
                                     // ViewBag.Message = "OK";
-                                    worksheet.Cell(fila, "N").Value = "OK";
+                                    worksheet.Cell(fila, "Z").Value = "OK";
                                 }
                                 else
                                 {
                                     ViewBag.Message = "ERROR";
-                                    worksheet.Cell(fila, "N").Value = "ERROR";
+                                    worksheet.Cell(fila, "Z").Value = "ERROR";
                                 }
                             }
                         }
