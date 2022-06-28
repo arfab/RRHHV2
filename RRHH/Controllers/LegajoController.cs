@@ -571,19 +571,22 @@ namespace RRHH.Controllers
                         }
                         catch (Exception)
                         {
-                            fecha_alta = "";
+                            fecha_alta = "ERR";
                         }
 
-                        string fecha_baja;
+                        string fecha_baja="";
 
-                        try
+                        if (dr[6].ToString() != "")
                         {
-                            DateTime f = DateTime.Parse(dr[6].ToString());
-                            fecha_baja = f.Year + "-" + f.Month.ToString().PadLeft(2, '0') + "-" + f.Day.ToString().PadLeft(2, '0');
-                        }
-                        catch (Exception)
-                        {
-                            fecha_baja = "";
+                            try
+                            {
+                                DateTime f = DateTime.Parse(dr[6].ToString());
+                                fecha_baja = f.Year + "-" + f.Month.ToString().PadLeft(2, '0') + "-" + f.Day.ToString().PadLeft(2, '0');
+                            }
+                            catch (Exception)
+                            {
+                                fecha_baja = "ERR";
+                            }
                         }
 
                         //string fecha_alta = dr[5].ToString();
@@ -626,51 +629,92 @@ namespace RRHH.Controllers
                                 break;
                         }
 
-                        string sError = "";
-                        int ret = legajoRepo.ObtenerDeImportacion(
-                                  dr[1].ToString(), 
-                                  dr[2].ToString(), 
-                                  dr[3].ToString(), 
-                                  dr[0].ToString(), 
-                                  dr[8].ToString(), 
-                                  dr[9].ToString(), 
-                                  dr[10].ToString(),
-                                  fecha_alta,
-                                  fecha_baja,
-                                  dr[4].ToString(),
-                                  dr[11].ToString(),
-                                  iUbicacion.ToString(),
-                                  ref legajo
-                                  );
-
-                        if (ret<0)
+                        if (iUbicacion == -1)
                         {
+                            worksheet.Cell(fila, "M").Value = "Ubicación inválida";
                             errores++;
-                            switch (ret)
-                            {
-                                case -1:
-                                    sError="El legajo ya existe";
-                                    break;
-                               
-                                default:
-                                    sError = "Error";
-                                    break;
-                            }
-
-                            // ViewBag.Message = "ERROR";
-                            worksheet.Cell(fila,"Z").Value = sError;
+                        }
+                        else if (fecha_alta == "ERR" || fecha_alta == "")
+                        {
+                            worksheet.Cell(fila, "M").Value = "Fecha alta inválida";
+                            errores++;
+                        }
+                        else if (fecha_baja == "ERR")
+                        {
+                            worksheet.Cell(fila, "M").Value = "Fecha baja inválida";
+                            errores++;
                         }
                         else
                         {
-                            if (legajoRepo.Insertar(legajo) == "")
+                            string sError = "";
+                            int ret = legajoRepo.ObtenerDeImportacion(
+                                      dr[1].ToString(),
+                                      dr[2].ToString(),
+                                      dr[3].ToString(),
+                                      dr[0].ToString(),
+                                      dr[8].ToString(),
+                                      dr[9].ToString(),
+                                      dr[10].ToString(),
+                                      fecha_alta,
+                                      fecha_baja,
+                                      dr[4].ToString(),
+                                      dr[11].ToString(),
+                                      iUbicacion.ToString(),
+                                      ref legajo
+                                      );
+
+                            if (ret < 0)
                             {
-                               // ViewBag.Message = "OK";
-                                worksheet.Cell(fila, "Z").Value = "OK";
+                                errores++;
+                                switch (ret)
+                                {
+                                    case -1:
+                                        sError = "El legajo ya existe";
+                                        break;
+
+                                    case -2:
+                                        sError = "Empresa inválida";
+                                        break;
+
+                                    case -3:
+                                        sError = "Sector/Local inválido";
+                                        break;
+
+
+                                    case -4:
+                                        sError = "Categoría inválida";
+                                        break;
+
+
+                                    case -5:
+                                        sError = "Tarea inválida";
+                                        break;
+
+
+                                    case -6:
+                                        sError = "Género inválido";
+                                        break;
+
+                                    default:
+                                        sError = "Error";
+                                        break;
+                                }
+
+                                // ViewBag.Message = "ERROR";
+                                worksheet.Cell(fila, "M").Value = sError;
                             }
                             else
                             {
-                                ViewBag.Message = "ERROR";
-                                worksheet.Cell(fila, "Z").Value = "ERROR";
+                                if (legajoRepo.Insertar(legajo) == "")
+                                {
+                                    // ViewBag.Message = "OK";
+                                    worksheet.Cell(fila, "M").Value = "OK";
+                                }
+                                else
+                                {
+                                    ViewBag.Message = "ERROR";
+                                    worksheet.Cell(fila, "M").Value = "ERROR";
+                                }
                             }
                         }
                     }

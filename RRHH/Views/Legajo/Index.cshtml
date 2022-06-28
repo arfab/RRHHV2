@@ -226,9 +226,15 @@
                              <td>
                                 @Convert.ToDateTime(item.fecha_alta).ToString("dd/MM/yyyy")
                             </td>
-                             <td>
-                               @Convert.ToDateTime(item.fecha_baja).ToString("dd/MM/yyyy")
-                            </td>
+
+                              @if (item.fecha_baja!=null){
+                                     <td> @Convert.ToDateTime(@item.fecha_baja).ToString("dd/MM/yyyy")</td>
+                                 }
+                                 else
+                                 {
+                                    <td></td>
+                                 }
+
 
                                 <td style="font-size:16px;">
                                     <a asp-controller="Legajo" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar el Legajo' class='bi bi-pencil-square'></i></a>
@@ -496,7 +502,7 @@
         }
 
         var ObtenerLocales = function () {
-             var CodLocal = @Html.Raw(Json.Serialize(ViewData["LocalActual"]));
+             var CodLocal = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
              $.ajax({
                 url: '@Url.Action("ObtenerLocales","Legajo")',
                 type: 'GET',

@@ -16,6 +16,7 @@
       
     <link href="~/css/estilos.css" rel="stylesheet" type="text/css" />
 
+    <link rel="icon" type="image/x-icon" href="~/img/logo.png">
 </head>
 <body>
      @using Microsoft.AspNetCore.Http
@@ -100,9 +101,9 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                            <a class="navbar-brand" href="#">
-      <img src="/img/logo.png" alt="..." height="36">
-    </a>
+                        <a class="navbar-brand" href="#">
+                             <img src="/img/logo.png" alt="..." height="36">
+                        </a>
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link" href="/Home/Index">RRHH</a></li>
                             @if (_perfil_id <=2)
