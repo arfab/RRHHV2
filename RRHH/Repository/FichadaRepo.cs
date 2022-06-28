@@ -32,17 +32,47 @@ namespace RRHH.Repository
 
                 foreach(Fichada item in lFichadas)
                 {
+                   
+
                     if (item.tipo1=="E" && item.tipo2=="S")
                     {
                         item.hora_entrada_1 = item.lec1;
                         item.hora_salida_1 = item.lec2;
+
+                        DateTime entrada1 = DateTime.Parse(item.lec1);
+                        DateTime salida1 = DateTime.Parse(item.lec2);
+
+                        TimeSpan span1 = salida1.Subtract(entrada1);
+
+                     
+
+                        TimeSpan? span2=null;
+
+                        if (item.tipo3 == "E" && item.tipo4 == "S")
+                        {
+
+                            item.hora_entrada_2 = item.lec3;
+                            item.hora_salida_2 = item.lec4;
+
+
+                            DateTime entrada2 = DateTime.Parse(item.lec3);
+                            DateTime salida2 = DateTime.Parse(item.lec4);
+
+                            span2 = salida2.Subtract(entrada2);
+
+
+                        }
+
+                        if (span2!=null)
+                        {
+                            span1 += span2.Value;
+                        }
+
+                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
                     }
 
-                    if (item.tipo3 == "E" && item.tipo4 == "S")
-                    {
-                        item.hora_entrada_2 = item.lec3;
-                        item.hora_salida_2 = item.lec4;
-                    }
+                   
 
                 }
 

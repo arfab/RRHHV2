@@ -9,7 +9,6 @@
         public string? hora_salida_1 { get; set; }
         public string? hora_entrada_2 { get; set; }
         public string? hora_salida_2 { get; set; }
-        public string? cantidad_horas { get; set; }
 
         public string? lec1 { get; set; }
         public string? tipo1 { get; set; }
@@ -28,6 +27,9 @@
 
         public string? lec6 { get; set; }
         public string? tipo6 { get; set; }
+
+        public string? cantidad_horas { get; set; }
+
 
         public string DiaSemana()
         {
