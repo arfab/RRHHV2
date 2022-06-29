@@ -32,7 +32,13 @@ namespace RRHH.Repository
 
                 foreach(Fichada item in lFichadas)
                 {
-                   
+
+                    
+
+                    if (item.tipo1 == null) 
+                        item.estado = "NO";
+                    else
+                        item.estado = "OK";
 
                     if (item.tipo1=="E" && item.tipo2=="S")
                     {
@@ -62,6 +68,15 @@ namespace RRHH.Repository
 
 
                         }
+                        else
+                        {
+                            if (item.tipo3 == "E" && item.tipo4 != "S" ||
+                                item.tipo4 == "S" && item.tipo3 != "E")
+                            {
+                                item.estado = "ERR";
+                            }
+
+                        }
 
                         if (span2!=null)
                         {
@@ -69,6 +84,16 @@ namespace RRHH.Repository
                         }
 
                         item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
+                    }
+
+                    else
+                    {
+                        if (item.tipo1 == "E" && item.tipo2 != "S" ||
+                            item.tipo2 == "S" && item.tipo1 != "E")
+                        {
+                            item.estado = "ERR";
+                        }
 
                     }
 

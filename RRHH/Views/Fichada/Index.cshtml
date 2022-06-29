@@ -171,7 +171,21 @@
                                     <tbody>
                                     @foreach (var item in Model)
                                     {
-                                      <tr>
+                                        string estilo ;
+
+                                        @if(item.estado=="ERR") {
+                                           estilo = "background-color:Yellow;";
+                                        }
+                                        else if (item.estado == "NO")
+                                        {
+                                          estilo = "background-color:LightBlue;";
+                                        }
+                                        else {
+                                          estilo = "background-color:White;";
+
+                                        }
+
+                                            <tr style="@estilo">
                              
                                                 <td>
                                                   @item.DiaSemana()
