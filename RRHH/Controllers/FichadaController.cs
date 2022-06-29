@@ -34,13 +34,16 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("EMPLEADO_FICHADA_ACTUAL", "");
             HttpContext.Session.SetString("FILTRO_FICHADA_ACTUAL", "");
 
+            HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", 1);
+
+
             return RedirectToAction("Index", "Fichada");
 
 
         }
 
 
-        public IActionResult Index(int nro_legajo,  int legajo_id, string filtro, string desde)
+        public IActionResult Index(int nro_legajo,  int legajo_id, string filtro, string desde, int tipo_listado)
         {
 
 
@@ -62,6 +65,11 @@ namespace RRHH.Controllers
         
             if (HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL");
             if (HttpContext.Session.GetString("FILTRO_FICHADA_ACTUAL") != null) filtro = HttpContext.Session.GetString("FILTRO_FICHADA_ACTUAL");
+
+            if (HttpContext.Session.GetInt32("TIPO_LISTADO_ACTUAL") != null)
+                tipo_listado = (int)HttpContext.Session.GetInt32("TIPO_LISTADO_ACTUAL");
+            else
+                tipo_listado = 1;
 
 
 
@@ -101,6 +109,7 @@ namespace RRHH.Controllers
 
                 ViewData["EmpleadoActual"] = legajo_id;
                 ViewData["FiltroActual"] = filtro;
+                ViewData["TipoListadoActual"] = tipo_listado;
 
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;
@@ -161,7 +170,7 @@ namespace RRHH.Controllers
 
                 IEnumerable<Fichada> fichadas;
 
-                fichadas = fichadaRepo.ObtenerTodos((nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta);
+                fichadas = fichadaRepo.ObtenerTodos((nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, tipo_listado);
 
 
                 if (desde == "busqueda")
@@ -193,7 +202,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Buscar(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int legajo_id, string filtro)
+        public IActionResult Buscar(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int legajo_id, string filtro, int tipo_listado)
         {
 
             HttpContext.Session.SetString("LEGAJO_FICHADA_ACTUAL", "");
@@ -212,6 +221,9 @@ namespace RRHH.Controllers
 
             HttpContext.Session.SetString("FECHA_FICHADA_DESDE", fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year);
             HttpContext.Session.SetString("FECHA_FICHADA_HASTA", fecha_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Year);
+
+            HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", tipo_listado);
+
 
             return RedirectToAction("Index", "Fichada", new { desde = "busqueda" });
 

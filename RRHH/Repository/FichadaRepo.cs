@@ -11,7 +11,7 @@ namespace RRHH.Repository
         static readonly string strConnectionString = Tools.GetConnectionString();
 
 
-        public IEnumerable<Fichada> ObtenerTodos(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta)
+        public IEnumerable<Fichada> ObtenerTodos(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int tipo_listado)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -26,6 +26,8 @@ namespace RRHH.Repository
                 parameter.Add("@tipo", "");
                 parameter.Add("@fecha_desde", (fecha_desde.Year < 1000) ? null : fecha_desde);
                 parameter.Add("@fecha_hasta", (fecha_hasta.Year < 1000) ? null : fecha_hasta);
+                parameter.Add("@tipo_listado", tipo_listado);
+
 
                 IEnumerable<Fichada> lFichadas;
                 lFichadas = con.Query<Fichada>("spFichadaAgrupadaObtener", parameter, commandType: CommandType.StoredProcedure).ToList();

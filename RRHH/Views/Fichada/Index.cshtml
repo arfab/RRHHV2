@@ -45,6 +45,14 @@
                            <label for="fecha_novedad_hasta">Hasta</label>
                            <input type="text" id="fecha_hasta" class="form-control" name="fecha_hasta" value="@ViewData["FechaHastaActual"]" />
                       </div>
+
+                       <div class="col" >
+                            <label class="form-check-label" for="tipo_listado">
+                              Sólo fichadas
+                             </label><br />
+                             <input class="form-check-input" type="checkbox" value="1"  name="tipo_listado" id="tipo_listado"  @((ViewData["TipoListadoActual"].ToString()=="1")?  "checked" : "" ) >
+
+                      </div>
                     </div>
                 </div>
               </div>  
@@ -178,7 +186,7 @@
                                         }
                                         else if (item.estado == "NO")
                                         {
-                                          estilo = "background-color:LightBlue;";
+                                          estilo = "background-color:LightGray;";
                                         }
                                         else {
                                           estilo = "background-color:White;";
