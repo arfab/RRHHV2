@@ -1022,6 +1022,48 @@ namespace RRHH.Controllers
 
 
         [HttpGet]
+        public JsonResult ObtenerLegajos(int empresa_id, int iNroLegajo, int ubicacion_id, int sector_id, string filtro, int activo)
+        {
+            List<Models.Empleado> l = new List<Models.Empleado>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                int nro_legajo=-1;
+                string apellido="";
+                bool isNumber = int.TryParse(filtro, out nro_legajo);
+
+                if (iNroLegajo <= 0 && isNumber) 
+                    iNroLegajo = nro_legajo;
+                else
+                {
+                    if (!isNumber) apellido = filtro; 
+                }
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@empresa_id", (empresa_id <= 0) ? -1 : empresa_id);
+                parameters.Add("@nro_legajo", (iNroLegajo<=0)?-1:iNroLegajo);
+                parameters.Add("@ubicacion_id", (ubicacion_id <= 0) ? -1 : ubicacion_id);
+                parameters.Add("@sector_id", (sector_id <= 0) ? -1 : sector_id);
+                parameters.Add("@apellido", (filtro == null) ? "" : apellido);
+                parameters.Add("@activo", activo);
+
+                l = con.Query<Models.Empleado>("spLegajoObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+            if (l.Count == 0)
+                l.Insert(0, new Models.Empleado(-1, "No hay empleados con ese criterio"));
+            else
+              if (l.Count > 1)
+                l.Insert(0, new Models.Empleado(-1, "-- Seleccione el empleado --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
+
+        [HttpGet]
         public JsonResult ObtenerLegajoPorID(int id)
         {
             ILegajoRepo legajoRepo;

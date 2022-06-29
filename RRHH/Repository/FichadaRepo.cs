@@ -35,10 +35,15 @@ namespace RRHH.Repository
                 foreach(Fichada item in lFichadas)
                 {
 
-                    
 
-                    if (item.tipo1 == null) 
-                        item.estado = "NO";
+
+                    if (item.tipo1 == null)
+                    {
+                        if (item.justificacion == "")
+                            item.estado = "NO";
+                        else
+                            item.estado = "JUS";
+                    }
                     else
                         item.estado = "OK";
 
