@@ -63,9 +63,13 @@ namespace RRHH.Controllers
 
             if (HttpContext.Session.GetString("FECHA_FICHADA_DESDE") != null && HttpContext.Session.GetString("FECHA_FICHADA_DESDE") != "")
                 fecha_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_FICHADA_DESDE"));
+            else
+                fecha_desde = DateTime.Now.Date;
 
             if (HttpContext.Session.GetString("FECHA_FICHADA_HASTA") != null && HttpContext.Session.GetString("FECHA_FICHADA_HASTA") != "")
                 fecha_hasta = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_FICHADA_HASTA"));
+            else
+                fecha_hasta = DateTime.Now.Date;
 
             if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL_FICHADA") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL_FICHADA");
 
@@ -196,7 +200,14 @@ namespace RRHH.Controllers
 
                 IEnumerable<Fichada> fichadas;
 
-                fichadas = fichadaRepo.ObtenerTodos((nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, tipo_listado);
+                fichadas = fichadaRepo.ObtenerTodos(
+                     (nro_legajo == 0) ? -1 : nro_legajo, 
+                     fechaDesde, 
+                     fechaHasta, 
+                     (empresa_id == 0) ? -1 : empresa_id, 
+                     (ubicacion_id == 0) ? -1 : ubicacion_id, 
+                     (sector_id == 0) ? -1 : sector_id, 
+                     tipo_listado);
 
 
                 if (desde == "busqueda")

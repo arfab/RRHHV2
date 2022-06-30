@@ -181,6 +181,9 @@
                                     <thead>
                                        
                                         <tr >
+                                            @if (@legajo == null) {
+                                               <th>#</th>
+                                            }
                                             <th>Dia</th>
                                             <th>Fecha</th>
                                             <th>Hora Entrada</th>
@@ -215,7 +218,9 @@
                                         }
 
                                             <tr style="@estilo">
-                             
+                                                @if (@legajo == null) {
+                                                 <th>@item.nro_legajo</th>
+                                                }
                                                 <td>
                                                   @item.DiaSemana()
                                                 </td>
