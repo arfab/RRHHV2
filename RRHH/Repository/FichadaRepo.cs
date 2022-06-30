@@ -101,7 +101,8 @@ namespace RRHH.Repository
 
                     else
                     {
-                        if (item.tipo1 == "E" && item.tipo2 != "S" ||
+                        if (item.tipo1!=null && item.tipo1!="E" || 
+                            item.tipo1 == "E" && item.tipo2 != "S" ||
                             item.tipo2 == "S" && item.tipo1 != "E")
                         {
                             item.estado = "ERR";
