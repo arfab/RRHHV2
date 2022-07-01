@@ -54,11 +54,11 @@
                 <div class="col-lg-4 col-xs-6 mb-3">
                     <div class="row" >
                         <div class="col" >
-                            <label for="fecha_novedad_desde">Desde</label>
+                            <label for="fecha_desde">Desde</label>
                             <input type="text" id="fecha_desde" class="form-control" name="fecha_desde" value="@ViewData["FechaDesdeActual"]"  />
                         </div>
                          <div class="col" >
-                           <label for="fecha_novedad_hasta">Hasta</label>
+                           <label for="fecha_hasta">Hasta</label>
                            <input type="text" id="fecha_hasta" class="form-control" name="fecha_hasta" value="@ViewData["FechaHastaActual"]" />
                       </div>
 
@@ -182,7 +182,7 @@
                                        
                                         <tr >
                                             @if (@legajo == null) {
-                                               <th>#</th>
+                                               <th>Empleado</th>
                                             }
                                             <th>Dia</th>
                                             <th>Fecha</th>
@@ -219,7 +219,7 @@
 
                                             <tr style="@estilo">
                                                 @if (@legajo == null) {
-                                                 <th>@item.nro_legajo</th>
+                                                 <th>@item.empleado</th>
                                                 }
                                                 <td>
                                                   @item.DiaSemana()
@@ -287,7 +287,7 @@
        
         var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
 
-        
+            
        ObtenerEmpresas();
 
        ObtenerUbicaciones();
@@ -369,14 +369,29 @@
              // ObtenerEmpleados($("#filtro").val());
               ObtenerLegajos($("#empresa_id").val(), $("#nro_legajo").val(),$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
+              
          });
 
-        
+           $("#filtro").focusout(function () {
+                         
+             //  if ($("#legajo_id").val() == null || $("#legajo_id").val() == -1)           
+             //     $('#fecha_hasta').attr("disabled", true);
+             //else 
+             //   $('#fecha_hasta').attr("disabled", false);
+         });
+
+          $("#legajo_id").change(function () {
+             //if ($("#legajo_id").val() == null || $("#legajo_id").val() == -1)           
+             //     $('#fecha_hasta').attr("disabled", true);
+             //else 
+             //   $('#fecha_hasta').attr("disabled", false);
+         });
 
          $("#nro_legajo").focusout(function () {
-             if ($("#nro_legajo").val() != '')
+             if ($("#nro_legajo").val() != '') { 
                  ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
 
+             }
          });
 
          
@@ -462,6 +477,8 @@
                     activo: 1
                 },
                 success: function (data) {
+
+                   
                     $('#legajo_id').find('option').remove()
                     $(data).each(
                         function (index, item) {            
@@ -471,6 +488,9 @@
                               $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                         }
                         );  
+
+                   
+                    $('#legajo_id').val(data[0].value).change();
 
                 },
                 error: function () {
@@ -578,7 +598,12 @@
             changeYear: true,
             format: "dd/mm/yyyy",
             language: "es"
-            });
+            }).on('changeDate', function(e) {
+              var FechaDesde = @Html.Raw(Json.Serialize(ViewData["FechaDesdeActual"]));
+                if ($("#legajo_id").val() == null || $("#legajo_id").val() == -1) {        
+                    $('#fecha_hasta').datepicker('setDate', e.date);
+                }
+             })  
          });
 
          

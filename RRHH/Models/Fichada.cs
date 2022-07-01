@@ -34,6 +34,7 @@
 
         public string? estado { get; set; }
 
+        public string? empleado { get; set; }
 
         public string DiaSemana()
         {
