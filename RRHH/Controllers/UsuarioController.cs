@@ -13,6 +13,12 @@ namespace RRHH.Controllers
 
         static readonly string strConnectionString = Tools.GetConnectionString();
 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UsuarioController(IHttpContextAccessor httpContextAccessor)
+        {
+            this._httpContextAccessor = httpContextAccessor;
+        }
 
         public IActionResult Index()
         {
@@ -89,6 +95,11 @@ namespace RRHH.Controllers
 
             if (usuario != null)
             {
+
+
+                Set("CGUID", Guid.NewGuid().ToString(),10 );
+
+
                 HttpContext.Session.SetInt32("UID", usuario.id);
 
                 HttpContext.Session.SetString("USUARIO_ID", usuario.UsuarioID);
@@ -377,6 +388,35 @@ namespace RRHH.Controllers
             l.Insert(0, new Models.Perfil(-1, "-- Seleccione el perfil --"));
 
             return Json(new SelectList(l, "id", "descripcion"));
+        }
+
+
+        public string Get(string key)
+        {
+            return Request.Cookies[key];
+        }
+        /// <summary>  
+        /// set the cookie  
+        /// </summary>  
+        /// <param name="key">key (unique indentifier)</param>  
+        /// <param name="value">value to store in cookie object</param>  
+        /// <param name="expireTime">expiration time</param>  
+        public void Set(string key, string value, int? expireTime)
+        {
+            CookieOptions option = new CookieOptions();
+            if (expireTime.HasValue)
+                option.Expires = DateTime.Now.AddMinutes(expireTime.Value);
+            else
+                option.Expires = DateTime.Now.AddMilliseconds(10);
+            Response.Cookies.Append(key, value, option);
+        }
+        /// <summary>  
+        /// Delete the key  
+        /// </summary>  
+        /// <param name="key">Key</param>  
+        public void Remove(string key)
+        {
+            Response.Cookies.Delete(key);
         }
 
     }
