@@ -105,6 +105,9 @@ namespace RRHH.Repository
                             item.tipo1 == "E" && item.tipo2 != "S" ||
                             item.tipo2 == "S" && item.tipo1 != "E")
                         {
+                            if (item.tipo1 == "E")
+                                item.hora_entrada_1 = item.lec1;
+
                             item.estado = "ERR";
                         }
 
