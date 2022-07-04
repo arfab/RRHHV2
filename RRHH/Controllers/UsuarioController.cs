@@ -420,52 +420,7 @@ namespace RRHH.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult IrADashBoard()
-        {
-            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
-
-            if (usuario_id != null)
-            {
-                IUsuarioRepo usuarioRepo;
-                usuarioRepo = new UsuarioRepo();
-
-                string sGuid = Guid.NewGuid().ToString();
-
-                Set("CGUID", sGuid, 10);
-
-
-                usuarioRepo.ActalizarGUID(usuario_id, "Dashboard", sGuid);
-
-                return Redirect("http://localhost:5054/Dashboard");
-            }
-            else
-                return RedirectToAction("Login", "Usuario");
-
-        }
-
-        public IActionResult IrARRHH()
-        {
-            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
-
-            if (usuario_id != null)
-            {
-                IUsuarioRepo usuarioRepo;
-                usuarioRepo = new UsuarioRepo();
-
-                string sGuid = Guid.NewGuid().ToString();
-
-                Set("CGUID", sGuid, 10);
-
-
-                usuarioRepo.ActalizarGUID(usuario_id, "RRHH", sGuid);
-
-                return Redirect("http://localhost:5123");
-            }
-            else
-                return RedirectToAction("Login", "Usuario");
-
-        }
+     
 
 
         public IActionResult IrASitio(string nombre, string url, string home)

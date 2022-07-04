@@ -31,6 +31,11 @@ namespace RRHH.Controllers
 
             webs = (IEnumerable<Web>)usuarioRepo.ObtenerWebs(usuario_id);
 
+            if (webs.Count()==1)
+            {
+                return RedirectToAction("IrASitio", "Usuario", new { nombre = webs.ElementAt(0).nombre, url = webs.ElementAt(0).url, home = webs.ElementAt(0).home_page }) ;
+            }
+    
             return View(webs);
         }
     }
