@@ -9,7 +9,7 @@
              <div class="card-body">
                   @foreach (var item in Model)
                     {
-                      <a class="btn btn-primary" asp-controller="Usuario" asp-action="IrASitio" asp-route-nombre="@item.nombre" asp-route-url="@item.url" asp-route-home="@item.home_page"  role="button">@item.nombre</a>
+                      <a class="btn btn-primary" target="_blank" asp-controller="Usuario" asp-action="IrASitio" asp-route-nombre="@item.nombre" asp-route-url="@item.url" asp-route-home="@item.home_page"  role="button">@item.nombre</a>
                     }
 
              </div>

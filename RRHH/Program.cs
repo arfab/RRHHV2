@@ -11,6 +11,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromSeconds(4000);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.Name = ".RRHH.Session";
 });
 
 var app = builder.Build();
