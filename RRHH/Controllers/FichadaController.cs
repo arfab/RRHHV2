@@ -260,12 +260,12 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("FECHA_FICHADA_DESDE", "");
             HttpContext.Session.SetString("FECHA_FICHADA_HASTA", "");
 
-            HttpContext.Session.SetString("EMPLEADO_FICHADA_ACTUAL", "");
-            HttpContext.Session.SetString("FILTRO_FICHADA_ACTUAL", "");
+           // HttpContext.Session.SetString("EMPLEADO_FICHADA_ACTUAL", "");
 
             HttpContext.Session.SetInt32("LEGAJO_FICHADA_ACTUAL", nro_legajo);
 
             HttpContext.Session.SetInt32("EMPLEADO_FICHADA_ACTUAL", legajo_id);
+
             HttpContext.Session.SetString("FILTRO_FICHADA_ACTUAL", (filtro == null) ? "" : filtro);
 
 

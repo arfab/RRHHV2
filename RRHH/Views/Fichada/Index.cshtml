@@ -282,10 +282,13 @@
 
     $(document).ready(function() {
         var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+        var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
         var FechaDesde = @Html.Raw(Json.Serialize(ViewData["FechaDesdeActual"]));
         var FechaHasta = @Html.Raw(Json.Serialize(ViewData["FechaHastaActual"]));
        
         var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+        var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+        var LegajoId = @Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
 
             
        ObtenerEmpresas();
@@ -310,16 +313,20 @@
         }
 
 
-        if (Filtro != null && Filtro!='') { 
-            $("#divEmpleado").show();
+        //if (Filtro != null && Filtro!='') { 
+        //    $("#divEmpleado").show();
 
-        }
-        else { 
-         //  $("#divEmpleado").hide();
-           $("#legajo_id").val(-1).change();
-        }
+        //}
+        //else { 
+        //   $("#legajo_id").val(-1).change();
+        //}
 
-           ObtenerLegajos($("#empresa_id").val(), $("#nro_legajo").val(),$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+           ObtenerLegajos($("#empresa_id").val(),Legajo,CodUbicacion,CodSector,Filtro )
+
+        
+
+           //ObtenerLegajos($("#empresa_id").val(), $("#nro_legajo").val(),$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
           // ObtenerEmpleados(Filtro);
       
@@ -340,6 +347,8 @@
     });
 
     $("#ubicacion_id").change(function () {
+          var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
        if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2) {
             ObtenerSectores($("#ubicacion_id").val());
         }
@@ -352,22 +361,21 @@
            }
         }
 
-         ObtenerLegajos($("#empresa_id").val(), $("#nro_legajo").val(),$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
       });
 
          $("#filtro").change(function () {
+             var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
 
              if ($("#filtro").val() != '') {            
                  $("#divEmpleado").show();
              }
              else {
-              // $("#divEmpleado").hide();
                $("#legajo_id").val(-1).change();
              }
 
-             // ObtenerEmpleados($("#filtro").val());
-              ObtenerLegajos($("#empresa_id").val(), $("#nro_legajo").val(),$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+              ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
               
          });
@@ -387,25 +395,27 @@
              //   $('#fecha_hasta').attr("disabled", false);
          });
 
-         $("#nro_legajo").focusout(function () {
-             if ($("#nro_legajo").val() != '') { 
-                 ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+         //$("#nro_legajo").focusout(function () {
+         //    if ($("#nro_legajo").val() != '') { 
+         //        ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
 
-             }
-         });
+         //    }
+         //});
 
          
          $("#sector_id").focusout(function () {
+               var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
              //if($("#nro_legajo").val()!='')
-             ObtenerLegajos($("#empresa_id").val(), $("#nro_legajo").val(),$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+             ObtenerLegajos($("#empresa_id").val(),Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
          });
 
 
 
 
          $("#empresa_id").focusout(function () {
+               var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
              //if($("#nro_legajo").val()!='')
-             ObtenerLegajos($("#empresa_id").val(), $("#nro_legajo").val(),$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+             ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
          });
 
 
@@ -490,7 +500,7 @@
                         );  
 
                    
-                    $('#legajo_id').val(data[0].value).change();
+                   // $('#legajo_id').val(data[0].value).change();
 
                 },
                 error: function () {
