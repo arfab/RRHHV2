@@ -190,6 +190,72 @@ namespace RRHH.Repository
         }
 
 
+
+        public string ActalizarGUID(string usuario_id, string sitio_web, string guid)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@UsuarioID", usuario_id);
+                parameters.Add("@sitio_web", sitio_web);
+                parameters.Add("@guid", (guid == "") ? null : guid);
+
+                icantFilas = con.Execute("spUsuarioGUIDActualizar", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
         }
+
+        public Usuario LoginPorGuid(string sitio_web, string guid)
+        {
+
+            Usuario usuario = new Usuario();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@sitio_web", sitio_web);
+                parameter.Add("@guid", guid);
+                usuario = con.QueryFirstOrDefault<Models.Usuario>("spUsuarioLoginPorGUID", parameter, commandType: CommandType.StoredProcedure);
+
+            }
+
+            if (usuario != null )
+                return usuario;
+            else
+                return null;
+
+
+        }
+
+        public IEnumerable<Web> ObtenerWebs(string usuario_id)
+        {
+
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@UsuarioID", usuario_id);
+                return con.Query<Web>("spUsuarioObtenerWebs", parameter, commandType: CommandType.StoredProcedure);
+
+            }
+
+
+        }
+
+
     }
+}
 

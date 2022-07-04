@@ -13,6 +13,10 @@ namespace RRHH.Repository
         public string Eliminar(string UsuarioID);
         public IEnumerable<Perfil> ObtenerPerfiles();
 
+        public string ActalizarGUID(string usuario_id, string sitio_web, string guid);
+        public Usuario LoginPorGuid(string sitio_web, string guid);
+        public IEnumerable<Web> ObtenerWebs(string usuario_id);
+
 
     }
 }

@@ -1,0 +1,21 @@
+﻿@model IEnumerable<RRHH.Models.Web>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_LayoutMenu.cshtml"; }
+
+<center>
+<div class="row" style="margin:20px;">
+    <div class="col">
+        <div class="card" style="width: 18rem;">
+             <div class="card-body">
+                  @foreach (var item in Model)
+                    {
+                      <a class="btn btn-primary" asp-controller="Usuario" asp-action="IrASitio" asp-route-nombre="@item.nombre" asp-route-url="@item.url" asp-route-home="@item.home_page"  role="button">@item.nombre</a>
+                    }
+
+             </div>
+        </div>
+    </div>
+</div>
+
+
+</center>
