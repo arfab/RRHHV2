@@ -39,7 +39,7 @@ namespace RRHH.Models
         public string? descripcion { get; set; }
         public string? observacion { get; set; }
         public string? estado { get; set; }
-        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        [Range(0, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? concepto { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? dias { get; set; }
