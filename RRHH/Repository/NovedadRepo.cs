@@ -23,7 +23,8 @@ namespace RRHH.Repository
                 parameters.Add("@ubicacion_id", novedad.ubicacion_id);
                 parameters.Add("@sector_id", (novedad.sector_id == -1) ? null : novedad.sector_id);
                 parameters.Add("@local_id", (novedad.local_id == -1) ? null : novedad.local_id);
-                parameters.Add("@responsable_id", (novedad.responsable_id == -1) ? null : novedad.responsable_id);
+                parameters.Add("@responsable", novedad.responsable);
+                //parameters.Add("@responsable_id", (novedad.responsable_id == -1) ? null : novedad.responsable_id);
                 parameters.Add("@categoria_novedad_id", novedad.categoria_novedad_id);
                 parameters.Add("@tipo_novedad_id", (novedad.tipo_novedad_id==-1)?null: novedad.tipo_novedad_id);
                 parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id > 0) ? novedad.tipo_resolucion_id : null);
@@ -62,7 +63,8 @@ namespace RRHH.Repository
                 parameters.Add("@ubicacion_id", novedad.ubicacion_id);
                 parameters.Add("@sector_id", (novedad.sector_id == -1) ? null : novedad.sector_id);
                 parameters.Add("@local_id", (novedad.local_id == -1) ? null : novedad.local_id);
-                parameters.Add("@responsable_id", (novedad.responsable_id == -1) ? null : novedad.responsable_id);
+                parameters.Add("@responsable", novedad.responsable);
+                //parameters.Add("@responsable_id", (novedad.responsable_id == -1) ? null : novedad.responsable_id);
                 parameters.Add("@categoria_novedad_id", novedad.categoria_novedad_id);
                 parameters.Add("@tipo_novedad_id", (novedad.tipo_novedad_id == -1) ? null : novedad.tipo_novedad_id);
                 parameters.Add("@tipo_resolucion_id", (novedad.tipo_resolucion_id > 0) ? novedad.tipo_resolucion_id : null);
