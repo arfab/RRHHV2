@@ -624,6 +624,9 @@ namespace RRHH.Controllers
                             case "LOCAL":
                                 iUbicacion = 3;
                                 break;
+                            case "DEPOSITO":
+                                iUbicacion = 4;
+                                break;
                             default:
                                 iUbicacion = -1;
                                 break;

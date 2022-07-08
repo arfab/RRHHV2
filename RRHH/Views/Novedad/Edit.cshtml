@@ -262,7 +262,7 @@ $(document).ready(function () {
     ObtenerUbicaciones();
     
 
-     if (CodUbicacion==1 || CodUbicacion==2) {
+     if (CodUbicacion==1 || CodUbicacion==2 || CodUbicacion==4) {
            ObtenerSectores(CodUbicacion,0);
             $("#divSector").show();
             $("#local_id").val(-1);
@@ -627,7 +627,7 @@ $(document).ready(function () {
     });
     
     $("#ubicacion_id").change(function () {
-       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2) {
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
             ObtenerSectores($("#ubicacion_id").val(),0);
             $("#divSector").show();
             $("#local_id").val(-1);
@@ -862,7 +862,7 @@ $(document).ready(function () {
                 $('#ubicacion_id').change();
                // $('#ubicacion_id').trigger("change");
 
-                if ($('#ubicacion_id').val() == 1 || $('#ubicacion_id').val() == 2) {
+                if ($('#ubicacion_id').val() == 1 || $('#ubicacion_id').val() == 2 || $('#ubicacion_id').val() == 4) {
                     ObtenerSectores($('#ubicacion_id').val(),data.sector_id);
                     //$('#sector_id').val(data.sector_id);
                     //$('#sector_id').change();
@@ -903,7 +903,7 @@ var ObtenerLegajoPorID = function (id) {
                 $('#ubicacion_id').val(data.ubicacion_id);
                 $('#ubicacion_id').change();
 
-                if ($('#ubicacion_id').val() == 1 || $('#ubicacion_id').val() == 2) {
+                if ($('#ubicacion_id').val() == 1 || $('#ubicacion_id').val() == 2 || $('#ubicacion_id').val() == 4) {
                     ObtenerSectores($('#ubicacion_id').val(),data.sector_id);
 
                     $("#divSector").show();

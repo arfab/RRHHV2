@@ -211,7 +211,7 @@
                                 @item.ubicacion
                             </td>
                             <td> 
-                                @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2)
+                                @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2 || @item.ubicacion_id == 4)
                                 {
                                     @item.sector
                                 }
@@ -311,7 +311,7 @@
 
        ObtenerUbicaciones();
 
-       if (CodUbicacion== 1 || CodUbicacion == 2) {
+       if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
             ObtenerSectores(CodUbicacion);
             //$("#divSector").show();
             //$("#local_id").val(-1);
@@ -374,7 +374,7 @@
 
  
     $("#ubicacion_id").change(function () {
-       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2) {
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
             ObtenerSectores($("#ubicacion_id").val());
            // $("#divSector").show();
            // $("#local_id").val(-1);
