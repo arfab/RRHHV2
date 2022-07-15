@@ -1368,8 +1368,8 @@ namespace RRHH.Controllers
                                       fecha_resolucion,
                                       dr[11].ToString(),
                                       dr[12].ToString(),
-                                      dr[13].ToString(),
                                       dr[14].ToString(),
+                                      dr[13].ToString(),
                                       ref novedad
                                       );
 
