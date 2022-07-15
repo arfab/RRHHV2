@@ -276,8 +276,11 @@
                                             <th>Tipo Resolución</th>
                                             <th>Días</th>
                                             <th>Descripción</th>
-                                            <th>Observación</th>
-                                            <th>Estado</th>
+                                            @if (_perfil_id <= 3)
+                                            {
+                                              <th class="observacion">Observación</th>
+                                              <th class="estado">Estado</th>
+                                            }
                                             <th></th>
                                         </tr>
 
@@ -330,7 +333,7 @@
                                                     @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                                                                                             @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                                                                                                                             @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                     }
                                                 </td>
@@ -343,13 +346,16 @@
                                                 <td style="width:50%;">
                                                     @item.descripcion
                                                 </td>
-                                                <td ">
-                                                    @item.observacion
-                                                </td>
-                                                <td ">
-                                                    @item.estado
-                                                </td>
-                                                    <td style="font-size:16px;">
+                                                @if (_perfil_id <= 3)
+                                                {
+                                                    <td class="observacion">
+                                                        @item.observacion
+                                                    </td>
+                                                    <td class="estado">
+                                                        @item.estado
+                                                    </td>
+                                                }
+                                                <td style="font-size:16px;">
                                                     
                                                     @if (_perfil_id <= 3)
                                                     {
@@ -406,8 +412,11 @@
                                             <th>F. Novedad</th>
                                             <th>Tipo Novedad</th>
                                             <th>Descripción</th>
-                                            <th>Observación</th>
-                                            <th>Estado</th>
+                                            @if (_perfil_id <= 3)
+                                            {
+                                              <th class="observacion">Observación</th>
+                                              <th class="estado">Estado</th>
+                                            }
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -459,12 +468,15 @@
                                                <td style="width:50%;">
                                                     @item.descripcion
                                                 </td>
-                                                <td ">
-                                                    @item.observacion
-                                                </td>
-                                                <td ">
-                                                    @item.estado
-                                                </td>
+                                                @if (_perfil_id <= 3)
+                                                {
+                                                    <td class="observacion">
+                                                        @item.observacion
+                                                    </td>
+                                                    <td class="estado">
+                                                        @item.estado
+                                                    </td>
+                                                }
                                                     <td style="font-size:16px;">
                                                    
                                                     @if (_perfil_id <= 3)
@@ -794,10 +806,18 @@
 
        function printData()
        {
-          
+         var mostrar=0;
+           
          $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").hide();
          $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").hide();
-         //$("#divCabecera").show();
+         
+         if (!$("#tablaSanciones .observacion").is(":hidden")) { 
+              $("#tablaSanciones .observacion").hide();
+              $("#tablaFelicitaciones .observacion").hide();
+              $("#tablaSanciones .estado").hide();
+              $("#tablaFelicitaciones .estado").hide();
+              mostrar = 1;
+         }
 
          var divToPrint=document.getElementById("divPrint");
          var htmlToPrint = '' +
@@ -832,6 +852,13 @@
          $("#tablaSanciones th:last-child, #tablaSanciones td:last-child").show();
          $("#tablaFelicitaciones th:last-child, #tablaFelicitaciones td:last-child").show();
          //$("#divCabecera").hide();
+
+           if (mostrar==1) {
+               $("#tablaSanciones .observacion").show();
+               $("#tablaFelicitaciones .observacion").show();
+               $("#tablaSanciones .estado").show();
+               $("#tablaFelicitaciones .estado").show();
+           }
 
          var is_chrome = Boolean(newWin.chrome);
          newWin.document.write(htmlToPrint);
