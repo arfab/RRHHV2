@@ -266,7 +266,8 @@ namespace RRHH.Controllers
             IUsuarioRepo usuarioRepo;
 
             ModelState.Remove("UsuarioID");
-           // ModelState.Remove("perfil_id");
+            ModelState.Remove("perfil_id");
+            ModelState.Remove("id");
 
             if (ModelState.IsValid)
             {
