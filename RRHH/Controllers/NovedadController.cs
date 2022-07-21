@@ -298,32 +298,36 @@ namespace RRHH.Controllers
 
                     }
 
+                if (nro_legajo == 0)
+                    if (ViewData["FechaNovedadDesdeActual"] == "" && ViewData["FechaNovedadHastaActual"] == "")
+                        nro_legajo = -2;
+                    else
+                        nro_legajo = -1;
 
-
-                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["TOTAL_NOVEDADES"] = cant;
 
-                int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
 
 
                 HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["FELICITACIONES"] = lFelicitaciones;
 
                 IEnumerable<Novedad> novedades;
 
-                novedades = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -2 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                novedades = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
 
 
                 if (desde == "busqueda")
                 {
-                    if (nro_legajo <= 0)
-                    {
-                        ViewBag.Message = "Debe especificar un legajo";
-                        return View();
-                    }
+                    //if (nro_legajo <= 0)
+                    //{
+                    //    ViewBag.Message = "Debe especificar un legajo";
+                    //    return View();
+                    //}
 
 
                     if (novedades.Count() == 0 && cantFelicitaciones == 0)

@@ -185,63 +185,66 @@
                 {
 
                     <div class="row" id="divCabecera" style="margin-bottom:10px;">
-                      <div class="col bottom-buffer">
-                        
-                          <div style="background-color: white ; padding: 2px; border: 1px solid black; text-align:center;">
-                           <img id="logo" src="~/img/logo.png" style="height:40px;vertical-align:middle;"  alt="..."> <span style="vertical-align:auto;">NOVEDADES</span>
-                         </div>
-                       
+                        <div class="col bottom-buffer">
+
+                            <div style="background-color: white ; padding: 2px; border: 1px solid black; text-align:center;">
+                                <img id="logo" src="~/img/logo.png" style="height:40px;vertical-align:middle;"  alt="..."> <span style="vertical-align:auto;">NOVEDADES</span>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="row">
-                      <div class="col bottom-buffer">
-                        <div class="table-responsive">
+                   
+                        <div class="row">
+                            <div class="col bottom-buffer">
+                                <div class="table-responsive">
 
-                    <table id="tablaLegajo" class="table table-bordered table-hover table-condensed">
-                        <thead>
-                            <tr >
-                                <th>Empresa</th>
-                                <th>Nro. Legajo</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Ubicación</th>
-                                <th>Sector/Local</th>
-                                <th>Categoría</th>
-                                <th>F. Ingreso</th>
-                                <th>F. Baja</th>                               
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr >
-                                <td>@legajo.empresa</td>
-                                <td>@legajo.nro_legajo</td>
-                                <td>@legajo.nombre</td>
-                                <td>@legajo.apellido</td>
-                                <td>@legajo.ubicacion</td>
-                                @if (legajo.ubicacion_id.Value==3)
-                                {
-                                   <td>@legajo.local</td>    
-                                }
-                                else
-                                 {
-                                    <td>@legajo.sector</td>
-                                 }
-                                 <td>@legajo.categoria</td>
-                                 <td> @Convert.ToDateTime(@legajo.fecha_alta).ToString("dd/MM/yyyy")</td>
-                                 @if (legajo.fecha_baja!=null){
-                                     <td> @Convert.ToDateTime(@legajo.fecha_baja).ToString("dd/MM/yyyy")</td>
-                                 }
-                                 else
-                                 {
-                                    <td></td>
-                                 }
-                                 
-                                
-                            </tr>
-                        </tbody>
-                    </table>
-                    </div></div></div>
+                                    <table id="tablaLegajo" class="table table-bordered table-hover table-condensed">
+                                        <thead>
+                                            <tr >
+                                                <th>Empresa</th>
+                                                <th>Nro. Legajo</th>
+                                                <th>Nombre</th>
+                                                <th>Apellido</th>
+                                                <th>Ubicación</th>
+                                                <th>Sector/Local</th>
+                                                <th>Categoría</th>
+                                                <th>F. Ingreso</th>
+                                                <th>F. Baja</th>                               
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr >
+                                                <td>@legajo.empresa</td>
+                                                <td>@legajo.nro_legajo</td>
+                                                <td>@legajo.nombre</td>
+                                                <td>@legajo.apellido</td>
+                                                <td>@legajo.ubicacion</td>
+                                                @if (legajo.ubicacion_id.Value == 3)
+                                                {
+                                                    <td>@legajo.local</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@legajo.sector</td>
+                                                }
+                                                <td>@legajo.categoria</td>
+                                                <td> @Convert.ToDateTime(@legajo.fecha_alta).ToString("dd/MM/yyyy")</td>
+                                                @if (legajo.fecha_baja != null)
+                                                {
+                                                    <td> @Convert.ToDateTime(@legajo.fecha_baja).ToString("dd/MM/yyyy")</td>
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
+                                                }
+
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div></div></div>
+                    
                 }
                 @if (@Model != null && Model.Count()>0)
             {
@@ -263,10 +266,13 @@
                                     <thead>
                                        
                                         <tr >
-@*                                            <th>Nro. Legajo</th>
+                                           @if (@legajo == null)
+                                           {
+                                            <th>Nro. Legajo</th>
                                             <th>Apellido</th>
                                             <th>Nombre</th>
-                                            <th>Ubicacion</th>*@
+                                            <th>Ubicacion</th>
+                                            }
                                             <th>Sector/Local</th>
                                             <th>Responsable</th>
                                             <th>F. Novedad</th>
@@ -293,20 +299,23 @@
                                             continue;
                                         }
                                             @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
-*@                                        <tr  >
 
-@*                                                <td>
-                                                    @item.nro_legajo
-                                                </td>
-                                                <td>
-                                                    @item.apellido
-                                                </td>
-                                                <td>
-                                                    @item.nombre
-                                                </td>
-                                                <td>
-                                                    @item.ubicacion
-                                                </td>*@
+*@                                       <tr  >
+                                                 @if (@legajo == null)
+                                                {
+                                                    <td>
+                                                        @item.nro_legajo
+                                                    </td>
+                                                    <td>
+                                                        @item.apellido
+                                                    </td>
+                                                    <td>
+                                                        @item.nombre
+                                                    </td>
+                                                    <td>
+                                                        @item.ubicacion
+                                                    </td>
+                                                }
                                                 <td>
                                                     @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2 || @item.ubicacion_id == 4)
                                                 {
@@ -380,20 +389,20 @@
 
              @if ( (int) total_fel>0)
             {
-                
 
-@*
+
+                    @*
                     <div class="d-flex d-flex justify-content-left">
                        <span id="spanFelicitaciones" style="font-weight: bold; padding-bottom:10px; padding-top:20px;">Felicitaciones</span>
                    </div>*@
 
                     <div class="row" style="margin-bottom:10px;">
                         <div class="col bottom-buffer">
-                             <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
-                             <span style="vertical-align:auto;">FELICITACIONES</span>
-                         </div>
-                       </div>
-                   </div>
+                            <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+                                <span style="vertical-align:auto;">FELICITACIONES</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col bottom-buffer">
@@ -403,10 +412,13 @@
                                 <table id="tablaFelicitaciones" class="table table-bordered table-hover table-condensed">
                                     <thead>
                                         <tr >
-@*                                            <th>Nro. Legajo</th>
-                                            <th>Apellido</th>
-                                            <th>Nombre</th>
-                                            <th>Ubicacion</th>*@
+                                            @if (@legajo == null)
+                                            {
+                                                <th>Nro. Legajo</th>
+                                                <th>Apellido</th>
+                                                <th>Nombre</th>
+                                                <th>Ubicacion</th>
+                                            }
                                             <th>Sector/Local</th>
                                             <th>Responsable</th>
                                             <th>F. Novedad</th>
@@ -424,25 +436,28 @@
                                         @foreach (var item in (IEnumerable<RRHH.Models.Novedad>) fel)
                                     {
 
-                                          @*  @if (item.categoria_novedad_id !=2)
+                                            @*  @if (item.categoria_novedad_id !=2)
                                         {
                                             continue;
                                         }*@
                                             @*                                        <tr style="cursor:pointer; background:@(item.categoria_novedad_id ==1 ? "white" : "lightgreen");"   onclick="location.href = '@(Url.Action("Edit", "Novedad", new { modo="V", id=@item.id }))'">
 *@                                        <tr  >
 
-@*                                                <td>
-                                                    @item.nro_legajo
-                                                </td>
-                                                <td>
-                                                    @item.apellido
-                                                </td>
-                                                <td>
-                                                    @item.nombre
-                                                </td>
-                                                <td>
-                                                    @item.ubicacion
-                                                </td>*@
+                                                @if (@legajo == null)
+                                                {
+                                                    <td>
+                                                        @item.nro_legajo
+                                                    </td>
+                                                    <td>
+                                                        @item.apellido
+                                                    </td>
+                                                    <td>
+                                                        @item.nombre
+                                                    </td>
+                                                    <td>
+                                                        @item.ubicacion
+                                                    </td>
+                                                }
                                                 <td>
                                                     @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2 || @item.ubicacion_id == 4)
                                                 {
