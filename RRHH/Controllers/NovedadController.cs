@@ -156,8 +156,9 @@ namespace RRHH.Controllers
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
             IEnumerable<Models.Novedad> lFelicitaciones;
+            int cantFelicitaciones = 0;
 
-            DateTime? fecha_novedad_desde=null;
+            DateTime ? fecha_novedad_desde=null;
             DateTime? fecha_novedad_hasta=null;
 
             if (HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE")!=null && HttpContext.Session.GetString("FECHA_NOVEDAD_DESDE")!="")
@@ -299,22 +300,30 @@ namespace RRHH.Controllers
                     }
 
                 if (nro_legajo == 0)
-                    if (ViewData["FechaNovedadDesdeActual"] == "" && ViewData["FechaNovedadHastaActual"] == "")
+                    if (ViewData["FechaNovedadDesdeActual"] == "" && ViewData["FechaNovedadHastaActual"] == "" && tipo_resolucion_id!=-2)
                         nro_legajo = -2;
                     else
                         nro_legajo = -1;
 
                 int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
                 ViewData["TOTAL_NOVEDADES"] = cant;
-
-                int cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
-                ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
-
+               
 
                 HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
-                ViewData["FELICITACIONES"] = lFelicitaciones;
+                if (nro_legajo > 0)
+                {
+                    cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                    ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
+
+                    lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido);
+                    ViewData["FELICITACIONES"] = lFelicitaciones;
+                }
+                else
+                {
+                    ViewData["TOTAL_FELICITACIONES"] = 0;
+                    ViewData["FELICITACIONES"] = null;
+                }
 
                 IEnumerable<Novedad> novedades;
 
@@ -628,40 +637,44 @@ namespace RRHH.Controllers
 
                     }
 
-                    l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
-
-                    currentRow += 2;
-                    worksheet.Cell(currentRow, 1).Value = "Felicitaciones";
-                    worksheet.Cell(currentRow, 1).Style.Font.SetBold();
-                    currentRow += 1;
-                    for (int i = 1; i <= 11; i++)
+                    if (nro_legajo > 0)
                     {
-                        worksheet.Cell(currentRow, i).Style.Font.SetBold();
-                    }
-                   
-                    worksheet.Cell(currentRow, 1).Value = "Legajo";
-                    worksheet.Cell(currentRow, 2).Value = "Apellido";
-                    worksheet.Cell(currentRow, 3).Value = "Nombre";
-                    worksheet.Cell(currentRow, 4).Value = "Ubicacion";
-                    worksheet.Cell(currentRow, 5).Value = "Sector";
-                    worksheet.Cell(currentRow, 6).Value = "Responsable";
-                    worksheet.Cell(currentRow, 7).Value = "Fecha Novedad";
-                    worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
-                    worksheet.Cell(currentRow, 9).Value = "Observaciones";
-                    currentRow += 1;
-                    foreach (var item in l)
-                    {
-                        currentRow++;
-                        worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
-                        worksheet.Cell(currentRow, 2).Value = item.apellido;
-                        worksheet.Cell(currentRow, 3).Value = item.nombre;
-                        worksheet.Cell(currentRow, 4).Value = item.ubicacion;
-                        worksheet.Cell(currentRow, 5).Value = item.sector;
-                        worksheet.Cell(currentRow, 6).Value = item.responsable;
-                        worksheet.Cell(currentRow, 7).Value = item.fecha_novedad;
-                        worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
-                        worksheet.Cell(currentRow, 9).Value = item.observacion;
 
+                        l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido);
+
+                        currentRow += 2;
+                        worksheet.Cell(currentRow, 1).Value = "Felicitaciones";
+                        worksheet.Cell(currentRow, 1).Style.Font.SetBold();
+                        currentRow += 1;
+                        for (int i = 1; i <= 11; i++)
+                        {
+                            worksheet.Cell(currentRow, i).Style.Font.SetBold();
+                        }
+
+                        worksheet.Cell(currentRow, 1).Value = "Legajo";
+                        worksheet.Cell(currentRow, 2).Value = "Apellido";
+                        worksheet.Cell(currentRow, 3).Value = "Nombre";
+                        worksheet.Cell(currentRow, 4).Value = "Ubicacion";
+                        worksheet.Cell(currentRow, 5).Value = "Sector";
+                        worksheet.Cell(currentRow, 6).Value = "Responsable";
+                        worksheet.Cell(currentRow, 7).Value = "Fecha Novedad";
+                        worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
+                        worksheet.Cell(currentRow, 9).Value = "Observaciones";
+                        currentRow += 1;
+                        foreach (var item in l)
+                        {
+                            currentRow++;
+                            worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
+                            worksheet.Cell(currentRow, 2).Value = item.apellido;
+                            worksheet.Cell(currentRow, 3).Value = item.nombre;
+                            worksheet.Cell(currentRow, 4).Value = item.ubicacion;
+                            worksheet.Cell(currentRow, 5).Value = item.sector;
+                            worksheet.Cell(currentRow, 6).Value = item.responsable;
+                            worksheet.Cell(currentRow, 7).Value = item.fecha_novedad;
+                            worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
+                            worksheet.Cell(currentRow, 9).Value = item.observacion;
+
+                        }
                     }
 
                     worksheet.Columns().AdjustToContents();
@@ -1008,7 +1021,9 @@ namespace RRHH.Controllers
             }
 
 
+            l.Insert(0, new Models.TipoResolucion(-2, "Sin tipo de resolución"));
             l.Insert(0, new Models.TipoResolucion(-1, "-- Seleccione el tipo de resolución --"));
+            
 
             return Json(new SelectList(l, "id", "descripcion"));
         }
