@@ -603,7 +603,7 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 1).Value = "Sanciones";
                     worksheet.Cell(currentRow, 1).Style.Font.SetBold();
                     currentRow += 1;
-                    for (int i = 1; i <= 11; i++)
+                    for (int i = 1; i <= 14; i++)
                     {
                         worksheet.Cell(currentRow, i).Style.Font.SetBold();
                     }
@@ -617,7 +617,10 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
                     worksheet.Cell(currentRow, 9).Value = "Fecha Resolución";
                     worksheet.Cell(currentRow, 10).Value = "Tipo Resolución";
-                    worksheet.Cell(currentRow, 11).Value = "Observaciones";
+                    worksheet.Cell(currentRow, 11).Value = "Días";
+                    worksheet.Cell(currentRow, 12).Value = "Descripción";
+                    worksheet.Cell(currentRow, 13).Value = "Observación";
+                    worksheet.Cell(currentRow, 14).Value = "Estado";
 
                     foreach (var item in l)
                     {
@@ -632,7 +635,10 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
                         worksheet.Cell(currentRow, 9).Value = item.fecha_resolucion;
                         worksheet.Cell(currentRow, 10).Value = item.tipo_resolucion;
-                        worksheet.Cell(currentRow, 11).Value = item.observacion;
+                        worksheet.Cell(currentRow, 11).Value = item.dias;
+                        worksheet.Cell(currentRow, 12).Value = item.descripcion;
+                        worksheet.Cell(currentRow, 13).Value = item.observacion;
+                        worksheet.Cell(currentRow, 14).Value = item.estado;
 
 
                     }
@@ -659,7 +665,9 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 6).Value = "Responsable";
                         worksheet.Cell(currentRow, 7).Value = "Fecha Novedad";
                         worksheet.Cell(currentRow, 8).Value = "Tipo Novedad";
-                        worksheet.Cell(currentRow, 9).Value = "Observaciones";
+                        worksheet.Cell(currentRow, 9).Value = "Descripción";
+                        worksheet.Cell(currentRow, 10).Value = "Observación";
+                        worksheet.Cell(currentRow, 11).Value = "Estado";
                         currentRow += 1;
                         foreach (var item in l)
                         {
@@ -672,7 +680,9 @@ namespace RRHH.Controllers
                             worksheet.Cell(currentRow, 6).Value = item.responsable;
                             worksheet.Cell(currentRow, 7).Value = item.fecha_novedad;
                             worksheet.Cell(currentRow, 8).Value = item.tipo_novedad;
-                            worksheet.Cell(currentRow, 9).Value = item.observacion;
+                            worksheet.Cell(currentRow, 9).Value = item.descripcion;
+                            worksheet.Cell(currentRow, 10).Value = item.observacion;
+                            worksheet.Cell(currentRow, 11).Value = item.estado;
 
                         }
                     }
