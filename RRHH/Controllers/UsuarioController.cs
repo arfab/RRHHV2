@@ -65,10 +65,23 @@ namespace RRHH.Controllers
 
             HttpContext.Session.SetString("EMPLEADO_ACTUAL", "");
             HttpContext.Session.SetString("FILTRO_ACTUAL", "");
-            //HttpContext.Session.SetString("EMAIL", "");
-            //HttpContext.Session.SetString("ID_ROL", "");
-            //HttpContext.Session.SetString("ROL_CODIGO", "");
-            //HttpContext.Session.SetString("ROL_DESCRIPCION", "");
+
+
+            HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", "");
+            HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", "");
+
+            HttpContext.Session.SetString("EMPRESA_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("LEGAJO_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("APELLIDO_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("UBICACION_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("SECTOR_ACTUAL_LEGAJO", "");
+
+            HttpContext.Session.SetString("EMPLEADO_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetString("FILTRO_ACTUAL_LEGAJO", "");
+            HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", -1);
+
+            HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
+
             return RedirectToAction("Login", "Usuario");
         }
 
@@ -108,6 +121,32 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetInt32("PERFIL_ID", usuario.perfil_id);
                 HttpContext.Session.SetString("PERFIL", usuario.perfil_descripcion);
                 HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", -1);
+
+                HttpContext.Session.SetString("EMPRESA_ACTUAL", "");
+                HttpContext.Session.SetString("LEGAJO_ACTUAL", "");
+                HttpContext.Session.SetString("APELLIDO_ACTUAL", "");
+
+                HttpContext.Session.SetString("CATEGORIA_NOVEDAD_ACTUAL", "");
+                HttpContext.Session.SetString("TIPO_NOVEDAD_ACTUAL", "");
+                HttpContext.Session.SetString("TIPO_RESOLUCION_ACTUAL", "");
+
+                HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", "");
+                HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", "");
+
+                HttpContext.Session.SetString("EMPLEADO_ACTUAL", "");
+                HttpContext.Session.SetString("FILTRO_ACTUAL", "");
+
+                HttpContext.Session.SetString("EMPRESA_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("LEGAJO_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("APELLIDO_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("UBICACION_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("SECTOR_ACTUAL_LEGAJO", "");
+
+                HttpContext.Session.SetString("EMPLEADO_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetString("FILTRO_ACTUAL_LEGAJO", "");
+                HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", -1);
+
+                HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
 
 
