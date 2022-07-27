@@ -88,7 +88,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<Novedad> ObtenerTodos(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido )
+        public IEnumerable<Novedad> ObtenerTodos(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido, int? perfil_id )
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -106,13 +106,14 @@ namespace RRHH.Repository
                 parameter.Add("@apellido", apellido);
                 parameter.Add("@fecha_novedad_desde", (fecha_novedad_desde.Year < 1000) ? null : fecha_novedad_desde);
                 parameter.Add("@fecha_novedad_hasta", (fecha_novedad_hasta.Year < 1000) ? null : fecha_novedad_hasta);
+                parameter.Add("@perfil_id", perfil_id);
 
                 return con.Query<Novedad>("spNovedadObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
             }
 
         }
 
-        public IEnumerable<Novedad> ObtenerPagina(int pag, int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        public IEnumerable<Novedad> ObtenerPagina(int pag, int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido, int? perfil_id)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -131,13 +132,14 @@ namespace RRHH.Repository
                 parameter.Add("@apellido", apellido);
                 parameter.Add("@fecha_novedad_desde", (fecha_novedad_desde.Year < 1000) ? null : fecha_novedad_desde);
                 parameter.Add("@fecha_novedad_hasta", (fecha_novedad_hasta.Year < 1000) ? null : fecha_novedad_hasta);
+                parameter.Add("@perfil_id", perfil_id);
 
                 return con.Query<Novedad>("spNovedadObtenerPag", parameter, commandType: CommandType.StoredProcedure).ToList();
             }
 
         }
 
-        public int ObtenerCantidad(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido)
+        public int ObtenerCantidad(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido, int? perfil_id)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -155,6 +157,7 @@ namespace RRHH.Repository
                 parameter.Add("@apellido", apellido);
                 parameter.Add("@fecha_novedad_desde", (fecha_novedad_desde.Year < 1000) ? null : fecha_novedad_desde);
                 parameter.Add("@fecha_novedad_hasta", (fecha_novedad_hasta.Year < 1000) ? null : fecha_novedad_hasta);
+                parameter.Add("@perfil_id", perfil_id);
 
                 return con.QuerySingle<int>("spNovedadObtenerCantidad", parameter, commandType: CommandType.StoredProcedure);
             }
@@ -163,8 +166,9 @@ namespace RRHH.Repository
 
         public Novedad Obtener(int id)
         {
+            
 
-            using (IDbConnection con = new SqlConnection(strConnectionString))
+             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
@@ -173,8 +177,9 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@id", id);
 
-                return con.QuerySingle<Novedad>("spNovedadObtener", parameter, commandType: CommandType.StoredProcedure);
+                return con.QuerySingleOrDefault<Novedad>("spNovedadObtener", parameter, commandType: CommandType.StoredProcedure);
             }
+           
 
         }
 
