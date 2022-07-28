@@ -893,6 +893,7 @@ $(document).ready(function () {
 
 
 var ObtenerLegajoPorID = function (id) {
+        var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
          $.ajax({
             url: '@Url.Action("ObtenerLegajoPorID","Legajo")',
             type: 'GET',
@@ -905,12 +906,15 @@ var ObtenerLegajoPorID = function (id) {
                 $('#apellido').text(data.apellido);
                 $('#nombre').text(data.nombre);
 
-                if ($('#ubicacion_id').val() == null) {
+              //  if (($('#ubicacion_id').val() == null || $('#ubicacion_id').val() <= 0) && modo=="A") {
+                 if (modo=="A") {
+
                     $('#ubicacion_id').val(data.ubicacion_id);
                     $('#ubicacion_id').change();
                 }
 
                 if ($('#ubicacion_id').val() == 1 || $('#ubicacion_id').val() == 2 || $('#ubicacion_id').val() == 4) {
+                   
                     ObtenerSectores($('#ubicacion_id').val(),data.sector_id);
 
                     $("#divSector").show();
