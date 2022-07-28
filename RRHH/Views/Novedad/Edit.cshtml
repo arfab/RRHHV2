@@ -561,20 +561,21 @@ $(document).ready(function () {
      //});
 
      $("#legajo_id").change(function () {
-
+     
         if ($("#legajo_id").val() > 0) {
              ObtenerLegajoPorID($("#legajo_id").val());
          }
     });
 
      $("#legajo_id").focusout(function () {
-
+          
         if ($("#legajo_id").val() > 0) {
              ObtenerLegajoPorID($("#legajo_id").val());
          }
     });
 
      $("#nro_legajo").change(function () {
+           
          ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
          //habilitar_grabar();     
     });
@@ -627,6 +628,7 @@ $(document).ready(function () {
     });
     
     $("#ubicacion_id").change(function () {
+        
        if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
             ObtenerSectores($("#ubicacion_id").val(),0);
             $("#divSector").show();
@@ -755,6 +757,8 @@ $(document).ready(function () {
 
      var ObtenerUbicaciones = function () {
          var CodUbicacion =@Html.Raw(Json.Serialize(Model.ubicacion_id));
+
+        
          $.ajax({
             url: '@Url.Action("ObtenerUbicaciones","Novedad")',
             type: 'GET',
@@ -900,8 +904,11 @@ var ObtenerLegajoPorID = function (id) {
             success: function (data) {
                 $('#apellido').text(data.apellido);
                 $('#nombre').text(data.nombre);
-                $('#ubicacion_id').val(data.ubicacion_id);
-                $('#ubicacion_id').change();
+
+                if ($('#ubicacion_id').val() == null) {
+                    $('#ubicacion_id').val(data.ubicacion_id);
+                    $('#ubicacion_id').change();
+                }
 
                 if ($('#ubicacion_id').val() == 1 || $('#ubicacion_id').val() == 2 || $('#ubicacion_id').val() == 4) {
                     ObtenerSectores($('#ubicacion_id').val(),data.sector_id);
