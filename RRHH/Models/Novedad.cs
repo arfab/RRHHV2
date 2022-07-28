@@ -55,6 +55,7 @@ namespace RRHH.Models
         public int? local_id { get; set; }
         public string? local { get; set; }
 
+        public string? empresa { get; set; }
 
     }
 }
