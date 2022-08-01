@@ -537,6 +537,28 @@ namespace RRHH.Controllers
         }
 
 
+        [HttpGet]
+        public JsonResult ObtenerPerfilesWeb(string web)
+        {
+            List<Models.PerfilWeb> l = new List<Models.PerfilWeb>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@web", web);
+
+                l = con.Query<Models.PerfilWeb>("spPerfilWebObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.PerfilWeb(-1, "-- Seleccione el perfil --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
 
     }
 }

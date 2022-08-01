@@ -30,6 +30,12 @@
 			   <select name="web_id" id="web_id" data-filter="make" class="filter-make filter form-control"></select>
 			</div>
 
+            
+             <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="perfil_id">Perfil</label>
+			   <select name="perfil_id" id="perfil_id" data-filter="make" class="filter-make filter form-control"></select>
+			</div>
+
           <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
@@ -113,8 +119,14 @@
    
          ObtenerWebs();
 
+         ObtenerPerfiles($("#web_id").val());
+       
  
        });
+
+      $("#web_id").change(function () {
+           ObtenerPerfiles($("#web_id").val());
+     });
 
 
          var ObtenerWebs = function () {
@@ -124,6 +136,7 @@
             data: {
             },
             success: function (data) {
+                $('#web_id').find('option').remove()
                 $(data).each(
                     function (index, item) {            
                           $('#web_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
@@ -133,6 +146,27 @@
             }
       });
     }
+
+     var ObtenerPerfiles = function (web_id) {
+
+             $.ajax({
+                url: '@Url.Action("ObtenerPerfilesWeb","Usuario")',
+                type: 'GET',
+                 data: {
+                web: web_id
+                },
+                success: function (data) {
+                     $('#perfil_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                              $('#perfil_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
     
 
      </script>
