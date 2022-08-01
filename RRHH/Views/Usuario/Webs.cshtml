@@ -12,7 +12,7 @@
 <form asp-controller="Usuario"  method="post" >
  <div class="container">
      <div class="jumbotron text-center Titulo">
-      <h2>Accesos</h2>
+      <h2>Accesos del usuario @ViewData["UsuarioID"]</h2>
     </div>
 
       <center>
@@ -40,6 +40,7 @@
             <div class="col bottom-buffer">
                 <div class="btns2">
                      <button id="btnGrabar" type="submit"  class="btn btn-success" asp-controller="Usuario" asp-action="InsertarWeb"  asp-route-UsuarioID=@ViewData["UsuarioID"]>AGREGAR/MODIFICAR ACCESO</button>
+                     <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Usuario" asp-action="Index">SALIR</a>
                 </div>
             </div>
         </div>
@@ -71,7 +72,7 @@
                      </td>
                     
                       <td>
-                          <button id="btnEliminar" type="submit" asp-action="EliminarWeb"  asp-route-UsuarioID=@ViewData["UsuarioID"] value="" class="btn btn-outline-success"  ><i data-mdb-toggle='tooltip' title='Eliminar' class='bi bi-x-circle'></i></button>
+                          <button id="btnEliminar" type="submit" asp-action="EliminarWeb"  asp-route-UsuarioID=@ViewData["UsuarioID"] asp-route-web=@item.nombre value="" class="btn btn-outline-success"  ><i data-mdb-toggle='tooltip' title='Eliminar' class='bi bi-x-circle'></i></button>
                        </td>
                   
                     </tr>  
@@ -119,7 +120,7 @@
    
          ObtenerWebs();
 
-         ObtenerPerfiles("RRHH");
+         //ObtenerPerfiles("RRHH");
        
  
        });
@@ -139,9 +140,9 @@
                 $('#web_id').find('option').remove()
                 $(data).each(
                     function (index, item) {    
-                        if (item.value=="RRHH")
-                          $('#web_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                         else 
+                        //if (item.value=="RRHH")
+                        //  $('#web_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        // else 
                           $('#web_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                     });
             },

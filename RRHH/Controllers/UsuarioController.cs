@@ -468,21 +468,21 @@ namespace RRHH.Controllers
             IUsuarioRepo usuarioRepo;
 
             usuarioRepo = new UsuarioRepo();
-            
-            usuarioRepo.InsertarWeb(UsuarioID, web_id, perfil_id);
+
+            if (web_id != "-1" && perfil_id >0 )   usuarioRepo.InsertarWeb(UsuarioID, web_id, perfil_id);
 
 
             return RedirectToAction("Webs", "Usuario", new { usuario_id = UsuarioID });
         }
 
         [HttpPost]
-        public IActionResult EliminarWeb(string UsuarioID, string web_id)
+        public IActionResult EliminarWeb(string UsuarioID, string web)
         {
             IUsuarioRepo usuarioRepo;
 
             usuarioRepo = new UsuarioRepo();
 
-            usuarioRepo.EliminarWeb(UsuarioID, web_id);
+            usuarioRepo.EliminarWeb(UsuarioID, web);
 
 
             return RedirectToAction("Webs", "Usuario", new { usuario_id = UsuarioID });
@@ -556,6 +556,8 @@ namespace RRHH.Controllers
 
                 l = con.Query<Models.Web>("select nombre as id, nombre as descripcion from web").ToList();
             }
+
+            l.Insert(0, new Models.Web("-1", "-- Seleccione el sitio --"));
 
             return Json(new SelectList(l, "id", "descripcion"));
 
