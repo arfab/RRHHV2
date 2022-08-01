@@ -9,7 +9,7 @@ namespace RRHH.Repository
         public string Modificar(Usuario usuario);
         public string CambiarClave(Usuario usuario);
         public Usuario ObtenerUsuario(string UsuarioId);
-        public IEnumerable<Usuario> ObtenerUsuarios();
+        public IEnumerable<Usuario> ObtenerUsuarios(int perfil_id);
         public string Eliminar(string UsuarioID);
         public IEnumerable<Perfil> ObtenerPerfiles();
 

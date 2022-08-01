@@ -125,7 +125,7 @@ namespace RRHH.Repository
             return "";
         }
 
-        public IEnumerable<Usuario> ObtenerUsuarios()
+        public IEnumerable<Usuario> ObtenerUsuarios(int perfil_id)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -133,7 +133,10 @@ namespace RRHH.Repository
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
-                return con.Query<Usuario>("spUsuarioObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@perfil_id", perfil_id);
+
+                return con.Query<Usuario>("spUsuarioObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
             }
 
         }

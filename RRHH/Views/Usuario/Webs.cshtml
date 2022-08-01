@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RRHH.Models.Usuario>
+﻿@model IEnumerable<RRHH.Models.Web>
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
 @using Microsoft.AspNetCore.Http
@@ -9,11 +9,10 @@
      var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 }
 
-
 <form asp-controller="Usuario"  method="post" >
  <div class="container">
      <div class="jumbotron text-center Titulo">
-      <h2>Usuarios</h2>
+      <h2>Accesos</h2>
     </div>
 
       <center>
@@ -25,22 +24,21 @@
 
        @if (_perfil_id ==1)
        {
+
+             <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="web_id">WEB</label>
+			   <select name="web_id" id="web_id" data-filter="make" class="filter-make filter form-control"></select>
+			</div>
+
           <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
-                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Usuario" asp-action="Registro">NUEVO USUARIO</a>
+                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Usuario" asp-action="Registro">NUEVO ACCESO</a>
                 </div>
             </div>
         </div>
        }
 
-       @* <div class="d-flex justify-content-center align-items-center container ">
-            <div class="row">
-                <div class="col bottom-buffer badge bg-secondary">
-                    <span id="spanCantidad" class="BarraCantidad">Cantidad  de usuarios: @Model.Count()</span>
-                </div>
-            </div>
-        </div>*@
 
         <div class="row">
             <div class="col bottom-buffer">
@@ -50,9 +48,7 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>Usuario</th>
-                            <th>Nombre</th>
-                            <th>Apellido</td>
+                            <th>Sitio</th>
                             <th>Perfil</td>
                             <th></th>
                         </tr>
@@ -62,30 +58,14 @@
                      {
                      <tr>
                       <td>
-                          @item.UsuarioID
+                          @item.nombre
                      </td>
                       <td>
-                          @item.Nombre
-                     </td>
-                     <td>
-                          @item.Apellido
-                     </td>
-                     <td>
-                          @item.perfil_descripcion
+                          @item.perfil
                      </td>
                     
                       <td>
-                          @if (_perfil_id==1) {
-                            <a asp-controller="Usuario" asp-action="CambiarClave" asp-route-UsuarioId="@item.UsuarioID"><i data-mdb-toggle='tooltip' title='Cambiar Clave'  class='bi bi-file-earmark-lock'></i></a>
-                          }
-                          <a asp-controller="Usuario" asp-action="Edit" asp-route-UsuarioId="@item.UsuarioID"><i data-mdb-toggle='tooltip' title='Editar el Usuario' class='bi bi-pencil-square'></i></a>
-                          @if (_perfil_id == 1)
-                          {
-                              <a onclick="mostrarModalEliminar('@item.UsuarioID');" ><i data-mdb-toggle='tooltip' title='Eliminar el usuario'  class='bi bi-x-circle'></i></a>
-
-                              <a asp-controller="Usuario" asp-action="Webs" asp-route-usuario_id="@item.UsuarioID"><i data-mdb-toggle='tooltip' title='Accesos'  class='bi bi-globe'></i></a>
-
-                           }
+                         <a onclick="mostrarModalEliminar('@item.nombre');" ><i data-mdb-toggle='tooltip' title='Eliminar el usuario'  class='bi bi-x-circle'></i></a>
                        </td>
                   
                     </tr>  
@@ -98,7 +78,7 @@
          </div>
 
          </center>
-
+</form>
 
     <!-- Modal Eliminar Usuario -->
 
@@ -125,13 +105,34 @@
             </div>
         </div>
     </div>
-    </div>
-</form>
 
- <script type="text/javascript">
-    function mostrarModalEliminar(id){
-      $("#hfID").val(id);
-      $("#bReserva").attr('asp-route-id2', id.toString());
-      $("#mdEliminar").modal('show');
-     }
-</script>
+     <script type="text/javascript">
+
+
+       $(document).ready(function() {
+   
+         ObtenerWebs();
+
+ 
+       });
+
+
+         var ObtenerWebs = function () {
+         $.ajax({
+            url: '@Url.Action("ObtenerWebs","Usuario")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $(data).each(
+                    function (index, item) {            
+                          $('#web_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+    
+
+     </script>

@@ -34,7 +34,7 @@ namespace RRHH.Controllers
 
                 usuarioRepo = new UsuarioRepo();
 
-                return View(usuarioRepo.ObtenerUsuarios());
+                return View(usuarioRepo.ObtenerUsuarios(perfil_id.Value));
             }
 
             return RedirectToAction("Login", "Usuario");
@@ -412,6 +412,9 @@ namespace RRHH.Controllers
         [HttpGet]
         public JsonResult ObtenerPerfiles()
         {
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
             List<Models.Perfil> l = new List<Models.Perfil>();
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -424,11 +427,38 @@ namespace RRHH.Controllers
                 l = con.Query<Models.Perfil>("spPerfilObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
             }
 
+            if (perfil_id == 1)
+            {
+                l.Insert(0, new Models.Perfil(99, "Sin perfil en RRHH"));
+            }
 
             l.Insert(0, new Models.Perfil(-1, "-- Seleccione el perfil --"));
 
-            return Json(new SelectList(l, "id", "descripcion"));
+
+            
+                return Json(new SelectList(l, "id", "descripcion"));
         }
+
+        [HttpGet]
+        public IActionResult Webs(string usuario_id)
+        {
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            if (perfil_id == 1 || perfil_id == 2)
+            {
+                IUsuarioRepo usuarioRepo;
+
+                usuarioRepo = new UsuarioRepo();
+
+                return View(usuarioRepo.ObtenerWebs(usuario_id));
+            }
+
+            return RedirectToAction("Login", "Usuario");
+
+
+        }
+
 
 
         public string Get(string key)
@@ -485,6 +515,27 @@ namespace RRHH.Controllers
                 return RedirectToAction("Login", "Usuario");
 
         }
+
+        [HttpGet]
+        public JsonResult ObtenerWebs()
+        {
+            List<Models.Web> l = new List<Models.Web>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                l = con.Query<Models.Web>("select nombre as id, nombre as descripcion from web").ToList();
+            }
+
+
+            return Json(new SelectList(l, "id", "descripcion"));
+
+
+        }
+
 
 
     }
