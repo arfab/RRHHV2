@@ -16,6 +16,8 @@ namespace RRHH.Repository
         public string ActalizarGUID(string usuario_id, string sitio_web, string guid);
         public Usuario LoginPorGuid(string sitio_web, string guid);
         public IEnumerable<Web> ObtenerWebs(string usuario_id);
+        public string InsertarWeb(string UsuarioID, string web, int perfil_id);
+        public string EliminarWeb(string UsuarioID, string web);
 
 
     }

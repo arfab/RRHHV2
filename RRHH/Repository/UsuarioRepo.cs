@@ -259,6 +259,51 @@ namespace RRHH.Repository
         }
 
 
+
+        public string InsertarWeb(string UsuarioID, string web, int perfil_id)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@UsuarioID", UsuarioID);
+                parameters.Add("@web", web);
+                parameters.Add("@perfil_id", perfil_id);
+
+
+                icantFilas = con.Execute("spUsuarioWebInsertar", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
+        }
+
+
+        public string EliminarWeb(string UsuarioID, string web)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@UsuarioID", UsuarioID);
+                parameters.Add("@web", web);
+
+
+                icantFilas = con.Execute("spUsuarioWebEliminar", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
+        }
+
     }
 }
 

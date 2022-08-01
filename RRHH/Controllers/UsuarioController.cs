@@ -451,6 +451,8 @@ namespace RRHH.Controllers
 
                 usuarioRepo = new UsuarioRepo();
 
+                ViewData["UsuarioID"] = usuario_id;
+
                 return View(usuarioRepo.ObtenerWebs(usuario_id));
             }
 
@@ -460,6 +462,31 @@ namespace RRHH.Controllers
         }
 
 
+        [HttpPost]
+        public IActionResult InsertarWeb(string UsuarioID, string web_id, int perfil_id )
+        {
+            IUsuarioRepo usuarioRepo;
+
+            usuarioRepo = new UsuarioRepo();
+            
+            usuarioRepo.InsertarWeb(UsuarioID, web_id, perfil_id);
+
+
+            return RedirectToAction("Webs", "Usuario", new { usuario_id = UsuarioID });
+        }
+
+        [HttpPost]
+        public IActionResult EliminarWeb(string UsuarioID, string web_id)
+        {
+            IUsuarioRepo usuarioRepo;
+
+            usuarioRepo = new UsuarioRepo();
+
+            usuarioRepo.EliminarWeb(UsuarioID, web_id);
+
+
+            return RedirectToAction("Webs", "Usuario", new { usuario_id = UsuarioID });
+        }
 
         public string Get(string key)
         {
@@ -530,7 +557,6 @@ namespace RRHH.Controllers
                 l = con.Query<Models.Web>("select nombre as id, nombre as descripcion from web").ToList();
             }
 
-
             return Json(new SelectList(l, "id", "descripcion"));
 
 
@@ -556,7 +582,7 @@ namespace RRHH.Controllers
 
             l.Insert(0, new Models.PerfilWeb(-1, "-- Seleccione el perfil --"));
 
-            return Json(new SelectList(l, "id", "descripcion"));
+            return Json(new SelectList(l, "perfil_id", "descripcion"));
         }
 
 

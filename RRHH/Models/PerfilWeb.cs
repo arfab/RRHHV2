@@ -17,5 +17,7 @@
 
         public string descripcion { get; set; }
 
+        public int perfil_id { get; set; }
+
     }
 }

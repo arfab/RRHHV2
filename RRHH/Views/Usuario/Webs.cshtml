@@ -39,7 +39,7 @@
           <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
-                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Usuario" asp-action="Registro">NUEVO ACCESO</a>
+                     <button id="btnGrabar" type="submit"  class="btn btn-success" asp-controller="Usuario" asp-action="InsertarWeb"  asp-route-UsuarioID=@ViewData["UsuarioID"]>AGREGAR/MODIFICAR ACCESO</button>
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
                      </td>
                     
                       <td>
-                         <a onclick="mostrarModalEliminar('@item.nombre');" ><i data-mdb-toggle='tooltip' title='Eliminar el usuario'  class='bi bi-x-circle'></i></a>
+                          <button id="btnEliminar" type="submit" asp-action="EliminarWeb"  asp-route-UsuarioID=@ViewData["UsuarioID"] value="" class="btn btn-outline-success"  ><i data-mdb-toggle='tooltip' title='Eliminar' class='bi bi-x-circle'></i></button>
                        </td>
                   
                     </tr>  
@@ -119,7 +119,7 @@
    
          ObtenerWebs();
 
-         ObtenerPerfiles($("#web_id").val());
+         ObtenerPerfiles("RRHH");
        
  
        });
@@ -138,7 +138,10 @@
             success: function (data) {
                 $('#web_id').find('option').remove()
                 $(data).each(
-                    function (index, item) {            
+                    function (index, item) {    
+                        if (item.value=="RRHH")
+                          $('#web_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                         else 
                           $('#web_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                     });
             },
