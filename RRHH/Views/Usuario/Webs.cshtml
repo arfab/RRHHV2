@@ -72,8 +72,10 @@
                      </td>
                     
                       <td>
-                          <button id="btnEliminar" type="submit" asp-action="EliminarWeb"  asp-route-UsuarioID=@ViewData["UsuarioID"] asp-route-web=@item.nombre value="" class="btn btn-outline-success"  ><i data-mdb-toggle='tooltip' title='Eliminar' class='bi bi-x-circle'></i></button>
-                       </td>
+                          <a onclick="mostrarModalEliminar('@ViewData["UsuarioID"]','@item.nombre');" ><i data-mdb-toggle='tooltip' title='Eliminar el usuario'  class='bi bi-x-circle'></i></a>
+
+@*                          <button id="btnEliminar" type="submit" asp-action="EliminarWeb"  asp-route-UsuarioID=@ViewData["UsuarioID"] asp-route-web=@item.nombre value="" class="btn btn-outline-success"  ><i data-mdb-toggle='tooltip' title='Eliminar' class='bi bi-x-circle'></i></button>
+*@                       </td>
                   
                     </tr>  
                     
@@ -85,7 +87,7 @@
          </div>
 
          </center>
-</form>
+
 
     <!-- Modal Eliminar Usuario -->
 
@@ -100,11 +102,12 @@
 
 
                         <div class="modal-body">
-                            Se eliminará el usuario con todos sus datos. Está seguro?
-                             <input id="hfID" name="hfID" type="hidden" >
+                            Se eliminará el acceso. Está seguro?
+                             <input id="hfUID" name="hfUID" type="hidden" >
+                             <input id="hfWEB" name="hfWEB" type="hidden" >
                         </div>
                         <div class="modal-footer">
-                             <button id="btnEliminar" type="submit" asp-action="Delete"  value="" class="btn btn-outline-success"  >SI</button>
+                             <button id="btnEliminar" type="submit" asp-action="EliminarWeb"  value="" class="btn btn-outline-success"  >SI</button>
                              <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
                         </div>
           
@@ -171,6 +174,16 @@
           });
         }
 
-    
+   
 
      </script>
+</form>
+
+ <script type="text/javascript">
+    function mostrarModalEliminar(uid, web){
+      $("#hfUID").val(uid);
+      $("#hfWEB").val(web);
+      $("#mdEliminar").modal('show');
+     }
+</script>
+

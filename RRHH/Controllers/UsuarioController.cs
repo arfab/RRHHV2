@@ -475,17 +475,32 @@ namespace RRHH.Controllers
             return RedirectToAction("Webs", "Usuario", new { usuario_id = UsuarioID });
         }
 
+        //[HttpPost]
+        //public IActionResult EliminarWeb(string UsuarioID, string web)
+        //{
+        //    IUsuarioRepo usuarioRepo;
+
+        //    usuarioRepo = new UsuarioRepo();
+
+        //    usuarioRepo.EliminarWeb(UsuarioID, web);
+
+
+        //    return RedirectToAction("Webs", "Usuario", new { usuario_id = UsuarioID });
+        //}
+
         [HttpPost]
-        public IActionResult EliminarWeb(string UsuarioID, string web)
+        public IActionResult EliminarWeb(string hfUID, string hfWEB)
         {
+
             IUsuarioRepo usuarioRepo;
 
             usuarioRepo = new UsuarioRepo();
 
-            usuarioRepo.EliminarWeb(UsuarioID, web);
+            usuarioRepo.EliminarWeb(hfUID, hfWEB);
 
 
-            return RedirectToAction("Webs", "Usuario", new { usuario_id = UsuarioID });
+            return RedirectToAction("Webs", "Usuario", new { usuario_id = hfUID });
+
         }
 
         public string Get(string key)
