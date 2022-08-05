@@ -12,7 +12,7 @@ namespace RRHH.Models
         public string UsuarioID { get; set; }
 
         [Required(ErrorMessage = "El campo es requerido")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", ErrorMessage = "Al menos 8 caracteres, 1 mayúscula, 1 minúscula y 1 número.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z.\d]{8,}$", ErrorMessage = "Al menos 8 caracteres, 1 mayúscula, 1 minúscula y 1 número.")]
         public string clave { get; set; }
 
         [Required(ErrorMessage = "El campo es requerido")]
