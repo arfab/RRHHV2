@@ -52,7 +52,7 @@ namespace RRHH.Repository
                     else
                         item.estado = "OK";
 
-                    if (item.tipo1=="E" && item.tipo2=="S")
+                    if (item.tipo1=="E" && (item.tipo2=="S" || item.tipo2=="E"))
                     {
                         item.hora_entrada_1 = item.lec1;
                         item.hora_salida_1 = item.lec2;
@@ -66,7 +66,7 @@ namespace RRHH.Repository
 
                         TimeSpan? span2=null;
 
-                        if (item.tipo3 == "E" && item.tipo4 == "S")
+                        if (item.tipo3 == "E" && (item.tipo4 == "S" || item.tipo4 == "E" && item.tipo5 == null))
                         {
 
                             item.hora_entrada_2 = item.lec3;
@@ -106,8 +106,9 @@ namespace RRHH.Repository
                             item.tipo2 == "S" && item.tipo1 != "E")
                         {
                             if (item.tipo1 == "E")
+                            {
                                 item.hora_entrada_1 = item.lec1;
-
+                            }
                             item.estado = "ERR";
                         }
 

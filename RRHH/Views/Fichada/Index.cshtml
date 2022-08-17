@@ -295,7 +295,7 @@
 
        ObtenerUbicaciones();
 
-       if (CodUbicacion== 1 || CodUbicacion == 2) {
+       if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
             ObtenerSectores(CodUbicacion);
         }
         else {
@@ -349,7 +349,7 @@
     $("#ubicacion_id").change(function () {
           var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
 
-       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2) {
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
             ObtenerSectores($("#ubicacion_id").val());
         }
         else {
