@@ -143,7 +143,7 @@ namespace RRHH.Controllers
                 if (legajo != null)
                 {
                     nro_legajo = legajo.nro_legajo.Value;
-
+                    empresa_id = legajo.empresa_id.Value;
                     ViewData["LegajoActual"] = legajo.nro_legajo;
                     ViewData["Legajo"] = legajo;
                 }
