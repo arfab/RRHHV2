@@ -37,7 +37,7 @@ namespace RRHH.Repository
                 IEnumerable<Fichada> lFichadas;
                 lFichadas = con.Query<Fichada>("spFichadaAgrupadaObtener", parameter, commandType: CommandType.StoredProcedure).ToList();
 
-                foreach(Fichada item in lFichadas)
+                foreach (Fichada item in lFichadas)
                 {
 
 
@@ -52,7 +52,30 @@ namespace RRHH.Repository
                     else
                         item.estado = "OK";
 
-                    if (item.tipo1=="E" && (item.tipo2=="S" || item.tipo2=="E"))
+
+                    if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null)
+                    {
+                        item.hora_entrada_1 = item.lec1;
+                        item.hora_salida_1 = item.lec2;
+                        item.hora_entrada_2 = item.lec3;
+                        item.hora_salida_2 = item.lec4;
+
+                        DateTime entrada1 = DateTime.Parse(item.lec1);
+                        DateTime salida1 = DateTime.Parse(item.lec2);
+
+                        TimeSpan span1 = salida1.Subtract(entrada1);
+
+                        DateTime entrada2 = DateTime.Parse(item.lec3);
+                        DateTime salida2 = DateTime.Parse(item.lec4);
+
+                        TimeSpan span2 = salida2.Subtract(entrada2);
+                        span1 += span2;
+                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
+
+
+                    }
+                    else if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 == null)
                     {
                         item.hora_entrada_1 = item.lec1;
                         item.hora_salida_1 = item.lec2;
@@ -62,63 +85,59 @@ namespace RRHH.Repository
 
                         TimeSpan span1 = salida1.Subtract(entrada1);
 
-                     
 
-                        TimeSpan? span2=null;
+                        DateTime entradaAux = DateTime.Parse(item.lec2);
+                        DateTime salidaAux = DateTime.Parse(item.lec3);
 
-                        if (item.tipo3 == "E" && (item.tipo4 == "S" || item.tipo4 == "E" && item.tipo5 == null))
-                        {
+                        TimeSpan spanAux = salidaAux.Subtract(entradaAux);
 
+                        if (spanAux.Hours < 2)
                             item.hora_entrada_2 = item.lec3;
-                            item.hora_salida_2 = item.lec4;
-
-
-                            DateTime entrada2 = DateTime.Parse(item.lec3);
-                            DateTime salida2 = DateTime.Parse(item.lec4);
-
-                            span2 = salida2.Subtract(entrada2);
-
-
-                        }
                         else
-                        {
-                            if (item.tipo3 == "E" && item.tipo4 != "S" ||
-                                item.tipo4 == "S" && item.tipo3 != "E")
-                            {
-                                item.estado = "ERR";
-                            }
-
-                        }
-
-                        if (span2!=null)
-                        {
-                            span1 += span2.Value;
-                        }
+                            item.hora_salida_2 = item.lec3;
 
                         item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
+                        item.estado = "ERR";
+
+                    }
+                    else if (item.tipo1 != null && item.tipo2 != null && item.tipo3 == null && item.tipo4 == null)
+                    {
+                        item.hora_entrada_1 = item.lec1;
+                        item.hora_salida_1 = item.lec2;
+
+                        DateTime entrada1 = DateTime.Parse(item.lec1);
+                        DateTime salida1 = DateTime.Parse(item.lec2);
+
+                        TimeSpan span1 = salida1.Subtract(entrada1);
+
+
+                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
+
+                    }
+                    else if (item.tipo1 != null && item.tipo2 == null && item.tipo3 == null && item.tipo4 == null)
+                    {
+                        if (item.tipo1 == "E")
+                            item.hora_entrada_1 = item.lec1;
+                        else
+                            item.hora_salida_1 = item.lec1;
+
+                        item.estado = "ERR";
 
                     }
 
                     else
                     {
-                        if (item.tipo1!=null && item.tipo1!="E" || 
-                            item.tipo1 == "E" && item.tipo2 != "S" ||
-                            item.tipo2 == "S" && item.tipo1 != "E")
-                        {
-                            if (item.tipo1 == "E")
-                            {
-                                item.hora_entrada_1 = item.lec1;
-                            }
-                            item.estado = "ERR";
-                        }
-
+                        item.estado = "ERR";
                     }
 
-                   
+                  
 
                 }
 
                 return lFichadas;
+                
             }
 
         }
