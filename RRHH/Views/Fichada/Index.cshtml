@@ -184,6 +184,7 @@
                                             @if (@legajo == null) {
                                                <th>Empleado</th>
                                             }
+                                            <th>Lectora</th>
                                             <th>Dia</th>
                                             <th>Fecha</th>
                                             <th>Hora Entrada</th>
@@ -221,6 +222,9 @@
                                                 @if (@legajo == null) {
                                                  <th>@item.empleado</th>
                                                 }
+                                                <td>
+                                                  @item.lectora
+                                                </td>
                                                 <td>
                                                   @item.DiaSemana()
                                                 </td>

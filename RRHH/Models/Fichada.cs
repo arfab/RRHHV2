@@ -36,6 +36,8 @@
 
         public string? empleado { get; set; }
 
+        public string? lectora { get; set; }
+
         public string DiaSemana()
         {
             switch (fecha.Value.DayOfWeek)
