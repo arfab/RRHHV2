@@ -212,11 +212,11 @@ namespace RRHH.Controllers
 
                 if (desde == "busqueda")
                 {
-                    if (nro_legajo <= 0)
+                    if (empresa_id <= 0)
                     {
                         if (fechaDesde.Year < 2000 || fechaHasta.Year < 2000 || fechaDesde != fechaHasta)
                         {
-                            ViewBag.Message = "El rango de fechas debe ser de un dia si no se especifica el legajo";
+                            ViewBag.Message = "El rango de fechas debe ser de un dia si no se especifica la empresa";
                             return View();
                         }
                     }
