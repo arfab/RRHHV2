@@ -202,9 +202,9 @@ namespace RRHH.Controllers
 
                 TimeSpan span1 = fechaHasta.Subtract(fechaDesde);
                 
-                if (span1.Days>31)
+                if (nro_legajo <=0 && span1.Days>31)
                 {
-                    ViewBag.Message = "El rango de fechas debe ser 31 dias como máximo";
+                    ViewBag.Message = "El rango de fechas debe ser 31 dias como maximo";
                     return View();
                 }
 
