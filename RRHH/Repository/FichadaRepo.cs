@@ -42,6 +42,59 @@ namespace RRHH.Repository
 
                     // Ver fichadas dobles
 
+                    String[] vLectura = new String[6];
+                    String[] vTipo = new String[6];
+                    vLectura[0] = item.lec1;
+                    vLectura[1] = item.lec2;
+                    vLectura[2] = item.lec3;
+                    vLectura[3] = item.lec4;
+                    vLectura[4] = item.lec5;
+                    vLectura[5] = item.lec6;
+                    vTipo[0] = item.tipo1;
+                    vTipo[1] = item.tipo2;
+                    vTipo[2] = item.tipo3;
+                    vTipo[3] = item.tipo4;
+                    vTipo[4] = item.tipo5;
+                    vTipo[5] = item.tipo6;
+
+                    for (int i=0; i < 5; i++)
+                    {
+                        if (vLectura[i] == null || vLectura[i + 1] == null ||  vLectura[i] == "" || vLectura[i+1] == "") continue;
+
+                        var dif = (DateTime.Parse(vLectura[i+1]) - DateTime.Parse(vLectura[i])).TotalSeconds;
+                        if (dif < 200)
+                        {
+                            for (int j = i; j < 5; j++)
+                            {
+                                if (vLectura[j] != null)
+                                {
+                                    vLectura[j] = vLectura[j + 1];
+                                    vTipo[j] = vTipo[j + 1];
+                                }
+                               
+                            }
+                            vLectura[5] = "";
+                            vTipo[5] = "";
+                            i = 0;
+                        }
+
+                    }
+
+                    item.lec1 = vLectura[0]==""?null:vLectura[0];
+                    item.lec2 = vLectura[1] == "" ? null : vLectura[1];
+                    item.lec3 = vLectura[2] == "" ? null : vLectura[2];
+                    item.lec4 = vLectura[3] == "" ? null : vLectura[3];
+                    item.lec5 = vLectura[4] == "" ? null : vLectura[4];
+                    item.lec6 = vLectura[5] == "" ? null : vLectura[5];
+
+                    item.tipo1 = vTipo[0] == "" ? null : vTipo[0];
+                    item.tipo2 = vTipo[1] == "" ? null : vTipo[1];
+                    item.tipo3 = vTipo[2] == "" ? null : vTipo[2];
+                    item.tipo4 = vTipo[3] == "" ? null : vTipo[3];
+                    item.tipo5 = vTipo[4] == "" ? null : vTipo[4];
+                    item.tipo6 = vTipo[5] == "" ? null : vTipo[5];
+
+
                     if (item.lec1 != null && item.lec2 != null)
                     {
                         var difLec = (DateTime.Parse(item.lec2) - DateTime.Parse(item.lec1)).TotalSeconds;
