@@ -385,6 +385,20 @@ namespace RRHH.Controllers
                 {
                     var worksheet = workbook.Worksheets.Add("Legajos");
 
+                    Legajo legajo = new Legajo();
+                    ILegajoRepo legajoRepo;
+                    legajoRepo = new LegajoRepo();
+
+                    legajo = legajoRepo.Obtener(legajo_id);
+
+
+                    if (legajo != null)
+                    {
+                        nro_legajo = legajo.nro_legajo.Value;
+                        empresa_id = legajo.empresa_id.Value;
+                    }
+
+
                     IEnumerable<Fichada> fichadas;
                     IFichadaRepo fichadaRepo;
 
