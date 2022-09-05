@@ -40,7 +40,82 @@ namespace RRHH.Repository
                 foreach (Fichada item in lFichadas)
                 {
 
+                    // Ver fichadas dobles
 
+                    if (item.lec1 != null && item.lec2 != null)
+                    {
+                        var difLec = (DateTime.Parse(item.lec2) - DateTime.Parse(item.lec1)).TotalSeconds;
+
+                        if (difLec< 200)
+                        {
+                            item.lec2 = item.lec3;
+                            item.lec3 = item.lec4;
+                            item.lec4 = item.lec5;
+                            item.lec5 = item.lec6;
+                            item.lec6 = null;
+                            item.tipo2 = item.tipo3;
+                            item.tipo3 = item.tipo4;
+                            item.tipo4 = item.tipo5;
+                            item.tipo5 = item.tipo6;
+                            item.tipo6 = null;
+                        }
+                    }
+
+                    if (item.lec2 != null && item.lec3 != null)
+                    {
+                        var difLec = (DateTime.Parse(item.lec3) - DateTime.Parse(item.lec2)).TotalSeconds;
+
+                        if (difLec < 200)
+                        {
+                            item.lec3 = item.lec4;
+                            item.lec4 = item.lec5;
+                            item.lec5 = item.lec6;
+                            item.lec6 = null;
+                            item.tipo3 = item.tipo4;
+                            item.tipo4 = item.tipo5;
+                            item.tipo5 = item.tipo6;
+                            item.tipo6 = null;
+                        }
+                    }
+
+                    if (item.lec3 != null && item.lec4 != null)
+                    {
+                        var difLec = (DateTime.Parse(item.lec4) - DateTime.Parse(item.lec3)).TotalSeconds;
+
+                        if (difLec < 200)
+                        {
+                            item.lec4 = item.lec5;
+                            item.lec5 = item.lec6;
+                            item.lec6 = null;
+                            item.tipo4 = item.tipo5;
+                            item.tipo5 = item.tipo6;
+                            item.tipo6 = null;
+                        }
+                    }
+
+                    if (item.lec4 != null && item.lec5 != null)
+                    {
+                        var difLec = (DateTime.Parse(item.lec5) - DateTime.Parse(item.lec4)).TotalSeconds;
+
+                        if (difLec < 200)
+                        {
+                            item.lec5 = item.lec6;
+                            item.lec6 = null;
+                            item.tipo5 = item.tipo6;
+                            item.tipo6 = null;
+                        }
+                    }
+
+                    if (item.lec5 != null && item.lec6 != null)
+                    {
+                        var difLec = (DateTime.Parse(item.lec6) - DateTime.Parse(item.lec5)).TotalSeconds;
+
+                        if (difLec < 200)
+                        {
+                            item.lec6 = null;
+                            item.tipo6 = null;
+                        }
+                    }
 
                     if (item.tipo1 == null)
                     {
