@@ -204,7 +204,8 @@ namespace RRHH.Repository
 
                     else
                     {
-                        item.estado = "ERR";
+                        if (item.estado!="NO")
+                            item.estado = "ERR";
                     }
 
                   
