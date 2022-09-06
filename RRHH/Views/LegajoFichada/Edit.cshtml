@@ -55,7 +55,9 @@
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
-                     <button id="btnGrabar" type="submit" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] value="" class="btn btn-outline-success"   >Grabar</button>
+                      <button id="btnGrabar" type="submit" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] value="" class="btn btn-outline-success"   >Grabar</button>
+                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalEliminar();" >Eliminar</a>
+                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalRestaurar();" >Restaurar</a>
                 </div>
             </div>
    
@@ -83,14 +85,50 @@
   </div>
 </div>
 
+<!-- Modal Eliminar -->
+<div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Fichadas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se eliminarán los datos de la fichada en este día. Está seguro?
+      </div>
+      <div class="modal-footer">
+        <a asp-action="Delete" asp-controller="LegajoFichada" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-fecha=@ViewData["FECHA"] class="btn btn-outline-success"  Text="SI">SI</a>
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Modal Restaurar -->
+<div class="modal fade" id="mdRestaurar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Fichadas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se restaurarán los datos de la fichada. Está seguro?
+      </div>
+      <div class="modal-footer">
+        <a asp-action="Restaurar" asp-controller="LegajoFichada" asp-route-id=@ViewData["ID"] class="btn btn-outline-success"  Text="SI">SI</a>
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal Salir -->
 <div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" >Sector</h5>
+        <h5 class="modal-title" >Fichadas</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -103,7 +141,7 @@
     </div>
   </div>
 </div>
-</div>
+
  </form>
 
 
@@ -125,6 +163,15 @@ function mostrarModalSalida(){
 }
 function mostrarModalGrabar(){
     $("#mdGrabar").modal('show');
+}
+
+function mostrarModalEliminar(){
+    $("#mdEliminar").modal('show');
+}
+
+
+function mostrarModalRestaurar(){
+    $("#mdRestaurar").modal('show');
 }
 
  $(function () {

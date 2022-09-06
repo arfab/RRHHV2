@@ -31,8 +31,11 @@ namespace RRHH.Controllers
 
             legajoFichada = legajoFichadaRepo.ObtenerPorLegajo(legajo_id,fecha);
 
+            ViewData["FECHA"] = fecha;
             ViewData["LEGAJO_ID"] = legajo_id;
             ViewData["LECTORA_ID"] = lectora_id;
+
+            if (legajoFichada!=null) ViewData["ID"] = legajoFichada.id;
 
             return View(legajoFichada);
 
@@ -85,23 +88,68 @@ namespace RRHH.Controllers
             return View(legajoFichada);
         }
 
-        public IActionResult Delete(int hfID)
+        public IActionResult Delete(int legajo_id, String fecha)
         {
 
-            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
-            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+            string sret;
+            ILegajoFichadaRepo legajoFichadaRepo;
+            LegajoFichada legajoFichada = new LegajoFichada();
 
+            legajoFichadaRepo = new LegajoFichadaRepo();
+
+            legajoFichada.legajo_id = legajo_id;
+
+            legajoFichada.fecha = DateTime.Parse(fecha);
+
+            legajoFichada.entrada_1 = null;
+            legajoFichada.salida_1 = null;
+            legajoFichada.entrada_2 = null;
+            legajoFichada.salida_2 = null;
+
+            sret = legajoFichadaRepo.Insertar(legajoFichada);
+
+            if (sret == "")
+            {
+
+                return RedirectToAction("Index", "Fichada");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+            }
+
+            //}
+
+            return View(legajoFichada);
+
+        }
+
+
+        public IActionResult Restaurar(int id)
+        {
+
+            string sret;
             ILegajoFichadaRepo legajoFichadaRepo;
 
             legajoFichadaRepo = new LegajoFichadaRepo();
 
+            sret = legajoFichadaRepo.Eliminar(id);
 
-            legajoFichadaRepo.Eliminar(hfID);
+            if (sret == "")
+            {
+
+                return RedirectToAction("Index", "Fichada");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+            }
 
 
-            return RedirectToAction("Index");
+            return View();
 
         }
+
 
     }
 }

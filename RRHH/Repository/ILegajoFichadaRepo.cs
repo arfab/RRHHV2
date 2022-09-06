@@ -9,7 +9,7 @@ namespace RRHH.Repository
         public LegajoFichada Obtener(int iID);
         public LegajoFichada ObtenerPorLegajo(int legajo_id, String fecha);
         public IEnumerable<LegajoFichada> ObtenerTodos();
-        public string Eliminar(int iId);
+        public string Eliminar(int iID);
 
     }
 }

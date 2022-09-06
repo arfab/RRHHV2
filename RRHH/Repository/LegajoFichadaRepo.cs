@@ -69,6 +69,7 @@ namespace RRHH.Repository
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
+               
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@id", iID);
