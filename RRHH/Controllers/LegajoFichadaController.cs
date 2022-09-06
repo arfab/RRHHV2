@@ -53,9 +53,9 @@ namespace RRHH.Controllers
         public IActionResult Edit(string modo, int legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2)
         {
 
-            string sret;
             ILegajoFichadaRepo legajoFichadaRepo;
             LegajoFichada legajoFichada = new LegajoFichada();
+            string sret;
 
             //if (ModelState.IsValid)
             //{
