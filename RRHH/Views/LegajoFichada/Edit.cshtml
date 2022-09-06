@@ -19,35 +19,35 @@
              <div class="row ">
             <div class="col bottom-buffer btns2" id="divFechaNovedad">
                       <label asp-for="fecha" class="control-label">Fecha</label><br />
-                      <input type="text" id="txtSelectedFecha" name="fecha"  asp-for="fecha" readonly="readonly"/>
+                      <input type="text" id="txtSelectedFecha" name="txtSelectedFecha"  asp-for="fecha" readonly="readonly"/>
 
              </div>
              </div> 
             <div class="row ">
                 <div class="col bottom-buffer">
                   <label asp-for="entrada_1" class="control-label">Entrada 1</label>
-                  <input asp-for="entrada_1" class="form-control" />
+                  <input type="time" asp-for="entrada_1" class="form-control" />
                 </div>
             </div>                       
 
              <div class="row ">
                 <div class="col bottom-buffer">
                   <label asp-for="salida_1" class="control-label">Salida 1</label>
-                  <input asp-for="salida_1" class="form-control" />
+                  <input type="time" asp-for="salida_1" class="form-control" />
                 </div>
             </div>      
             
             <div class="row ">
                 <div class="col bottom-buffer">
                   <label asp-for="entrada_2" class="control-label">Entrada 2</label>
-                  <input asp-for="entrada_2" class="form-control" />
+                  <input type="time" asp-for="entrada_2" class="form-control" />
                 </div>
             </div>                       
 
              <div class="row ">
                 <div class="col bottom-buffer">
                   <label asp-for="salida_2" class="control-label">Salida 2</label>
-                  <input asp-for="salida_2" class="form-control" />                
+                  <input type="time" asp-for="salida_2" class="form-control" />                
                  </div>
             </div>    
 
@@ -147,13 +147,14 @@
 
  <script type="text/javascript">
 
+$(document).ready(function () {
+       
+        $('#txtSelectedFecha').datepicker({format: 'dd/mm/yyyy' });
 
-//function HabilitarGrabar() {
-//    if ($("#items").val()!="" && $("#cliente_id").val()!=0) 
-//      $("#btnGrabar").show();
-//    else
-//     $("#btnGrabar").hide(); 
-//}
+        //if(Fecha==null) $('#txtSelectedFecha').datepicker('setDate', "-0d");
+        
+
+   })
 
 function mostrarModalSalida(){
     if ($("#btnGrabar").is(":visible"))
@@ -175,10 +176,10 @@ function mostrarModalRestaurar(){
 }
 
  $(function () {
-      $('#txtSelectedFechad').datepicker({
+      $('#txtSelectedFecha').datepicker({
         changeMonth: true,
         changeYear: true,
-        format: "dd/mm/yyyy",
+        format: 'DD/MM/YYYY',
         language: "es"
         });
      });

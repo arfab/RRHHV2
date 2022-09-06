@@ -9,8 +9,8 @@ namespace RRHH.Models
 
         public int legajo_id { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy}", ApplyFormatInEditMode = false)]
+        [DataType(DataType.Text)]
         public DateTime fecha { get; set; }
 
         public int lectora_id { get; set; }

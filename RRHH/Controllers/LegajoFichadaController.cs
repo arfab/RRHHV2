@@ -29,13 +29,18 @@ namespace RRHH.Controllers
 
             LegajoFichada legajoFichada = new LegajoFichada();
 
-            legajoFichada = legajoFichadaRepo.ObtenerPorLegajo(legajo_id,fecha);
+            fecha = DateTime.Parse(fecha).ToString("dd/MM/yyyy");
+
+            legajoFichada = legajoFichadaRepo.ObtenerPorLegajo(legajo_id, fecha);
 
             ViewData["FECHA"] = fecha;
             ViewData["LEGAJO_ID"] = legajo_id;
             ViewData["LECTORA_ID"] = lectora_id;
 
-            if (legajoFichada!=null) ViewData["ID"] = legajoFichada.id;
+            if (legajoFichada != null)
+            {
+                ViewData["ID"] = legajoFichada.id;
+              }
 
             return View(legajoFichada);
 
