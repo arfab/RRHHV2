@@ -62,7 +62,7 @@ namespace RRHH.Repository
                         if (vLectura[i] == null || vLectura[i + 1] == null ||  vLectura[i] == "" || vLectura[i+1] == "") continue;
 
                         var dif = (DateTime.Parse(vLectura[i+1]) - DateTime.Parse(vLectura[i])).TotalSeconds;
-                        if (dif < 200)
+                        if (dif < 120)
                         {
                             for (int j = i; j < 5; j++)
                             {
@@ -99,7 +99,7 @@ namespace RRHH.Repository
                     //{
                     //    var difLec = (DateTime.Parse(item.lec2) - DateTime.Parse(item.lec1)).TotalSeconds;
 
-                    //    if (difLec< 200)
+                    //    if (difLec< 120)
                     //    {
                     //        item.lec2 = item.lec3;
                     //        item.lec3 = item.lec4;
@@ -118,7 +118,7 @@ namespace RRHH.Repository
                     //{
                     //    var difLec = (DateTime.Parse(item.lec3) - DateTime.Parse(item.lec2)).TotalSeconds;
 
-                    //    if (difLec < 200)
+                    //    if (difLec < 120)
                     //    {
                     //        item.lec3 = item.lec4;
                     //        item.lec4 = item.lec5;
@@ -135,7 +135,7 @@ namespace RRHH.Repository
                     //{
                     //    var difLec = (DateTime.Parse(item.lec4) - DateTime.Parse(item.lec3)).TotalSeconds;
 
-                    //    if (difLec < 200)
+                    //    if (difLec < 120)
                     //    {
                     //        item.lec4 = item.lec5;
                     //        item.lec5 = item.lec6;
@@ -150,7 +150,7 @@ namespace RRHH.Repository
                     //{
                     //    var difLec = (DateTime.Parse(item.lec5) - DateTime.Parse(item.lec4)).TotalSeconds;
 
-                    //    if (difLec < 200)
+                    //    if (difLec < 120)
                     //    {
                     //        item.lec5 = item.lec6;
                     //        item.lec6 = null;
@@ -163,7 +163,7 @@ namespace RRHH.Repository
                     //{
                     //    var difLec = (DateTime.Parse(item.lec6) - DateTime.Parse(item.lec5)).TotalSeconds;
 
-                    //    if (difLec < 200)
+                    //    if (difLec < 120)
                     //    {
                     //        item.lec6 = null;
                     //        item.tipo6 = null;

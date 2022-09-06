@@ -3,6 +3,8 @@
     public class Fichada
     {
         public int? nro_legajo { get; set; }
+        public int? legajo_id { get; set; }
+        public int? lectora_id { get; set; }
         public DateTime? fecha { get; set; }
         
         public string? hora_entrada_1 { get; set; }

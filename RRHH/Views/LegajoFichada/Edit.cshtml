@@ -1,0 +1,149 @@
+﻿@model RRHH.Models.LegajoFichada
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@{
+    ViewData["Title"] = "Edición de fichada";
+
+}
+
+<form asp-action="Edit" method="post">
+<div class="container">
+
+   @*         <div class="row ">
+                <div class="col bottom-buffer">
+                  <label asp-for="fecha" class="control-label">Fecha</label>
+                  <input asp-for="fecha" class="form-control" />
+                </div>
+            </div>  *@  
+             <div class="row ">
+            <div class="col bottom-buffer btns2" id="divFechaNovedad">
+                      <label asp-for="fecha" class="control-label">Fecha</label><br />
+                      <input type="text" id="txtSelectedFecha" name="fecha"  asp-for="fecha" readonly="readonly"/>
+
+             </div>
+             </div> 
+            <div class="row ">
+                <div class="col bottom-buffer">
+                  <label asp-for="entrada_1" class="control-label">Entrada 1</label>
+                  <input asp-for="entrada_1" class="form-control" />
+                </div>
+            </div>                       
+
+             <div class="row ">
+                <div class="col bottom-buffer">
+                  <label asp-for="salida_1" class="control-label">Salida 1</label>
+                  <input asp-for="salida_1" class="form-control" />
+                </div>
+            </div>      
+            
+            <div class="row ">
+                <div class="col bottom-buffer">
+                  <label asp-for="entrada_2" class="control-label">Entrada 2</label>
+                  <input asp-for="entrada_2" class="form-control" />
+                </div>
+            </div>                       
+
+             <div class="row ">
+                <div class="col bottom-buffer">
+                  <label asp-for="salida_2" class="control-label">Salida 2</label>
+                  <input asp-for="salida_2" class="form-control" />                
+                 </div>
+            </div>    
+
+
+              <div class="row " id="divInsertar">
+                <div class="col bottom-buffer">
+                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+                     <button id="btnGrabar" type="submit" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] value="" class="btn btn-outline-success"   >Grabar</button>
+                </div>
+            </div>
+   
+</div>
+
+
+
+
+  <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Fichada</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit"  asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] value=""  class="btn btn-outline-success" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Salir -->
+<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Sector</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se perderán los cambios efectuados. Está seguro?
+      </div>
+      <div class="modal-footer">
+        <a asp-action="Index" asp-controller="Fichada" class="btn btn-outline-success"  Text="SI">SI</a>
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ </form>
+
+
+ <script type="text/javascript">
+
+
+//function HabilitarGrabar() {
+//    if ($("#items").val()!="" && $("#cliente_id").val()!=0) 
+//      $("#btnGrabar").show();
+//    else
+//     $("#btnGrabar").hide(); 
+//}
+
+function mostrarModalSalida(){
+    if ($("#btnGrabar").is(":visible"))
+      $("#mdSalir").modal('show');
+    else 
+      window.location.href = "/Fichada/Index";
+}
+function mostrarModalGrabar(){
+    $("#mdGrabar").modal('show');
+}
+
+ $(function () {
+      $('#txtSelectedFechad').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
+
+</script>
+
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
