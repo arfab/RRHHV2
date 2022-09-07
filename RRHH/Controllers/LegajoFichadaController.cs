@@ -40,7 +40,8 @@ namespace RRHH.Controllers
             if (legajoFichada != null)
             {
                 ViewData["ID"] = legajoFichada.id;
-              }
+            }
+           
 
             return View(legajoFichada);
 
@@ -93,7 +94,9 @@ namespace RRHH.Controllers
             return View(legajoFichada);
         }
 
-        public IActionResult Delete(int legajo_id, String fecha)
+
+        [HttpPost]
+        public IActionResult Delete(int legajo_id, int lectora_id, String fecha)
         {
 
             string sret;
@@ -103,6 +106,8 @@ namespace RRHH.Controllers
             legajoFichadaRepo = new LegajoFichadaRepo();
 
             legajoFichada.legajo_id = legajo_id;
+
+            legajoFichada.lectora_id = lectora_id;
 
             legajoFichada.fecha = DateTime.Parse(fecha);
 

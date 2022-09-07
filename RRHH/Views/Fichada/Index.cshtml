@@ -250,7 +250,7 @@
                                                     @item.justificacion
                                                 </td>
                                                    <td style="font-size:16px;">
-                                                      <a asp-controller="LegajoFichada" asp-action="Edit" asp-route-lectora_id=@item.lectora_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@item.fecha asp-route-entrada_1=@item.hora_entrada_1 asp-route-salida_1=@item.hora_salida_1 asp-route-entrada_2=@item.hora_entrada_2 asp-route-salida_2=@item.hora_salida_2><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
+                                                      <a asp-controller="LegajoFichada" asp-action="Edit" asp-route-lectora_id=@item.lectora_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-entrada_1=@item.hora_entrada_1 asp-route-salida_1=@item.hora_salida_1 asp-route-entrada_2=@item.hora_entrada_2 asp-route-salida_2=@item.hora_salida_2><i data-mdb-toggle='tooltip' title='Editar la novedad' class='bi bi-pencil-square'></i></a>
 
                                                     
 @*                                                  @if (_perfil_id <= 3)
