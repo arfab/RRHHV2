@@ -1,0 +1,584 @@
+﻿@model RRHH.Models.Justificacion
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Novedad";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+    var _origen = (string)ViewData["ORIGEN"];
+    var _modo = (string)ViewData["MODO"];
+
+}
+
+<form  method="post" id="form1">
+<div class="container">
+<h2>Justificación</h2>
+
+           <div class="row mb-3" >
+             <div class="col-lg-2 col-xs-6 mb-3">
+                  <label for="filtro">Legajo / Apellido</label>
+                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+			</div>
+			<div class="col-lg-6 col-xs-6 mb-3">
+                <label for="empresa_id">Empleado</label>
+                <select  data-filter="model" class="form-control" asp-for="legajo_id" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+			</div>
+
+          </div>  
+
+
+            <div class="row" hidden>
+                  <div class="col bottom-buffer">
+                     <label asp-for="empresa_id" class="control-label">Empresa</label>
+                     <select  class="form-control" id="empresa_id" asp-for="empresa_id" ></select>
+                     <span class="alert-danger" asp-validation-for="empresa_id"></span>
+                  </div>
+            </div>
+
+       
+            <div class="row " hidden>
+                <div class="col bottom-buffer">
+                  <label asp-for="nro_legajo" class="control-label">Nro. Legajo</label>
+                  <input asp-for="nro_legajo" id="nro_legajo" name="nro_legajo" type="number" class="form-control" />
+                  <span class="alert-danger" asp-validation-for="nro_legajo"></span>
+                </div>
+                <div class="col bottom-buffer">
+                  <label asp-for="nombre" id="nombre" name="nombre" class="control-label"></label> <label asp-for="apellido" id="apellido" name="apellido" class="control-label"></label>
+                </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col bottom-buffer">
+                     <label asp-for="ubicacion_id" class="control-label">Ubicación</label>
+                     <select  class="form-control" id="ubicacion_id" asp-for="ubicacion_id" ></select>
+                     <span class="alert-danger" asp-validation-for="ubicacion_id"></span>
+              </div>
+           
+               <div class="row">
+                   <div class="col bottom-buffer" id="divSector">
+                     <label asp-for="sector_id" class="control-label">Sector</label>
+                     <select  class="form-control" id="sector_id" asp-for="sector_id" ></select>
+                     <span class="alert-danger" asp-validation-for="sector_id"></span>
+                  </div>
+                  <div class="col bottom-buffer" id="divLocal">
+                     <label asp-for="local_id" class="control-label">Local</label>
+                     <select  class="form-control" id="local_id" asp-for="local_id" ></select>
+                     <span class="alert-danger" asp-validation-for="local_id"></span>
+                  </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col bottom-buffer">
+                     <label asp-for="categoria_id" class="control-label">Categoría</label>
+                     <select  class="form-control" id="categoria_id" asp-for="categoria_id" ></select>
+                     <span class="alert-danger" asp-validation-for="categoria_id"></span>
+
+            </div>
+
+             <div class="col bottom-buffer btns2" id="divFechaDesde">
+                      <label asp-for="fecha_desde" class="control-label">Fecha Desde</label><br />
+                      <input type="text" id="txtSelectedFechaDesde" name="fecha_desde"  asp-for="fecha_desde" />
+
+             </div>
+             <div class="col bottom-buffer btns2" id="divFechaHasta">
+                      <label asp-for="fecha_hasta" class="control-label">Fecha Hasta</label><br />
+                      <input type="text" id="txtSelectedFechaHasta" name="fecha_hasta"  asp-for="fecha_hasta" />
+
+             </div>
+
+           </div>
+
+
+           
+          <div class="row">
+             <div class="col bottom-buffer"  id="divDescripcion">
+                <label asp-for="descripcion" class="control-label">Descripcion</label>
+                <input asp-for="descripcion" class="form-control" id="descripcion" />
+                 <span class="alert-danger" asp-validation-for="descripcion"></span>
+             </div>
+          </div>
+
+
+           <div class="row " id="divInsertar">
+                <div class="col bottom-buffer">
+                <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+
+                 <a id="grabar_id" value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
+              
+                </div>
+                 <div class="col bottom-buffer">
+                     Ultima modificación: @Model.usuario (@Model.fecha_alta)
+                 </div>
+            </div>
+   
+
+
+
+
+  <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Justificación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Salir -->
+<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Justificación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se perderán los cambios efectuados. Está seguro?
+      </div>
+      <div class="modal-footer">
+       @if (_origen=="L") {
+          <a asp-controller="legajo" asp-action="Index"  class="btn btn-outline-success"  Text="SI">SI</a>
+       }
+       else {
+          <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
+       }
+
+       
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ </form>
+
+
+ <script type="text/javascript">
+
+
+$(document).ready(function () {
+
+    var CodCategoria = @Html.Raw(Json.Serialize(Model.categoria_id));
+    var FechaDesde = @Html.Raw(Json.Serialize(Model.fecha_desde));
+    var FechaHasta = @Html.Raw(Json.Serialize(Model.fecha_hasta));
+    var Apellido = @Html.Raw(Json.Serialize(Model.apellido));
+    var Nombre = @Html.Raw(Json.Serialize(Model.nombre));
+    var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
+    var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
+    var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+
+
+     var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+     var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+
+    if (modo == "V") {
+        $("#form1 :input").prop("disabled", true);
+        $("#grabar_id").hide();
+    }
+    else {
+        $("#form1 :input").prop("disabled", false);
+        $("#grabar_id").show();
+    }
+
+
+    $("#apellido").text('');
+    $("#nombre").text('');
+
+    ObtenerUbicaciones();
+    
+
+     if (CodUbicacion==1 || CodUbicacion==2 || CodUbicacion==4) {
+           ObtenerSectores(CodUbicacion,0);
+            $("#divSector").show();
+            $("#local_id").val(-1);
+            $("#divLocal").hide();
+        }
+        else {
+           if (CodUbicacion == 3) {
+               ObtenerLocales(0);
+               $("#divLocal").show();
+               $("#sector_id").val(-1);
+               $("#divSector").hide();
+           }
+           else {
+               $("#divLocal").hide();
+                $("#local_id").val(-1);
+               $("#sector_id").val(-1);
+               $("#divSector").hide();
+           }
+        }
+   
+
+    ObtenerCategorias();
+
+
+    ObtenerEmpleados(Filtro);
+
+    if ($("#nro_legajo").val() == 0) 
+    {
+        $("#nro_legajo").val('');
+    }
+
+
+    if (Apellido != null) 
+    {
+        $("#apellido").text(Apellido);
+    }
+
+     if (Nombre != null) 
+    {
+        $("#nombre").text(Nombre);
+    }
+
+        $('#txtSelectedFechaDesde').datepicker({format: 'dd/mm/yyyy' });
+        $('#txtSelectedFechaHasta').datepicker({format: 'dd/mm/yyyy' });
+
+        if(FechaDesde==null) $('#txtSelectedFechaDesde').datepicker('setDate', "-0d");
+        if(FechaHasta==null) $('#txtSelectedFechaHasta').datepicker('setDate', "-0d");
+
+   })
+
+
+     $("#filtro").change(function () {
+        ObtenerEmpleados($("#filtro").val());       
+     });
+
+
+
+     $("#legajo_id").change(function () {
+     
+        if ($("#legajo_id").val() > 0) {
+             ObtenerLegajoPorID($("#legajo_id").val());
+         }
+    });
+
+     $("#legajo_id").focusout(function () {
+          
+        if ($("#legajo_id").val() > 0) {
+             ObtenerLegajoPorID($("#legajo_id").val());
+         }
+    });
+
+     $("#nro_legajo").change(function () {
+           
+         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+
+    });
+
+
+    
+    $("#ubicacion_id").change(function () {
+        
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+            ObtenerSectores($("#ubicacion_id").val(),0);
+            $("#divSector").show();
+            $("#local_id").val(-1);
+            $("#divLocal").hide();
+        }
+        else {
+            ObtenerLocales(0);
+            $("#divLocal").show();
+            $("#sector_id").val(-1);
+            $("#divSector").hide();
+        }
+        
+         habilitar_grabar();     
+    });
+
+  function mostrarModalSalida(){
+      var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+
+      if ($("#grabar_id").is(":visible"))
+        $("#mdSalir").modal('show');
+       else {
+         var url;
+         if (origen == "L") 
+           url = "@Url.Action("Index", "Legajo")";
+         else 
+           url = "@Url.Action("Index", "Justificacion")"; 
+         window.location.href = url;
+       }
+
+  }
+
+  function mostrarModalGrabar(){
+    $("#mdGrabar").modal('show');
+  }
+
+
+ 
+  var ObtenerCategorias = function () {
+         var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerCategorias","Justificacion")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#categoria_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodCategoria)
+                          $('#categoria_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#categoria_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+     
+
+     var ObtenerUbicaciones = function () {
+         var CodUbicacion =@Html.Raw(Json.Serialize(Model.ubicacion_id));
+
+        
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Novedad")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+       var ObtenerSectores = function (ubicacion_id, sec_id) {
+             var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
+           if (sec_id != 0) CodSector = sec_id;
+             $.ajax({
+                url: '@Url.Action("ObtenerSectores","Legajo")',
+                type: 'GET',
+                 data: {
+                ubicacion_id: ubicacion_id
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodSector)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+        var ObtenerLocales = function (loc_id) {
+             var CodLocal = @Html.Raw(Json.Serialize(Model.local_id));
+             if (loc_id != 0) CodLocal = loc_id;
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#local_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#local_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#local_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+   
+
+    var ObtenerLegajo = function (empresa_id, nro_legajo) {
+         $.ajax({
+            url: '@Url.Action("ObtenerLegajo","Novedad")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                empresa_id: empresa_id,
+                nro_legajo: nro_legajo
+            },
+            success: function (data) {
+                $('#apellido').text(data.apellido);
+                $('#nombre').text(data.nombre);
+                $('#ubicacion_id').val(data.ubicacion_id);
+                $('#ubicacion_id').change();
+               // $('#ubicacion_id').trigger("change");
+
+                if ($('#ubicacion_id').val() == 1 || $('#ubicacion_id').val() == 2 || $('#ubicacion_id').val() == 4) {
+                    ObtenerSectores($('#ubicacion_id').val(),data.sector_id);
+                    //$('#sector_id').val(data.sector_id);
+                    //$('#sector_id').change();
+                    $("#divSector").show();
+                    $("#local_id").val(-1);
+                    $("#divLocal").hide();  
+                }       
+                else {
+                    ObtenerLocales(data.local_id);
+                    //$('#local_id').val(data.local_id);
+                    //$('#local_id').change();
+                    $("#divLocal").show();
+                    $("#sector_id").val(-1);
+                    $("#divSector").hide();
+                }
+
+                habilitar_grabar(); 
+            },
+            error: function () {
+            }
+      });
+    }
+     
+
+
+var ObtenerLegajoPorID = function (id) {
+        var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerLegajoPorID","Legajo")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (data) {
+                $('#apellido').text(data.apellido);
+                $('#nombre').text(data.nombre);
+
+              //  if (($('#ubicacion_id').val() == null || $('#ubicacion_id').val() <= 0) && modo=="A") {
+                 if (modo=="A") {
+
+                    $('#ubicacion_id').val(data.ubicacion_id);
+                    $('#ubicacion_id').change();
+                }
+
+                if ($('#ubicacion_id').val() == 1 || $('#ubicacion_id').val() == 2 || $('#ubicacion_id').val() == 4) {
+                   
+                    ObtenerSectores($('#ubicacion_id').val(),data.sector_id);
+
+                    $("#divSector").show();
+                    $("#local_id").val(-1);
+                    $("#divLocal").hide();  
+                }       
+                else {
+                    ObtenerLocales(data.local_id);
+                    $("#divLocal").show();
+                    $("#sector_id").val(-1);
+                    $("#divSector").hide();
+                }
+
+                habilitar_grabar(); 
+            },
+            error: function () {
+            }
+      });
+    }
+
+var ObtenerEmpleados = function (filtro) {
+         var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+         $.ajax({
+            url: '@Url.Action("ObtenerEmpleados","Legajo")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                filtro: filtro
+            },
+            success: function (data) {
+                $('#legajo_id').find('option').remove()
+                if (data[0].value > 0) { 
+                   ObtenerLegajoPorID(data[0].value);
+                }
+                $(data).each(
+                    function (index, item) {    
+                       
+                        if (item.value==CodEmpleado || CodEmpleado==null && index==0)
+                          $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                         else 
+                          $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    }
+                    );
+            },
+            error: function () {
+             
+            }
+      });
+    }
+
+    $(function () {
+      $('#txtSelectedFechaDesde').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
+
+      $(function () {
+      $('#txtSelectedFechaHasta').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
+
+
+ $('#form1').submit(function()
+ {
+    $("input[type='submit']", this)
+      .attr('disabled', 'disabled');
+  });
+
+</script>
+
+
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
+
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial" />
+}
