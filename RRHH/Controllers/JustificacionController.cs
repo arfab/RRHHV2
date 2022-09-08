@@ -490,11 +490,16 @@ namespace RRHH.Controllers
 
                 ViewData["MODO"] = (modo == null) ? "E" : modo;
 
+                justificacion.empresa_id = legajo.empresa_id;
+                justificacion.nro_legajo = legajo.nro_legajo;
+
+
                 ViewData["EMPRESA_ID"] = justificacion.empresa_id;
                 ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
                 ViewData["FiltroActual"] = justificacion.nro_legajo;
                 ViewData["EmpleadoActual"] = justificacion.legajo_id;
 
+               
                 return View(justificacion);
             }
             else

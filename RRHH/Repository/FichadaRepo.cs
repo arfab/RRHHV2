@@ -257,7 +257,7 @@ namespace RRHH.Repository
 
                     else
                     {
-                        if (item.estado!="NO")
+                        if (item.estado!="NO" && item.estado != "JUS")
                             item.estado = "ERR";
                     }
 
