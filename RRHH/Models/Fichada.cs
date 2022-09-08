@@ -32,6 +32,7 @@
 
         public string? cantidad_horas { get; set; }
 
+        public int? justificacion_id { get; set; }
         public string? justificacion { get; set; }
 
         public string? estado { get; set; }

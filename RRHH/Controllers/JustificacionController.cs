@@ -63,11 +63,11 @@ namespace RRHH.Controllers
                 ViewData["FechaJustificacionHastaActual"] = "";
 
                 ViewData["EmpleadoActual"] = -1;
-                ViewData["FiltroActual"] = "";
+                ViewData["FiltroJustificacionActual"] = "";
 
                 HttpContext.Session.SetString("EMPRESA_JUSTIFICACION_ACTUAL", "");
                 HttpContext.Session.SetString("LEGAJO_JUSTIFICACION_ACTUAL", "");
-                HttpContext.Session.SetString("APELLIDO_JUSTIICACION_ACTUAL", "");
+                HttpContext.Session.SetString("APELLIDO_JUSTIFICACION_ACTUAL", "");
 
                 HttpContext.Session.SetString("CATEGORIA_JUSTIFICACION_ACTUAL", "");
 
@@ -75,8 +75,8 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetString("FECHA_JUSTIFICACION_DESDE", "");
                 HttpContext.Session.SetString("FECHA_JUSTIFICACION_HASTA", "");
 
-                HttpContext.Session.SetString("EMPLEADO_JUSTIICACION_ACTUAL", "");
-                HttpContext.Session.SetString("FILTRO_JUSTIICACION_ACTUAL", "");
+                HttpContext.Session.SetString("EMPLEADO_JUSTIFICACION_ACTUAL", "");
+                HttpContext.Session.SetString("FILTRO_JUSTIFICACION_ACTUAL", "");
 
                 HttpContext.Session.SetInt32("PAG_NOVEDAD", 1);
         
@@ -179,7 +179,7 @@ namespace RRHH.Controllers
                 ViewData["ApellidoActual"] = apellido;
 
                 ViewData["EmpleadoActual"] = legajo_id;
-                ViewData["FiltroActual"] = filtro;
+                ViewData["FiltroJustificacionActual"] = filtro;
 
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;
@@ -451,7 +451,7 @@ namespace RRHH.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, string fecha)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -486,7 +486,7 @@ namespace RRHH.Controllers
 
                 if (perfil_id == 4 && legajo.ubicacion_id != 3) return RedirectToAction("Index", "Justificacion");
 
-                //ViewData["ID"] = nro_legajo.Value;
+                ViewData["ID"] = id.Value;
 
                 ViewData["MODO"] = (modo == null) ? "E" : modo;
 
@@ -496,7 +496,7 @@ namespace RRHH.Controllers
 
                 ViewData["EMPRESA_ID"] = justificacion.empresa_id;
                 ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
-                ViewData["FiltroActual"] = justificacion.nro_legajo;
+                ViewData["FiltroJustificacionActual"] = justificacion.nro_legajo;
                 ViewData["EmpleadoActual"] = justificacion.legajo_id;
 
                
@@ -507,6 +507,11 @@ namespace RRHH.Controllers
                 //ViewData["ID"] = 0;
                 ViewData["MODO"] = "A";
 
+                if (fecha != null)
+                {
+                    justificacion.fecha_desde = DateTime.Parse(fecha);
+                    justificacion.fecha_hasta = DateTime.Parse(fecha);
+                }
                 if (nro_legajo != null) justificacion.nro_legajo = nro_legajo.Value;
                 if (empresa_id != null) justificacion.empresa_id = empresa_id.Value;
                 if (ubicacion_id != null) justificacion.ubicacion_id = ubicacion_id.Value;
@@ -527,7 +532,7 @@ namespace RRHH.Controllers
 
                     ViewData["EMPRESA_ID"] = justificacion.empresa_id;
                     ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
-                    ViewData["FiltroActual"] = justificacion.nro_legajo;
+                    ViewData["FiltroJustificacionActual"] = justificacion.nro_legajo;
                     ViewData["EmpleadoActual"] = justificacion.legajo_id;
                 }
 
@@ -540,7 +545,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int? id, Justificacion justificacion)
+        public IActionResult Edit(string modo, int? id, Justificacion justificacion, string origen)
         {
             int? usuario_id = HttpContext.Session.GetInt32("UID");
 
@@ -567,7 +572,10 @@ namespace RRHH.Controllers
 
                 if (sret == "")
                 {
-                    return RedirectToAction("Index", "Justificacion");
+                    if (origen=="F")
+                       return RedirectToAction("Index", "Fichada");
+                    else
+                       return RedirectToAction("Index", "Justificacion");
 
                 }
                 else
@@ -581,7 +589,7 @@ namespace RRHH.Controllers
 
 
 
-        public IActionResult Delete(int hfID)
+        public IActionResult Delete(int hfID, string origen)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -595,7 +603,10 @@ namespace RRHH.Controllers
             justificacionRepo.Eliminar(hfID);
 
 
-            return RedirectToAction("Index");
+            if (origen == "F")
+                return RedirectToAction("Index", "Fichada");
+            else
+                return RedirectToAction("Index", "Justificacion");
 
         }
 
