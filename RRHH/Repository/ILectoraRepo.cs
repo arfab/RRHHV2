@@ -7,5 +7,7 @@ namespace RRHH.Repository
 
         public IEnumerable<Lectora> ObtenerTodos();
 
+        public int ObtenerAjuste(int lectora_id, DateTime fecha);
+
     }
 }

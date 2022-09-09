@@ -40,6 +40,15 @@ namespace RRHH.Repository
                 foreach (Fichada item in lFichadas)
                 {
 
+
+                    ILectoraRepo iLectoraRepo;
+                    iLectoraRepo = new LectoraRepo();
+
+                    // Se obtiene el valor del delta en el caso de que la lectora tenga una ajuste en la fecha
+                    // Por ahora lo comento
+                    // int iDelta = iLectoraRepo.ObtenerAjuste(item.lectora_id.Value, item.fecha.Value);
+
+
                     // Ver fichadas dobles
 
                     String[] vLectura = new String[6];
