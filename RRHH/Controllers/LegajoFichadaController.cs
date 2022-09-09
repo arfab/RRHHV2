@@ -167,7 +167,7 @@ namespace RRHH.Controllers
 
                 legajoFichada.legajo_id = legajo_id;
 
-                legajoFichada.lectora_id = lectora_id;
+                legajoFichada.lectora_id = -1;
 
                 legajoFichada.fecha = DateTime.Parse(fecha);
 
