@@ -47,6 +47,7 @@ namespace RRHH.Repository
                     // Se obtiene el valor del delta en el caso de que la lectora tenga una ajuste en la fecha
                     // Por ahora lo comento
                     // int iDelta = iLectoraRepo.ObtenerAjuste(item.lectora_id.Value, item.fecha.Value);
+                    // Ojo porque solo debería ajustarse para los valores originales. No si se hace una edición!
 
 
                     // Ver fichadas dobles
