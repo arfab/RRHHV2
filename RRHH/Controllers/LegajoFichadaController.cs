@@ -93,6 +93,22 @@ namespace RRHH.Controllers
             LegajoFichada legajoFichada = new LegajoFichada();
             string sret;
 
+            Legajo legajo = new Legajo();
+            ILegajoRepo legajoRepo;
+            legajoRepo = new LegajoRepo();
+            legajo = legajoRepo.Obtener(legajo_id);
+
+
+            if (legajo != null)
+            {
+                legajoFichada.nro_legajo = legajo.nro_legajo.Value;
+                legajoFichada.empresa_id = legajo.empresa_id.Value;
+
+                ViewData["EMPRESA_ID"] = legajoFichada.empresa_id;
+                ViewData["NRO_LEGAJO"] = legajoFichada.nro_legajo;
+                ViewData["FiltroFichadaActual"] = legajoFichada.nro_legajo;
+                ViewData["EmpleadoActual"] = legajo.id;
+            }
 
             if (legajo_id <= 0)
             {
@@ -101,6 +117,51 @@ namespace RRHH.Controllers
             }
             //if (ModelState.IsValid)
             //{
+
+            if (entrada_1 == null && salida_1!=null ||
+                salida_1 == null && entrada_2!= null ||
+                entrada_2 == null && salida_2!= null
+                )
+             {
+                ViewBag.Message = "No pueden saltearse horarios de fichadas";
+                return View(legajoFichada);
+            }
+
+           
+
+            if (entrada_1 != null && salida_1 != null)
+            {
+                TimeSpan span1 = DateTime.Parse(salida_1).Subtract(DateTime.Parse(entrada_1));
+
+                if (span1.TotalMinutes < 2)
+                {
+                    ViewBag.Message = "La salida 1 debe ser mayor a 2 minutos que la entrada 1";
+                    return View(legajoFichada);
+                }
+            }
+
+
+            if (salida_1 != null && entrada_2 != null)
+            {
+                TimeSpan span1 = DateTime.Parse(entrada_2).Subtract(DateTime.Parse(salida_1));
+
+                if (span1.TotalMinutes < 2)
+                {
+                    ViewBag.Message = "La entrada 2 debe ser mayor a 2 minutos que la salida 1";
+                    return View(legajoFichada);
+                }
+            }
+
+            if (entrada_2 != null && salida_2 != null)
+            {
+                TimeSpan span1 = DateTime.Parse(salida_2).Subtract(DateTime.Parse(entrada_2));
+
+                if (span1.TotalMinutes <2)
+                {
+                    ViewBag.Message = "La salida 2 debe ser mayor a 2 minutos que la entrada 2";
+                    return View(legajoFichada);
+                }
+            }
 
             legajoFichadaRepo = new LegajoFichadaRepo();
 
