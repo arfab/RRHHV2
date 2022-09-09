@@ -20,7 +20,7 @@
            <div class="row mb-3" >
              <div class="col-lg-2 col-xs-6 mb-3">
                   <label for="filtro">Legajo / Apellido</label>
-                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroJustificacionActual"]" class="form-control" />                                          
 			</div>
 			<div class="col-lg-6 col-xs-6 mb-3">
                 <label for="legajo_id">Empleado</label>
@@ -205,7 +205,7 @@ $(document).ready(function () {
     var Nombre = @Html.Raw(Json.Serialize(Model.nombre));
     //var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
     //var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
-    var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+    var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroJustificacionActual"]));
 
 
      var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
