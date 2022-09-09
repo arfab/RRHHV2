@@ -30,7 +30,7 @@ namespace RRHH.Repository
 
                 icantFilas = con.Execute("spJustificacionInsertar", parameters, commandType: CommandType.StoredProcedure);
 
-              //  if (parameters.Get<int>("@retValue") < 0) return "El legajo no existe";
+                if (parameters.Get<int>("@retValue") == -1 ) return "Las fechas se solapan con otra justificacion";
 
 
             }

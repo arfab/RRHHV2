@@ -580,6 +580,10 @@ namespace RRHH.Controllers
                 }
                 else
                 {
+                    ViewData["EMPRESA_ID"] = justificacion.empresa_id;
+                    ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
+                    ViewData["FiltroJustificacionActual"] = justificacion.nro_legajo;
+                    ViewData["EmpleadoActual"] = justificacion.legajo_id;
                     ViewBag.Message = sret;
                 }
 
