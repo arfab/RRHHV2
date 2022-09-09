@@ -39,7 +39,7 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("EMPLEADO_FICHADA_ACTUAL", "");
             HttpContext.Session.SetString("FILTRO_FICHADA_ACTUAL", "");
 
-            HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", 1);
+            HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", 0);
 
 
             return RedirectToAction("Index", "Fichada");
@@ -85,8 +85,7 @@ namespace RRHH.Controllers
 
             if (HttpContext.Session.GetInt32("TIPO_LISTADO_ACTUAL") != null)
                 tipo_listado = (int)HttpContext.Session.GetInt32("TIPO_LISTADO_ACTUAL");
-            else
-                tipo_listado = 1;
+    
 
 
 

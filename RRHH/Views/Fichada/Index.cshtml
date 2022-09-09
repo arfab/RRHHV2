@@ -62,13 +62,27 @@
                            <input type="text" id="fecha_hasta" class="form-control" name="fecha_hasta" value="@ViewData["FechaHastaActual"]" />
                       </div>
 
-                       <div class="col" >
+                       @*<div class="col" >
                             <label class="form-check-label" for="tipo_listado">
                               Sólo fichadas
                              </label><br />
                              <input class="form-check-input" type="checkbox" value="1"  name="tipo_listado" id="tipo_listado"  @((ViewData["TipoListadoActual"].ToString()=="1")?  "checked" : "" ) >
 
+                      </div>*@
+
+
+                   
+                      <div class="col bottom-buffer">
+                        <label for="tipo_listado" class="control-label">Tipo</label>
+                        <select  data-filter="model" class="form-control" name="tipo_listado" id="tipo_listado" value="@ViewData["TipoListadoActual"]" >
+                           <option value="0">Sin fichar</option>
+                           <option value="1">Solo fichadas</option>
+                           <option value="2">Todas</option>
+                        </select>   
                       </div>
+         
+
+
                     </div>
                 </div>
               </div>  
@@ -303,6 +317,9 @@
         var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
         var LegajoId = @Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
 
+        var Tipo = @Html.Raw(Json.Serialize(ViewData["TipoListadoActual"]));
+
+        $("#tipo_listado").val(Tipo).change();
             
        ObtenerEmpresas();
 
