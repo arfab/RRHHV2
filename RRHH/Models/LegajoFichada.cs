@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace RRHH.Models
 {
@@ -8,6 +9,13 @@ namespace RRHH.Models
         public int id { get; set; }
 
         public int legajo_id { get; set; }
+
+        [Required(ErrorMessage = "El campo es requerido")]
+        [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
+        [Remote(action: "LegajoExiste", controller: "Novedad", AdditionalFields = "empresa_id", ErrorMessage = "El nro de legajo no existe")]
+        public int? nro_legajo { get; set; }
+        public string? apellido { get; set; }
+        public string? nombre { get; set; }
 
         [DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy}", ApplyFormatInEditMode = false)]
         [DataType(DataType.Text)]
@@ -20,8 +28,9 @@ namespace RRHH.Models
         public string? entrada_2 { get; set; }
         public string? salida_2 { get; set; }
 
-     
-        public string? lectora { get; set; }
+        public int? empresa_id { get; set; }
+        public string? empresa { get; set; }
+        
 
         public string DiaSemana()
         {

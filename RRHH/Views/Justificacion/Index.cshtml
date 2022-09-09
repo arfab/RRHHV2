@@ -64,7 +64,7 @@
                      <input type="submit" asp-action="ExportarExcel"   value="Exportar a Excel" class="btn btn-primary" />
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
-                      @if (_perfil_id <= 3)
+                    @if (_perfil_id <= 3)
                     {
                           <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="Justificacion" asp-action="Edit" asp-route-modo="A"   asp-route-legajo_id="@ViewData["EmpleadoActual"]" >INGRESAR JUSTIFICACION</a>                     
                     }

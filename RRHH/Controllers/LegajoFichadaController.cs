@@ -16,7 +16,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2)
+        public IActionResult Edit(int? legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -27,15 +27,50 @@ namespace RRHH.Controllers
 
             legajoFichadaRepo = new LegajoFichadaRepo();
 
-            LegajoFichada legajoFichada = new LegajoFichada();
+            LegajoFichada legajoFichada=null;
 
-            fecha = DateTime.Parse(fecha).ToString("dd/MM/yyyy");
+            if (fecha == null)
+            {
+                fecha= DateTime.Now.Date.ToString("dd/MM/yyyy");
+            }
 
-            legajoFichada = legajoFichadaRepo.ObtenerPorLegajo(legajo_id, fecha);
+            if (legajo_id != null)
+            {
 
-            ViewData["FECHA"] = fecha;
-            ViewData["LEGAJO_ID"] = legajo_id;
-            ViewData["LECTORA_ID"] = lectora_id;
+                if (fecha != null)
+                {
+
+                    fecha = DateTime.Parse(fecha).ToString("dd/MM/yyyy");
+
+                    legajoFichada = legajoFichadaRepo.ObtenerPorLegajo(legajo_id.Value, fecha);
+
+                   
+
+                    ViewData["FECHA"] = fecha;
+                }
+
+                if (legajoFichada == null) legajoFichada = new LegajoFichada();
+
+                ViewData["LEGAJO_ID"] = legajo_id;
+                ViewData["LECTORA_ID"] = lectora_id;
+
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+                legajoRepo = new LegajoRepo();
+                legajo = legajoRepo.Obtener(legajo_id.Value);
+
+
+                if (legajo != null)
+                {
+                    legajoFichada.nro_legajo = legajo.nro_legajo.Value;
+                    legajoFichada.empresa_id = legajo.empresa_id.Value;
+
+                    ViewData["EMPRESA_ID"] = legajoFichada.empresa_id;
+                    ViewData["NRO_LEGAJO"] = legajoFichada.nro_legajo;
+                    ViewData["FiltroFichadaActual"] = legajoFichada.nro_legajo;
+                    ViewData["EmpleadoActual"] = legajo.id;
+                }
+            }
 
             if (legajoFichada != null)
             {
@@ -58,10 +93,16 @@ namespace RRHH.Controllers
             LegajoFichada legajoFichada = new LegajoFichada();
             string sret;
 
+
+            if (legajo_id <= 0)
+            {
+                ViewBag.Message = "El legajo es obligatorio";
+                return View(legajoFichada);
+            }
             //if (ModelState.IsValid)
             //{
 
-                legajoFichadaRepo = new LegajoFichadaRepo();
+            legajoFichadaRepo = new LegajoFichadaRepo();
 
                 legajoFichada.legajo_id = legajo_id;
 
