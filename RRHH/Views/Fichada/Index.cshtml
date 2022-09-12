@@ -76,7 +76,7 @@
                         <label for="tipo_listado" class="control-label">Tipo</label>
                         <select  data-filter="model" class="form-control" name="tipo_listado" id="tipo_listado" value="@ViewData["TipoListadoActual"]" >
                            <option value="0">Sin fichar</option>
-                           <option value="1">Solo fichadas</option>
+                           <option value="1">Fichadas</option>
                            <option value="2">Todas</option>
                         </select>   
                       </div>
@@ -126,6 +126,7 @@
                          </div>
                        
                         </div>
+                        
                     </div>
 
                     <div class="row">
@@ -182,11 +183,15 @@
                     <div class="row" style="margin-bottom:10px;">
                         <div class="col bottom-buffer">
                              <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
-                             <span style="vertical-align:auto;">FICHADAS</span>
+                             @*<span style="vertical-align:auto;">FICHADAS</span><br />*@<span>Cantidad encontrada: @Model.Count()</span>    
                          </div>
                        </div>
+                       
+                    
+
                    </div>
-                   
+                    
+   
                     <div class="row">
                         <div class="col bottom-buffer">
                             <div class="table-responsive">
