@@ -434,7 +434,8 @@ namespace RRHH.Controllers
             ViewData["NRO_LEGAJO"] = legajo.nro_legajo;
             ViewData["EMPRESA_ID"] = legajo.empresa_id;
 
-            if (valida(legajo, modo))
+            string mensaje = "";
+            if (valida(legajo, modo,ref mensaje))
             {
 
                 legajoRepo = new LegajoRepo();
@@ -454,6 +455,10 @@ namespace RRHH.Controllers
                     ViewBag.Message = sret;
                 }
 
+            }
+            else
+            {
+                ViewBag.Message = mensaje;
             }
             return View(legajo);
         }
@@ -1088,8 +1093,10 @@ namespace RRHH.Controllers
         }
 
 
-        public Boolean valida(Legajo legajo, string modo)
+        public Boolean valida(Legajo legajo, string modo, ref string mensaje)
         {
+
+            mensaje = "Error al insertar el legajo";
 
             if (legajo.nro_legajo == null) return false;
 
@@ -1100,7 +1107,10 @@ namespace RRHH.Controllers
             if (modo == "A")
             {
                 if (legajoRepo.ObtenerPorNro(legajo.empresa_id.Value, legajo.nro_legajo.Value) != null)
+                {
+                    mensaje = "Ya existe ese legajo en la misma empresa";
                     return false;
+                }
             }
             else
             {

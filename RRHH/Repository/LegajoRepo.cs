@@ -37,9 +37,11 @@ namespace RRHH.Repository
                     parameters.Add("@activo", 1);
                     parameters.Add("@fecha_alta", legajo.fecha_alta);
                     parameters.Add("@fecha_baja", legajo.fecha_baja);
+                    parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
                     icantFilas = con.Execute("spLegajoInsertar", parameters, commandType: CommandType.StoredProcedure);
+                    if (parameters.Get<int>("@retValue") < 0) return "Ya existe ese legajo en la misma empresa";
 
 
                 }
@@ -77,9 +79,12 @@ namespace RRHH.Repository
                 parameters.Add("@activo", 1);
                 parameters.Add("@fecha_alta", legajo.fecha_alta);
                 parameters.Add("@fecha_baja", legajo.fecha_baja);
+                parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
                 con.Execute("spLegajoModificar", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<int>("@retValue") < 0) return "Ya existe ese legajo en la misma empresa";
 
 
             }
