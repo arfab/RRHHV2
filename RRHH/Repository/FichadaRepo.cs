@@ -90,12 +90,21 @@ namespace RRHH.Repository
 
                     }
 
-                    item.lec1 = vLectura[0]==""?null:vLectura[0];
-                    item.lec2 = vLectura[1] == "" ? null : vLectura[1];
-                    item.lec3 = vLectura[2] == "" ? null : vLectura[2];
-                    item.lec4 = vLectura[3] == "" ? null : vLectura[3];
-                    item.lec5 = vLectura[4] == "" ? null : vLectura[4];
-                    item.lec6 = vLectura[5] == "" ? null : vLectura[5];
+                    //item.lec1 = vLectura[0]==""?null:vLectura[0];                  
+                    //item.lec2 = vLectura[1] == "" ? null : vLectura[1];
+                    //item.lec3 = vLectura[2] == "" ? null : vLectura[2];
+                    //item.lec4 = vLectura[3] == "" ? null : vLectura[3];
+                    //item.lec5 = vLectura[4] == "" ? null : vLectura[4];
+                    //item.lec6 = vLectura[5] == "" ? null : vLectura[5];
+
+
+                    item.lec1 = CalcularHora(vLectura[0], item.delta.Value);
+                    item.lec2 = CalcularHora(vLectura[1], item.delta.Value);
+                    item.lec3 = CalcularHora(vLectura[2], item.delta.Value);
+                    item.lec4 = CalcularHora(vLectura[3], item.delta.Value);
+                    item.lec5 = CalcularHora(vLectura[4], item.delta.Value);
+                    item.lec6 = CalcularHora(vLectura[5], item.delta.Value);
+
 
                     item.tipo1 = vTipo[0] == "" ? null : vTipo[0];
                     item.tipo2 = vTipo[1] == "" ? null : vTipo[1];
@@ -278,6 +287,19 @@ namespace RRHH.Repository
                 return lFichadas;
                 
             }
+
+        }
+
+        string? CalcularHora(string hora, int delta)
+        {
+            if (hora == "" || hora==null) return null;
+
+            if (delta==0) return hora;
+
+            DateTime d;
+            DateTime.TryParse(hora, out d);
+            d = d.AddMinutes(delta);
+            return d.ToString("HH:mm:ss");
 
         }
     }

@@ -41,6 +41,8 @@
 
         public string? lectora { get; set; }
 
+        public int? delta { get; set; }
+
         public string DiaSemana()
         {
             switch (fecha.Value.DayOfWeek)
