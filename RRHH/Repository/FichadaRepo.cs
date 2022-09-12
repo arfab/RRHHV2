@@ -19,6 +19,14 @@ namespace RRHH.Repository
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
+                IUtilsRepo iUtilsRepo;
+                iUtilsRepo = new UtilsRepo();
+
+                string valor = iUtilsRepo.ObtenerParametro("MINUTOS_DOBLE_FICHADA");
+
+                int minutos_doble = valor == "" ? 0 : Int32.Parse(valor);
+
+
 
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@equipo_id", -1);
@@ -67,14 +75,18 @@ namespace RRHH.Repository
                     vTipo[4] = item.tipo5;
                     vTipo[5] = item.tipo6;
 
+
+                  
+
+                         
                     for (int i=0; i < 5; i++)
                     {
                         if (vLectura[i] == null || vLectura[i + 1] == null ||  vLectura[i] == "" || vLectura[i+1] == "") continue;
 
                         var dif = (DateTime.Parse(vLectura[i+1]) - DateTime.Parse(vLectura[i])).TotalSeconds;
-                        if (dif < 120)
+                        if (dif < minutos_doble*60)
                         {
-                            for (int j = i; j < 5; j++)
+                            for (int j = i+1; j < 5; j++)
                             {
                                 if (vLectura[j] != null)
                                 {
