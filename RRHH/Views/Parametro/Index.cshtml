@@ -1,0 +1,117 @@
+﻿@model IEnumerable<RRHH.Models.Parametro>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Index";
+     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+}
+
+
+<form asp-controller="Parametro"  method="post" >
+ <div class="container">
+     <div class="jumbotron text-center Titulo">
+      <h2>Parametros</h2>
+    </div>
+
+      <center>
+     <div class="row">
+            <div class="col bottom-buffer">
+                <span id="spanTitulo"></span>
+            </div>
+        </div>
+
+          <div class="row bottom-buffer">
+            <div class="col bottom-buffer">
+                <div class="btns2">
+                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Parametro" asp-action="Edit">NUEVO PARAMETRO</a>
+                </div>
+            </div>
+        </div>
+
+      
+
+        <div class="row">
+            <div class="col bottom-buffer">
+                <div class="table-responsive">
+
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Descripcion</th>
+                            <th>Valor</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                     @foreach (var item in Model)
+                     {
+                     <tr>
+                      <td>
+                          @item.codigo
+                     </td>
+                      <td>
+                          @item.descripcion
+                     </td>     
+                      <td>
+                         @item.valor
+                     </td>  
+                        <td>
+                          <a asp-controller="Parametro" asp-action="Edit" asp-route-codigo="@item.codigo"><i data-mdb-toggle='tooltip' title='Editar el parametro' class='bi bi-pencil-square'></i></a>
+                          @if (_perfil_id == 1)
+                          {
+                              <a onclick="mostrarModalEliminar('@item.codigo');" ><i data-mdb-toggle='tooltip' title='Eliminar el parametro'  class='bi bi-x-circle'></i></a>                         
+                          }
+
+
+                    </td>
+                    </tr>  
+                    
+                 }
+                 </tbody>
+                </table>
+              </div>
+            </div>
+         </div>
+
+         </center>
+
+
+    <!-- Modal Eliminar -->
+
+    <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              
+                        <div class="modal-header">
+                            <h5 class="modal-title">Parametro</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+                            Se eliminará el parametro con todos sus datos. Está seguro?
+                             <input id="hfCodigo" name="hfCodigo" type="hidden" >
+                        </div>
+                        <div class="modal-footer">
+                             <button id="btnEliminar" type="submit" asp-action="Delete"  value="" class="btn btn-outline-success"  >SI</button>
+                             <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                        </div>
+          
+
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+ <script type="text/javascript">
+    function mostrarModalEliminar(codigo){
+      $("#hfCodigo").val(codigo);
+      $("#mdEliminar").modal('show');
+     }
+</script>

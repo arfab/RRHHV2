@@ -1,17 +1,26 @@
-﻿@model RRHH.Models.TipoJustificacion
+﻿@model RRHH.Models.Parametro
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 @{
-    ViewData["Title"] = "Edición del tipo de justificación";
+    ViewData["Title"] = "Edición del parámetro";
 
 }
 
 <form asp-action="Edit" method="post">
 <div class="container">
+           <div class="row ">
+                <div class="col bottom-buffer">
+                <label asp-for="codigo" class="control-label">Descripción del parámetro</label>
+                <input asp-for="codigo" class="form-control" />
+                 <span class="alert-danger" asp-validation-for="codigo"></span>
+                 </div>
+
+            </div>   
+
              <div class="row ">
                 <div class="col bottom-buffer">
-                <label asp-for="descripcion" class="control-label">Descripción del tipo de justificación</label>
+                <label asp-for="descripcion" class="control-label">Descripción del parámetro</label>
                 <input asp-for="descripcion" class="form-control" />
                  <span class="alert-danger" asp-validation-for="descripcion"></span>
                  </div>
@@ -19,23 +28,11 @@
             
             <div class="row ">
                 <div class="col bottom-buffer">
-                <label asp-for="observacion" class="control-label">Observación del tipo de justificación</label>
-                <input asp-for="observacion" class="form-control" />
+                <label asp-for="valor" class="control-label">Valor del parámetro</label>
+                <input asp-for="valor" class="form-control" />
                  </div>
             </div>    
-
-             <div class="row ">
-                <div class="col bottom-buffer">
-                <label asp-for="pago" class="control-label">Se Paga?</label>
-                 <select  data-filter="model" class="form-control" name="pago" id="pago" asp-for="pago" >
-                  <option value="1">Pago</option>
-                  <option value="0">No Pago</option>
-                </select>   
-                 </div>
-            </div>    
-
-
-
+            
 
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
@@ -54,14 +51,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" >Tipo de justificación</h5>
+        <h5 class="modal-title" >Tipo de parámetro</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         Confirma los cambios hechos?
       </div>
       <div class="modal-footer">
-          <button type="submit"  asp-route-id=@ViewData["ID"] value=""  class="btn btn-outline-success" >SI</button>
+          <button type="submit"  asp-route-codigo=@ViewData["CODIGO"] value=""  class="btn btn-outline-success" >SI</button>
           <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>
@@ -75,7 +72,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" >Tipo de justificación</h5>
+        <h5 class="modal-title" >Tipo de parámetro</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -106,7 +103,7 @@ function mostrarModalSalida(){
     if ($("#btnGrabar").is(":visible"))
       $("#mdSalir").modal('show');
     else 
-      window.location.href = "/TipoJustificacion/Index";
+      window.location.href = "/Parametro/Index";
 }
 function mostrarModalGrabar(){
     $("#mdGrabar").modal('show');
