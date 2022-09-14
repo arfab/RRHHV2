@@ -43,7 +43,11 @@
 
         public string? nombre { get; set; }
 
+        public string? empresa { get; set; }
+
         public string? lectora { get; set; }
+
+        public int? lectora_nro { get; set; }
 
         public int? delta { get; set; }
 

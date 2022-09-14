@@ -6,7 +6,8 @@ using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RRHH.Repository;
 using ClosedXML.Excel;
-
+using System;
+using System.IO;
 
 namespace RRHH.Controllers
 {
@@ -440,15 +441,16 @@ namespace RRHH.Controllers
                     }
                     worksheet.Cell(currentRow, 1).Value = "Legajo";
                     worksheet.Cell(currentRow, 2).Value = "Empleado";
-                    worksheet.Cell(currentRow, 3).Value = "Lectora";
-                    worksheet.Cell(currentRow, 4).Value = "Día";
-                    worksheet.Cell(currentRow, 5).Value = "Fecha";
-                    worksheet.Cell(currentRow, 6).Value = "Hora Entrada";
-                    worksheet.Cell(currentRow, 7).Value = "Hora Salida";
-                    worksheet.Cell(currentRow, 8).Value = "Hora Entrada";
-                    worksheet.Cell(currentRow, 9).Value = "Hora Salida";
-                    worksheet.Cell(currentRow, 10).Value = "Cant Hs.";
-                    worksheet.Cell(currentRow, 11).Value = "Justificación";
+                    worksheet.Cell(currentRow, 3).Value = "Empresa";
+                    worksheet.Cell(currentRow, 4).Value = "Lectora";
+                    worksheet.Cell(currentRow, 5).Value = "Día";
+                    worksheet.Cell(currentRow, 6).Value = "Fecha";
+                    worksheet.Cell(currentRow, 7).Value = "Hora Entrada";
+                    worksheet.Cell(currentRow, 8).Value = "Hora Salida";
+                    worksheet.Cell(currentRow, 9).Value = "Hora Entrada";
+                    worksheet.Cell(currentRow, 10).Value = "Hora Salida";
+                    worksheet.Cell(currentRow, 11).Value = "Cant Hs.";
+                    worksheet.Cell(currentRow, 12).Value = "Justificación";
 
 
                     foreach (var item in fichadas)
@@ -456,15 +458,16 @@ namespace RRHH.Controllers
                         currentRow++;
                         worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
                         worksheet.Cell(currentRow, 2).Value = item.apellido + ", " + item.nombre;
-                        worksheet.Cell(currentRow, 3).Value = item.lectora;
-                        worksheet.Cell(currentRow, 4).Value = item.DiaSemana();
-                        worksheet.Cell(currentRow, 5).Value = Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy");
-                        worksheet.Cell(currentRow, 6).Value = item.hora_entrada_1;
-                        worksheet.Cell(currentRow, 7).Value = item.hora_salida_1;
-                        worksheet.Cell(currentRow, 8).Value = item.hora_entrada_2;
-                        worksheet.Cell(currentRow, 9).Value = item.hora_salida_2;
-                        worksheet.Cell(currentRow, 10).Value = item.cantidad_horas;
-                        worksheet.Cell(currentRow, 11).Value = item.justificacion;
+                        worksheet.Cell(currentRow, 3).Value = item.empresa;
+                        worksheet.Cell(currentRow, 4).Value = item.lectora;
+                        worksheet.Cell(currentRow, 5).Value = item.DiaSemana();
+                        worksheet.Cell(currentRow, 6).Value = Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy");
+                        worksheet.Cell(currentRow, 7).Value = item.hora_entrada_1;
+                        worksheet.Cell(currentRow, 8).Value = item.hora_salida_1;
+                        worksheet.Cell(currentRow, 9).Value = item.hora_entrada_2;
+                        worksheet.Cell(currentRow, 10).Value = item.hora_salida_2;
+                        worksheet.Cell(currentRow, 11).Value = item.cantidad_horas;
+                        worksheet.Cell(currentRow, 12).Value = item.justificacion;
 
 
 
@@ -479,6 +482,224 @@ namespace RRHH.Controllers
                     var content = stream.ToArray();
                     Response.Clear();
                     Response.Headers.Add("content-disposition", "attachment;filename=Fichadas.xls");
+                    Response.ContentType = "application/xls";
+                    Response.Body.WriteAsync(content);
+                    Response.Body.Flush();
+                }
+            }
+
+
+            return;
+        }
+
+
+
+
+        [HttpPost]
+        public void ExportarCSV(int nro_legajo, int legajo_id, DateTime? fecha_desde, DateTime? fecha_hasta, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, string apellido, int tipo_listado)
+        {
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return;
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            //DateTime? fecha_desde = null;
+            //DateTime? fecha_hasta = null;
+
+            HttpContext.Session.SetString("APELLIDO_ACTUAL_FICHADA", (apellido == null) ? "" : apellido);
+
+            HttpContext.Session.SetInt32("EMPRESA_ACTUAL_FICHADA", empresa_id);
+
+
+            HttpContext.Session.SetInt32("UBICACION_ACTUAL_FICHADA", ubicacion_id);
+
+            HttpContext.Session.SetInt32("SECTOR_ACTUAL_FICHADA", sector_id);
+
+
+            HttpContext.Session.SetString("LEGAJO_FICHADA_ACTUAL", "");
+
+            HttpContext.Session.SetString("FECHA_FICHADA_DESDE", "");
+            HttpContext.Session.SetString("FECHA_FICHADA_HASTA", "");
+
+            // HttpContext.Session.SetString("EMPLEADO_FICHADA_ACTUAL", "");
+
+            HttpContext.Session.SetInt32("LEGAJO_FICHADA_ACTUAL", nro_legajo);
+
+            HttpContext.Session.SetInt32("EMPLEADO_FICHADA_ACTUAL", legajo_id);
+
+            HttpContext.Session.SetString("FILTRO_FICHADA_ACTUAL", (filtro == null) ? "" : filtro);
+
+
+            HttpContext.Session.SetString("FECHA_FICHADA_DESDE", fecha_desde.Value.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Value.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Value.Year);
+            HttpContext.Session.SetString("FECHA_FICHADA_HASTA", fecha_hasta.Value.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Value.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Value.Year);
+
+            HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", tipo_listado);
+
+            if (HttpContext.Session.GetString("FECHA_FICHADA_DESDE") != null && HttpContext.Session.GetString("FECHA_FICHADA_DESDE") != "")
+                fecha_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_FICHADA_DESDE"));
+            else
+                fecha_desde = DateTime.Now.Date;
+
+            if (HttpContext.Session.GetString("FECHA_FICHADA_HASTA") != null && HttpContext.Session.GetString("FECHA_FICHADA_HASTA") != "")
+                fecha_hasta = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_FICHADA_HASTA"));
+            else
+                fecha_hasta = DateTime.Now.Date;
+
+            if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL_FICHADA") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL_FICHADA");
+
+            if (HttpContext.Session.GetString("APELLIDO_ACTUAL_FICHADA") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL_FICHADA");
+
+            if (HttpContext.Session.GetInt32("UBICACION_ACTUAL_FICHADA") != null) ubicacion_id = (int)HttpContext.Session.GetInt32("UBICACION_ACTUAL_FICHADA");
+
+            if (HttpContext.Session.GetInt32("SECTOR_ACTUAL_FICHADA") != null) sector_id = (int)HttpContext.Session.GetInt32("SECTOR_ACTUAL_FICHADA");
+
+
+            if (HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL");
+            if (HttpContext.Session.GetString("FILTRO_FICHADA_ACTUAL") != null) filtro = HttpContext.Session.GetString("FILTRO_FICHADA_ACTUAL");
+
+            if (HttpContext.Session.GetInt32("TIPO_LISTADO_ACTUAL") != null)
+                tipo_listado = (int)HttpContext.Session.GetInt32("TIPO_LISTADO_ACTUAL");
+            else
+                tipo_listado = 1;
+
+
+
+            if (perfil_id > 0)
+            {
+
+                MemoryStream mr = new MemoryStream();
+
+                using (TextWriter tw = new StreamWriter(mr))
+                {
+                   
+
+                    Legajo legajo = new Legajo();
+                    ILegajoRepo legajoRepo;
+                    legajoRepo = new LegajoRepo();
+
+                    legajo = legajoRepo.Obtener(legajo_id);
+
+
+                    if (legajo != null)
+                    {
+                        nro_legajo = legajo.nro_legajo.Value;
+                        empresa_id = legajo.empresa_id.Value;
+                    }
+
+
+                    IEnumerable<Fichada> fichadas;
+                    IFichadaRepo fichadaRepo;
+
+                    fichadaRepo = new FichadaRepo();
+
+                    DateTime fechaDesde = new DateTime();
+                    DateTime fechaHasta = new DateTime();
+
+                    if (fecha_desde != null)
+                        if (fecha_desde.Value.Year > 2002)
+                            fechaDesde = fecha_desde.Value;
+                        else
+                              if (fecha_desde.Value.Year != 1)
+                            fechaDesde = new DateTime(1, 1, 1);
+
+                    if (fecha_hasta != null)
+                        if (fecha_hasta.Value.Year > 2002)
+                            fechaHasta = fecha_hasta.Value;
+                        else
+                              if (fecha_hasta.Value.Year != 1)
+                            fechaHasta = new DateTime(1, 1, 1);
+
+
+
+                    fichadas = fichadaRepo.ObtenerTodos(
+                  (nro_legajo == 0) ? -1 : nro_legajo,
+                  fechaDesde,
+                  fechaHasta,
+                  (empresa_id == 0) ? -1 : empresa_id,
+                  (ubicacion_id == 0) ? -1 : ubicacion_id,
+                  (sector_id == 0) ? -1 : sector_id,
+                  tipo_listado);
+
+
+
+
+                    //worksheet.Cell(currentRow, 1).Value = "Legajo";
+                    //worksheet.Cell(currentRow, 2).Value = "Empleado";
+                    //worksheet.Cell(currentRow, 3).Value = "Empresa";
+                    //worksheet.Cell(currentRow, 4).Value = "Lectora";
+                    //worksheet.Cell(currentRow, 5).Value = "Día";
+                    //worksheet.Cell(currentRow, 6).Value = "Fecha";
+                    //worksheet.Cell(currentRow, 7).Value = "Hora Entrada";
+                    //worksheet.Cell(currentRow, 8).Value = "Hora Salida";
+                    //worksheet.Cell(currentRow, 9).Value = "Hora Entrada";
+                    //worksheet.Cell(currentRow, 10).Value = "Hora Salida";
+                    //worksheet.Cell(currentRow, 11).Value = "Cant Hs.";
+                    //worksheet.Cell(currentRow, 12).Value = "Justificación";
+
+                    var currentRow = 1;
+                    foreach (var item in fichadas)
+                    {
+                        currentRow++;
+                        if (item.hora_entrada_1!=null)
+                        {
+                            tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                            tw.Write(item.hora_entrada_1 + ",");
+                            tw.Write("E,");
+                            tw.Write(item.lectora_nro + ",");
+                            tw.WriteLine(item.nro_legajo);
+                        }
+                        if (item.hora_salida_1 != null)
+                        {
+                            tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                            tw.Write(item.hora_salida_1 + ",");
+                            tw.Write("S,");
+                            tw.Write(item.lectora_nro + ",");
+                            tw.WriteLine(item.nro_legajo);
+                        }
+                        if (item.hora_entrada_2 != null)
+                        {
+                            tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                            tw.Write(item.hora_entrada_2 + ",");
+                            tw.Write("E,");
+                            tw.Write(item.lectora_nro + ",");
+                            tw.WriteLine(item.nro_legajo);
+                        }   
+                        if (item.hora_salida_2 != null)
+                        {
+                            tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                            tw.Write(item.hora_salida_2 + ",");
+                            tw.Write("S,");
+                            tw.Write(item.lectora_nro + ",");
+                            tw.WriteLine(item.nro_legajo);
+                        }
+
+                        //worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
+                        //worksheet.Cell(currentRow, 2).Value = item.apellido + ", " + item.nombre;
+                        //worksheet.Cell(currentRow, 3).Value = item.empresa;
+                        //worksheet.Cell(currentRow, 4).Value = item.lectora;
+                        //worksheet.Cell(currentRow, 5).Value = item.DiaSemana();
+                        //worksheet.Cell(currentRow, 6).Value = Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy");
+                        //worksheet.Cell(currentRow, 7).Value = item.hora_entrada_1;
+                        //worksheet.Cell(currentRow, 8).Value = item.hora_salida_1;
+                        //worksheet.Cell(currentRow, 9).Value = item.hora_entrada_2;
+                        //worksheet.Cell(currentRow, 10).Value = item.hora_salida_2;
+                        //worksheet.Cell(currentRow, 11).Value = item.cantidad_horas;
+                        //worksheet.Cell(currentRow, 12).Value = item.justificacion;
+
+
+
+                    }
+
+
+
+                    tw.Flush();
+
+                    //using var stream = new MemoryStream();
+                    //workbook.SaveAs(stream);
+                    var content = mr.ToArray();
+                    Response.Clear();
+                    Response.Headers.Add("content-disposition", "attachment;filename=Fichadas.txt");
                     Response.ContentType = "application/xls";
                     Response.Body.WriteAsync(content);
                     Response.Body.Flush();
