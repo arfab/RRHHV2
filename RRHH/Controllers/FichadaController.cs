@@ -699,9 +699,10 @@ namespace RRHH.Controllers
 
                     //using var stream = new MemoryStream();
                     //workbook.SaveAs(stream);
+                    string nomarch = "Fichadas_" + Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy") + "_" + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + ".txt";
                     var content = mr.ToArray();
                     Response.Clear();
-                    Response.Headers.Add("content-disposition", "attachment;filename=Fichadas.txt");
+                    Response.Headers.Add("content-disposition", "attachment;filename=" + nomarch);
                     Response.ContentType = "application/xls";
                     Response.Body.WriteAsync(content);
                     Response.Body.Flush();
