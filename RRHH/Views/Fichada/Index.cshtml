@@ -10,6 +10,7 @@
     var pagina = @HttpContextAccessor.HttpContext.Session.GetInt32("PAG_FICHADA");
     var total_paginas = @HttpContextAccessor.HttpContext.Session.GetInt32("TOT_PAG_FICHADA");
     var legajo =  (RRHH.Models.Legajo) ViewData["LEGAJO"];
+    var tipo_listado =  (int) ViewData["TIPO_LISTADO"];
           
     }
 
@@ -93,7 +94,10 @@
                      <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" class="btn btn-primary" />
                      <input type="submit" value="Limpiar" asp-action="Limpiar" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
                      <input type="submit" asp-action="ExportarExcel"   value="Exportar a Excel" class="btn btn-primary" />
-                     <input type="submit" asp-action="ExportarCSV"   value="Exportar a ComuWin" class="btn btn-primary" />
+                     @if (tipo_listado == 1)
+                     {
+                       <input type="submit" asp-action="ExportarCSV" id="ExportarCSV"  value="Exportar a ComuWin" class="btn btn-primary" />
+                     } 
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
                      @if (_perfil_id <= 3)

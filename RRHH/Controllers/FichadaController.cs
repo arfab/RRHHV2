@@ -223,6 +223,8 @@ namespace RRHH.Controllers
 
                 }
 
+                ViewData["TIPO_LISTADO"] = tipo_listado;
+
                 fichadas = fichadaRepo.ObtenerTodos(
                      (nro_legajo == 0) ? -1 : nro_legajo, 
                      fechaDesde, 
