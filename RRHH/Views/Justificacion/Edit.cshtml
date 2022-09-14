@@ -4,6 +4,8 @@
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
+
+
 @{
     ViewData["Title"] = "Novedad";
     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
@@ -17,6 +19,21 @@
 <div class="container">
 <h2>Justificación</h2>
 
+        <div class="row mb-3" >
+            <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="empresa_id">Empresa</label>
+			   <select name="empresa_id" id="empresa_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["EMPRESA_ID"]"></select>
+			</div>
+            <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="ubicacion_id">Ubicación</label>
+			   <select name="ubicacion_id" id="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UBICACION_ID"]"></select>
+			</div>
+             <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="sector_id">Sector/Local</label>
+			   <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SECTOR_ID"]"></select>
+			</div>
+         </div>
+
            <div class="row mb-3" >
              <div class="col-lg-2 col-xs-6 mb-3">
                   <label for="filtro">Legajo / Apellido</label>
@@ -24,7 +41,7 @@
 			</div>
 			<div class="col-lg-6 col-xs-6 mb-3">
                 <label for="legajo_id">Empleado</label>
-                <select  data-filter="model" class="form-control" asp-for="legajo_id" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+                <select  data-filter="model" class="form-control"  asp-for="legajo_id"  name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
 
           </div>  
@@ -197,14 +214,18 @@
 
 
 $(document).ready(function () {
+    var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+    var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
 
     var CodCategoria = @Html.Raw(Json.Serialize(Model.categoria_id));
     var FechaDesde = @Html.Raw(Json.Serialize(Model.fecha_desde));
     var FechaHasta = @Html.Raw(Json.Serialize(Model.fecha_hasta));
     var Apellido = @Html.Raw(Json.Serialize(Model.apellido));
     var Nombre = @Html.Raw(Json.Serialize(Model.nombre));
-    //var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
-    //var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
+
+     var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+     var LegajoId = @Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
     var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroJustificacionActual"]));
 
 
@@ -224,30 +245,31 @@ $(document).ready(function () {
     $("#apellido").text('');
     $("#nombre").text('');
 
-    //ObtenerUbicaciones();
+          
+       ObtenerEmpresas();
+
+       ObtenerUbicaciones();
     
 
-     //if (CodUbicacion==1 || CodUbicacion==2 || CodUbicacion==4) {
-     //      ObtenerSectores(CodUbicacion,0);
-     //       $("#divSector").show();
-     //       $("#local_id").val(-1);
-     //       $("#divLocal").hide();
-     //   }
-     //   else {
-     //      if (CodUbicacion == 3) {
-     //          ObtenerLocales(0);
-     //          $("#divLocal").show();
-     //          $("#sector_id").val(-1);
-     //          $("#divSector").hide();
-     //      }
-     //      else {
-     //          $("#divLocal").hide();
-     //           $("#local_id").val(-1);
-     //          $("#sector_id").val(-1);
-     //          $("#divSector").hide();
-     //      }
-     //   }
-   
+    if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
+            ObtenerSectores(CodUbicacion);
+        }
+        else {
+           if (CodUbicacion ==3) {
+               ObtenerLocales();
+           }
+            else {
+               $("#sector_id").val(-1);
+           }
+        }
+
+        if ($("#nro_legajo").val() <=0) 
+        {
+            $("#nro_legajo").val('');
+        }
+
+
+       ObtenerLegajos($("#empresa_id").val(),Legajo,CodUbicacion,CodSector,Filtro )
 
     ObtenerCategorias();
 
@@ -334,7 +356,42 @@ $(document).ready(function () {
 }
 
 
- 
+ $("#ubicacion_id").change(function () {
+         var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+            ObtenerSectores($("#ubicacion_id").val());
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales();
+           }
+           else {
+                $("#sector_id").val(-1);
+           }
+        }
+
+         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+      });
+
+   $("#sector_id").focusout(function () {
+              var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+             //if($("#nro_legajo").val()!='')
+       ObtenerLegajos($("#empresa_id").val(), Legajo, $("#ubicacion_id").val(), $("#sector_id").val(), $("#filtro").val());
+
+           
+         });
+
+
+
+
+         $("#empresa_id").focusout(function () {
+              var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+             //if($("#nro_legajo").val()!='')
+             ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+         });
+
   var ObtenerCategorias = function () {
          var CodCategoria =@Html.Raw(Json.Serialize(Model.categoria_id));
          $.ajax({
@@ -375,9 +432,7 @@ $(document).ready(function () {
             success: function (data) {
                 $('#apellido').text(data.apellido);
                 $('#nombre').text(data.nombre);
-             
 
-                habilitar_grabar(); 
             },
             error: function () {
             }
@@ -400,9 +455,7 @@ var ObtenerLegajoPorID = function (id) {
                 $('#apellido').text(data.apellido);
                 $('#nombre').text(data.nombre);
 
-              
-
-                habilitar_grabar(); 
+    
             },
             error: function () {
             }
@@ -434,12 +487,142 @@ var ObtenerEmpleados = function (filtro) {
                           $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                     }
                     );
+      
             },
             error: function () {
              
             }
       });
     }
+
+     var ObtenerLegajos = function (empresa_id, nro_legajo, ubicacion_id, sector_id, filtro) {
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+          
+             $.ajax({
+                url: '@Url.Action("ObtenerLegajos","Legajo")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    empresa_id: empresa_id,
+                    nro_legajo: nro_legajo,
+                    ubicacion_id: ubicacion_id,
+                    sector_id: sector_id,
+                    filtro: filtro,
+                    activo: 1
+                },
+                success: function (data) {
+
+                   
+                    $('#legajo_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpleado)
+                              $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                             else 
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        }
+                        ); 
+
+
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+      var ObtenerEmpresas = function () {
+             var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#empresa_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpresa)
+                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+  var ObtenerUbicaciones = function () {
+         var CodUbicacion =@Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Legajo")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+      var ObtenerSectores = function (ubicacion_id) {
+             var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerSectores","Legajo")',
+                type: 'GET',
+                 data: {
+                ubicacion_id: ubicacion_id
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodSector)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+        var ObtenerLocales = function () {
+             var CodLocal = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
 
     $(function () {
       $('#txtSelectedFechaDesde').datepicker({
@@ -465,6 +648,8 @@ var ObtenerEmpleados = function (filtro) {
     $("input[type='submit']", this)
       .attr('disabled', 'disabled');
   });
+
+
 
 </script>
 

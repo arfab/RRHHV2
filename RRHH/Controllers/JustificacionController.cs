@@ -557,9 +557,16 @@ namespace RRHH.Controllers
 
             ViewData["MODO"] = modo;
 
-           
+            
 
-            if (valida(justificacion))
+            ViewData["MODO"] = (modo == null) ? "E" : modo;
+
+            ViewData["UBICACION_ID"] = justificacion.ubicacion_id;
+            ViewData["SECTOR_ID"] = justificacion.sector_id;
+
+
+            string mensaje = "";
+            if (valida(justificacion,ref mensaje))
             {
 
 
@@ -580,14 +587,22 @@ namespace RRHH.Controllers
                 }
                 else
                 {
-                    ViewData["EMPRESA_ID"] = justificacion.empresa_id;
-                    ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
-                    ViewData["FiltroJustificacionActual"] = justificacion.nro_legajo;
-                    ViewData["EmpleadoActual"] = justificacion.legajo_id;
+                   
                     ViewBag.Message = sret;
                 }
 
             }
+            else
+            {
+                ViewBag.Message = mensaje;
+            }
+
+            ViewData["EMPRESA_ID"] = justificacion.empresa_id;
+            ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
+            ViewData["FiltroJustificacionActual"] = justificacion.nro_legajo;
+            ViewData["EmpleadoActual"] = justificacion.legajo_id;
+            ViewData["LegajoActual"] = justificacion.nro_legajo;
+
             return View(justificacion);
         }
 
@@ -733,10 +748,14 @@ namespace RRHH.Controllers
         }
 
 
-        public Boolean valida(Justificacion justificacion)
+        public Boolean valida(Justificacion justificacion,ref string mensaje)
         {
 
-            //    if (novedad.nro_legajo == null) return false;
+            if (justificacion.legajo_id<0)
+            {
+                mensaje = "Debe seleccionar al menos un legajo";
+                return false; 
+            }
 
             LegajoRepo legajoRepo;
 
