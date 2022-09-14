@@ -39,6 +39,10 @@
 
         public string? empleado { get; set; }
 
+        public string? apellido { get; set; }
+
+        public string? nombre { get; set; }
+
         public string? lectora { get; set; }
 
         public int? delta { get; set; }

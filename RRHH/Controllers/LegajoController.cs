@@ -639,17 +639,17 @@ namespace RRHH.Controllers
 
                         if (iUbicacion == -1)
                         {
-                            worksheet.Cell(fila, "Z").Value = "Ubicación inválida";
+                            worksheet.Cell(fila, "M").Value = "Ubicación inválida";
                             errores++;
                         }
                         else if (fecha_alta == "ERR" || fecha_alta == "")
                         {
-                            worksheet.Cell(fila, "Z").Value = "Fecha alta inválida";
+                            worksheet.Cell(fila, "M").Value = "Fecha alta inválida";
                             errores++;
                         }
                         else if (fecha_baja == "ERR")
                         {
-                            worksheet.Cell(fila, "Z").Value = "Fecha baja inválida";
+                            worksheet.Cell(fila, "M").Value = "Fecha baja inválida";
                             errores++;
                         }
                         else
@@ -709,19 +709,19 @@ namespace RRHH.Controllers
                                 }
 
                                 // ViewBag.Message = "ERROR";
-                                worksheet.Cell(fila, "Z").Value = sError;
+                                worksheet.Cell(fila, "M").Value = sError;
                             }
                             else
                             {
                                 if (legajoRepo.Insertar(legajo) == "")
                                 {
                                     // ViewBag.Message = "OK";
-                                    worksheet.Cell(fila, "Z").Value = "OK";
+                                    worksheet.Cell(fila, "M").Value = "OK";
                                 }
                                 else
                                 {
                                     ViewBag.Message = "ERROR";
-                                    worksheet.Cell(fila, "Z").Value = "ERROR";
+                                    worksheet.Cell(fila, "M").Value = "ERROR";
                                 }
                             }
                         }

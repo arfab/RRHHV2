@@ -438,31 +438,33 @@ namespace RRHH.Controllers
                     {
                         worksheet.Cell(currentRow, i).Style.Font.SetBold();
                     }
-                    worksheet.Cell(currentRow, 1).Value = "Empleado";
-                    worksheet.Cell(currentRow, 2).Value = "Lectora";
-                    worksheet.Cell(currentRow, 3).Value = "Día";
-                    worksheet.Cell(currentRow, 4).Value = "Fecha";
-                    worksheet.Cell(currentRow, 5).Value = "Hora Entrada";
-                    worksheet.Cell(currentRow, 6).Value = "Hora Salida";
-                    worksheet.Cell(currentRow, 7).Value = "Hora Entrada";
-                    worksheet.Cell(currentRow, 8).Value = "Hora Salida";
-                    worksheet.Cell(currentRow, 9).Value = "Cant Hs.";
-                    worksheet.Cell(currentRow, 10).Value = "Justificación";
+                    worksheet.Cell(currentRow, 1).Value = "Legajo";
+                    worksheet.Cell(currentRow, 2).Value = "Empleado";
+                    worksheet.Cell(currentRow, 3).Value = "Lectora";
+                    worksheet.Cell(currentRow, 4).Value = "Día";
+                    worksheet.Cell(currentRow, 5).Value = "Fecha";
+                    worksheet.Cell(currentRow, 6).Value = "Hora Entrada";
+                    worksheet.Cell(currentRow, 7).Value = "Hora Salida";
+                    worksheet.Cell(currentRow, 8).Value = "Hora Entrada";
+                    worksheet.Cell(currentRow, 9).Value = "Hora Salida";
+                    worksheet.Cell(currentRow, 10).Value = "Cant Hs.";
+                    worksheet.Cell(currentRow, 11).Value = "Justificación";
 
 
                     foreach (var item in fichadas)
                     {
                         currentRow++;
-                        worksheet.Cell(currentRow, 1).Value = item.empleado;
-                        worksheet.Cell(currentRow, 2).Value = item.lectora;
-                        worksheet.Cell(currentRow, 3).Value = item.DiaSemana();
-                        worksheet.Cell(currentRow, 4).Value = Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy");
-                        worksheet.Cell(currentRow, 5).Value = item.hora_entrada_1;
-                        worksheet.Cell(currentRow, 6).Value = item.hora_salida_1;
-                        worksheet.Cell(currentRow, 7).Value = item.hora_entrada_2;
-                        worksheet.Cell(currentRow, 8).Value = item.hora_salida_2;
-                        worksheet.Cell(currentRow, 9).Value = item.cantidad_horas;
-                        worksheet.Cell(currentRow, 10).Value = item.justificacion;
+                        worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
+                        worksheet.Cell(currentRow, 2).Value = item.apellido + ", " + item.nombre;
+                        worksheet.Cell(currentRow, 3).Value = item.lectora;
+                        worksheet.Cell(currentRow, 4).Value = item.DiaSemana();
+                        worksheet.Cell(currentRow, 5).Value = Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy");
+                        worksheet.Cell(currentRow, 6).Value = item.hora_entrada_1;
+                        worksheet.Cell(currentRow, 7).Value = item.hora_salida_1;
+                        worksheet.Cell(currentRow, 8).Value = item.hora_entrada_2;
+                        worksheet.Cell(currentRow, 9).Value = item.hora_salida_2;
+                        worksheet.Cell(currentRow, 10).Value = item.cantidad_horas;
+                        worksheet.Cell(currentRow, 11).Value = item.justificacion;
 
 
 
