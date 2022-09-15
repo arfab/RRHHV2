@@ -63,6 +63,7 @@ namespace RRHH.Controllers
                 ViewData["FechaJustificacionHastaActual"] = "";
 
                 ViewData["EmpleadoActual"] = -1;
+                ViewData["Legajos"] = new string[] { };
                 ViewData["FiltroJustificacionActual"] = "";
 
                 HttpContext.Session.SetString("EMPRESA_JUSTIFICACION_ACTUAL", "");
@@ -112,7 +113,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int categoria_id,  int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde)
+        public IActionResult Index(int categoria_id,  int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde, string[] legajos)
         {
 
 
@@ -179,6 +180,8 @@ namespace RRHH.Controllers
                 ViewData["ApellidoActual"] = apellido;
 
                 ViewData["EmpleadoActual"] = legajo_id;
+                ViewData["Legajos"] = legajos;
+
                 ViewData["FiltroJustificacionActual"] = filtro;
 
                 Legajo legajo = new Legajo();
@@ -498,8 +501,8 @@ namespace RRHH.Controllers
                 ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
                 ViewData["FiltroJustificacionActual"] = justificacion.nro_legajo;
                 ViewData["EmpleadoActual"] = justificacion.legajo_id;
+                ViewData["Legajos"] = justificacion.legajos;
 
-               
                 return View(justificacion);
             }
             else
@@ -534,6 +537,7 @@ namespace RRHH.Controllers
                     ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
                     ViewData["FiltroJustificacionActual"] = justificacion.nro_legajo;
                     ViewData["EmpleadoActual"] = justificacion.legajo_id;
+                    ViewData["Legajos"] = justificacion.legajos;
                 }
 
                 return View(justificacion);
@@ -551,7 +555,7 @@ namespace RRHH.Controllers
 
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
-            string sret;
+            string sret="";
 
             IJustificacionRepo justificacionRepo;
 
@@ -575,7 +579,19 @@ namespace RRHH.Controllers
                 if (modo == "E" || modo == null)
                     sret = justificacionRepo.Modificar(justificacion, usuario_id.Value);
                 else
-                    sret = justificacionRepo.Insertar(justificacion, usuario_id.Value);
+                {
+                    if (justificacion.legajo_id != null)
+                        sret = justificacionRepo.Insertar(justificacion, usuario_id.Value);
+                    else
+                    {
+                        foreach (string s in justificacion.legajos)
+                        {
+                            justificacion.legajo_id = Int32.Parse(s);
+                            sret = justificacionRepo.Insertar(justificacion, usuario_id.Value);
+                        }
+                    }
+                }
+
 
                 if (sret == "")
                 {
@@ -601,6 +617,7 @@ namespace RRHH.Controllers
             ViewData["NRO_LEGAJO"] = justificacion.nro_legajo;
             ViewData["FiltroJustificacionActual"] = justificacion.nro_legajo;
             ViewData["EmpleadoActual"] = justificacion.legajo_id;
+            ViewData["Legajos"] = justificacion.legajos;
             ViewData["LegajoActual"] = justificacion.nro_legajo;
 
             return View(justificacion);
@@ -751,6 +768,12 @@ namespace RRHH.Controllers
         public Boolean valida(Justificacion justificacion,ref string mensaje)
         {
 
+            if (justificacion.legajo_id == null && justificacion.legajos==null)
+            {
+                mensaje = "Debe seleccionar al menos un legajo";
+                return false;
+            }
+
             if (justificacion.legajo_id<0)
             {
                 mensaje = "Debe seleccionar al menos un legajo";
@@ -761,7 +784,7 @@ namespace RRHH.Controllers
 
             legajoRepo = new LegajoRepo();
 
-            if (legajoRepo.Obtener(justificacion.legajo_id.Value) == null) return false;
+            //if (legajoRepo.Obtener(justificacion.legajo_id.Value) == null) return false;
             if (justificacion.categoria_id <= 0) return false;
            
             //if (justificacion.descripcion == null) return false;

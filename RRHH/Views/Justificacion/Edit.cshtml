@@ -5,14 +5,13 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 
-
 @{
     ViewData["Title"] = "Novedad";
     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
     var _origen = (string)ViewData["ORIGEN"];
     var _modo = (string)ViewData["MODO"];
     var _id = ViewData["ID"];
-
+    var _empleado = (ViewData["EmpleadoActual"]==null)?-1:(int)ViewData["EmpleadoActual"];
 }
 
 <form  method="post" id="form1">
@@ -39,11 +38,19 @@
                   <label for="filtro">Legajo / Apellido</label>
                   <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroJustificacionActual"]" class="form-control" />                                          
 			</div>
-			<div class="col-lg-6 col-xs-6 mb-3">
+             @if (_modo=="A" && _empleado<0) {
+            <div class="col-lg-6 col-xs-6 mb-3">
+                <label for="legajo_id">Empleado</label>
+                <select  data-filter="model" class="form-control"  multiple asp-for="legajos"  name="legajos" id="legajo_id" value="@ViewData["Legajos"]"  ></select>           
+			</div>
+             }
+             else
+             {
+			   <div class="col-lg-6 col-xs-6 mb-3">
                 <label for="legajo_id">Empleado</label>
                 <select  data-filter="model" class="form-control"  asp-for="legajo_id"  name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
-			</div>
-
+			   </div>
+             }
           </div>  
 
 
@@ -375,6 +382,14 @@ $(document).ready(function () {
 
       });
 
+        $("#sector_id").change(function () {
+              var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+             //if($("#nro_legajo").val()!='')
+       ObtenerLegajos($("#empresa_id").val(), Legajo, $("#ubicacion_id").val(), $("#sector_id").val(), $("#filtro").val());
+
+           
+         });
+
    $("#sector_id").focusout(function () {
               var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
              //if($("#nro_legajo").val()!='')
@@ -464,7 +479,7 @@ var ObtenerLegajoPorID = function (id) {
 
 var ObtenerEmpleados = function (filtro) {
          var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
-
+         var CodModo =@Html.Raw(Json.Serialize(ViewData["Modo"]));
          $.ajax({
             url: '@Url.Action("ObtenerEmpleados","Legajo")',
             type: 'GET',
@@ -480,11 +495,12 @@ var ObtenerEmpleados = function (filtro) {
                 }
                 $(data).each(
                     function (index, item) {    
-                       
-                        if (item.value==CodEmpleado || CodEmpleado==null && index==0)
-                          $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
-                         else 
-                          $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        if (item.value!=-1) { 
+                          if (item.value==CodEmpleado || CodEmpleado==null && index==0)
+                            $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                           else 
+                            $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')            
+                        }
                     }
                     );
       
@@ -497,7 +513,7 @@ var ObtenerEmpleados = function (filtro) {
 
      var ObtenerLegajos = function (empresa_id, nro_legajo, ubicacion_id, sector_id, filtro) {
              var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
-          
+             var CodModo =@Html.Raw(Json.Serialize(ViewData["Modo"]));
              $.ajax({
                 url: '@Url.Action("ObtenerLegajos","Legajo")',
                 type: 'GET',
@@ -516,11 +532,13 @@ var ObtenerEmpleados = function (filtro) {
                    
                     $('#legajo_id').find('option').remove()
                     $(data).each(
-                        function (index, item) {            
-                            if (item.value==CodEmpleado)
-                              $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        function (index, item) {     
+                            if (item.value!=-1) { 
+                             if (item.value==CodEmpleado)
+                               $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
                              else 
-                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')         
+                            }
                         }
                         ); 
 

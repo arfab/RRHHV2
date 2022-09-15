@@ -1014,7 +1014,7 @@ namespace RRHH.Controllers
                     con.Open();
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@filtro", filtro);
+                parameters.Add("@filtro", filtro==null?"":filtro);
 
                 l = con.Query<Models.Empleado>("spLegajoObtenerPorFiltro", parameters, commandType: CommandType.StoredProcedure).ToList();
             }

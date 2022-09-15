@@ -44,6 +44,6 @@ namespace RRHH.Models
         public int? empresa_id { get; set; }
         public string? empresa { get; set; }
 
-
+        public string[]? legajos { get; set; }
     }
 }
