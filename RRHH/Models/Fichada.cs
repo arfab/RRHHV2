@@ -51,6 +51,20 @@
 
         public int? delta { get; set; }
 
+        public int? ubicacion_id { get; set; }
+
+        public int? sector_id { get; set; }
+
+        public int? local_id { get; set; }
+
+
+        public string? horas_normales { get; set; }
+
+        public string? horas_50 { get; set; }
+
+        public string? horas_100 { get; set; }
+
+
         public string DiaSemana()
         {
             switch (fecha.Value.DayOfWeek)

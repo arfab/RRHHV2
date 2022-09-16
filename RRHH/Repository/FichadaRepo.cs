@@ -214,10 +214,15 @@ namespace RRHH.Repository
 
                     if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null)
                     {
+
+                        
+
                         item.hora_entrada_1 = item.lec1;
                         item.hora_salida_1 = item.lec2;
                         item.hora_entrada_2 = item.lec3;
                         item.hora_salida_2 = item.lec4;
+
+                  
 
                         DateTime entrada1 = DateTime.Parse(item.lec1);
                         DateTime salida1 = DateTime.Parse(item.lec2);
@@ -264,6 +269,21 @@ namespace RRHH.Repository
                     {
                         item.hora_entrada_1 = item.lec1;
                         item.hora_salida_1 = item.lec2;
+
+                        CantidadHoras cantidadHoras = ObtenerCantidadHoras(item.hora_entrada_1,
+                                      item.hora_salida_1,
+                                      item.hora_entrada_2,
+                                      item.hora_salida_2,
+                                      item.ubicacion_id.Value,
+                                      item.ubicacion_id.Value==3?item.local_id.Value:item.sector_id.Value,
+                                      (int)item.fecha.Value.DayOfWeek+1);
+
+                        if (cantidadHoras != null)
+                        {
+                            if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
+                            if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
+                            if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
+                        }
 
                         DateTime entrada1 = DateTime.Parse(item.lec1);
                         DateTime salida1 = DateTime.Parse(item.lec2);
@@ -314,5 +334,29 @@ namespace RRHH.Repository
             return d.ToString("HH:mm:ss");
 
         }
+
+
+        public CantidadHoras ObtenerCantidadHoras(string entrada1, string salida1, string entrada2, string salida2, int ubicacion_id, int sector_id, int dia_semana)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@entrada1", entrada1);
+                parameter.Add("@salida1", salida1);
+                parameter.Add("@entrada2", entrada2);
+                parameter.Add("@salida2", salida2);
+                parameter.Add("@ubicacion_id", ubicacion_id);
+                parameter.Add("@sector_id", sector_id);
+                parameter.Add("@dia_semana", dia_semana);
+
+                return con.QuerySingle<CantidadHoras>("spCantidadHorasObtenerDesglose", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
     }
 }

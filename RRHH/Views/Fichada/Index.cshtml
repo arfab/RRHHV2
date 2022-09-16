@@ -217,6 +217,9 @@
                                             <th>Hora Entrada</th>
                                             <th>Hora Salida</th>
                                             <th>Cant. Hs.</th>
+                                            <th>Normales</th>
+                                            <th>50%</th>
+                                            <th>100%</th>
                                             <th>Justificación</th>
                                             <th></th>
                                         </tr>
@@ -270,6 +273,15 @@
                                                 </td>
                                                 <td>
                                                     @item.cantidad_horas
+                                                </td>
+                                                <td>
+                                                    @item.horas_normales
+                                                </td>
+                                                <td>
+                                                    @item.horas_50
+                                                </td>
+                                                <td>
+                                                    @item.horas_100
                                                 </td>
                                                  <td>
                                                     @item.justificacion
