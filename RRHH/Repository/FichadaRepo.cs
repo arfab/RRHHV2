@@ -358,5 +358,32 @@ namespace RRHH.Repository
 
         }
 
+
+        public string InsertarExportacionFichada(int nro_lectora, int nro_legajo, DateTime fecha, string hora,string tipo, int completo)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@lectora_nro", nro_lectora);
+                parameters.Add("@nro_legajo", nro_legajo);
+                parameters.Add("@fecha", fecha);
+                parameters.Add("@hora", hora);
+                parameters.Add("@tipo", tipo);
+                parameters.Add("@completo", completo);
+
+
+                icantFilas = con.Execute("spFichadaExportacionInsertar", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
+        }
+
+
     }
 }

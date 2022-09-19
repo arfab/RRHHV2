@@ -498,7 +498,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public void ExportarCSV(int nro_legajo, int legajo_id, DateTime? fecha_desde, DateTime? fecha_hasta, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, string apellido, int tipo_listado)
+        public void ExportarCSV(int nro_legajo, int legajo_id, DateTime? fecha_desde, DateTime? fecha_hasta, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, string apellido, int tipo_listado, int completo)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -645,35 +645,104 @@ namespace RRHH.Controllers
                         currentRow++;
                         if (item.hora_entrada_1!=null)
                         {
-                            tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
-                            tw.Write(item.hora_entrada_1 + ",");
-                            tw.Write("E,");
-                            tw.Write(item.lectora_nro + ",");
-                            tw.WriteLine(item.nro_legajo);
+                            try
+                            {
+                                fichadaRepo.InsertarExportacionFichada(item.nro_legajo.Value, item.lectora_nro.Value, item.fecha.Value, item.hora_entrada_1, "E", completo);
+
+                                tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                                tw.Write(item.hora_entrada_1 + ",");
+                                tw.Write("E,");
+                                tw.Write(item.lectora_nro + ",");
+                                tw.WriteLine(item.nro_legajo);
+
+                            }
+                            catch (SqlException ex)
+                            {
+                                if (ex.Number == 2601 || ex.Number == 2627)
+                                {
+                                    // Violation in one on both...
+                                }
+                            }
+
+                           
+
                         }
                         if (item.hora_salida_1 != null)
                         {
-                            tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
-                            tw.Write(item.hora_salida_1 + ",");
-                            tw.Write("S,");
-                            tw.Write(item.lectora_nro + ",");
-                            tw.WriteLine(item.nro_legajo);
+
+                            try
+                            {
+                                fichadaRepo.InsertarExportacionFichada(item.nro_legajo.Value, item.lectora_nro.Value, item.fecha.Value, item.hora_salida_1, "S", completo);
+
+
+                                tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                                tw.Write(item.hora_salida_1 + ",");
+                                tw.Write("S,");
+                                tw.Write(item.lectora_nro + ",");
+                                tw.WriteLine(item.nro_legajo);
+
+
+                            }
+                            catch (SqlException ex)
+                            {
+                                if (ex.Number == 2601 || ex.Number == 2627)
+                                {
+                                    // Violation in one on both...
+                                }
+                            }
+
+
                         }
                         if (item.hora_entrada_2 != null)
                         {
-                            tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
-                            tw.Write(item.hora_entrada_2 + ",");
-                            tw.Write("E,");
-                            tw.Write(item.lectora_nro + ",");
-                            tw.WriteLine(item.nro_legajo);
-                        }   
+
+                            try
+                            {
+                                fichadaRepo.InsertarExportacionFichada(item.nro_legajo.Value, item.lectora_nro.Value, item.fecha.Value, item.hora_entrada_2, "E", completo);
+
+                                tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                                tw.Write(item.hora_entrada_2 + ",");
+                                tw.Write("E,");
+                                tw.Write(item.lectora_nro + ",");
+                                tw.WriteLine(item.nro_legajo);
+
+
+                            }
+                            catch (SqlException ex)
+                            {
+                                if (ex.Number == 2601 || ex.Number == 2627)
+                                {
+                                    // Violation in one on both...
+                                }
+                            }
+
+                           
+
+                        }
                         if (item.hora_salida_2 != null)
                         {
-                            tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
-                            tw.Write(item.hora_salida_2 + ",");
-                            tw.Write("S,");
-                            tw.Write(item.lectora_nro + ",");
-                            tw.WriteLine(item.nro_legajo);
+
+                            try
+                            {
+                                fichadaRepo.InsertarExportacionFichada(item.nro_legajo.Value, item.lectora_nro.Value, item.fecha.Value, item.hora_salida_2, "E", completo);
+
+                                tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                                tw.Write(item.hora_salida_2 + ",");
+                                tw.Write("S,");
+                                tw.Write(item.lectora_nro + ",");
+                                tw.WriteLine(item.nro_legajo);
+
+
+                            }
+                            catch (SqlException ex)
+                            {
+                                if (ex.Number == 2601 || ex.Number == 2627)
+                                {
+                                    // Violation in one on both...
+                                }
+                            }                           
+
+
                         }
 
                         //worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
@@ -711,6 +780,80 @@ namespace RRHH.Controllers
 
 
             return;
+        }
+
+
+
+        [HttpGet]
+        public JsonResult ObtenerLocales(int empresa_id)
+        {
+            List<Models.Local> l = new List<Models.Local>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@empresa_id", empresa_id);
+
+                l = con.Query<Models.Local>("spLocalLegajoObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Local(-1, "-- Seleccione el local --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+
+
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerSectores(int ubicacion_id, int empresa_id)
+        {
+            List<Models.Sector> l = new List<Models.Sector>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@ubicacion_id", ubicacion_id);
+                parameters.Add("@empresa_id", empresa_id);
+
+                l = con.Query<Models.Sector>("spSectorLegajoObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Sector(-1, "-- Seleccione el sector --", -1, ""));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerUbicaciones(int empresa_id)
+        {
+            List<Models.Ubicacion> l = new List<Models.Ubicacion>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@empresa_id", empresa_id==0?-1:empresa_id);
+
+                // l = con.Query<Models.Ubicacion>("select * from ubicacion order by descripcion", parameters).ToList();
+                l = con.Query<Models.Ubicacion>("spUbicacionLegajoObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Ubicacion(-1, "-- Seleccione la ubicación --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+
+
         }
 
 

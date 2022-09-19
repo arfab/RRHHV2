@@ -96,7 +96,9 @@
                      <input type="submit" asp-action="ExportarExcel"   value="Exportar a Excel" class="btn btn-primary" />
                      @if (tipo_listado == 1)
                      {
-                       <input type="submit" asp-action="ExportarCSV" id="ExportarCSV"  value="Exportar a ComuWin" class="btn btn-primary" />
+                       <input type="submit" asp-action="ExportarCSV" id="ExportarCSV" asp-route-completo="1"  value="Exportar a ComuWin (todos)" class="btn btn-primary" />
+                       <input type="submit" asp-action="ExportarCSV" id="ExportarCSV2" asp-route-completo="0"  value="Exportar a ComuWin (nuevos)" class="btn btn-primary" />
+
                      } 
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
@@ -331,6 +333,7 @@
 
     $(document).ready(function() {
         var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+        var CodEmpresa = @Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
         var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
         var FechaDesde = @Html.Raw(Json.Serialize(ViewData["FechaDesdeActual"]));
         var FechaHasta = @Html.Raw(Json.Serialize(ViewData["FechaHastaActual"]));
@@ -345,14 +348,14 @@
             
        ObtenerEmpresas();
 
-       ObtenerUbicaciones();
+       ObtenerUbicaciones(CodEmpresa);
 
        if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
-            ObtenerSectores(CodUbicacion);
+            ObtenerSectores(CodUbicacion, CodEmpresa);
         }
         else {
            if (CodUbicacion ==3) {
-               ObtenerLocales();
+               ObtenerLocales(CodEmpresa);
            }
             else {
                $("#sector_id").val(-1);
@@ -398,18 +401,46 @@
 
     });
 
+
+    $("#empresa_id").change(function () {
+         var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+         ObtenerUbicaciones($("#empresa_id").val());
+           
+         $("#ubicacion_id").val(-1);
+
+         if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+           ObtenerSectores($("#ubicacion_id").val(),$("#empresa_id").val());
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales($("#empresa_id").val());
+           }
+           else {
+             $('#sector_id').find('option').remove();
+             $("#sector_id").val(-1);
+           }
+        }
+
+         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+
+      });
+
+
     $("#ubicacion_id").change(function () {
           var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
 
        if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
-            ObtenerSectores($("#ubicacion_id").val());
+            ObtenerSectores($("#ubicacion_id").val(),$("#empresa_id").val());
         }
         else {
            if ($("#ubicacion_id").val() == 3) {
-               ObtenerLocales();
+               ObtenerLocales($("#empresa_id").val());
            }
            else {
-                $("#sector_id").val(-1);
+               $('#sector_id').find('option').remove();
+               $("#sector_id").val(-1);
            }
         }
 
@@ -584,12 +615,13 @@
         }
 
 
-  var ObtenerUbicaciones = function () {
+  var ObtenerUbicaciones = function (empresa_id) {
          var CodUbicacion =@Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
          $.ajax({
-            url: '@Url.Action("ObtenerUbicaciones","Legajo")',
+            url: '@Url.Action("ObtenerUbicaciones","Fichada")',
             type: 'GET',
             data: {
+              empresa_id: empresa_id
             },
             success: function (data) {
                 $('#ubicacion_id').find('option').remove()
@@ -606,14 +638,15 @@
       });
     }
 
-      var ObtenerSectores = function (ubicacion_id) {
+      var ObtenerSectores = function (ubicacion_id, empresa_id) {
              var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
 
              $.ajax({
-                url: '@Url.Action("ObtenerSectores","Legajo")',
+                url: '@Url.Action("ObtenerSectores","Fichada")',
                 type: 'GET',
                  data: {
-                ubicacion_id: ubicacion_id
+                  ubicacion_id: ubicacion_id,
+                  empresa_id: empresa_id
                 },
                 success: function (data) {
                     $('#sector_id').find('option').remove()
@@ -630,12 +663,13 @@
           });
         }
 
-        var ObtenerLocales = function () {
+        var ObtenerLocales = function (empresa_id) {
              var CodLocal = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
              $.ajax({
-                url: '@Url.Action("ObtenerLocales","Legajo")',
+                url: '@Url.Action("ObtenerLocales","Fichada")',
                 type: 'GET',
                 data: {
+                  empresa_id: empresa_id
                 },
                 success: function (data) {
                     $('#sector_id').find('option').remove()
