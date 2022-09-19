@@ -19,6 +19,14 @@ namespace RRHH.Repository
                 if (con.State == ConnectionState.Closed)
                     con.Open();
 
+                string horas_normal = "";
+                string horas_50 = "";
+                string horas_100 = "";
+
+                int minutos_normal=0;
+                int minutos_50 = 0;
+                int minutos_100 = 0;
+
                 IUtilsRepo iUtilsRepo;
                 iUtilsRepo = new UtilsRepo();
 
@@ -222,7 +230,20 @@ namespace RRHH.Repository
                         item.hora_entrada_2 = item.lec3;
                         item.hora_salida_2 = item.lec4;
 
-                  
+                        CantidadHoras cantidadHoras = ObtenerCantidadHoras(item.hora_entrada_1,
+                                            item.hora_salida_1,
+                                            item.hora_entrada_2,
+                                            item.hora_salida_2,
+                                            item.ubicacion_id.Value,
+                                            item.ubicacion_id.Value == 3 ? item.local_id.Value : item.sector_id.Value,
+                                            (int)item.fecha.Value.DayOfWeek + 1);
+
+                        if (cantidadHoras != null)
+                        {
+                            if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
+                            if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
+                            if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
+                        }
 
                         DateTime entrada1 = DateTime.Parse(item.lec1);
                         DateTime salida1 = DateTime.Parse(item.lec2);
@@ -236,7 +257,15 @@ namespace RRHH.Repository
                         span1 += span2;
                         item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
 
-
+                        if (cantidadHoras != null)
+                        {
+                            if (cantidadHoras.horas_normales != null && cantidadHoras.horas_normales.Trim() != "")
+                                minutos_normal += (int)TimeSpan.Parse(cantidadHoras.horas_normales).TotalMinutes;
+                            if (cantidadHoras.horas_50 != null && cantidadHoras.horas_50.Trim() != "")
+                                minutos_50 += (int)TimeSpan.Parse(cantidadHoras.horas_50).TotalMinutes;
+                            if (cantidadHoras.horas_100 != null && cantidadHoras.horas_100.Trim() != "")
+                                minutos_100 += (int)TimeSpan.Parse(cantidadHoras.horas_100).TotalMinutes;
+                        }
 
                     }
                     else if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 == null)
@@ -293,6 +322,15 @@ namespace RRHH.Repository
 
                         item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
 
+                        if (cantidadHoras != null)
+                        {
+                            if (cantidadHoras.horas_normales != null && cantidadHoras.horas_normales.Trim() != "")
+                                minutos_normal += (int)TimeSpan.Parse(cantidadHoras.horas_normales).TotalMinutes;
+                            if (cantidadHoras.horas_50 != null && cantidadHoras.horas_50.Trim() != "")
+                                minutos_50 += (int)TimeSpan.Parse(cantidadHoras.horas_50).TotalMinutes;
+                            if (cantidadHoras.horas_100 != null && cantidadHoras.horas_100.Trim() != "")
+                                minutos_100 += (int)TimeSpan.Parse(cantidadHoras.horas_100).TotalMinutes;
+                        }
 
                     }
                     else if (item.tipo1 != null && item.tipo2 == null && item.tipo3 == null && item.tipo4 == null)
@@ -315,6 +353,11 @@ namespace RRHH.Repository
                   
 
                 }
+
+                horas_normal = ((int) minutos_normal/60).ToString() +":" + (minutos_normal- ((int)minutos_normal / 60)*60).ToString();
+                horas_50 = ((int)minutos_50 / 60).ToString() + ":" + (minutos_50 - ((int)minutos_50 / 60)*60).ToString();
+                horas_100 = ((int)minutos_100 / 60).ToString() + ":" + (minutos_100 - ((int)minutos_100 / 60)*60).ToString();
+
 
                 return lFichadas;
                 
