@@ -745,6 +745,59 @@ namespace RRHH.Controllers
 
                         }
 
+
+                        if (item.hora_entrada_3 != null)
+                        {
+
+                            try
+                            {
+                                fichadaRepo.InsertarExportacionFichada(item.nro_legajo.Value, item.lectora_nro.Value, item.fecha.Value, item.hora_entrada_3, "E", completo);
+
+                                tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                                tw.Write(item.hora_entrada_3 + ",");
+                                tw.Write("E,");
+                                tw.Write(item.lectora_nro + ",");
+                                tw.WriteLine(item.nro_legajo);
+
+
+                            }
+                            catch (SqlException ex)
+                            {
+                                if (ex.Number == 2601 || ex.Number == 2627)
+                                {
+                                    // Violation in one on both...
+                                }
+                            }
+
+
+
+                        }
+                        if (item.hora_salida_3 != null)
+                        {
+
+                            try
+                            {
+                                fichadaRepo.InsertarExportacionFichada(item.nro_legajo.Value, item.lectora_nro.Value, item.fecha.Value, item.hora_salida_3, "E", completo);
+
+                                tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                                tw.Write(item.hora_salida_3 + ",");
+                                tw.Write("S,");
+                                tw.Write(item.lectora_nro + ",");
+                                tw.WriteLine(item.nro_legajo);
+
+
+                            }
+                            catch (SqlException ex)
+                            {
+                                if (ex.Number == 2601 || ex.Number == 2627)
+                                {
+                                    // Violation in one on both...
+                                }
+                            }
+
+
+                        }
+
                         //worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
                         //worksheet.Cell(currentRow, 2).Value = item.apellido + ", " + item.nombre;
                         //worksheet.Cell(currentRow, 3).Value = item.empresa;
