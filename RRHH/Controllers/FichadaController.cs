@@ -451,8 +451,10 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 8).Value = "Hora Salida";
                     worksheet.Cell(currentRow, 9).Value = "Hora Entrada";
                     worksheet.Cell(currentRow, 10).Value = "Hora Salida";
-                    worksheet.Cell(currentRow, 11).Value = "Cant Hs.";
-                    worksheet.Cell(currentRow, 12).Value = "Justificación";
+                    worksheet.Cell(currentRow, 11).Value = "Hora Entrada";
+                    worksheet.Cell(currentRow, 12).Value = "Hora Salida";
+                    worksheet.Cell(currentRow, 13).Value = "Cant Hs.";
+                    worksheet.Cell(currentRow, 14).Value = "Justificación";
 
 
                     foreach (var item in fichadas)
@@ -468,8 +470,10 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 8).Value = item.hora_salida_1;
                         worksheet.Cell(currentRow, 9).Value = item.hora_entrada_2;
                         worksheet.Cell(currentRow, 10).Value = item.hora_salida_2;
-                        worksheet.Cell(currentRow, 11).Value = item.cantidad_horas;
-                        worksheet.Cell(currentRow, 12).Value = item.justificacion;
+                        worksheet.Cell(currentRow, 11).Value = item.hora_entrada_3;
+                        worksheet.Cell(currentRow, 12).Value = item.hora_salida_3;
+                        worksheet.Cell(currentRow, 13).Value = item.cantidad_horas;
+                        worksheet.Cell(currentRow, 14).Value = item.justificacion;
 
 
 

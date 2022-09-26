@@ -418,6 +418,31 @@ namespace RRHH.Repository
             return "";
         }
 
+        public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, string fecha)
+        {
+
+       
+                using (IDbConnection con = new SqlConnection(strConnectionString))
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+
+                    DynamicParameters parameter = new DynamicParameters();
+                    parameter.Add("@legajo_id", legajo_id);
+                    parameter.Add("@fecha", fecha);
+                                        
+                    return con.Query<FichadaOriginal>("spFichadaOriginalObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
+
+
+
+                }
+           
+            
+
+        }
+
+
 
     }
 }

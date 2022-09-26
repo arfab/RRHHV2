@@ -214,12 +214,12 @@
                                             <th>Lectora</th>
                                             <th>Dia</th>
                                             <th>Fecha</th>
-                                            <th>Hora Entrada</th>
-                                            <th>Hora Salida</th>
-                                            <th>Hora Entrada</th>
-                                            <th>Hora Salida</th>
-                                            <th>Hora Entrada</th>
-                                            <th>Hora Salida</th>
+                                            <th style="background-color: #bdbebd">Hora Entrada</th>
+                                            <th style="background-color: #bdbebd">Hora Salida</th>
+                                            <th style="background-color: #d3d3d3">Hora Entrada</th>
+                                            <th style="background-color: #d3d3d3">Hora Salida</th>
+                                            <th style="background-color: #e9e9e9">Hora Entrada</th>
+                                            <th style="background-color: #e9e9e9">Hora Salida</th>
                                             <th>Cant. Hs.</th>
                                             <th>Normales</th>
                                             <th>50%</th>
@@ -234,7 +234,10 @@
                                     {
                                         string estilo ;
 
-                                        @if(item.estado=="ERR") {
+                                        @if(item.lectora_id==-1 && item.estado!="NO" && item.estado!="JUS" && item.estado!="OK") {
+                                           estilo = "background-color:Orange;";
+                                        }
+                                        else if(item.estado=="ERR") {
                                            estilo = "background-color:#FFFF66;";
                                         }
                                         else if (item.estado == "NO")
@@ -250,35 +253,35 @@
 
                                         }
 
-                                            <tr style="@estilo">
+                                            <tr >
                                                 @if (@legajo == null) {
-                                                 <th>@item.empleado</th>
+                                                 <th style="@estilo">@item.empleado</th>
                                                 }
-                                                <td>
+                                                <td style="@estilo">
                                                   @item.lectora
                                                 </td>
                                                 <td>
                                                   @item.DiaSemana()
                                                 </td>
-                                                <td>
+                                                <td style="border-color:black; border-style: solid;" >
                                                     @Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy")
                                                 </td>
                                                 <td>
                                                     @item.hora_entrada_1
                                                 </td>
-                                                <td>
+                                                 <td style="border-color:black; border-style: solid;" >
                                                     @item.hora_salida_1
                                                 </td>
-                                                <td>
+                                                 <td>
                                                     @item.hora_entrada_2
                                                 </td>
-                                                <td>
+                                                 <td style="border-color:black; border-style: solid;" >
                                                     @item.hora_salida_2
                                                 </td>
                                                  <td>
                                                     @item.hora_entrada_3
                                                 </td>
-                                                <td>
+                                                 <td style="border-color:black; border-style: solid;" >
                                                     @item.hora_salida_3
                                                 </td>
                                                 <td>
@@ -315,6 +318,10 @@
                                                     {
                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="V" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Ver la novedad' class='bi bi-eye'></i></a>                                                        
                                                     }*@
+
+                                                     @if (item.lectora !=null && item.lectora != "") {
+                                                       <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")><i data-mdb-toggle='tooltip' title='Ver fichadas originales' class='bi bi-eye'></i></a>
+                                                     }
                                                 </td>
                                             </tr>
 

@@ -30,3 +30,13 @@
 .table-condensed {
     font-size: 10px;
 }
+
+#tablaFichadas td  {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tablaFichadas th {
+    text-align: center;
+    vertical-align: middle;
+}
