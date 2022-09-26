@@ -11,6 +11,10 @@
         public string? hora_salida_1 { get; set; }
         public string? hora_entrada_2 { get; set; }
         public string? hora_salida_2 { get; set; }
+        public string? hora_entrada_3 { get; set; }
+        public string? hora_salida_3 { get; set; }
+        public string? hora_entrada_4 { get; set; }
+        public string? hora_salida_4 { get; set; }
 
         public string? lec1 { get; set; }
         public string? tipo1 { get; set; }

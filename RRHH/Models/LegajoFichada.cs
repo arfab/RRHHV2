@@ -27,6 +27,10 @@ namespace RRHH.Models
         public string? salida_1 { get; set; }
         public string? entrada_2 { get; set; }
         public string? salida_2 { get; set; }
+        public string? entrada_3 { get; set; }
+        public string? salida_3 { get; set; }
+        public string? entrada_4 { get; set; }
+        public string? salida_4 { get; set; }
 
         public int? empresa_id { get; set; }
         public string? empresa { get; set; }

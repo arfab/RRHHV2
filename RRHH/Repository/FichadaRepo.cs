@@ -110,12 +110,6 @@ namespace RRHH.Repository
 
                     }
 
-                    //item.lec1 = vLectura[0]==""?null:vLectura[0];                  
-                    //item.lec2 = vLectura[1] == "" ? null : vLectura[1];
-                    //item.lec3 = vLectura[2] == "" ? null : vLectura[2];
-                    //item.lec4 = vLectura[3] == "" ? null : vLectura[3];
-                    //item.lec5 = vLectura[4] == "" ? null : vLectura[4];
-                    //item.lec6 = vLectura[5] == "" ? null : vLectura[5];
 
 
                     item.lec1 = CalcularHora(vLectura[0], item.delta.Value);
@@ -134,80 +128,6 @@ namespace RRHH.Repository
                     item.tipo6 = vTipo[5] == "" ? null : vTipo[5];
 
 
-                    //if (item.lec1 != null && item.lec2 != null)
-                    //{
-                    //    var difLec = (DateTime.Parse(item.lec2) - DateTime.Parse(item.lec1)).TotalSeconds;
-
-                    //    if (difLec< 120)
-                    //    {
-                    //        item.lec2 = item.lec3;
-                    //        item.lec3 = item.lec4;
-                    //        item.lec4 = item.lec5;
-                    //        item.lec5 = item.lec6;
-                    //        item.lec6 = null;
-                    //        item.tipo2 = item.tipo3;
-                    //        item.tipo3 = item.tipo4;
-                    //        item.tipo4 = item.tipo5;
-                    //        item.tipo5 = item.tipo6;
-                    //        item.tipo6 = null;
-                    //    }
-                    //}
-
-                    //if (item.lec2 != null && item.lec3 != null)
-                    //{
-                    //    var difLec = (DateTime.Parse(item.lec3) - DateTime.Parse(item.lec2)).TotalSeconds;
-
-                    //    if (difLec < 120)
-                    //    {
-                    //        item.lec3 = item.lec4;
-                    //        item.lec4 = item.lec5;
-                    //        item.lec5 = item.lec6;
-                    //        item.lec6 = null;
-                    //        item.tipo3 = item.tipo4;
-                    //        item.tipo4 = item.tipo5;
-                    //        item.tipo5 = item.tipo6;
-                    //        item.tipo6 = null;
-                    //    }
-                    //}
-
-                    //if (item.lec3 != null && item.lec4 != null)
-                    //{
-                    //    var difLec = (DateTime.Parse(item.lec4) - DateTime.Parse(item.lec3)).TotalSeconds;
-
-                    //    if (difLec < 120)
-                    //    {
-                    //        item.lec4 = item.lec5;
-                    //        item.lec5 = item.lec6;
-                    //        item.lec6 = null;
-                    //        item.tipo4 = item.tipo5;
-                    //        item.tipo5 = item.tipo6;
-                    //        item.tipo6 = null;
-                    //    }
-                    //}
-
-                    //if (item.lec4 != null && item.lec5 != null)
-                    //{
-                    //    var difLec = (DateTime.Parse(item.lec5) - DateTime.Parse(item.lec4)).TotalSeconds;
-
-                    //    if (difLec < 120)
-                    //    {
-                    //        item.lec5 = item.lec6;
-                    //        item.lec6 = null;
-                    //        item.tipo5 = item.tipo6;
-                    //        item.tipo6 = null;
-                    //    }
-                    //}
-
-                    //if (item.lec5 != null && item.lec6 != null)
-                    //{
-                    //    var difLec = (DateTime.Parse(item.lec6) - DateTime.Parse(item.lec5)).TotalSeconds;
-
-                    //    if (difLec < 120)
-                    //    {
-                    //        item.lec6 = null;
-                    //        item.tipo6 = null;
-                    //    }
-                    //}
 
                     if (item.tipo1 == null)
                     {
@@ -234,6 +154,8 @@ namespace RRHH.Repository
                                             item.hora_salida_1,
                                             item.hora_entrada_2,
                                             item.hora_salida_2,
+                                            item.hora_entrada_3,
+                                            item.hora_salida_3,
                                             item.ubicacion_id.Value,
                                             item.ubicacion_id.Value == 3 ? item.local_id.Value : item.sector_id.Value,
                                             (int)item.fecha.Value.DayOfWeek + 1);
@@ -303,6 +225,8 @@ namespace RRHH.Repository
                                       item.hora_salida_1,
                                       item.hora_entrada_2,
                                       item.hora_salida_2,
+                                      item.hora_entrada_3, 
+                                      item.hora_salida_3,
                                       item.ubicacion_id.Value,
                                       item.ubicacion_id.Value==3?item.local_id.Value:item.sector_id.Value,
                                       (int)item.fecha.Value.DayOfWeek+1);
@@ -350,7 +274,72 @@ namespace RRHH.Repository
                             item.estado = "ERR";
                     }
 
-                  
+
+                    if (item.estado != "ERR" && item.tipo5 != null && item.tipo6 != null)
+                    {
+
+
+                        item.hora_entrada_3 = item.lec5;
+                        item.hora_salida_3 = item.lec6;
+
+                        CantidadHoras cantidadHoras = ObtenerCantidadHoras(
+                                      item.hora_entrada_1,
+                                      item.hora_salida_1,
+                                      item.hora_entrada_2,
+                                      item.hora_salida_2,
+                                      item.hora_entrada_3,
+                                      item.hora_salida_3,
+                                      item.ubicacion_id.Value,
+                                      item.ubicacion_id.Value == 3 ? item.local_id.Value : item.sector_id.Value,
+                                      (int)item.fecha.Value.DayOfWeek + 1);
+
+                        if (cantidadHoras != null)
+                        {
+                            if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
+                            if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
+                            if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
+                        }
+
+                        DateTime entrada1 = DateTime.Parse(item.lec1);
+                        DateTime salida1 = DateTime.Parse(item.lec2);
+
+                        TimeSpan span1 = salida1.Subtract(entrada1);
+
+                        DateTime entrada2 = DateTime.Parse(item.lec3);
+                        DateTime salida2 = DateTime.Parse(item.lec4);
+
+                        TimeSpan span2 = salida2.Subtract(entrada2);
+
+                        DateTime entrada3 = DateTime.Parse(item.lec5);
+                        DateTime salida3 = DateTime.Parse(item.lec6);
+
+                        TimeSpan span3 = salida3.Subtract(entrada3);
+
+
+
+                        span1 += span2;
+                        span1 += span3;
+
+                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
+
+                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
+                        //if (cantidadHoras != null)
+                        //{
+                        //    if (cantidadHoras.horas_normales != null && cantidadHoras.horas_normales.Trim() != "")
+                        //        minutos_normal += (int)TimeSpan.Parse(cantidadHoras.horas_normales).TotalMinutes;
+                        //    if (cantidadHoras.horas_50 != null && cantidadHoras.horas_50.Trim() != "")
+                        //        minutos_50 += (int)TimeSpan.Parse(cantidadHoras.horas_50).TotalMinutes;
+                        //    if (cantidadHoras.horas_100 != null && cantidadHoras.horas_100.Trim() != "")
+                        //        minutos_100 += (int)TimeSpan.Parse(cantidadHoras.horas_100).TotalMinutes;
+                        //}
+
+
+                    }
+
+
+
 
                 }
 
@@ -379,7 +368,7 @@ namespace RRHH.Repository
         }
 
 
-        public CantidadHoras ObtenerCantidadHoras(string entrada1, string salida1, string entrada2, string salida2, int ubicacion_id, int sector_id, int dia_semana)
+        public CantidadHoras ObtenerCantidadHoras(string entrada1, string salida1, string entrada2, string salida2, string entrada3, string salida3, int ubicacion_id, int sector_id, int dia_semana)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -392,6 +381,8 @@ namespace RRHH.Repository
                 parameter.Add("@salida1", salida1);
                 parameter.Add("@entrada2", entrada2);
                 parameter.Add("@salida2", salida2);
+                parameter.Add("@entrada3", entrada3);
+                parameter.Add("@salida3", salida3);
                 parameter.Add("@ubicacion_id", ubicacion_id);
                 parameter.Add("@sector_id", sector_id);
                 parameter.Add("@dia_semana", dia_semana);

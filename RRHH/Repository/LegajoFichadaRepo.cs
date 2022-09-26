@@ -26,6 +26,10 @@ namespace RRHH.Repository
                 parameters.Add("@salida1", legajoFichada.salida_1);
                 parameters.Add("@entrada2", legajoFichada.entrada_2);
                 parameters.Add("@salida2", legajoFichada.salida_2);
+                parameters.Add("@entrada3", legajoFichada.entrada_3);
+                parameters.Add("@salida3", legajoFichada.salida_3);
+                parameters.Add("@entrada4", legajoFichada.entrada_4);
+                parameters.Add("@salida4", legajoFichada.salida_4);
 
 
                 icantFilas = con.Execute("spLegajoFichadaInsertar", parameters, commandType: CommandType.StoredProcedure);
@@ -51,7 +55,10 @@ namespace RRHH.Repository
                 parameters.Add("@salida1", legajoFichada.salida_1);
                 parameters.Add("@entrada2", legajoFichada.entrada_2);
                 parameters.Add("@salida2", legajoFichada.salida_2);
-
+                parameters.Add("@entrada3", legajoFichada.entrada_3);
+                parameters.Add("@salida3", legajoFichada.salida_3);
+                parameters.Add("@entrada4", legajoFichada.entrada_4);
+                parameters.Add("@salida4", legajoFichada.salida_4);
 
                 con.Execute("spLegajoFichadaModificar", parameters, commandType: CommandType.StoredProcedure);
 

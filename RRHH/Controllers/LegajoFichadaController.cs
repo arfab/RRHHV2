@@ -16,7 +16,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2)
+        public IActionResult Edit(int? legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -86,7 +86,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2)
+        public IActionResult Edit(string modo, int legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3)
         {
 
             ILegajoFichadaRepo legajoFichadaRepo;
@@ -120,7 +120,8 @@ namespace RRHH.Controllers
 
             if (entrada_1 == null && salida_1!=null ||
                 salida_1 == null && entrada_2!= null ||
-                entrada_2 == null && salida_2!= null
+                entrada_2 == null && salida_2!= null ||
+                salida_2 == null && entrada_3 != null
                 )
              {
                 ViewBag.Message = "No pueden saltearse horarios de fichadas";
@@ -163,6 +164,30 @@ namespace RRHH.Controllers
                 }
             }
 
+            if (salida_2 != null && entrada_3 != null)
+            {
+                TimeSpan span1 = DateTime.Parse(entrada_3).Subtract(DateTime.Parse(salida_2));
+
+                if (span1.TotalMinutes < 2)
+                {
+                    ViewBag.Message = "La entrada 3 debe ser mayor a 2 minutos que la salida 2";
+                    return View(legajoFichada);
+                }
+
+            }
+
+            if (entrada_3 != null && salida_3 != null)
+            {
+                TimeSpan span1 = DateTime.Parse(salida_3).Subtract(DateTime.Parse(entrada_3));
+
+                if (span1.TotalMinutes < 2)
+                {
+                    ViewBag.Message = "La salida 3 debe ser mayor a 2 minutos que la entrada 3";
+                    return View(legajoFichada);
+                }
+            }
+
+
             legajoFichadaRepo = new LegajoFichadaRepo();
 
                 legajoFichada.legajo_id = legajo_id;
@@ -175,11 +200,13 @@ namespace RRHH.Controllers
                 if (salida_1 != null) legajoFichada.salida_1 = salida_1;
                 if (entrada_2 != null) legajoFichada.entrada_2 = entrada_2;
                 if (salida_2 != null) legajoFichada.salida_2 = salida_2;
+                if (entrada_3 != null) legajoFichada.entrada_3 = entrada_3;
+                if (salida_3 != null) legajoFichada.salida_3 = salida_3;
 
-                //if (id != null)
-                //    sret = legajoFichadaRepo.Modificar(legajoFichada);
-                //else
-                sret = legajoFichadaRepo.Insertar(legajoFichada);
+            //if (id != null)
+            //    sret = legajoFichadaRepo.Modificar(legajoFichada);
+            //else
+            sret = legajoFichadaRepo.Insertar(legajoFichada);
 
                 if (sret == "")
                 {
@@ -217,6 +244,8 @@ namespace RRHH.Controllers
             legajoFichada.salida_1 = null;
             legajoFichada.entrada_2 = null;
             legajoFichada.salida_2 = null;
+            legajoFichada.entrada_3 = null;
+            legajoFichada.salida_3 = null;
 
             sret = legajoFichadaRepo.Insertar(legajoFichada);
 
