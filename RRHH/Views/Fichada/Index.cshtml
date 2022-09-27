@@ -212,6 +212,7 @@
                                                <th>Empleado</th>
                                             }
                                             <th>Lectora</th>
+                                            <th></th>
                                             <th>Dia</th>
                                             <th>Fecha</th>
                                             <th style="background-color: #bdbebd">Hora Entrada</th>
@@ -259,6 +260,12 @@
                                                 }
                                                 <td style="@estilo">
                                                   @item.lectora
+                                                </td>
+                                                <td>
+                                                  @if (@item.cantidad_lecturas>0) {
+                                                     <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")>                                                    <h4><span class="badge bg-primary rounded-pill">@item.cantidad_lecturas</span></h4></a>
+
+                                                  }
                                                 </td>
                                                 <td>
                                                   @item.DiaSemana()
@@ -319,9 +326,7 @@
                                                        <a asp-controller="Novedad" asp-action="Edit" asp-route-modo="V" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Ver la novedad' class='bi bi-eye'></i></a>                                                        
                                                     }*@
 
-                                                     @if (item.lectora !=null && item.lectora != "") {
-                                                       <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")><i data-mdb-toggle='tooltip' title='Ver fichadas originales' class='bi bi-eye'></i></a>
-                                                     }
+
                                                 </td>
                                             </tr>
 
