@@ -233,9 +233,14 @@ namespace RRHH.Repository
 
                         if (cantidadHoras != null)
                         {
-                            if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
-                            if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
-                            if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
+                            if (item.horas_normales=="")
+                              if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
+
+                            if (item.horas_50 == "")
+                                if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
+
+                            if (item.horas_100 == "")
+                                if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                         }
 
                         DateTime entrada1 = DateTime.Parse(item.lec1);
@@ -295,9 +300,14 @@ namespace RRHH.Repository
 
                         if (cantidadHoras != null)
                         {
-                            if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
-                            if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
-                            if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
+                            if (item.horas_normales == "")
+                                if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
+
+                            if (item.horas_50 == "")
+                                if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
+
+                            if (item.horas_100 == "")
+                                if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                         }
 
                         DateTime entrada1 = DateTime.Parse(item.lec1);

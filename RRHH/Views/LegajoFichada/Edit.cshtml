@@ -52,11 +52,23 @@
 
 
              <div class="row ">
-            <div class="col bottom-buffer btns2" id="divFechaNovedad">
+                <div class="col bottom-buffer btns2" id="divFechaNovedad">
                       <label asp-for="fecha" class="control-label">Fecha</label><br />
                       <input type="text" class="form_control" id="txtSelectedFecha" name="fecha"  asp-for="fecha" readonly="readonly"/>
 
-             </div>
+                </div>
+                <div class="col bottom-buffer">
+                  <label asp-for="horas_normales" class="control-label">Horas</label>
+                  <input type="time" asp-for="horas_normales" step="1" class="form-control" />
+                </div>
+                <div class="col bottom-buffer">
+                  <label asp-for="horas_50" class="control-label">Horas 50</label>
+                  <input type="time" asp-for="horas_50" step="1" class="form-control" />
+                </div>
+                <div class="col bottom-buffer">
+                  <label asp-for="horas_100" class="control-label">Horas 100</label>
+                  <input type="time" asp-for="horas_100" step="1" class="form-control" />
+                </div>
              </div> 
             <div class="row ">
                 <div class="col bottom-buffer">

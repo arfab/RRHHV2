@@ -32,6 +32,10 @@ namespace RRHH.Models
         public string? entrada_4 { get; set; }
         public string? salida_4 { get; set; }
 
+        public string? horas_normales { get; set; }
+        public string? horas_50 { get; set; }
+        public string? horas_100 { get; set; }
+
         public int? empresa_id { get; set; }
         public string? empresa { get; set; }
         
