@@ -162,22 +162,57 @@ namespace RRHH.Repository
 
                         if (cantidadHoras != null)
                         {
-                            if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
-                            if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
-                            if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
+                            if (item.horas_normales == "")
+                                if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
+
+                            if (item.horas_50 == "")
+                                if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
+                            
+                            if (item.horas_100 == "")
+                                if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                         }
 
-                        DateTime entrada1 = DateTime.Parse(item.lec1);
-                        DateTime salida1 = DateTime.Parse(item.lec2);
+                        if (item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
+                        {
 
-                        TimeSpan span1 = salida1.Subtract(entrada1);
+                      
+                          DateTime entrada1 = DateTime.Parse(item.lec1);
+                          DateTime salida1 = DateTime.Parse(item.lec2);
 
-                        DateTime entrada2 = DateTime.Parse(item.lec3);
-                        DateTime salida2 = DateTime.Parse(item.lec4);
+                          TimeSpan span1 = salida1.Subtract(entrada1);
 
-                        TimeSpan span2 = salida2.Subtract(entrada2);
-                        span1 += span2;
-                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                          DateTime entrada2 = DateTime.Parse(item.lec3);
+                          DateTime salida2 = DateTime.Parse(item.lec4);
+
+                          TimeSpan span2 = salida2.Subtract(entrada2);
+                          span1 += span2;
+                          item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                       }
+                       else
+                       {
+                            TimeSpan spanHs = TimeSpan.Parse("00:00");
+                            TimeSpan spanHs50 = TimeSpan.Parse("00:00");
+                            TimeSpan spanHs100 = TimeSpan.Parse("00:00");
+
+
+                            if (item.horas_normales.Trim() != "")
+                            {
+                                spanHs = TimeSpan.Parse(item.horas_normales);
+                            }
+                            if (item.horas_50.Trim() != "")
+                            {
+                                spanHs50 = TimeSpan.Parse(item.horas_50);
+                            }
+                            if (item.horas_100.Trim() != "")
+                            {
+                                spanHs100 = TimeSpan.Parse(item.horas_100);
+                            }
+
+                            spanHs += spanHs50;
+                            spanHs += spanHs100;
+                            item.cantidad_horas = spanHs.Hours.ToString() + ":" + spanHs.Minutes.ToString().PadLeft(2, '0');
+
+                        }
 
                         if (cantidadHoras != null)
                         {
@@ -243,13 +278,43 @@ namespace RRHH.Repository
                                 if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                         }
 
-                        DateTime entrada1 = DateTime.Parse(item.lec1);
-                        DateTime salida1 = DateTime.Parse(item.lec2);
+                        if (item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
+                        {
+                            DateTime entrada1 = DateTime.Parse(item.lec1);
+                            DateTime salida1 = DateTime.Parse(item.lec2);
 
-                        TimeSpan span1 = salida1.Subtract(entrada1);
+                            TimeSpan span1 = salida1.Subtract(entrada1);
 
 
-                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                            item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                        }
+                        else
+                        {
+                            TimeSpan spanHs = TimeSpan.Parse("00:00");
+                            TimeSpan spanHs50 = TimeSpan.Parse("00:00");
+                            TimeSpan spanHs100 = TimeSpan.Parse("00:00");
+
+
+                            if (item.horas_normales.Trim() != "")
+                            {
+                                spanHs = TimeSpan.Parse(item.horas_normales);
+                            }
+                            if (item.horas_50.Trim() != "")
+                            {
+                                spanHs50 = TimeSpan.Parse(item.horas_50);
+                            }
+                            if (item.horas_100.Trim() != "")
+                            {
+                                spanHs100 = TimeSpan.Parse(item.horas_100);
+                            }
+
+                            spanHs += spanHs50;
+                            spanHs += spanHs100;
+
+                            item.cantidad_horas = spanHs.Hours.ToString() + ":" + spanHs.Minutes.ToString().PadLeft(2, '0');
+
+                        }
+
 
                         if (cantidadHoras != null)
                         {
