@@ -140,7 +140,7 @@ namespace RRHH.Repository
                         item.estado = "OK";
 
 
-                    if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null)
+                    if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null )
                     {
 
                         
@@ -150,80 +150,83 @@ namespace RRHH.Repository
                         item.hora_entrada_2 = item.lec3;
                         item.hora_salida_2 = item.lec4;
 
-                        CantidadHoras cantidadHoras = ObtenerCantidadHoras(item.hora_entrada_1,
-                                            item.hora_salida_1,
-                                            item.hora_entrada_2,
-                                            item.hora_salida_2,
-                                            item.hora_entrada_3,
-                                            item.hora_salida_3,
-                                            item.ubicacion_id.Value,
-                                            item.ubicacion_id.Value == 3 ? item.local_id.Value : item.sector_id.Value,
-                                            (int)item.fecha.Value.DayOfWeek + 1);
 
-                        if (cantidadHoras != null)
+                        if (item.tipo5 == null)
                         {
-                            if (item.horas_normales == "")
-                                if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
+                            CantidadHoras cantidadHoras = ObtenerCantidadHoras(item.hora_entrada_1,
+                                                item.hora_salida_1,
+                                                item.hora_entrada_2,
+                                                item.hora_salida_2,
+                                                item.hora_entrada_3,
+                                                item.hora_salida_3,
+                                                item.ubicacion_id.Value,
+                                                item.ubicacion_id.Value == 3 ? item.local_id.Value : item.sector_id.Value,
+                                                (int)item.fecha.Value.DayOfWeek + 1);
 
-                            if (item.horas_50 == "")
-                                if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
-                            
-                            if (item.horas_100 == "")
-                                if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
-                        }
-
-                        if (item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
-                        {
-
-                      
-                          DateTime entrada1 = DateTime.Parse(item.lec1);
-                          DateTime salida1 = DateTime.Parse(item.lec2);
-
-                          TimeSpan span1 = salida1.Subtract(entrada1);
-
-                          DateTime entrada2 = DateTime.Parse(item.lec3);
-                          DateTime salida2 = DateTime.Parse(item.lec4);
-
-                          TimeSpan span2 = salida2.Subtract(entrada2);
-                          span1 += span2;
-                          item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
-                       }
-                       else
-                       {
-                            TimeSpan spanHs = TimeSpan.Parse("00:00");
-                            TimeSpan spanHs50 = TimeSpan.Parse("00:00");
-                            TimeSpan spanHs100 = TimeSpan.Parse("00:00");
-
-
-                            if (item.horas_normales.Trim() != "")
+                            if (cantidadHoras != null)
                             {
-                                spanHs = TimeSpan.Parse(item.horas_normales);
-                            }
-                            if (item.horas_50.Trim() != "")
-                            {
-                                spanHs50 = TimeSpan.Parse(item.horas_50);
-                            }
-                            if (item.horas_100.Trim() != "")
-                            {
-                                spanHs100 = TimeSpan.Parse(item.horas_100);
+                                if (item.horas_normales == "")
+                                    if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
+
+                                if (item.horas_50 == "")
+                                    if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
+
+                                if (item.horas_100 == "")
+                                    if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                             }
 
-                            spanHs += spanHs50;
-                            spanHs += spanHs100;
-                            item.cantidad_horas = spanHs.Hours.ToString() + ":" + spanHs.Minutes.ToString().PadLeft(2, '0');
+                            if (item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
+                            {
 
+
+                                DateTime entrada1 = DateTime.Parse(item.lec1);
+                                DateTime salida1 = DateTime.Parse(item.lec2);
+
+                                TimeSpan span1 = salida1.Subtract(entrada1);
+
+                                DateTime entrada2 = DateTime.Parse(item.lec3);
+                                DateTime salida2 = DateTime.Parse(item.lec4);
+
+                                TimeSpan span2 = salida2.Subtract(entrada2);
+                                span1 += span2;
+                                item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                            }
+                            else
+                            {
+                                TimeSpan spanHs = TimeSpan.Parse("00:00");
+                                TimeSpan spanHs50 = TimeSpan.Parse("00:00");
+                                TimeSpan spanHs100 = TimeSpan.Parse("00:00");
+
+
+                                if (item.horas_normales != null && item.horas_normales.Trim() != "")
+                                {
+                                    spanHs = TimeSpan.Parse(item.horas_normales);
+                                }
+                                if (item.horas_50 != null && item.horas_50.Trim() != "")
+                                {
+                                    spanHs50 = TimeSpan.Parse(item.horas_50);
+                                }
+                                if (item.horas_100 != null && item.horas_100.Trim() != "")
+                                {
+                                    spanHs100 = TimeSpan.Parse(item.horas_100);
+                                }
+
+                                spanHs += spanHs50;
+                                spanHs += spanHs100;
+                                item.cantidad_horas = spanHs.Hours.ToString() + ":" + spanHs.Minutes.ToString().PadLeft(2, '0');
+
+                            }
+
+                            if (cantidadHoras != null)
+                            {
+                                if (cantidadHoras.horas_normales != null && cantidadHoras.horas_normales.Trim() != "")
+                                    minutos_normal += (int)TimeSpan.Parse(cantidadHoras.horas_normales).TotalMinutes;
+                                if (cantidadHoras.horas_50 != null && cantidadHoras.horas_50.Trim() != "")
+                                    minutos_50 += (int)TimeSpan.Parse(cantidadHoras.horas_50).TotalMinutes;
+                                if (cantidadHoras.horas_100 != null && cantidadHoras.horas_100.Trim() != "")
+                                    minutos_100 += (int)TimeSpan.Parse(cantidadHoras.horas_100).TotalMinutes;
+                            }
                         }
-
-                        if (cantidadHoras != null)
-                        {
-                            if (cantidadHoras.horas_normales != null && cantidadHoras.horas_normales.Trim() != "")
-                                minutos_normal += (int)TimeSpan.Parse(cantidadHoras.horas_normales).TotalMinutes;
-                            if (cantidadHoras.horas_50 != null && cantidadHoras.horas_50.Trim() != "")
-                                minutos_50 += (int)TimeSpan.Parse(cantidadHoras.horas_50).TotalMinutes;
-                            if (cantidadHoras.horas_100 != null && cantidadHoras.horas_100.Trim() != "")
-                                minutos_100 += (int)TimeSpan.Parse(cantidadHoras.horas_100).TotalMinutes;
-                        }
-
                     }
                     else if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 == null)
                     {
@@ -295,15 +298,15 @@ namespace RRHH.Repository
                             TimeSpan spanHs100 = TimeSpan.Parse("00:00");
 
 
-                            if (item.horas_normales.Trim() != "")
+                            if (item.horas_normales != null && item.horas_normales.Trim() != "")
                             {
                                 spanHs = TimeSpan.Parse(item.horas_normales);
                             }
-                            if (item.horas_50.Trim() != "")
+                            if (item.horas_50 != null && item.horas_50.Trim() != "")
                             {
                                 spanHs50 = TimeSpan.Parse(item.horas_50);
                             }
-                            if (item.horas_100.Trim() != "")
+                            if (item.horas_100!=null && item.horas_100.Trim() != "")
                             {
                                 spanHs100 = TimeSpan.Parse(item.horas_100);
                             }
@@ -375,30 +378,58 @@ namespace RRHH.Repository
                                 if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                         }
 
-                        DateTime entrada1 = DateTime.Parse(item.lec1);
-                        DateTime salida1 = DateTime.Parse(item.lec2);
+                        if (item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
+                        {
+                            DateTime entrada1 = DateTime.Parse(item.lec1);
+                            DateTime salida1 = DateTime.Parse(item.lec2);
 
-                        TimeSpan span1 = salida1.Subtract(entrada1);
+                            TimeSpan span1 = salida1.Subtract(entrada1);
 
-                        DateTime entrada2 = DateTime.Parse(item.lec3);
-                        DateTime salida2 = DateTime.Parse(item.lec4);
+                            DateTime entrada2 = DateTime.Parse(item.lec3);
+                            DateTime salida2 = DateTime.Parse(item.lec4);
 
-                        TimeSpan span2 = salida2.Subtract(entrada2);
+                            TimeSpan span2 = salida2.Subtract(entrada2);
 
-                        DateTime entrada3 = DateTime.Parse(item.lec5);
-                        DateTime salida3 = DateTime.Parse(item.lec6);
+                            DateTime entrada3 = DateTime.Parse(item.lec5);
+                            DateTime salida3 = DateTime.Parse(item.lec6);
 
-                        TimeSpan span3 = salida3.Subtract(entrada3);
-
-
-
-                        span1 += span2;
-                        span1 += span3;
-
-                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                            TimeSpan span3 = salida3.Subtract(entrada3);
 
 
-                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
+                            span1 += span2;
+                            span1 += span3;
+
+                            item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                       
+
+                        }
+                        else
+                        {
+                            TimeSpan spanHs = TimeSpan.Parse("00:00");
+                            TimeSpan spanHs50 = TimeSpan.Parse("00:00");
+                            TimeSpan spanHs100 = TimeSpan.Parse("00:00");
+
+
+                            if (item.horas_normales != null && item.horas_normales.Trim() != "")
+                            {
+                                spanHs = TimeSpan.Parse(item.horas_normales);
+                            }
+                            if (item.horas_50 != null  & item.horas_50.Trim() != "")
+                            {
+                                spanHs50 = TimeSpan.Parse(item.horas_50);
+                            }
+                            if (item.horas_100 != null && item.horas_100.Trim() != "")
+                            {
+                                spanHs100 = TimeSpan.Parse(item.horas_100);
+                            }
+
+                            spanHs += spanHs50;
+                            spanHs += spanHs100;
+                            item.cantidad_horas = spanHs.Hours.ToString() + ":" + spanHs.Minutes.ToString().PadLeft(2, '0');
+
+                        }
+
 
                         //if (cantidadHoras != null)
                         //{
