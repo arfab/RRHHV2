@@ -57,6 +57,8 @@
         
         public int? cantidad_lecturas { get; set; }
 
+        public int? cantidad_lecturas_orig { get; set; }
+
         public int? ubicacion_id { get; set; }
 
         public int? sector_id { get; set; }

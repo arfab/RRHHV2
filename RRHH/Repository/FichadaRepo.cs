@@ -165,13 +165,13 @@ namespace RRHH.Repository
 
                             if (cantidadHoras != null)
                             {
-                                if (item.horas_normales == "")
+                                if (item.horas_normales == null || item.horas_normales == "")
                                     if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
 
-                                if (item.horas_50 == "")
+                                if (item.horas_50 == null || item.horas_50 == "")
                                     if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
 
-                                if (item.horas_100 == "")
+                                if (item.horas_100 == null || item.horas_100 == "")
                                     if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                             }
 
@@ -271,13 +271,13 @@ namespace RRHH.Repository
 
                         if (cantidadHoras != null)
                         {
-                            if (item.horas_normales=="")
+                            if (item.horas_normales == null || item.horas_normales=="")
                               if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
 
-                            if (item.horas_50 == "")
+                            if (item.horas_50 == null || item.horas_50 == "")
                                 if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
 
-                            if (item.horas_100 == "")
+                            if (item.horas_100 == null || item.horas_100 == "")
                                 if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                         }
 
@@ -368,13 +368,13 @@ namespace RRHH.Repository
 
                         if (cantidadHoras != null)
                         {
-                            if (item.horas_normales == "")
+                            if (item.horas_normales == null || item.horas_normales == "")
                                 if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales;
 
-                            if (item.horas_50 == "")
+                            if (item.horas_50 == null || item.horas_50 == "")
                                 if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50;
 
-                            if (item.horas_100 == "")
+                            if (item.horas_100 == null || item.horas_100 == "")
                                 if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100;
                         }
 
@@ -524,7 +524,7 @@ namespace RRHH.Repository
             return "";
         }
 
-        public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, string fecha)
+        public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, string fecha, int sin_excluidos)
         {
 
        
@@ -537,8 +537,9 @@ namespace RRHH.Repository
                     DynamicParameters parameter = new DynamicParameters();
                     parameter.Add("@legajo_id", legajo_id);
                     parameter.Add("@fecha", fecha);
-                                        
-                    return con.Query<FichadaOriginal>("spFichadaOriginalObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
+                    parameter.Add("@sin_exluidos", sin_excluidos);
+
+                return con.Query<FichadaOriginal>("spFichadaOriginalObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
 
 
 
