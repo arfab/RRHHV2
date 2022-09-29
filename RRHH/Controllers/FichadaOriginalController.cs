@@ -19,6 +19,8 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
+            ViewData["SIN_EXCLUIDOS"] = sin_exluidos;
+
             if (perfil_id == 1 || perfil_id == 2)
             {
                 IFichadaRepo fichadaRepo;
@@ -27,6 +29,8 @@ namespace RRHH.Controllers
 
                 return View(fichadaRepo.ObtenerFichadasOriginales(legajo_id, fecha, sin_exluidos));
             }
+
+           
 
             return RedirectToAction("Login", "Usuario");
 

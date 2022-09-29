@@ -212,8 +212,8 @@
                                                <th>Empleado</th>
                                             }
                                             <th>Lectora</th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>#Original</th>
+                                            <th>#Lecturas</th>
                                             <th>Dia</th>
                                             <th>Fecha</th>
                                             <th style="background-color: #bdbebd">Hora Entrada</th>
@@ -265,7 +265,7 @@
                                                 <td>
                                                   @if (@item.cantidad_lecturas_orig>0 || @item.lectora.ToUpper()=="MANUAL") {
                                                     <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_exluidos=0>
-                                                       <h4><span class="badge bg-primary rounded-pill">@item.cantidad_lecturas_orig</span></h4>
+                                                       <h4><span class="badge bg-secondary ">@item.cantidad_lecturas_orig</span></h4>
                                                     </a>
                                                   }
                                                 </td>

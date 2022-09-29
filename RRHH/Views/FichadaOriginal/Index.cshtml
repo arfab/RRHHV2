@@ -4,13 +4,23 @@
 
 @{
     ViewBag.Title = "Index";
+    var sin_excluidos =  (int) ViewData["SIN_EXCLUIDOS"];
+
 }
 
 
 <form  >
  <div class="container">
      <div class="jumbotron text-center Titulo">
-      <h2>Fichadas Originales</h2>
+            @if (@sin_excluidos ==0)
+            {
+                 <h2>Fichadas originales</h2>
+            }
+            else
+            {
+                <h2>Fichadas sin duplicados</h2>
+            }
+           
     </div>
 
       <center>
