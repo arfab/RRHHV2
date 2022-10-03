@@ -652,11 +652,28 @@ namespace RRHH.Repository
                             }
                         
                     }
-                    else if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 == null)
+                    else if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 == null ||
+                             item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 == null ||
+                             item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 == null
+                            )
                     {
                         item.hora_entrada_1 = item.lec1;
                         item.hora_salida_1 = item.lec2;
 
+
+                        if (item.tipo3 != null)
+                        {
+                            item.hora_entrada_2 = item.lec3;
+                            item.hora_salida_2 = item.lec4;
+                        }
+
+
+                        if (item.tipo5 != null)
+                        {
+                            item.hora_entrada_3 = item.lec5;
+                        }
+
+                        /*
                         DateTime entrada1 = DateTime.Parse(item.lec1);
                         DateTime salida1 = DateTime.Parse(item.lec2);
 
@@ -674,7 +691,7 @@ namespace RRHH.Repository
                             item.hora_salida_2 = item.lec3;
 
                         item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
-
+                        */
                         item.estado = "ERR";
 
                     }
