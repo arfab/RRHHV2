@@ -673,25 +673,105 @@ namespace RRHH.Repository
                             item.hora_entrada_3 = item.lec5;
                         }
 
-                        /*
-                        DateTime entrada1 = DateTime.Parse(item.lec1);
-                        DateTime salida1 = DateTime.Parse(item.lec2);
-
-                        TimeSpan span1 = salida1.Subtract(entrada1);
 
 
-                        DateTime entradaAux = DateTime.Parse(item.lec2);
-                        DateTime salidaAux = DateTime.Parse(item.lec3);
 
-                        TimeSpan spanAux = salidaAux.Subtract(entradaAux);
 
-                        if (spanAux.Hours < 2)
-                            item.hora_entrada_2 = item.lec3;
+                        CantidadHoras cantidadHoras =
+                            ObtenerCantidadHoras(item.hora_entrada_1,
+                                                 item.hora_salida_1,
+                                                 item.hora_entrada_2,
+                                                 item.hora_salida_2,
+                                                 item.hora_entrada_3,
+                                                 item.hora_salida_3,
+                                                 item.ubicacion_id.Value,
+                                                 item.ubicacion_id.Value == 3 ? item.local_id.Value : item.sector_id.Value,
+                                                 (int)item.fecha.Value.DayOfWeek + 1);
+
+                        if (cantidadHoras != null)
+                        {
+                            if (item.horas_normales == null || item.horas_normales == "")
+                                if (cantidadHoras.horas_normales != null) item.horas_normales = cantidadHoras.horas_normales.Trim();
+
+                            if (item.horas_50 == null || item.horas_50 == "")
+                                if (cantidadHoras.horas_50 != null) item.horas_50 = cantidadHoras.horas_50.Trim();
+
+                            if (item.horas_100 == null || item.horas_100 == "")
+                                if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100.Trim();
+                        }
+
+                        if (item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
+                        {
+
+
+                            DateTime entrada1 = DateTime.Parse(item.lec1);
+                            DateTime salida1 = DateTime.Parse(item.lec2);
+
+                            TimeSpan span1 = salida1.Subtract(entrada1);
+
+                            if (item.tipo3 != null && item.tipo4 != null)
+                            {
+                                DateTime entrada2 = DateTime.Parse(item.lec3);
+                                DateTime salida2 = DateTime.Parse(item.lec4);
+                                TimeSpan span2 = salida2.Subtract(entrada2);
+                                span1 += span2;
+                            }
+
+                            if (item.tipo5 != null && item.tipo6 != null)
+                            {
+
+                                DateTime entrada3 = DateTime.Parse(item.lec5);
+                                DateTime salida3 = DateTime.Parse(item.lec6);
+
+                                TimeSpan span3 = salida3.Subtract(entrada3);
+                                span1 += span3;
+                            }
+
+                            item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+
+
+                        }
                         else
-                            item.hora_salida_2 = item.lec3;
+                        {
+                            TimeSpan spanHs = TimeSpan.Parse("00:00");
+                            TimeSpan spanHs50 = TimeSpan.Parse("00:00");
+                            TimeSpan spanHs100 = TimeSpan.Parse("00:00");
 
-                        item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
-                        */
+
+                            if (item.horas_normales != null && item.horas_normales.Trim() != "")
+                            {
+                                spanHs = TimeSpan.Parse(item.horas_normales);
+                            }
+                            if (item.horas_50 != null && item.horas_50.Trim() != "")
+                            {
+                                spanHs50 = TimeSpan.Parse(item.horas_50);
+                            }
+                            if (item.horas_100 != null && item.horas_100.Trim() != "")
+                            {
+                                spanHs100 = TimeSpan.Parse(item.horas_100);
+                            }
+
+                            spanHs += spanHs50;
+                            spanHs += spanHs100;
+                            item.cantidad_horas = spanHs.Hours.ToString() + ":" + spanHs.Minutes.ToString().PadLeft(2, '0');
+
+                        }
+
+                        if (cantidadHoras != null)
+                        {
+                            if (cantidadHoras.horas_normales != null && cantidadHoras.horas_normales.Trim() != "")
+                                minutos_normal += (int)TimeSpan.Parse(cantidadHoras.horas_normales).TotalMinutes;
+                            if (cantidadHoras.horas_50 != null && cantidadHoras.horas_50.Trim() != "")
+                                minutos_50 += (int)TimeSpan.Parse(cantidadHoras.horas_50).TotalMinutes;
+                            if (cantidadHoras.horas_100 != null && cantidadHoras.horas_100.Trim() != "")
+                                minutos_100 += (int)TimeSpan.Parse(cantidadHoras.horas_100).TotalMinutes;
+                        }
+
+
+
+
+
+
                         item.estado = "ERR";
 
                     }
@@ -792,6 +872,24 @@ namespace RRHH.Repository
             }
             return "";
         }
+
+        public string ExcluirFichadas()
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+
+                icantFilas = con.Execute("spFichadaExcluir", commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
+        }
+
 
         public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, string fecha, int sin_excluidos)
         {

@@ -148,7 +148,15 @@ namespace RRHH.Controllers
 
                 HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
+                if (usuario.perfil_id<=3)
+                {
+                    IFichadaRepo fichadaRepo;
 
+                    fichadaRepo = new FichadaRepo();
+
+                    fichadaRepo.ExcluirFichadas();
+
+                }
 
                 return RedirectToAction("Menu", "Home");
             }
