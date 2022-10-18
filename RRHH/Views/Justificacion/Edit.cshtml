@@ -38,21 +38,41 @@
                   <label for="filtro">Legajo / Apellido</label>
                   <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroJustificacionActual"]" class="form-control" />                                          
 			</div>
-             @if (_modo=="A" && _empleado<0) {
+            @* @if (_modo=="A" && _empleado<0) {
             <div class="col-lg-6 col-xs-6 mb-3">
                 <label for="legajo_id">Empleado</label>
                 <select  data-filter="model" class="form-control"  multiple asp-for="legajos"  name="legajos" id="legajo_id" value="@ViewData["Legajos"]"  ></select>           
 			</div>
              }
              else
-             {
+             {*@
 			   <div class="col-lg-6 col-xs-6 mb-3">
                 <label for="legajo_id">Empleado</label>
                 <select  data-filter="model" class="form-control"  asp-for="legajo_id"  name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			   </div>
-             }
+            @* }*@
           </div>  
 
+
+           <div class="col-lg-6 col-xs-6 mb-3">
+            <button id="btnAgregar" type="button" onclick="AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());" class="btn btn-success btn-sm" >AGREGAR</button>
+            </div>
+
+            <div class="row"> 
+              <div class="col" style="margin-right:5px;">
+                 <table class="table table-light table-hover" id="tblItems">
+                   <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Legajo</th>
+                      <th>Apellido</th>
+                      <th>Nombre</th>
+                      <th></th>
+                   </tr>
+                  </thead>
+                </table>
+              </div>
+           </div> 
 
             <div class="row" hidden>
                   <div class="col bottom-buffer">
@@ -71,6 +91,7 @@
                 </div>
                 <div class="col bottom-buffer">
                   <label asp-for="nombre" id="nombre" name="nombre" class="control-label"></label> <label asp-for="apellido" id="apellido" name="apellido" class="control-label"></label>
+                  <input id="legajos" name="legajos" class="form-control" />
                 </div>
 
             </div>
@@ -161,7 +182,7 @@
         Confirma los cambios hechos?
       </div>
       <div class="modal-footer">
-          <button type="submit" asp-route-modo=@ViewData["MODO"] asp-route-origen=@ViewData["ORIGEN"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
+          <button type="submit" onclick="ObtenerLegajosID();" asp-route-modo=@ViewData["MODO"] asp-route-origen=@ViewData["ORIGEN"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
           <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>
@@ -469,7 +490,7 @@ var ObtenerLegajoPorID = function (id) {
             success: function (data) {
                 $('#apellido').text(data.apellido);
                 $('#nombre').text(data.nombre);
-
+                $('#nro_legajo').val(data.nro_legajo);
     
             },
             error: function () {
@@ -495,12 +516,12 @@ var ObtenerEmpleados = function (filtro) {
                 }
                 $(data).each(
                     function (index, item) {    
-                        if (item.value!=-1) { 
+                       // if (item.value!=-1) { 
                           if (item.value==CodEmpleado || CodEmpleado==null && index==0)
                             $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
                            else 
                             $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')            
-                        }
+                        //}
                     }
                     );
       
@@ -668,6 +689,81 @@ var ObtenerEmpleados = function (filtro) {
   });
 
 
+function AgregarItem(
+     id,
+     nro_legajo,
+     apellido,
+     nombre
+     ) 
+
+  {
+
+  if (id<0) return;
+
+  if (BuscarItem(id)>0) return;
+
+  var table = document.getElementById("tblItems");
+  var rowCount = table.rows.length;
+  var row = table.insertRow(rowCount);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+  var cell4 = row.insertCell(3);
+  var cell5 = row.insertCell(4);
+
+
+  row.id="row_"+rowCount.toString();
+     
+  cell5.style.textAlign = "right";
+  
+  cell1.innerHTML = id;
+  cell2.innerHTML = nro_legajo;
+  cell3.innerHTML = apellido;
+  cell4.innerHTML = nombre;
+  cell5.innerHTML = "<a onclick='EliminarItem(" + rowCount + ")'><i data-mdb-toggle='tooltip' title='Eliminar'  class='bi bi-x-circle'></i></a>";
+
+ // var cant = CalcularCantidadTotal();
+   
+
+}
+
+function EliminarItem(id) {
+    var clave= "row_"+id.toString();      
+    var rowIndex = document.getElementById(clave).rowIndex;
+    document.getElementById("tblItems").deleteRow(rowIndex);   
+}
+
+function BuscarItem(cod)
+{
+
+  var table = document.getElementById("tblItems");
+  var rowCount = table.rows.length;
+  for (var i=0; i<rowCount; i++)
+  {
+    if (table.rows[i].cells[0].innerHTML == cod )
+        return i;
+  }
+  return -1;
+
+}
+
+function ObtenerLegajosID()
+{
+  var legajos = "";
+  var table = document.getElementById("tblItems");
+  var rowCount = table.rows.length;
+  for (var i=1; i<rowCount; i++)
+  {
+    legajos = legajos + table.rows[i].cells[0].innerHTML;
+    if (i < rowCount - 1) legajos = legajos + ",";
+  }
+
+  $('#legajos').text(legajos);   
+  $('#legajos').val(legajos);  
+
+  return legajos;
+
+}
 
 </script>
 

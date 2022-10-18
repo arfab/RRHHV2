@@ -549,7 +549,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int? id, Justificacion justificacion, string origen)
+        public IActionResult Edit(string modo, int? id, string legajos, Justificacion justificacion, string origen)
         {
             int? usuario_id = HttpContext.Session.GetInt32("UID");
 
@@ -580,14 +580,21 @@ namespace RRHH.Controllers
                     sret = justificacionRepo.Modificar(justificacion, usuario_id.Value);
                 else
                 {
-                    if (justificacion.legajo_id != null)
+                    if (justificacion.legajo_id != null && (legajos == null || legajos == ""))
                         sret = justificacionRepo.Insertar(justificacion, usuario_id.Value);
                     else
                     {
-                        foreach (string s in justificacion.legajos)
+                        string[] legajos_id = legajos.Split(',');
+
+                        foreach (string s in legajos_id)
                         {
                             justificacion.legajo_id = Int32.Parse(s);
                             sret = justificacionRepo.Insertar(justificacion, usuario_id.Value);
+                            if (sret != "")
+                            {
+
+                                ViewBag.Message = sret;
+                            }
                         }
                     }
                 }
@@ -601,11 +608,7 @@ namespace RRHH.Controllers
                        return RedirectToAction("Index", "Justificacion");
 
                 }
-                else
-                {
-                   
-                    ViewBag.Message = sret;
-                }
+               
 
             }
             else
