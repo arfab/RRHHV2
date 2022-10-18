@@ -265,15 +265,34 @@
                                                 <td>
                                                   @if (@item.cantidad_lecturas_orig>0 || @item.lectora.ToUpper()=="MANUAL") {
                                                     <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_exluidos=0>
-                                                       <h4><span class="badge bg-secondary ">@item.cantidad_lecturas_orig</span></h4>
+                                                       <h4>                                                          
+                                                         <span class="badge bg-secondary ">
+                                                           @item.cantidad_lecturas_orig
+                                                         </span>
+                                                       </h4>
                                                     </a>
                                                   }
                                                 </td>
                                                 <td>
                                                   @if (@item.cantidad_lecturas>0 || @item.lectora.ToUpper()=="MANUAL") {
-                                                    <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_exluidos=1>
-                                                       <h4><span class="badge bg-primary rounded-pill">@item.cantidad_lecturas</span></h4>
-                                                    </a>
+                                                        <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_exluidos=1>
+                                                            @if (@item.cantidad_lecturas <= 6)
+                                                            {
+                                                                <h4>
+                                                                    <span class="badge  bg-primary rounded-pill">
+                                                                        @item.cantidad_lecturas
+                                                                    </span>
+                                                                </h4>
+                                                            }
+                                                            else
+                                                            {
+                                                                <h4>
+                                                                    <span class="badge  bg-danger rounded-pill">
+                                                                        @item.cantidad_lecturas
+                                                                    </span>
+                                                                </h4>
+                                                            }
+                                                        </a>
                                                   }
                                                 </td>
                                                 <td>

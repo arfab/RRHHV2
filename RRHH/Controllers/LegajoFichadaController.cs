@@ -86,7 +86,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String horas_normales, String horas_50, String horas_100)
+        public IActionResult Edit(string modo, int legajo_id, string legajos, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String horas_normales, String horas_50, String horas_100)
         {
 
             ILegajoFichadaRepo legajoFichadaRepo;
@@ -190,7 +190,7 @@ namespace RRHH.Controllers
 
             legajoFichadaRepo = new LegajoFichadaRepo();
 
-                legajoFichada.legajo_id = legajo_id;
+               
 
                 legajoFichada.lectora_id = -1;
 
@@ -207,10 +207,11 @@ namespace RRHH.Controllers
                 if (horas_50 != null) legajoFichada.horas_50 = horas_50;
                 if (horas_100 != null) legajoFichada.horas_100 = horas_100;
 
-            //if (id != null)
-            //    sret = legajoFichadaRepo.Modificar(legajoFichada);
-            //else
-            sret = legajoFichadaRepo.Insertar(legajoFichada);
+            if (legajos==null || legajos == "")
+            {
+                legajoFichada.legajo_id = legajo_id;
+
+                sret = legajoFichadaRepo.Insertar(legajoFichada);
 
                 if (sret == "")
                 {
@@ -221,8 +222,25 @@ namespace RRHH.Controllers
                 {
                     ViewBag.Message = sret;
                 }
+            }
+            else
+            {
+                string[] legajos_id = legajos.Split(',');
 
-            //}
+                foreach (string leg in legajos_id)
+                {
+                    legajoFichada.legajo_id = Int16.Parse(leg);
+                    sret = legajoFichadaRepo.Insertar(legajoFichada);
+                    if (sret != "")
+                    {
+
+                        ViewBag.Message = sret;
+                    }
+                }
+
+                return RedirectToAction("Index", "Fichada");
+            }
+
 
             return View(legajoFichada);
         }
