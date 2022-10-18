@@ -554,12 +554,12 @@ var ObtenerEmpleados = function (filtro) {
                     $('#legajo_id').find('option').remove()
                     $(data).each(
                         function (index, item) {     
-                            if (item.value!=-1) { 
+                           // if (item.value!=-1) { 
                              if (item.value==CodEmpleado)
                                $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
                              else 
                               $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')         
-                            }
+                          //  }
                         }
                         ); 
 

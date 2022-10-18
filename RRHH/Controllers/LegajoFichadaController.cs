@@ -16,12 +16,14 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? legajo_id, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String horas_normales, String horas_50, String horas_100)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String horas_normales, String horas_50, String horas_100)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            ViewData["MODO"] = (modo == null) ? "E" : modo;
 
             ILegajoFichadaRepo legajoFichadaRepo;
 
