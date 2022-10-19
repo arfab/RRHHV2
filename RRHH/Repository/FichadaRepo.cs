@@ -518,6 +518,8 @@ namespace RRHH.Repository
                     item.lec4 = CalcularHora(item.lec4, item.delta.Value);
                     item.lec5 = CalcularHora(item.lec5, item.delta.Value);
                     item.lec6 = CalcularHora(item.lec6, item.delta.Value);
+                    item.lec7 = CalcularHora(item.lec7, item.delta.Value);
+                    item.lec8 = CalcularHora(item.lec8, item.delta.Value);
 
                     item.tipo1 = item.tipo1 == "" ? null : item.tipo1;
                     item.tipo2 = item.tipo2 == "" ? null : item.tipo2;
@@ -525,6 +527,8 @@ namespace RRHH.Repository
                     item.tipo4 = item.tipo4 == "" ? null : item.tipo4;
                     item.tipo5 = item.tipo5 == "" ? null : item.tipo5;
                     item.tipo6 = item.tipo6 == "" ? null : item.tipo6;
+                    item.tipo7 = item.tipo7 == "" ? null : item.tipo7;
+                    item.tipo8 = item.tipo8 == "" ? null : item.tipo8;
 
                     if (item.tipo1 == null)
                     {
@@ -537,9 +541,11 @@ namespace RRHH.Repository
                         item.estado = "OK";
 
 
-                    if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 != null ||
-                        item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4!=null && item.tipo5 == null && item.tipo6 == null ||
-                        item.tipo1 != null && item.tipo2 != null && item.tipo3 == null && item.tipo4 == null && item.tipo5 == null && item.tipo6 == null
+                    if (
+                        item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 != null && item.tipo7 != null && item.tipo8 != null ||
+                        item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 != null && item.tipo7 == null && item.tipo8 == null ||
+                        item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4!=null && item.tipo5 == null && item.tipo6 == null && item.tipo7 == null && item.tipo8 == null ||
+                        item.tipo1 != null && item.tipo2 != null && item.tipo3 == null && item.tipo4 == null && item.tipo5 == null && item.tipo6 == null && item.tipo7 == null && item.tipo8 == null
                         )
                     
                     {
@@ -561,6 +567,12 @@ namespace RRHH.Repository
                             item.hora_salida_3 = item.lec6;
                         }
 
+                        if (item.tipo7 != null)
+                        {
+                            item.hora_entrada_4 = item.lec7;
+                            item.hora_salida_4 = item.lec8;
+                        }
+
                         CantidadHoras cantidadHoras = 
                            ObtenerCantidadHoras(item.hora_entrada_1,
                                                 item.hora_salida_1,
@@ -568,6 +580,8 @@ namespace RRHH.Repository
                                                 item.hora_salida_2,
                                                 item.hora_entrada_3,
                                                 item.hora_salida_3,
+                                                item.hora_entrada_4,
+                                                item.hora_salida_4,
                                                 item.ubicacion_id.Value,
                                                 item.ubicacion_id.Value == 3 ? item.local_id.Value : item.sector_id.Value,
                                                 (int)item.fecha.Value.DayOfWeek + 1);
@@ -611,7 +625,17 @@ namespace RRHH.Repository
                                 span1 += span3;
                               }
 
-                              item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                            if (item.tipo7 != null)
+                            {
+
+                                DateTime entrada4 = DateTime.Parse(item.lec7);
+                                DateTime salida4 = DateTime.Parse(item.lec8);
+
+                                TimeSpan span4 = salida4.Subtract(entrada4);
+                                span1 += span4;
+                            }
+
+                            item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
 
 
                             }
@@ -654,7 +678,8 @@ namespace RRHH.Repository
                     }
                     else if (item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 == null ||
                              item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 == null ||
-                             item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 == null
+                             item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 == null ||
+                             item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 != null && item.tipo7 != null && item.tipo8 == null
                             )
                     {
                         item.hora_entrada_1 = item.lec1;
@@ -664,6 +689,10 @@ namespace RRHH.Repository
                         if (item.tipo3 != null)
                         {
                             item.hora_entrada_2 = item.lec3;
+                        }
+
+                        if (item.tipo4 != null)
+                        {
                             item.hora_salida_2 = item.lec4;
                         }
 
@@ -673,8 +702,20 @@ namespace RRHH.Repository
                             item.hora_entrada_3 = item.lec5;
                         }
 
+                        if (item.tipo6 != null)
+                        {
+                            item.hora_salida_3 = item.lec6;
+                        }
 
+                        if (item.tipo7 != null)
+                        {
+                            item.hora_entrada_4 = item.lec7;
+                        }
 
+                        if (item.tipo8 != null)
+                        {
+                            item.hora_salida_4 = item.lec8;
+                        }
 
 
                         //CantidadHoras cantidadHoras =
@@ -823,7 +864,7 @@ namespace RRHH.Repository
         }
 
 
-        public CantidadHoras ObtenerCantidadHoras(string entrada1, string salida1, string entrada2, string salida2, string entrada3, string salida3, int ubicacion_id, int sector_id, int dia_semana)
+        public CantidadHoras ObtenerCantidadHoras(string entrada1, string salida1, string entrada2, string salida2, string entrada3, string salida3, string entrada4, string salida4, int ubicacion_id, int sector_id, int dia_semana)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -838,6 +879,8 @@ namespace RRHH.Repository
                 parameter.Add("@salida2", salida2);
                 parameter.Add("@entrada3", entrada3);
                 parameter.Add("@salida3", salida3);
+                parameter.Add("@entrada4", entrada4);
+                parameter.Add("@salida4", salida4);
                 parameter.Add("@ubicacion_id", ubicacion_id);
                 parameter.Add("@sector_id", sector_id);
                 parameter.Add("@dia_semana", dia_semana);

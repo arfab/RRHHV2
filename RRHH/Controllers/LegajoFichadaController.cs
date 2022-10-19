@@ -16,7 +16,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String horas_normales, String horas_50, String horas_100)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -88,7 +88,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int legajo_id, string legajos, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String horas_normales, String horas_50, String horas_100)
+        public IActionResult Edit(string modo, int legajo_id, string legajos, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100)
         {
 
             ILegajoFichadaRepo legajoFichadaRepo;
@@ -123,7 +123,9 @@ namespace RRHH.Controllers
             if (entrada_1 == null && salida_1!=null ||
                 salida_1 == null && entrada_2!= null ||
                 entrada_2 == null && salida_2!= null ||
-                salida_2 == null && entrada_3 != null
+                salida_2 == null && entrada_3 != null ||
+                entrada_3 == null && salida_3 != null ||
+                salida_3 == null && entrada_4 != null
                 )
              {
                 ViewBag.Message = "No pueden saltearse horarios de fichadas";
@@ -190,6 +192,31 @@ namespace RRHH.Controllers
             }
 
 
+            if (salida_3 != null && entrada_4 != null)
+            {
+                TimeSpan span1 = DateTime.Parse(entrada_4).Subtract(DateTime.Parse(salida_3));
+
+                if (span1.TotalMinutes < 2)
+                {
+                    ViewBag.Message = "La entrada 4 debe ser mayor a 2 minutos que la salida 3";
+                    return View(legajoFichada);
+                }
+
+            }
+
+            if (entrada_4 != null && salida_4 != null)
+            {
+                TimeSpan span1 = DateTime.Parse(salida_4).Subtract(DateTime.Parse(entrada_4));
+
+                if (span1.TotalMinutes < 2)
+                {
+                    ViewBag.Message = "La salida 4 debe ser mayor a 2 minutos que la entrada 4";
+                    return View(legajoFichada);
+                }
+            }
+
+
+
             legajoFichadaRepo = new LegajoFichadaRepo();
 
                
@@ -204,8 +231,10 @@ namespace RRHH.Controllers
                 if (salida_2 != null) legajoFichada.salida_2 = salida_2;
                 if (entrada_3 != null) legajoFichada.entrada_3 = entrada_3;
                 if (salida_3 != null) legajoFichada.salida_3 = salida_3;
+                if (entrada_4 != null) legajoFichada.entrada_4 = entrada_4;
+                if (salida_4 != null) legajoFichada.salida_4 = salida_4;
 
-                if (horas_normales != null) legajoFichada.horas_normales = horas_normales;
+            if (horas_normales != null) legajoFichada.horas_normales = horas_normales;
                 if (horas_50 != null) legajoFichada.horas_50 = horas_50;
                 if (horas_100 != null) legajoFichada.horas_100 = horas_100;
 

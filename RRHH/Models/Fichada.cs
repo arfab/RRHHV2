@@ -34,6 +34,12 @@
         public string? lec6 { get; set; }
         public string? tipo6 { get; set; }
 
+        public string? lec7 { get; set; }
+        public string? tipo7 { get; set; }
+
+        public string? lec8 { get; set; }
+        public string? tipo8 { get; set; }
+
         public string? cantidad_horas { get; set; }
 
         public int? justificacion_id { get; set; }

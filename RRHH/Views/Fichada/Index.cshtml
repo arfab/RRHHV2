@@ -222,6 +222,8 @@
                                             <th style="background-color: #d3d3d3">Hora Salida</th>
                                             <th style="background-color: #e9e9e9">Hora Entrada</th>
                                             <th style="background-color: #e9e9e9">Hora Salida</th>
+                                            <th style="background-color: #e9e9e9">Hora Entrada</th>
+                                            <th style="background-color: #e9e9e9">Hora Salida</th>
                                             <th>Cant. Hs.</th>
                                             <th>Normales</th>
                                             @*<th>50%</th>
@@ -276,7 +278,7 @@
                                                 <td>
                                                   @if (@item.cantidad_lecturas>0 || @item.lectora.ToUpper()=="MANUAL") {
                                                         <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_exluidos=1>
-                                                            @if (@item.cantidad_lecturas <= 6)
+                                                            @if (@item.cantidad_lecturas <= 8)
                                                             {
                                                                 <h4>
                                                                     <span class="badge  bg-primary rounded-pill">
@@ -319,6 +321,12 @@
                                                  <td style="border-color:black; border-style: solid;" >
                                                     @item.hora_salida_3
                                                 </td>
+                                                 <td>
+                                                    @item.hora_entrada_4
+                                                </td>
+                                                 <td style="border-color:black; border-style: solid;" >
+                                                    @item.hora_salida_4
+                                                </td>
                                                 <td>
                                                     @item.cantidad_horas
                                                 </td>
@@ -335,7 +343,7 @@
                                                     @item.justificacion
                                                 </td>
                                                    <td style="font-size:16px;">
-                                                      <a asp-controller="LegajoFichada" asp-action="Edit" asp-route-lectora_id=@item.lectora_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-entrada_1=@item.hora_entrada_1 asp-route-salida_1=@item.hora_salida_1 asp-route-entrada_2=@item.hora_entrada_2 asp-route-salida_2=@item.hora_salida_2 asp-route-entrada_3=@item.hora_entrada_3 asp-route-salida_3=@item.hora_salida_3 asp-route-horas_normales=@item.horas_normales asp-route-horas_50=@item.horas_100 asp-route-horas_50=@item.horas_100><i data-mdb-toggle='tooltip' title='Editar la fichada' class='bi bi-pencil-square'></i></a>
+                                                      <a asp-controller="LegajoFichada" asp-action="Edit" asp-route-lectora_id=@item.lectora_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-entrada_1=@item.hora_entrada_1 asp-route-salida_1=@item.hora_salida_1 asp-route-entrada_2=@item.hora_entrada_2 asp-route-salida_2=@item.hora_salida_2 asp-route-entrada_3=@item.hora_entrada_3 asp-route-salida_3=@item.hora_salida_3 asp-route-entrada_4=@item.hora_entrada_4 asp-route-salida_4=@item.hora_salida_4 asp-route-horas_normales2=@item.horas_normales asp-route-horas_502=@item.horas_100 asp-route-horas_1002=@item.horas_100><i data-mdb-toggle='tooltip' title='Editar la fichada' class='bi bi-pencil-square'></i></a>
                                             
                                                        @if (item.justificacion_id==-1) {
                                                          <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="A" asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-origen="F" ><i data-mdb-toggle='tooltip' title='Nueva justificación' class='bi bi-watch'></i></a>                                                        

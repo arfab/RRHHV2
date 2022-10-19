@@ -35,36 +35,43 @@
         }
 
             <div class="row mb-3" >
-             <div class="col-lg-2 col-xs-6 mb-3">
+               
+             <div class="col-lg-4 col-xs-4 mb-3">
                   <label for="filtro">Legajo / Apellido</label>
                   <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroFichadaActual"]" class="form-control" />                                          
 			</div>
-			<div class="col-lg-6 col-xs-6 mb-3">
+			<div class="col-lg-4 col-xs-4 mb-3">
                 <label for="legajo_id">Empleado</label>
                 <select  data-filter="model" class="form-control" asp-for="legajo_id" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
 
-            <div class="col-lg-6 col-xs-6 mb-3">
-            <button id="btnAgregar" type="button" onclick="AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());" class="btn btn-success btn-sm" >AGREGAR</button>
-            </div>
+           </div>  
 
+        @if (_modo == "A")
+        {
             <div class="row"> 
-              <div class="col" style="margin-right:5px;">
-                 <table class="table table-light table-hover" id="tblItems">
-                   <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Legajo</th>
-                      <th>Apellido</th>
-                      <th>Nombre</th>
-                      <th></th>
-                   </tr>
-                  </thead>
-                </table>
+             <div class="col">
+              <button id="btnAgregar" type="button" onclick="AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());" class="btn btn-success btn-sm" >AGREGAR</button>
               </div>
-           </div> 
+            </div>
+            <div class="row"> 
+                <div class="col" style="margin-right:5px;">
+                    <table class="table table-light table-hover" id="tblItems">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Legajo</th>
+                                <th>Apellido</th>
+                                <th>Nombre</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        }
 
-          </div>  
+      
 
            <div class="row" hidden>
                   <div class="col bottom-buffer">
@@ -86,16 +93,19 @@
                   <input id="legajos" name="legajos" class="form-control" />
 
                 </div>
-
+                
             </div>
 
-
              <div class="row ">
-                <div class="col bottom-buffer btns2" id="divFechaNovedad">
+               <div class="col bottom-buffer btns2" id="divFechaNovedad">
                       <label asp-for="fecha" class="control-label">Fecha</label><br />
                       <input type="text" class="form_control" id="txtSelectedFecha" name="fecha"  asp-for="fecha" readonly="readonly"/>
 
                 </div>
+             </div>
+
+             <div class="row ">
+                
                 <div class="col bottom-buffer">
                   <label asp-for="horas_normales" class="control-label">Horas</label>
                   <input type="time" asp-for="horas_normales" step="1" class="form-control" />
@@ -109,18 +119,20 @@
                   <input type="time" asp-for="horas_100" step="1" class="form-control" />
                 </div>
              </div> 
-            <div class="row ">
+            
+             <div class="row ">
                 <div class="col bottom-buffer">
                   <label asp-for="entrada_1" class="control-label">Entrada 1</label>
                   <input type="time" asp-for="entrada_1" step="1" class="form-control" />
                 </div>
-            </div>                       
-
-             <div class="row ">
                 <div class="col bottom-buffer">
                   <label asp-for="salida_1" class="control-label">Salida 1</label>
                   <input type="time" asp-for="salida_1" step="1" class="form-control" />
                 </div>
+            </div>                       
+
+             <div class="row ">
+                
             </div>      
             
             <div class="row ">
@@ -128,13 +140,14 @@
                   <label asp-for="entrada_2" class="control-label">Entrada 2</label>
                   <input type="time" asp-for="entrada_2" step="1" class="form-control" />
                 </div>
-            </div>                       
-
-             <div class="row ">
                 <div class="col bottom-buffer">
                   <label asp-for="salida_2" class="control-label">Salida 2</label>
                   <input type="time" asp-for="salida_2" step="1" class="form-control" />                
                  </div>
+            </div>                       
+
+             <div class="row ">
+              
             </div>    
 
              <div class="row ">
@@ -142,13 +155,29 @@
                   <label asp-for="entrada_3" class="control-label">Entrada 3</label>
                   <input type="time" asp-for="entrada_3" step="1" class="form-control" />
                 </div>
-            </div>                       
-
-             <div class="row ">
                 <div class="col bottom-buffer">
                   <label asp-for="salida_3" class="control-label">Salida 3</label>
                   <input type="time" asp-for="salida_3" step="1" class="form-control" />                
                  </div>
+            </div>                       
+
+             <div class="row ">
+                
+            </div>    
+
+             <div class="row ">
+                <div class="col bottom-buffer">
+                  <label asp-for="entrada_4" class="control-label">Entrada 4</label>
+                  <input type="time" asp-for="entrada_4" step="1" class="form-control" />
+                </div>
+                <div class="col bottom-buffer">
+                  <label asp-for="salida_4" class="control-label">Salida 4</label>
+                  <input type="time" asp-for="salida_4" step="1" class="form-control" />                
+                 </div>
+            </div>                       
+
+             <div class="row ">
+                
             </div>    
 
               <div class="row " id="divInsertar">
