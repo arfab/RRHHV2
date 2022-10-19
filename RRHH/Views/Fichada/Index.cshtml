@@ -266,7 +266,7 @@
                                                 </td>
                                                 <td>
                                                   @if (@item.cantidad_lecturas_orig>0 || @item.lectora.ToUpper()=="MANUAL") {
-                                                    <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_exluidos=0>
+                                                    <a target="_blank" asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_excluidos=0>
                                                        <h4>                                                          
                                                          <span class="badge bg-secondary ">
                                                            @item.cantidad_lecturas_orig
@@ -277,7 +277,7 @@
                                                 </td>
                                                 <td>
                                                   @if (@item.cantidad_lecturas>0 || @item.lectora.ToUpper()=="MANUAL") {
-                                                        <a asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_exluidos=1>
+                                                        <a target="_blank" asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_excluidos=1>
                                                             @if (@item.cantidad_lecturas <= 8)
                                                             {
                                                                 <h4>

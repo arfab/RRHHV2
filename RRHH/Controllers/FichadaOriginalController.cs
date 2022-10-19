@@ -11,7 +11,7 @@ namespace RRHH.Controllers
 {
     public class FichadaOriginalController : Controller
     {
-        public IActionResult Index(int legajo_id, string fecha, int sin_exluidos)
+        public IActionResult Index(int legajo_id, string fecha, int sin_excluidos)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -19,7 +19,26 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            ViewData["SIN_EXCLUIDOS"] = sin_exluidos;
+            ViewData["SIN_EXCLUIDOS"] = sin_excluidos;
+
+            Legajo legajo = new Legajo();
+            ILegajoRepo legajoRepo;
+            legajoRepo = new LegajoRepo();
+
+            legajo = legajoRepo.Obtener(legajo_id);
+
+
+            if (legajo != null)
+            {
+                ViewData["Ubicacion"] = legajo.ubicacion;
+                ViewData["Sector"] = legajo.sector;
+                ViewData["Local"] = legajo.local;
+                ViewData["Empresa"] = legajo.empresa;
+                ViewData["NroLegajo"] = legajo.nro_legajo;
+                ViewData["Apellido"] = legajo.apellido;
+                ViewData["Nombre"] = legajo.nombre;
+            }
+
 
             if (perfil_id == 1 || perfil_id == 2)
             {
@@ -27,7 +46,7 @@ namespace RRHH.Controllers
 
                 fichadaRepo = new FichadaRepo();
 
-                return View(fichadaRepo.ObtenerFichadasOriginales(legajo_id, fecha, sin_exluidos));
+                return View(fichadaRepo.ObtenerFichadasOriginales(legajo_id, fecha, sin_excluidos));
             }
 
            
