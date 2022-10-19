@@ -453,8 +453,10 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 10).Value = "Hora Salida";
                     worksheet.Cell(currentRow, 11).Value = "Hora Entrada";
                     worksheet.Cell(currentRow, 12).Value = "Hora Salida";
-                    worksheet.Cell(currentRow, 13).Value = "Cant Hs.";
-                    worksheet.Cell(currentRow, 14).Value = "Justificación";
+                    worksheet.Cell(currentRow, 13).Value = "Hora Entrada";
+                    worksheet.Cell(currentRow, 14).Value = "Hora Salida";
+                    worksheet.Cell(currentRow, 15).Value = "Cant Hs.";
+                    worksheet.Cell(currentRow, 16).Value = "Justificación";
 
 
                     foreach (var item in fichadas)
@@ -472,8 +474,10 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 10).Value = item.hora_salida_2;
                         worksheet.Cell(currentRow, 11).Value = item.hora_entrada_3;
                         worksheet.Cell(currentRow, 12).Value = item.hora_salida_3;
-                        worksheet.Cell(currentRow, 13).Value = item.cantidad_horas;
-                        worksheet.Cell(currentRow, 14).Value = item.justificacion;
+                        worksheet.Cell(currentRow, 13).Value = item.hora_entrada_4;
+                        worksheet.Cell(currentRow, 14).Value = item.hora_salida_4;
+                        worksheet.Cell(currentRow, 15).Value = item.cantidad_horas;
+                        worksheet.Cell(currentRow, 16).Value = item.justificacion;
 
 
 
@@ -799,8 +803,59 @@ namespace RRHH.Controllers
                                 }
                             }
 
-
                         }
+
+
+                            if (item.hora_entrada_4 != null)
+                            {
+
+                                try
+                                {
+                                    fichadaRepo.InsertarExportacionFichada(item.nro_legajo.Value, item.lectora_nro.Value, item.fecha.Value, item.hora_entrada_4, "E", completo);
+
+                                    tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                                    tw.Write(item.hora_entrada_4 + ",");
+                                    tw.Write("E,");
+                                    tw.Write(item.lectora_nro + ",");
+                                    tw.WriteLine(item.nro_legajo);
+
+
+                                }
+                                catch (SqlException ex)
+                                {
+                                    if (ex.Number == 2601 || ex.Number == 2627)
+                                    {
+                                        // Violation in one on both...
+                                    }
+                                }
+
+
+
+                            }
+                            if (item.hora_salida_4 != null)
+                            {
+
+                                try
+                                {
+                                    fichadaRepo.InsertarExportacionFichada(item.nro_legajo.Value, item.lectora_nro.Value, item.fecha.Value, item.hora_salida_4, "E", completo);
+
+                                    tw.Write(Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") + ",");
+                                    tw.Write(item.hora_salida_4 + ",");
+                                    tw.Write("S,");
+                                    tw.Write(item.lectora_nro + ",");
+                                    tw.WriteLine(item.nro_legajo);
+
+
+                                }
+                                catch (SqlException ex)
+                                {
+                                    if (ex.Number == 2601 || ex.Number == 2627)
+                                    {
+                                        // Violation in one on both...
+                                    }
+                                }
+
+                            }
 
                         //worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
                         //worksheet.Cell(currentRow, 2).Value = item.apellido + ", " + item.nombre;
