@@ -12,6 +12,7 @@
     var _modo = (string)ViewData["MODO"];
     var _id = ViewData["ID"];
     var _empleado = (ViewData["EmpleadoActual"]==null)?-1:(int)ViewData["EmpleadoActual"];
+    var _item_actual = (ViewData["ITEM_ACTUAL"]==null)?0:(int)ViewData["ITEM_ACTUAL"];
 }
 
 <form  method="post" id="form1">
@@ -182,7 +183,7 @@
         Confirma los cambios hechos?
       </div>
       <div class="modal-footer">
-          <button type="submit" onclick="ObtenerLegajosID();" asp-route-modo=@ViewData["MODO"] asp-route-origen=@ViewData["ORIGEN"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
+          <button type="submit" onclick="ObtenerLegajosID();" asp-route-modo=@ViewData["MODO"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
           <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>
@@ -201,7 +202,7 @@
         Se eliminarán los datos de la justificación. Está seguro?
       </div>
       <div class="modal-footer">
-         <button type="submit"  asp-action="Delete" asp-controller="Justificacion" asp-route-hfID=@ViewData["ID"] asp-route-origen=@ViewData["ORIGEN"] value=""  class="btn btn-outline-success" >SI</button>
+         <button type="submit"  asp-action="Delete" asp-controller="Justificacion" asp-route-hfID=@ViewData["ID"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value=""  class="btn btn-outline-success" >SI</button>
          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>
@@ -222,7 +223,7 @@
       </div>
       <div class="modal-footer">
        @if (_origen=="F") {
-          <a asp-controller="Fichada" asp-action="Index"  class="btn btn-outline-success"  Text="SI">SI</a>
+          <a asp-controller="Fichada" asp-action="Index" asp-route-item_actual=@ViewData["ITEM_ACTUAL"]  class="btn btn-outline-success"  Text="SI">SI</a>
        }
        else {
           <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>

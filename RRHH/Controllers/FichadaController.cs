@@ -49,7 +49,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int nro_legajo,  int legajo_id, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, string apellido, int tipo_listado)
+        public IActionResult Index(int nro_legajo,  int legajo_id, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, string apellido, int tipo_listado, int? item_actual)
         {
 
 
@@ -132,6 +132,8 @@ namespace RRHH.Controllers
                 ViewData["EmpleadoActual"] = legajo_id;
                 ViewData["FiltroActual"] = filtro;
                 ViewData["TipoListadoActual"] = tipo_listado;
+
+                ViewData["ITEM_ACTUAL"] = item_actual == null?0:item_actual.Value ;
 
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;

@@ -40,3 +40,12 @@
     text-align: center;
     vertical-align: middle;
 }
+
+#tablaFichadas tr.activa td {
+    border-bottom: 1pt solid black;
+}
+
+#tablaFichadas tr.activa th {
+    border-bottom: 1pt solid black;
+}
+

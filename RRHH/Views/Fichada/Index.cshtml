@@ -11,7 +11,11 @@
     var total_paginas = @HttpContextAccessor.HttpContext.Session.GetInt32("TOT_PAG_FICHADA");
     var legajo =  (RRHH.Models.Legajo) ViewData["LEGAJO"];
     var tipo_listado =  (int) ViewData["TIPO_LISTADO"];
-          
+
+    var nro_item = 0; 
+
+   
+
     }
 
 
@@ -238,6 +242,8 @@
                                     {
                                         string estilo ;
 
+                                        nro_item = nro_item + 1;
+
                                         @if(item.lectora.ToUpper()=="MANUAL") {
                                            estilo = "background-color:Orange;";
                                         }
@@ -266,7 +272,9 @@
                                                 </td>
                                                 <td>
                                                   @if (@item.cantidad_lecturas_orig>0 || @item.lectora.ToUpper()=="MANUAL") {
-                                                    <a target="_blank" asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_excluidos=0>
+                                                    @*<a target="_blank" asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_excluidos=0>*@
+                                                    <a onclick='ObtenerFichadasOriginales(@item.legajo_id,"@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")" ,0)'>
+
                                                        <h4>                                                          
                                                          <span class="badge bg-secondary ">
                                                            @item.cantidad_lecturas_orig
@@ -277,7 +285,9 @@
                                                 </td>
                                                 <td>
                                                   @if (@item.cantidad_lecturas>0 || @item.lectora.ToUpper()=="MANUAL") {
-                                                        <a target="_blank" asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_excluidos=1>
+                                                           @* <a  target="_blank" asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_excluidos=1>*@  
+                                                           <a onclick='ObtenerFichadasOriginales(@item.legajo_id,"@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")" ,1)'>
+
                                                             @if (@item.cantidad_lecturas <= 8)
                                                             {
                                                                 <h4>
@@ -346,11 +356,11 @@
                                                       <a asp-controller="LegajoFichada" asp-action="Edit" asp-route-lectora_id=@item.lectora_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-entrada_1=@item.hora_entrada_1 asp-route-salida_1=@item.hora_salida_1 asp-route-entrada_2=@item.hora_entrada_2 asp-route-salida_2=@item.hora_salida_2 asp-route-entrada_3=@item.hora_entrada_3 asp-route-salida_3=@item.hora_salida_3 asp-route-entrada_4=@item.hora_entrada_4 asp-route-salida_4=@item.hora_salida_4 asp-route-horas_calculadas=@item.cantidad_horas asp-route-horas_normales2=@item.horas_normales asp-route-horas_502=@item.horas_50 asp-route-horas_1002=@item.horas_100><i data-mdb-toggle='tooltip' title='Editar la fichada' class='bi bi-pencil-square'></i></a>
                                             
                                                        @if (item.justificacion_id==-1) {
-                                                         <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="A" asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-origen="F" ><i data-mdb-toggle='tooltip' title='Nueva justificación' class='bi bi-watch'></i></a>                                                        
+                                                         <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="A" asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-origen="F" asp-route-nro_item=@nro_item ><i data-mdb-toggle='tooltip' title='Nueva justificación' class='bi bi-watch'></i></a>                                                        
                                                        }
                                                        else
                                                        {
-                                                          <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.justificacion_id  asp-route-origen="F" ><i data-mdb-toggle='tooltip' title='Nueva justificación' class='bi bi-watch'></i></a>                                                        
+                                                          <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.justificacion_id  asp-route-origen="F" asp-route-nro_item=@nro_item ><i data-mdb-toggle='tooltip' title='Nueva justificación' class='bi bi-watch'></i></a>                                                        
                                                        }
 @*                                                  @if (_perfil_id <= 3)
                                                     {
@@ -384,6 +394,24 @@
 
     </form>
 
+    <div id="partialModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Fichadas</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
      <script type="text/javascript">
 
@@ -399,6 +427,8 @@
         var LegajoId = @Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
 
         var Tipo = @Html.Raw(Json.Serialize(ViewData["TipoListadoActual"]));
+
+        var item_actual = @Html.Raw(Json.Serialize(ViewData["ITEM_ACTUAL"]));
 
         $("#tipo_listado").val(Tipo).change();
             
@@ -454,7 +484,7 @@
             else 
               $('#fecha_hasta').datepicker('setDate',FechaHasta);
 
-
+           if(item_actual>0) ubicarFila(item_actual);
     });
 
 
@@ -743,6 +773,26 @@
         }
 
 
+         var ObtenerFichadasOriginales = function (legajo_id, fecha, sin_excluidos) {
+            
+               $.ajax({
+                    type: "GET",
+                    url: "/FichadaOriginal/Index",
+                    data: { legajo_id: legajo_id, fecha: fecha, sin_excluidos: sin_excluidos },
+                    success: function (response) {
+                        $("#partialModal").find(".modal-body").html(response);
+                        $("#partialModal").modal('show');
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+        }
+
+
 
          $(function () {
           $('#fecha_desde').datepicker({
@@ -832,6 +882,21 @@
     $('#btnImprimir').on('click',function(){
     printData();
     })
+
+
+    function ubicarFila(item_actual){
+
+        $('#tablaFichadas').find('tr').eq(item_actual).addClass('activa');
+
+        var w = $(window);
+        var row = $('#tablaFichadas').find('tr').eq(item_actual);
+   
+  
+         if (row.length){
+           w.scrollTop( row.offset().top - (w.height()/2) );
+          }
+    }
+
 
     </script>
 

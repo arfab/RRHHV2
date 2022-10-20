@@ -78,7 +78,6 @@
 
         public string? horas_100 { get; set; }
 
-
         public string DiaSemana()
         {
             switch (fecha.Value.DayOfWeek)

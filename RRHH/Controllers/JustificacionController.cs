@@ -454,7 +454,7 @@ namespace RRHH.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, string fecha)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, string fecha, int nro_item)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -471,6 +471,8 @@ namespace RRHH.Controllers
             Justificacion justificacion = new Justificacion();
 
             ViewData["ORIGEN"] = origen;
+
+            ViewData["ITEM_ACTUAL"] = nro_item;
 
             if (id != null)
             {
@@ -549,7 +551,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int? id, string legajos, Justificacion justificacion, string origen)
+        public IActionResult Edit(string modo, int? id, string legajos, Justificacion justificacion, string origen, int nro_item)
         {
             int? usuario_id = HttpContext.Session.GetInt32("UID");
 
@@ -561,7 +563,8 @@ namespace RRHH.Controllers
 
             ViewData["MODO"] = modo;
 
-            
+            ViewData["ITEM_ACTUAL"] = nro_item;
+
 
             ViewData["MODO"] = (modo == null) ? "E" : modo;
 
@@ -603,7 +606,7 @@ namespace RRHH.Controllers
                 if (sret == "")
                 {
                     if (origen=="F")
-                       return RedirectToAction("Index", "Fichada");
+                       return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
                     else
                        return RedirectToAction("Index", "Justificacion");
 
@@ -628,12 +631,13 @@ namespace RRHH.Controllers
 
 
 
-        public IActionResult Delete(int hfID, string origen)
+        public IActionResult Delete(int hfID, string origen, int nro_item)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
+            ViewData["ITEM_ACTUAL"] = nro_item;
 
             IJustificacionRepo justificacionRepo;
 
@@ -643,7 +647,7 @@ namespace RRHH.Controllers
 
 
             if (origen == "F")
-                return RedirectToAction("Index", "Fichada");
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
             else
                 return RedirectToAction("Index", "Justificacion");
 
