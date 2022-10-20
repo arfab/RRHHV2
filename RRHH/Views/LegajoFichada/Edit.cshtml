@@ -188,7 +188,7 @@
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
-                      <button id="btnGrabar"  type="submit" onclick="ObtenerLegajosID();" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] asp-route_fecha=@ViewData["FECHA"]  value="" class="btn btn-outline-success"   >Grabar</button>
+                      <button id="btnGrabar"  type="submit" onclick="ObtenerLegajosID();" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] asp-route_fecha=@ViewData["FECHA"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value="" class="btn btn-outline-success"   >Grabar</button>
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalEliminar();" >Eliminar</a>
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalRestaurar();" >Restaurar</a>
                 </div>
@@ -211,7 +211,7 @@
         Confirma los cambios hechos?
       </div>
       <div class="modal-footer">
-          <button type="submit"  asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] value=""  class="btn btn-outline-success" >SI</button>
+          <button type="submit"  asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value=""  class="btn btn-outline-success" >SI</button>
           <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>
@@ -230,7 +230,7 @@
         Se eliminarán los datos de la fichada en este día. Está seguro?
       </div>
       <div class="modal-footer">
-         <button type="submit"  asp-action="Delete" asp-controller="LegajoFichada" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] value=""  class="btn btn-outline-success" >SI</button>
+         <button type="submit"  asp-action="Delete" asp-controller="LegajoFichada" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value=""  class="btn btn-outline-success" >SI</button>
 
 @*        <a asp-action="Delete" asp-controller="LegajoFichada" asp-route-legajo_id=@ViewData["LEGAJO_ID"]  class="btn btn-outline-success"  Text="SI">SI</a>
 *@        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
@@ -251,7 +251,7 @@
         Se restaurarán los datos de la fichada. Está seguro?
       </div>
       <div class="modal-footer">
-        <a asp-action="Restaurar" asp-controller="LegajoFichada" asp-route-id=@ViewData["ID"] class="btn btn-outline-success"  Text="SI">SI</a>
+        <a asp-action="Restaurar" asp-controller="LegajoFichada" asp-route-id=@ViewData["ID"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] class="btn btn-outline-success"  Text="SI">SI</a>
         <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>
@@ -270,7 +270,7 @@
         Se perderán los cambios efectuados. Está seguro?
       </div>
       <div class="modal-footer">
-        <a asp-action="Index" asp-controller="Fichada" class="btn btn-outline-success"  Text="SI">SI</a>
+        <a asp-action="Index" asp-controller="Fichada" asp-route-item_actual=@ViewData["ITEM_ACTUAL"] class="btn btn-outline-success"  Text="SI">SI</a>
         <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>

@@ -16,7 +16,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_calculadas, String horas_normales, String horas_50, String horas_100)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_calculadas, String horas_normales, String horas_50, String horas_100, int nro_item)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -24,6 +24,8 @@ namespace RRHH.Controllers
             if (usuario_id == null) return RedirectToAction("Login", "Usuario");
 
             ViewData["MODO"] = (modo == null) ? "E" : modo;
+
+            ViewData["ITEM_ACTUAL"] = nro_item;
 
             ViewData["HORAS_CALCULADAS"] = horas_calculadas;
 
@@ -90,7 +92,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int legajo_id, string legajos, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100)
+        public IActionResult Edit(string modo, int legajo_id, string legajos, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100, int nro_item)
         {
 
             ILegajoFichadaRepo legajoFichadaRepo;
@@ -102,6 +104,7 @@ namespace RRHH.Controllers
             legajoRepo = new LegajoRepo();
             legajo = legajoRepo.Obtener(legajo_id);
 
+            ViewData["ITEM_ACTUAL"] = nro_item;
 
             if (legajo != null)
             {
@@ -249,7 +252,7 @@ namespace RRHH.Controllers
                 if (sret == "")
                 {
 
-                    return RedirectToAction("Index", "Fichada");
+                    return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
                 }
                 else
                 {
@@ -271,7 +274,7 @@ namespace RRHH.Controllers
                     }
                 }
 
-                return RedirectToAction("Index", "Fichada");
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
             }
 
 
@@ -280,10 +283,13 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Delete(int legajo_id, int lectora_id, String fecha)
+        public IActionResult Delete(int legajo_id, int lectora_id, String fecha, int nro_item)
         {
 
             string sret;
+
+            ViewData["ITEM_ACTUAL"] = nro_item;
+
             ILegajoFichadaRepo legajoFichadaRepo;
             LegajoFichada legajoFichada = new LegajoFichada();
 
@@ -307,7 +313,7 @@ namespace RRHH.Controllers
             if (sret == "")
             {
 
-                return RedirectToAction("Index", "Fichada");
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
             }
             else
             {
@@ -321,10 +327,13 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Restaurar(int id)
+        public IActionResult Restaurar(int id, int nro_item)
         {
 
             string sret;
+
+            ViewData["ITEM_ACTUAL"] = nro_item;
+
             ILegajoFichadaRepo legajoFichadaRepo;
 
             legajoFichadaRepo = new LegajoFichadaRepo();
@@ -334,7 +343,7 @@ namespace RRHH.Controllers
             if (sret == "")
             {
 
-                return RedirectToAction("Index", "Fichada");
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
             }
             else
             {
