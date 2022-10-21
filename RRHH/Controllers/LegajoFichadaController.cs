@@ -92,7 +92,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int legajo_id, string legajos, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100, int nro_item)
+        public IActionResult Edit(string modo, int legajo_id, string legajos, string fechas , int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100, int nro_item)
         {
 
             ILegajoFichadaRepo legajoFichadaRepo;
@@ -247,17 +247,25 @@ namespace RRHH.Controllers
             {
                 legajoFichada.legajo_id = legajo_id;
 
-                sret = legajoFichadaRepo.Insertar(legajoFichada);
+                if (fechas == null || fechas == "")
+                    fechas = legajoFichada.fecha.ToString("dd/MM/yyyy"); ;
 
-                if (sret == "")
+                string[] fechas_id = fechas.Split(',');
+
+                foreach (string fec in fechas_id)
                 {
+                    legajoFichada.fecha = DateTime.Parse(fec);
+                    sret = legajoFichadaRepo.Insertar(legajoFichada);
+
+                    if (sret != "")
+                    {
+
+                        ViewBag.Message = sret;
+                    }
+                }
 
                     return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
-                }
-                else
-                {
-                    ViewBag.Message = sret;
-                }
+               
             }
             else
             {
@@ -265,12 +273,22 @@ namespace RRHH.Controllers
 
                 foreach (string leg in legajos_id)
                 {
+                   
                     legajoFichada.legajo_id = Int16.Parse(leg);
-                    sret = legajoFichadaRepo.Insertar(legajoFichada);
-                    if (sret != "")
-                    {
+                    if (fechas == null || fechas == "")
+                        fechas = legajoFichada.fecha.ToString("dd/MM/yyyy"); ;
 
-                        ViewBag.Message = sret;
+                    string[] fechas_id = fechas.Split(',');
+
+                    foreach (string fec in fechas_id)
+                    {
+                        legajoFichada.fecha = DateTime.Parse(fec);
+                        sret = legajoFichadaRepo.Insertar(legajoFichada);
+                        if (sret != "")
+                        {
+
+                            ViewBag.Message = sret;
+                        }
                     }
                 }
 

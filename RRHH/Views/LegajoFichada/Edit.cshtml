@@ -91,7 +91,7 @@
                 <div class="col bottom-buffer">
                   <label asp-for="nombre" id="nombre" name="nombre" class="control-label"></label> <label asp-for="apellido" id="apellido" name="apellido" class="control-label"></label>
                   <input id="legajos" name="legajos" class="form-control" />
-
+                  <input id="fechas" name="fechas" class="form-control" />
                 </div>
                 
             </div>
@@ -108,6 +108,27 @@
                       <label class="control-label">@ViewData["HORAS_CALCULADAS"]</label><br />
                 </div>
              </div>
+
+        @if (_modo == "A")
+        {
+            <div class="row"> 
+             <div class="col">
+              <button id="btnAgregarFecha" type="button" onclick="AgregarFecha($('#txtSelectedFecha').val());" class="btn btn-success btn-sm" >AGREGAR</button>
+              </div>
+            </div>
+            <div class="row"> 
+                <div class="col" style="margin-right:5px;">
+                    <table class="table table-light table-hover" id="tblFechas">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        }
 
              <div class="row ">
                 
@@ -705,6 +726,59 @@ function BuscarItem(cod)
 
 }
 
+
+
+
+function AgregarFecha(
+   fecha
+ ) 
+
+  {
+
+
+  if (BuscarFecha(fecha)>0) return;
+
+  var table = document.getElementById("tblFechas");
+  var rowCount = table.rows.length;
+  var row = table.insertRow(rowCount);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+
+
+  row.id="row_"+rowCount.toString();
+     
+  
+  cell1.innerHTML = fecha;
+  cell2.innerHTML = "<a onclick='EliminarFecha(" + rowCount + ")'><i data-mdb-toggle='tooltip' title='Eliminar'  class='bi bi-x-circle'></i></a>";
+
+ // var cant = CalcularCantidadTotal();
+   
+
+}
+
+function EliminarFecha(id) {
+    var clave= "row_"+id.toString();      
+    var rowIndex = document.getElementById(clave).rowIndex;
+    document.getElementById("tblFechas").deleteRow(rowIndex);   
+}
+
+function BuscarFecha(cod)
+{
+
+  var table = document.getElementById("tblFechas");
+  var rowCount = table.rows.length;
+  for (var i=0; i<rowCount; i++)
+  {
+    if (table.rows[i].cells[0].innerHTML == cod )
+        return i;
+  }
+  return -1;
+
+}
+
+
+
+
 function ObtenerLegajosID()
 {
   var legajos = "";
@@ -718,6 +792,19 @@ function ObtenerLegajosID()
 
   $('#legajos').text(legajos);   
   $('#legajos').val(legajos);  
+
+  var fechas = "";
+  var table = document.getElementById("tblFechas");
+  var rowCount = table.rows.length;
+  for (var i=1; i<rowCount; i++)
+  {
+    fechas = fechas + table.rows[i].cells[0].innerHTML;
+    if (i < rowCount - 1) fechas = fechas + ",";
+  }
+
+  $('#fechas').text(fechas);   
+  $('#fechas').val(fechas);  
+
 
   return legajos;
 
