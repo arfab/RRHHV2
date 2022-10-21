@@ -576,6 +576,19 @@
              //   $('#fecha_hasta').attr("disabled", false);
          });
 
+
+         
+          $("#lectora_id").change(function () {
+              if ($("#lectora_id").val() == -1) { 
+                
+              }
+              else {
+                  $("#tipo_listado").val(1).change();
+      
+              }
+
+         });
+
          //$("#nro_legajo").focusout(function () {
          //    if ($("#nro_legajo").val() != '') { 
          //        ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
