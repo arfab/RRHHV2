@@ -87,6 +87,7 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("APELLIDO_ACTUAL_FICHADA", "");
             HttpContext.Session.SetString("UBICACION_ACTUAL_FICHADA", "");
             HttpContext.Session.SetString("SECTOR_ACTUAL_FICHADA", "");
+            HttpContext.Session.SetString("LECTORA_ACTUAL_FICHADA", "");
 
             HttpContext.Session.SetString("LEGAJO_FICHADA_ACTUAL", "");
 

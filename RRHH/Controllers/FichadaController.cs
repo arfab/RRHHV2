@@ -23,7 +23,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Limpiar(int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
+        public IActionResult Limpiar(int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int lectora_id, int local_id)
         {
 
             HttpContext.Session.SetString("EMPRESA_ACTUAL_FICHADA", "");
@@ -31,6 +31,7 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("APELLIDO_ACTUAL_FICHADA", "");
             HttpContext.Session.SetString("UBICACION_ACTUAL_FICHADA", "");
             HttpContext.Session.SetString("SECTOR_ACTUAL_FICHADA", "");
+            HttpContext.Session.SetString("LECTORA_ACTUAL_FICHADA", "");
 
             HttpContext.Session.SetString("LEGAJO_FICHADA_ACTUAL", "");
 
@@ -49,7 +50,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int nro_legajo,  int legajo_id, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, string apellido, int tipo_listado, int? item_actual)
+        public IActionResult Index(int nro_legajo,  int legajo_id, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, int lectora_id, string apellido, int tipo_listado, int? item_actual)
         {
 
 
@@ -79,6 +80,8 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("UBICACION_ACTUAL_FICHADA") != null) ubicacion_id = (int)HttpContext.Session.GetInt32("UBICACION_ACTUAL_FICHADA");
 
             if (HttpContext.Session.GetInt32("SECTOR_ACTUAL_FICHADA") != null) sector_id = (int)HttpContext.Session.GetInt32("SECTOR_ACTUAL_FICHADA");
+
+            if (HttpContext.Session.GetInt32("LECTORA_ACTUAL_FICHADA") != null) lectora_id = (int)HttpContext.Session.GetInt32("LECTORA_ACTUAL_FICHADA");
 
 
             if (HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL");
@@ -128,6 +131,7 @@ namespace RRHH.Controllers
 
                 ViewData["UBICACION_ID"] = ubicacion_id;
                 ViewData["SECTOR_ID"] = sector_id;
+                ViewData["LECTORA_ID"] = lectora_id;
 
                 ViewData["EmpleadoActual"] = legajo_id;
                 ViewData["FiltroActual"] = filtro;
@@ -235,7 +239,8 @@ namespace RRHH.Controllers
                      fechaHasta, 
                      (empresa_id == 0) ? -1 : empresa_id, 
                      (ubicacion_id == 0) ? -1 : ubicacion_id, 
-                     (sector_id == 0) ? -1 : sector_id, 
+                     (sector_id == 0) ? -1 : sector_id,
+                     (lectora_id == 0) ? -1 : lectora_id,
                      tipo_listado);
 
 
@@ -276,7 +281,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Buscar(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int legajo_id, string filtro, int empresa_id,int ubicacion_id, int sector_id, string apellido, int tipo_listado)
+        public IActionResult Buscar(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int legajo_id, string filtro, int empresa_id,int ubicacion_id, int sector_id, int lectora_id, string apellido, int tipo_listado)
         {
 
             HttpContext.Session.SetString("APELLIDO_ACTUAL_FICHADA", (apellido == null) ? "" : apellido);
@@ -287,6 +292,8 @@ namespace RRHH.Controllers
             HttpContext.Session.SetInt32("UBICACION_ACTUAL_FICHADA", ubicacion_id);
 
             HttpContext.Session.SetInt32("SECTOR_ACTUAL_FICHADA", sector_id);
+
+            HttpContext.Session.SetInt32("LECTORA_ACTUAL_FICHADA", lectora_id);
 
 
             HttpContext.Session.SetString("LEGAJO_FICHADA_ACTUAL", "");
@@ -315,7 +322,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public void ExportarExcel(int nro_legajo, int legajo_id, DateTime? fecha_desde, DateTime? fecha_hasta, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, string apellido, int tipo_listado)
+        public void ExportarExcel(int nro_legajo, int legajo_id, DateTime? fecha_desde, DateTime? fecha_hasta, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, int lectora_id, string apellido, int tipo_listado)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -334,6 +341,8 @@ namespace RRHH.Controllers
             HttpContext.Session.SetInt32("UBICACION_ACTUAL_FICHADA", ubicacion_id);
 
             HttpContext.Session.SetInt32("SECTOR_ACTUAL_FICHADA", sector_id);
+
+            HttpContext.Session.SetInt32("LECTORA_ACTUAL_FICHADA", lectora_id);
 
 
             HttpContext.Session.SetString("LEGAJO_FICHADA_ACTUAL", "");
@@ -372,6 +381,8 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("UBICACION_ACTUAL_FICHADA") != null) ubicacion_id = (int)HttpContext.Session.GetInt32("UBICACION_ACTUAL_FICHADA");
 
             if (HttpContext.Session.GetInt32("SECTOR_ACTUAL_FICHADA") != null) sector_id = (int)HttpContext.Session.GetInt32("SECTOR_ACTUAL_FICHADA");
+
+            if (HttpContext.Session.GetInt32("LECTORA_ACTUAL_FICHADA") != null) lectora_id = (int)HttpContext.Session.GetInt32("LECTORA_ACTUAL_FICHADA");
 
 
             if (HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL");
@@ -436,6 +447,7 @@ namespace RRHH.Controllers
                   (empresa_id == 0) ? -1 : empresa_id,
                   (ubicacion_id == 0) ? -1 : ubicacion_id,
                   (sector_id == 0) ? -1 : sector_id,
+                  (lectora_id == 0) ? -1 : lectora_id,
                   tipo_listado);
 
                  
@@ -510,7 +522,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public void ExportarCSV(int nro_legajo, int legajo_id, DateTime? fecha_desde, DateTime? fecha_hasta, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, string apellido, int tipo_listado, int completo)
+        public void ExportarCSV(int nro_legajo, int legajo_id, DateTime? fecha_desde, DateTime? fecha_hasta, string filtro, string desde, int empresa_id, int ubicacion_id, int sector_id, int lectora_id, string apellido, int tipo_listado, int completo)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -529,6 +541,8 @@ namespace RRHH.Controllers
             HttpContext.Session.SetInt32("UBICACION_ACTUAL_FICHADA", ubicacion_id);
 
             HttpContext.Session.SetInt32("SECTOR_ACTUAL_FICHADA", sector_id);
+
+            HttpContext.Session.SetInt32("LECTORA_ACTUAL_FICHADA", lectora_id);
 
 
             HttpContext.Session.SetString("LEGAJO_FICHADA_ACTUAL", "");
@@ -567,6 +581,9 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("UBICACION_ACTUAL_FICHADA") != null) ubicacion_id = (int)HttpContext.Session.GetInt32("UBICACION_ACTUAL_FICHADA");
 
             if (HttpContext.Session.GetInt32("SECTOR_ACTUAL_FICHADA") != null) sector_id = (int)HttpContext.Session.GetInt32("SECTOR_ACTUAL_FICHADA");
+
+            if (HttpContext.Session.GetInt32("LECTORA_ACTUAL_FICHADA") != null) lectora_id = (int)HttpContext.Session.GetInt32("LECTORA_ACTUAL_FICHADA");
+
 
 
             if (HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_FICHADA_ACTUAL");
@@ -633,6 +650,7 @@ namespace RRHH.Controllers
                   (empresa_id == 0) ? -1 : empresa_id,
                   (ubicacion_id == 0) ? -1 : ubicacion_id,
                   (sector_id == 0) ? -1 : sector_id,
+                  (lectora_id == 0) ? -1 : lectora_id,
                   tipo_listado);
 
 
@@ -972,6 +990,29 @@ namespace RRHH.Controllers
 
         }
 
+
+        [HttpGet]
+        public JsonResult ObtenerLectoras(int ubicacion_id, int empresa_id)
+        {
+            List<Models.Lectora> l = new List<Models.Lectora>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@ubicacion_id", ubicacion_id == 0 ? -1 : ubicacion_id);
+                parameters.Add("@empresa_id", empresa_id == 0 ? -1 : empresa_id);
+
+                l = con.Query<Models.Lectora>("spLectoraObtenerPorFiltro", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Lectora(-1, "-- Seleccione la lectora --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
 
     }
 }

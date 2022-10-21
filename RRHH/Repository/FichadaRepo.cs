@@ -463,7 +463,7 @@ namespace RRHH.Repository
 */
 
 
-        public IEnumerable<Fichada> ObtenerTodos(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int empresa_id, int ubicacion_id, int sector_id, int tipo_listado)
+        public IEnumerable<Fichada> ObtenerTodos(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int empresa_id, int ubicacion_id, int sector_id, int lectora_id, int tipo_listado)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -499,6 +499,7 @@ namespace RRHH.Repository
                 parameter.Add("@empresa_id", empresa_id);
                 parameter.Add("@ubicacion_id", ubicacion_id);
                 parameter.Add("@sector_id", sector_id);
+                parameter.Add("@lectora_id", lectora_id);
 
 
 

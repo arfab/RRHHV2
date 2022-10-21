@@ -33,17 +33,21 @@
 
               
           <div class="row mb-3" >
-            <div class="col-sm-4 col-xs-6 mb-3">
+            <div class="col-sm-3 col-xs-6 mb-3">
                <label for="empresa_id">Empresa</label>
 			   <select name="empresa_id" id="empresa_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["EMPRESA_ID"]"></select>
 			</div>
-            <div class="col-sm-4 col-xs-6 mb-3">
+            <div class="col-sm-3 col-xs-6 mb-3">
                <label for="ubicacion_id">Ubicación</label>
 			   <select name="ubicacion_id" id="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UBICACION_ID"]"></select>
 			</div>
-             <div class="col-sm-4 col-xs-6 mb-3">
+             <div class="col-sm-3 col-xs-6 mb-3">
                <label for="sector_id">Sector/Local</label>
 			   <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SECTOR_ID"]"></select>
+			</div>
+             <div class="col-sm-3 col-xs-6 mb-3">
+               <label for="lectora_id">Lectoras</label>
+			   <select name="lectora_id" id="lectora_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["LECTORA_ID"]"></select>
 			</div>
          </div>
 
@@ -419,6 +423,7 @@
         var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
         var CodEmpresa = @Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
         var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+        var CodLectora = @Html.Raw(Json.Serialize(ViewData["LECTORA_ID"]));
         var FechaDesde = @Html.Raw(Json.Serialize(ViewData["FechaDesdeActual"]));
         var FechaHasta = @Html.Raw(Json.Serialize(ViewData["FechaHastaActual"]));
        
@@ -435,6 +440,9 @@
        ObtenerEmpresas();
 
        ObtenerUbicaciones(CodEmpresa);
+
+       ObtenerLectoras(CodUbicacion, CodEmpresa);
+
 
        if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
             ObtenerSectores(CodUbicacion, CodEmpresa);
@@ -508,6 +516,8 @@
            }
         }
 
+         ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val());
+
          ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
 
@@ -529,6 +539,8 @@
                $("#sector_id").val(-1);
            }
         }
+
+        ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val());
 
          ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
@@ -771,6 +783,33 @@
                 }
           });
         }
+
+
+         var ObtenerLectoras = function (ubicacion_id, empresa_id) {
+             var CodLectora = @Html.Raw(Json.Serialize(ViewData["LECTORA_ID"]));
+            
+             $.ajax({
+                url: '@Url.Action("ObtenerLectoras","Fichada")',
+                type: 'GET',
+                 data: {
+                  ubicacion_id: ubicacion_id,
+                  empresa_id: empresa_id
+                },
+                success: function (data) {
+                    $('#lectora_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLectora)
+                              $('#lectora_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#lectora_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
 
 
          var ObtenerFichadasOriginales = function (legajo_id, fecha, sin_excluidos) {
