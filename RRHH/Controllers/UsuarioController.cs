@@ -82,6 +82,22 @@ namespace RRHH.Controllers
 
             HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
+            HttpContext.Session.SetString("EMPRESA_ACTUAL_FICHADA", "");
+
+            HttpContext.Session.SetString("APELLIDO_ACTUAL_FICHADA", "");
+            HttpContext.Session.SetString("UBICACION_ACTUAL_FICHADA", "");
+            HttpContext.Session.SetString("SECTOR_ACTUAL_FICHADA", "");
+
+            HttpContext.Session.SetString("LEGAJO_FICHADA_ACTUAL", "");
+
+            HttpContext.Session.SetString("FECHA_FICHADA_DESDE", "");
+            HttpContext.Session.SetString("FECHA_FICHADA_HASTA", "");
+
+            HttpContext.Session.SetString("EMPLEADO_FICHADA_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_FICHADA_ACTUAL", "");
+
+            HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", 0);
+
             return RedirectToAction("Login", "Usuario");
         }
 
