@@ -10,7 +10,7 @@ namespace RRHH.Repository
 
         public string InsertarExportacionFichada(int nro_lectora, int nro_legajo, DateTime fecha, string hora, string tipo, int completo);
 
-        public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, string fecha, int sin_excluidos);
+        public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, int lectora_id, string fecha, int sin_excluidos);
 
         public string ExcluirFichadas();
     }

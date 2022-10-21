@@ -935,7 +935,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, string fecha, int sin_excluidos)
+        public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, int lectora_id, string fecha, int sin_excluidos)
         {
 
        
@@ -947,6 +947,7 @@ namespace RRHH.Repository
 
                     DynamicParameters parameter = new DynamicParameters();
                     parameter.Add("@legajo_id", legajo_id);
+                    parameter.Add("@lectora_id", lectora_id);
                     parameter.Add("@fecha", fecha);
                     parameter.Add("@sin_exluidos", sin_excluidos);
 

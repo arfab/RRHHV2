@@ -11,7 +11,7 @@ namespace RRHH.Controllers
 {
     public class FichadaOriginalController : Controller
     {
-        public IActionResult Index(int legajo_id, string fecha, int sin_excluidos)
+        public IActionResult Index(int legajo_id, int lectora_id, string fecha, int sin_excluidos)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -46,7 +46,7 @@ namespace RRHH.Controllers
 
                 fichadaRepo = new FichadaRepo();
 
-                return View(fichadaRepo.ObtenerFichadasOriginales(legajo_id, fecha, sin_excluidos));
+                return View(fichadaRepo.ObtenerFichadasOriginales(legajo_id, lectora_id,  fecha, sin_excluidos));
             }
 
            

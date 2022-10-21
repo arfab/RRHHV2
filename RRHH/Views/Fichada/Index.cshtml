@@ -277,7 +277,7 @@
                                                 <td>
                                                   @if (@item.cantidad_lecturas_orig>0 || @item.lectora.ToUpper()=="MANUAL") {
                                                     @*<a target="_blank" asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_excluidos=0>*@
-                                                    <a onclick='ObtenerFichadasOriginales(@item.legajo_id,"@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")" ,0)'>
+                                                    <a onclick='ObtenerFichadasOriginales(@item.legajo_id,@ViewData["LECTORA_ID"],"@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")" ,0)'>
 
                                                        <h4>                                                          
                                                          <span class="badge bg-secondary ">
@@ -290,7 +290,7 @@
                                                 <td>
                                                   @if (@item.cantidad_lecturas>0 || @item.lectora.ToUpper()=="MANUAL") {
                                                            @* <a  target="_blank" asp-controller="FichadaOriginal" asp-action="Index"  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd") asp-route-sin_excluidos=1>*@  
-                                                           <a onclick='ObtenerFichadasOriginales(@item.legajo_id,"@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")" ,1)'>
+                                                           <a onclick='ObtenerFichadasOriginales(@item.legajo_id,@ViewData["LECTORA_ID"],"@Convert.ToDateTime(item.fecha).ToString("yyyy-MM-dd")" ,1)'>
 
                                                             @if (@item.cantidad_lecturas <= 8)
                                                             {
@@ -825,12 +825,12 @@
 
 
 
-         var ObtenerFichadasOriginales = function (legajo_id, fecha, sin_excluidos) {
+         var ObtenerFichadasOriginales = function (legajo_id, lectora_id, fecha, sin_excluidos) {
             
                $.ajax({
                     type: "GET",
                     url: "/FichadaOriginal/Index",
-                    data: { legajo_id: legajo_id, fecha: fecha, sin_excluidos: sin_excluidos },
+                    data: { legajo_id: legajo_id, lectora_id: lectora_id, fecha: fecha, sin_excluidos: sin_excluidos },
                     success: function (response) {
                         $("#partialModal").find(".modal-body").html(response);
                         $("#partialModal").modal('show');
