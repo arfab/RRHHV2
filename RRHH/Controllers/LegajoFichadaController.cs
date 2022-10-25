@@ -16,7 +16,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_calculadas, String horas_normales, String horas_50, String horas_100, int nro_item)
+        public IActionResult Edit(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_calculadas, String horas_normales, String horas_50, String horas_100, int nro_item, int validado, int cantidad_lecturas)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -26,6 +26,10 @@ namespace RRHH.Controllers
             ViewData["MODO"] = (modo == null) ? "E" : modo;
 
             ViewData["ITEM_ACTUAL"] = nro_item;
+
+            ViewData["CANTIDAD_LECTURAS"] = cantidad_lecturas;
+
+            ViewData["VALIDADO"] = validado;
 
             ViewData["HORAS_CALCULADAS"] = horas_calculadas;
 
@@ -50,8 +54,6 @@ namespace RRHH.Controllers
 
                     legajoFichada = legajoFichadaRepo.ObtenerPorLegajo(legajo_id.Value, fecha);
 
-                   
-
                     ViewData["FECHA"] = fecha;
                 }
 
@@ -59,6 +61,8 @@ namespace RRHH.Controllers
 
                 ViewData["LEGAJO_ID"] = legajo_id;
                 ViewData["LECTORA_ID"] = lectora_id;
+             
+                
 
                 Legajo legajo = new Legajo();
                 ILegajoRepo legajoRepo;
@@ -92,7 +96,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int legajo_id, string legajos, string fechas , int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100, int nro_item)
+        public IActionResult Edit(string modo, int legajo_id, string legajos, string fechas , int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100, int nro_item, int validado, int cantidad_lecturas)
         {
 
             ILegajoFichadaRepo legajoFichadaRepo;
@@ -239,6 +243,8 @@ namespace RRHH.Controllers
                 if (salida_3 != null) legajoFichada.salida_3 = salida_3;
                 if (entrada_4 != null) legajoFichada.entrada_4 = entrada_4;
                 if (salida_4 != null) legajoFichada.salida_4 = salida_4;
+
+                legajoFichada.validado = validado;
 
             if (horas_normales != null) legajoFichada.horas_normales = horas_normales;
                 if (horas_50 != null) legajoFichada.horas_50 = horas_50;

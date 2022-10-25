@@ -4,7 +4,9 @@
 
 @{
     ViewData["Title"] = "Edición de fichada";
-     var _modo = (string)ViewData["MODO"];
+    var _modo = (string)ViewData["MODO"];
+    var _cantidad_lecturas =  (int) ViewData["CANTIDAD_LECTURAS"];
+
 }
 
 <form asp-action="Edit" method="post">
@@ -113,7 +115,17 @@
                       <label asp-for="fecha" class="control-label">Horas Calculadas</label><br />
                       <label class="control-label">@ViewData["HORAS_CALCULADAS"]</label><br />
                 </div>
-             </div>
+                @if (_modo != "A" && _cantidad_lecturas>8)
+                {
+                  <div class="col bottom-buffer">
+                    <label for="validado" class="control-label">Validado</label>
+                    <select  data-filter="model" class="form-control" name="validado" id="validado" asp-for="validado"  >
+                        <option value="0">NO</option>
+                        <option value="1">SI</option>
+                    </select>   
+                  </div>
+                }
+        </div>
 
         @if (_modo == "A")
         {
@@ -702,8 +714,8 @@ var ObtenerEmpleados = function (filtro) {
 
 
 function HabilitarGrabar() {
-    
-    if ($("#tblItems tr").length>1)
+     var Modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+    if ($("#tblItems tr").length>1 || $('#legajo_id').val() && Modo!="A" )
       $("#btnGrabar").show();
     else
      $("#btnGrabar").hide(); 

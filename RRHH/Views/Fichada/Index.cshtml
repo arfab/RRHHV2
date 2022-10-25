@@ -300,7 +300,15 @@
                                                                     </span>
                                                                 </h4>
                                                             }
-                                                            else
+                                                            else if (@item.validado == 1)
+                                                            {
+                                                                <h4>
+                                                                    <span class="badge  bg-success rounded-pill">
+                                                                        @item.cantidad_lecturas
+                                                                    </span>
+                                                                </h4>
+                                                            }
+                                                            else 
                                                             {
                                                                 <h4>
                                                                     <span class="badge  bg-danger rounded-pill">
@@ -357,7 +365,7 @@
                                                     @item.justificacion
                                                 </td>
                                                    <td style="font-size:16px;">
-                                                      <a asp-controller="LegajoFichada" asp-action="Edit" asp-route-lectora_id=@item.lectora_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-entrada_1=@item.hora_entrada_1 asp-route-salida_1=@item.hora_salida_1 asp-route-entrada_2=@item.hora_entrada_2 asp-route-salida_2=@item.hora_salida_2 asp-route-entrada_3=@item.hora_entrada_3 asp-route-salida_3=@item.hora_salida_3 asp-route-entrada_4=@item.hora_entrada_4 asp-route-salida_4=@item.hora_salida_4 asp-route-horas_calculadas=@item.cantidad_horas asp-route-horas_normales2=@item.horas_normales asp-route-horas_502=@item.horas_50 asp-route-horas_1002=@item.horas_100 asp-route-nro_item=@nro_item><i data-mdb-toggle='tooltip' title='Editar la fichada' class='bi bi-pencil-square'></i></a>
+                                                      <a asp-controller="LegajoFichada" asp-action="Edit" asp-route-lectora_id=@item.lectora_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-entrada_1=@item.hora_entrada_1 asp-route-salida_1=@item.hora_salida_1 asp-route-entrada_2=@item.hora_entrada_2 asp-route-salida_2=@item.hora_salida_2 asp-route-entrada_3=@item.hora_entrada_3 asp-route-salida_3=@item.hora_salida_3 asp-route-entrada_4=@item.hora_entrada_4 asp-route-salida_4=@item.hora_salida_4 asp-route-horas_calculadas=@item.cantidad_horas asp-route-horas_normales2=@item.horas_normales asp-route-horas_502=@item.horas_50 asp-route-horas_1002=@item.horas_100 asp-route-nro_item=@nro_item asp-route-cantidad_lecturas=@item.cantidad_lecturas><i data-mdb-toggle='tooltip' title='Editar la fichada' class='bi bi-pencil-square'></i></a>
                                             
                                                        @if (item.justificacion_id==-1) {
                                                          <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="A" asp-route-legajo_id=@item.legajo_id asp-route-fecha=@Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy") asp-route-origen="F" asp-route-nro_item=@nro_item ><i data-mdb-toggle='tooltip' title='Nueva justificación' class='bi bi-watch'></i></a>                                                        

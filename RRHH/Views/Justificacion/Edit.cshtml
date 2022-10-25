@@ -708,22 +708,24 @@ var ObtenerEmpleados = function (filtro) {
  function HabilitarGrabar() {
     
   if ($("#tblItems tr").length>1)
-      $("#btnGrabar").show();
+      $("#grabar_id").show();
   else
-      $("#btnGrabar").hide(); 
+      $("#grabar_id").hide(); 
 }
 
 
 function Limpiar() {
-  $("#apellido").val('').change();
-  $("#nombre").val('').change();
+  $("#apellido").val('');
+  $("#nombre").val('');
   $("#filtro").val('').change();
 
   $("#empresa_id").val(-1).change();
   $("#ubicacion_id").val(-1).change();
   $("#sector_id").val(-1).change();
   $("#legajo_id").val(-1).change();
- 
+  $("#categoria_id").val(-1);
+  $("#descripcion").val('').change();
+
   $("#tblItems").find("tr:gt(0)").remove();
 
   $('#txtSelectedFechaDesde').datepicker('setDate', "-0d");
