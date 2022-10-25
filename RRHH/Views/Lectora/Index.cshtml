@@ -10,7 +10,7 @@
 <form  >
  <div class="container">
      <div class="jumbotron text-center Titulo">
-      <h2>Lecturas</h2>
+      <h2>Lectoras</h2>
     </div>
 
       <center>
@@ -34,6 +34,7 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Días Ultima Lectura</th>
+                            <th>Ultima Lectura</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,9 +50,9 @@
                       <td>
                           @item.horas     
                      </td>   
-                    @* <td>
-                          @Convert.ToDateTime(item.ultima_actualizacion).ToString("dd/MM/yyyy hh:mm:ss")
-                     </td>*@
+                     <td>
+                          @Convert.ToDateTime(item.ultima_actualizacion).ToString("dd/MM/yyyy HH:mm:ss")
+                     </td>
 
                     </tr>  
                     
