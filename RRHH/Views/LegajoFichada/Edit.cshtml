@@ -4,10 +4,13 @@
 
 @{
     ViewData["Title"] = "Edición de fichada";
-     var _modo = (string)ViewData["MODO"];
+    var _modo = (string)ViewData["MODO"];
+    var _cantidad_lecturas =  (int) ViewData["CANTIDAD_LECTURAS"];
+
 }
 
 <form asp-action="Edit" method="post">
+ <button type="submit" disabled style="display: none" aria-hidden="true"></button>
 <div class="container">
 
    @*         <div class="row ">
@@ -31,6 +34,7 @@
                     <label for="sector_id">Sector/Local</label>
                     <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SECTOR_ID"]"></select>
                 </div>
+
             </div>
         }
 
@@ -38,15 +42,19 @@
                
              <div class="col-lg-4 col-xs-4 mb-3">
                   <label for="filtro">Legajo / Apellido</label>
-                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroFichadaActual"]" class="form-control" />                                          
+                  <input name="filtro" onpaste="return false;" ondrop="return false;" autocomplete="off"   id="filtro"  placeholder="Filtro" value="@ViewData["FiltroFichadaActual"]" class="form-control" />                                          
 			</div>
 			<div class="col-lg-4 col-xs-4 mb-3">
                 <label for="legajo_id">Empleado</label>
                 <select  data-filter="model" class="form-control" asp-for="legajo_id" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
-
-           </div>  
-
+             @if (_modo == "A" )
+             {
+               <div class="col-lg-4 col-xs-4 mb-3">
+                 <input type="button" value="Limpiar" asp-action="Limpiar" onclick="Limpiar();" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+               </div>
+             }
+          </div>  
         @if (_modo == "A")
         {
             <div class="row"> 
@@ -107,7 +115,17 @@
                       <label asp-for="fecha" class="control-label">Horas Calculadas</label><br />
                       <label class="control-label">@ViewData["HORAS_CALCULADAS"]</label><br />
                 </div>
-             </div>
+                @if (_modo != "A" && _cantidad_lecturas>8)
+                {
+                  <div class="col bottom-buffer">
+                    <label for="validado" class="control-label">Validado</label>
+                    <select  data-filter="model" class="form-control" name="validado" id="validado" asp-for="validado"  >
+                        <option value="0">NO</option>
+                        <option value="1">SI</option>
+                    </select>   
+                  </div>
+                }
+        </div>
 
         @if (_modo == "A")
         {
@@ -209,7 +227,7 @@
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
-                      <button id="btnGrabar"  type="submit" onclick="ObtenerLegajosID();" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] asp-route_fecha=@ViewData["FECHA"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value="" class="btn btn-outline-success"   >Grabar</button>
+                      <button id="btnGrabar"  type="submit" onclick="ObtenerLegajosID();" asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] asp-route-modo=@ViewData["MODO"] asp-route_fecha=@ViewData["FECHA"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value="" class="btn btn-outline-success"   >Grabar</button>
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalEliminar();" >Eliminar</a>
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalRestaurar();" >Restaurar</a>
                 </div>
@@ -353,21 +371,45 @@ $(document).ready(function () {
           $("#nro_legajo").val('');
         }
 
-        
+      HabilitarGrabar();
 
    })
 
-  $("#filtro").change(function () {
-        ObtenerEmpleados($("#filtro").val());       
+   
+
+
+   $('#filtro').keyup(function(event){
+    if(event.which == 13 ){        
+        ObtenerEmpleados($("#filtro").val());
+        AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());
+        return false; 
+    }    
+   });
+
+  
+   $('#txtSelectedFecha').keyup(function(event){
+    
+    if(event.which == 13 ){               
+       AgregarFecha($('#txtSelectedFecha').val());        
+       return false; 
+    }    
+   });
+
+      $("#filtro").change(function () {     
+
+        ObtenerEmpleados($("#filtro").val());         
+        //$('#legajo_id').focus()
      });
 
 
-
      $("#legajo_id").change(function () {
-     
+        
         if ($("#legajo_id").val() > 0) {
              ObtenerLegajoPorID($("#legajo_id").val());
+             //AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());
          }
+
+        
     });
 
      $("#legajo_id").focusout(function () {
@@ -531,6 +573,8 @@ var ObtenerEmpleados = function (filtro) {
                           $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
                     }
                     );
+
+                   HabilitarGrabar();
             },
             error: function () {
              
@@ -668,6 +712,39 @@ var ObtenerEmpleados = function (filtro) {
           });
         }
 
+
+function HabilitarGrabar() {
+     var Modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+    if ($("#tblItems tr").length>1 || $('#legajo_id').val() && Modo!="A" )
+      $("#btnGrabar").show();
+    else
+     $("#btnGrabar").hide(); 
+}
+
+function Limpiar() {
+  $("#apellido").val('').change();
+  $("#nombre").val('').change();
+  $("#filtro").val('').change();
+
+  $("#empresa_id").val(-1).change();
+  $("#ubicacion_id").val(-1).change();
+  $("#sector_id").val(-1).change();
+  $("#legajo_id").val(-1).change();
+ 
+  $("#tblItems").find("tr:gt(0)").remove();
+  $("#tblFechas").find("tr:gt(0)").remove();
+
+  $("input[type=time]").val('').change();
+
+  $('#txtSelectedFecha').datepicker('setDate', "-0d");
+
+  HabilitarGrabar();
+
+  
+
+    //document.getElementById("tblItems").deleteRow(rowIndex);   
+}
+
 function AgregarItem(
      id,
      nro_legajo,
@@ -701,6 +778,9 @@ function AgregarItem(
   cell4.innerHTML = nombre;
   cell5.innerHTML = "<a onclick='EliminarItem(" + rowCount + ")'><i data-mdb-toggle='tooltip' title='Eliminar'  class='bi bi-x-circle'></i></a>";
 
+  $("#filtro").val('');
+
+  HabilitarGrabar();
  // var cant = CalcularCantidadTotal();
    
 
@@ -710,6 +790,8 @@ function EliminarItem(id) {
     var clave= "row_"+id.toString();      
     var rowIndex = document.getElementById(clave).rowIndex;
     document.getElementById("tblItems").deleteRow(rowIndex);   
+
+      HabilitarGrabar();
 }
 
 function BuscarItem(cod)

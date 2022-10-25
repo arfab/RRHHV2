@@ -33,6 +33,7 @@ namespace RRHH.Repository
                 parameters.Add("@horas_normales", legajoFichada.horas_normales);
                 parameters.Add("@horas_50", legajoFichada.horas_50);
                 parameters.Add("@horas_100", legajoFichada.horas_100);
+                parameters.Add("@validado", legajoFichada.validado);
 
                 icantFilas = con.Execute("spLegajoFichadaInsertar", parameters, commandType: CommandType.StoredProcedure);
 

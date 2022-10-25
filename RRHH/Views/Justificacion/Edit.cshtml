@@ -16,6 +16,8 @@
 }
 
 <form  method="post" id="form1">
+ <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+
 <div class="container">
 <h2>Justificación</h2>
 
@@ -37,28 +39,27 @@
            <div class="row mb-3" >
              <div class="col-lg-2 col-xs-6 mb-3">
                   <label for="filtro">Legajo / Apellido</label>
-                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroJustificacionActual"]" class="form-control" />                                          
+                  <input name="filtro" id="filtro" onpaste="return false;" ondrop="return false;" autocomplete="off"   placeholder="Filtro" value="@ViewData["FiltroJustificacionActual"]" class="form-control" />                                          
 			</div>
-            @* @if (_modo=="A" && _empleado<0) {
-            <div class="col-lg-6 col-xs-6 mb-3">
-                <label for="legajo_id">Empleado</label>
-                <select  data-filter="model" class="form-control"  multiple asp-for="legajos"  name="legajos" id="legajo_id" value="@ViewData["Legajos"]"  ></select>           
-			</div>
-             }
-             else
-             {*@
-			   <div class="col-lg-6 col-xs-6 mb-3">
+  		    <div class="col-lg-6 col-xs-6 mb-3">
                 <label for="legajo_id">Empleado</label>
                 <select  data-filter="model" class="form-control"  asp-for="legajo_id"  name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
-			   </div>
-            @* }*@
+			</div>
+             @if (_modo == "A" )
+             {
+               <div class="col-lg-4 col-xs-4 mb-3">
+                 <input type="button" value="Limpiar" asp-action="Limpiar" onclick="Limpiar();" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+               </div>
+             }
           </div>  
-
-
-           <div class="col-lg-6 col-xs-6 mb-3">
-            <button id="btnAgregar" type="button" onclick="AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());" class="btn btn-success btn-sm" >AGREGAR</button>
+        
+          @if (_modo == "A" )
+          {
+            <div class="row"> 
+              <div class="col-lg-6 col-xs-6 mb-3">
+              <button id="btnAgregar" type="button" onclick="AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());" class="btn btn-success btn-sm" >AGREGAR</button>
             </div>
-
+            </div>
             <div class="row"> 
               <div class="col" style="margin-right:5px;">
                  <table class="table table-light table-hover" id="tblItems">
@@ -74,7 +75,7 @@
                 </table>
               </div>
            </div> 
-
+           }
             <div class="row" hidden>
                   <div class="col bottom-buffer">
                      <label asp-for="empresa_id" class="control-label">Empresa</label>
@@ -261,14 +262,14 @@ $(document).ready(function () {
      var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
      var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
 
-    if (modo == "V") {
-        $("#form1 :input").prop("disabled", true);
-        $("#grabar_id").hide();
-    }
-    else {
-        $("#form1 :input").prop("disabled", false);
-        $("#grabar_id").show();
-    }
+    //if (modo == "V") {
+    //    $("#form1 :input").prop("disabled", true);
+    //    $("#grabar_id").hide();
+    //}
+    //else {
+    //    $("#form1 :input").prop("disabled", false);
+    //    $("#grabar_id").show();
+    //}
 
 
     $("#apellido").text('');
@@ -327,7 +328,19 @@ $(document).ready(function () {
         if(FechaDesde==null) $('#txtSelectedFechaDesde').datepicker('setDate', "-0d");
         if(FechaHasta==null) $('#txtSelectedFechaHasta').datepicker('setDate', "-0d");
 
+        HabilitarGrabar();
+
+
    })
+
+
+     $('#filtro').keyup(function(event){
+    if(event.which == 13 ){        
+        ObtenerEmpleados($("#filtro").val());
+        AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());
+        return false; 
+    }    
+   });
 
 
      $("#filtro").change(function () {
@@ -525,6 +538,9 @@ var ObtenerEmpleados = function (filtro) {
                         //}
                     }
                     );
+
+                    HabilitarGrabar();
+
       
             },
             error: function () {
@@ -683,11 +699,45 @@ var ObtenerEmpleados = function (filtro) {
      });
 
 
- $('#form1').submit(function()
- {
-    $("input[type='submit']", this)
-      .attr('disabled', 'disabled');
-  });
+ //$('#form1').submit(function()
+ //{
+ //   $("input[type='submit']", this)
+ //     .attr('disabled', 'disabled');
+ // });
+
+ function HabilitarGrabar() {
+    
+  if ($("#tblItems tr").length>1)
+      $("#grabar_id").show();
+  else
+      $("#grabar_id").hide(); 
+}
+
+
+function Limpiar() {
+  $("#apellido").val('');
+  $("#nombre").val('');
+  $("#filtro").val('').change();
+
+  $("#empresa_id").val(-1).change();
+  $("#ubicacion_id").val(-1).change();
+  $("#sector_id").val(-1).change();
+  $("#legajo_id").val(-1).change();
+  $("#categoria_id").val(-1);
+  $("#descripcion").val('').change();
+
+  $("#tblItems").find("tr:gt(0)").remove();
+
+  $('#txtSelectedFechaDesde').datepicker('setDate', "-0d");
+  $('#txtSelectedFechaHasta').datepicker('setDate', "-0d");
+
+  HabilitarGrabar();
+
+  
+
+    //document.getElementById("tblItems").deleteRow(rowIndex);   
+}
+
 
 
 function AgregarItem(
@@ -723,6 +773,10 @@ function AgregarItem(
   cell4.innerHTML = nombre;
   cell5.innerHTML = "<a onclick='EliminarItem(" + rowCount + ")'><i data-mdb-toggle='tooltip' title='Eliminar'  class='bi bi-x-circle'></i></a>";
 
+   $("#filtro").val('');
+
+  HabilitarGrabar();
+
  // var cant = CalcularCantidadTotal();
    
 
@@ -732,6 +786,8 @@ function EliminarItem(id) {
     var clave= "row_"+id.toString();      
     var rowIndex = document.getElementById(clave).rowIndex;
     document.getElementById("tblItems").deleteRow(rowIndex);   
+
+   HabilitarGrabar();
 }
 
 function BuscarItem(cod)
