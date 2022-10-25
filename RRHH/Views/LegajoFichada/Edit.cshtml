@@ -383,7 +383,7 @@ $(document).ready(function () {
       $("#filtro").change(function () {     
 
         ObtenerEmpleados($("#filtro").val());         
-        $('#legajo_id').focus()
+        //$('#legajo_id').focus()
      });
 
 
@@ -392,7 +392,7 @@ $(document).ready(function () {
         
         if ($("#legajo_id").val() > 0) {
              ObtenerLegajoPorID($("#legajo_id").val());
-             AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());
+             //AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());
          }
 
         
@@ -708,19 +708,19 @@ function HabilitarGrabar() {
 }
 
 function Limpiar() {
-  $("#apellido").val('');
-  $("#nombre").val('');
-  $("#filtro").val('');
+  $("#apellido").val('').change();
+  $("#nombre").val('').change();
+  $("#filtro").val('').change();
 
-  $("#empresa_id").val(-1);
-  $("#ubicacion_id").val(-1);
-  $("#sector_id").val(-1);
-  $("#legajo_id").val(-1);
+  $("#empresa_id").val(-1).change();
+  $("#ubicacion_id").val(-1).change();
+  $("#sector_id").val(-1).change();
+  $("#legajo_id").val(-1).change();
  
   $("#tblItems").find("tr:gt(0)").remove();
   $("#tblFechas").find("tr:gt(0)").remove();
 
-  $("input[type=time]").val('');
+  $("input[type=time]").val('').change();
 
   HabilitarGrabar();
 
