@@ -40,7 +40,7 @@
                
              <div class="col-lg-4 col-xs-4 mb-3">
                   <label for="filtro">Legajo / Apellido</label>
-                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroFichadaActual"]" class="form-control" />                                          
+                  <input name="filtro" onpaste="return false;" ondrop="return false;" autocomplete="off"   id="filtro"  placeholder="Filtro" value="@ViewData["FiltroFichadaActual"]" class="form-control" />                                          
 			</div>
 			<div class="col-lg-4 col-xs-4 mb-3">
                 <label for="legajo_id">Empleado</label>
@@ -363,6 +363,8 @@ $(document).ready(function () {
 
    })
 
+   
+
 
    $('#filtro').keyup(function(event){
     if(event.which == 13 ){        
@@ -374,6 +376,7 @@ $(document).ready(function () {
 
   
    $('#txtSelectedFecha').keyup(function(event){
+    
     if(event.which == 13 ){               
        AgregarFecha($('#txtSelectedFecha').val());        
        return false; 
@@ -385,7 +388,6 @@ $(document).ready(function () {
         ObtenerEmpleados($("#filtro").val());         
         //$('#legajo_id').focus()
      });
-
 
 
      $("#legajo_id").change(function () {
@@ -701,7 +703,7 @@ var ObtenerEmpleados = function (filtro) {
 
 function HabilitarGrabar() {
     
-    if ($("#legajo_id").val()>0 || $("#tblItems tr").length>1)
+    if ($("#tblItems tr").length>1)
       $("#btnGrabar").show();
     else
      $("#btnGrabar").hide(); 
@@ -721,6 +723,8 @@ function Limpiar() {
   $("#tblFechas").find("tr:gt(0)").remove();
 
   $("input[type=time]").val('').change();
+
+  $('#txtSelectedFecha').datepicker('setDate', "-0d");
 
   HabilitarGrabar();
 
