@@ -105,6 +105,7 @@ namespace RRHH.Controllers
             legajo = legajoRepo.Obtener(legajo_id);
 
             ViewData["ITEM_ACTUAL"] = nro_item;
+            ViewData["MODO"] = modo;
 
             if (legajo != null)
             {
