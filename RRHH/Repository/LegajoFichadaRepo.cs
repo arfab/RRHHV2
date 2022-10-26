@@ -145,5 +145,35 @@ namespace RRHH.Repository
         }
 
 
+
+        public string InsertarManual(LegajoFichada legajoFichada)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@legajo_id", legajoFichada.legajo_id);
+                parameters.Add("@lectora_id", legajoFichada.lectora_id);
+                parameters.Add("@entrada1", legajoFichada.entrada_1==null?null: legajoFichada.fecha.Add(TimeSpan.Parse(legajoFichada.entrada_1)));
+                parameters.Add("@salida1", legajoFichada.salida_1 == null ? null : legajoFichada.fecha.Add(TimeSpan.Parse(legajoFichada.salida_1)));
+                parameters.Add("@entrada2", legajoFichada.entrada_2 == null ? null : legajoFichada.fecha.Add(TimeSpan.Parse(legajoFichada.entrada_2)));
+                parameters.Add("@salida2", legajoFichada.salida_2 == null ? null : legajoFichada.fecha.Add(TimeSpan.Parse(legajoFichada.salida_2)));
+                parameters.Add("@entrada3", legajoFichada.entrada_3 == null ? null : legajoFichada.fecha.Add(TimeSpan.Parse(legajoFichada.entrada_3)));
+                parameters.Add("@salida3", legajoFichada.salida_3 == null ? null : legajoFichada.fecha.Add(TimeSpan.Parse(legajoFichada.salida_3)));
+                parameters.Add("@entrada4", legajoFichada.entrada_4 == null ? null : legajoFichada.fecha.Add(TimeSpan.Parse(legajoFichada.entrada_4)));
+                parameters.Add("@salida4", legajoFichada.salida_4 == null ? null : legajoFichada.fecha.Add(TimeSpan.Parse(legajoFichada.salida_4)));
+
+
+                icantFilas = con.Execute("spFichadaManualInsertar", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
+        }
+
     }
 }

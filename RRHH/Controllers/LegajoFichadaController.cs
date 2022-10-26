@@ -290,7 +290,12 @@ namespace RRHH.Controllers
                     foreach (string fec in fechas_id)
                     {
                         legajoFichada.fecha = DateTime.Parse(fec);
-                        sret = legajoFichadaRepo.Insertar(legajoFichada);
+
+                        if (modo=="A")
+                            sret = legajoFichadaRepo.Insertar(legajoFichada);
+                        else 
+                            sret = legajoFichadaRepo.Insertar(legajoFichada);
+
                         if (sret != "")
                         {
 
