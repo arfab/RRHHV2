@@ -127,9 +127,8 @@ namespace RRHH.Controllers
                 ViewBag.Message = "El legajo es obligatorio";
                 return View(legajoFichada);
             }
-            //if (ModelState.IsValid)
-            //{
-
+           
+            /*
             if (entrada_1 == null && salida_1!=null ||
                 salida_1 == null && entrada_2!= null ||
                 entrada_2 == null && salida_2!= null ||
@@ -225,7 +224,7 @@ namespace RRHH.Controllers
                 }
             }
 
-
+            */
 
             legajoFichadaRepo = new LegajoFichadaRepo();
 
@@ -262,7 +261,7 @@ namespace RRHH.Controllers
                 foreach (string fec in fechas_id)
                 {
                     legajoFichada.fecha = DateTime.Parse(fec);
-                    sret = legajoFichadaRepo.Insertar(legajoFichada);
+                    sret = legajoFichadaRepo.Insertar(legajoFichada, modo);
 
                     if (sret != "")
                     {
@@ -292,9 +291,9 @@ namespace RRHH.Controllers
                         legajoFichada.fecha = DateTime.Parse(fec);
 
                         if (modo=="A")
-                            sret = legajoFichadaRepo.Insertar(legajoFichada);
+                            sret = legajoFichadaRepo.Insertar(legajoFichada, modo);
                         else 
-                            sret = legajoFichadaRepo.Insertar(legajoFichada);
+                            sret = legajoFichadaRepo.Insertar(legajoFichada, modo);
 
                         if (sret != "")
                         {
@@ -338,7 +337,7 @@ namespace RRHH.Controllers
             legajoFichada.entrada_3 = null;
             legajoFichada.salida_3 = null;
 
-            sret = legajoFichadaRepo.Insertar(legajoFichada);
+            sret = legajoFichadaRepo.Insertar(legajoFichada, "E");
 
             if (sret == "")
             {

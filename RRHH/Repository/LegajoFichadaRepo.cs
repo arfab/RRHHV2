@@ -9,7 +9,7 @@ namespace RRHH.Repository
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public string Insertar(LegajoFichada legajoFichada)
+        public string Insertar(LegajoFichada legajoFichada, string modo)
         {
             int icantFilas;
             using (var con = new SqlConnection(strConnectionString))
@@ -34,6 +34,7 @@ namespace RRHH.Repository
                 parameters.Add("@horas_50", legajoFichada.horas_50);
                 parameters.Add("@horas_100", legajoFichada.horas_100);
                 parameters.Add("@validado", legajoFichada.validado);
+                parameters.Add("@modo", modo);
 
                 icantFilas = con.Execute("spLegajoFichadaInsertar", parameters, commandType: CommandType.StoredProcedure);
 

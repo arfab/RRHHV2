@@ -4,7 +4,7 @@ namespace RRHH.Repository
 {
     public interface ILegajoFichadaRepo
     {
-        public string Insertar(LegajoFichada legajoFichada);
+        public string Insertar(LegajoFichada legajoFichada, string modo);
         public string InsertarManual(LegajoFichada legajoFichada);
         public string Modificar(LegajoFichada legajoFichada);
         public LegajoFichada Obtener(int iID);

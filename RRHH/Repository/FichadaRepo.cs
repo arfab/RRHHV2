@@ -830,6 +830,47 @@ namespace RRHH.Repository
 
                     else
                     {
+
+                        if (item.tipo1 != null)
+                        {
+                            item.hora_entrada_1 = item.lec1;
+                        }
+
+                        if (item.tipo2 != null)
+                        {
+                            item.hora_salida_1 = item.lec2;
+                        }
+
+                        if (item.tipo3 != null)
+                        {
+                            item.hora_entrada_2 = item.lec3;
+                        }
+
+                        if (item.tipo4 != null)
+                        {
+                            item.hora_salida_2 = item.lec4;
+                        }
+
+                        if (item.tipo5 != null)
+                        {
+                            item.hora_entrada_3 = item.lec5;
+                        }
+
+                        if (item.tipo6 != null)
+                        {
+                            item.hora_salida_3 = item.lec6;
+                        }
+
+                        if (item.tipo7 != null)
+                        {
+                            item.hora_entrada_4 = item.lec7;
+                        }
+
+                        if (item.tipo8 != null)
+                        {
+                            item.hora_entrada_4 = item.lec8;
+                        }
+
                         if (item.estado != "NO" && item.estado != "JUS")
                             item.estado = "ERR";
                     }
