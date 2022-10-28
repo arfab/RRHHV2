@@ -394,6 +394,7 @@ $(document).ready(function () {
     }    
    });
 
+
   
    $('#txtSelectedFecha').keyup(function(event){
     
@@ -763,6 +764,7 @@ function AgregarItem(
   {
 
   if (id<0) return;
+  if (nro_legajo=='') return;
 
   if (BuscarItem(id)>0) return;
 
