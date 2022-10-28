@@ -405,8 +405,9 @@ $(document).ready(function () {
    });
 
       $("#filtro").change(function () {     
+              
+        ObtenerEmpleados($("#filtro").val());     
 
-        ObtenerEmpleados($("#filtro").val());         
         //$('#legajo_id').focus()
      });
 
@@ -548,7 +549,6 @@ var ObtenerLegajoPorID = function (id) {
                 $('#apellido').text(data.apellido);
                 $('#nombre').text(data.nombre);
                 $('#nro_legajo').val(data.nro_legajo);
-              
 
                 //habilitar_grabar(); 
             },
@@ -739,7 +739,8 @@ function Limpiar() {
   $("#ubicacion_id").val(-1).change();
   $("#sector_id").val(-1).change();
   $("#legajo_id").val(-1).change();
- 
+  $("#nro_legajo").val('');
+
   $("#tblItems").find("tr:gt(0)").remove();
   $("#tblFechas").find("tr:gt(0)").remove();
 
