@@ -975,6 +975,24 @@ namespace RRHH.Repository
             return "";
         }
 
+        public string GenerarFichadas(int alta_legajo)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@alta_legajo", alta_legajo);
+
+                icantFilas = con.Execute("spFichadaGenerar", commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
+        }
+
 
         public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, int lectora_id, string fecha, int sin_excluidos)
         {

@@ -13,5 +13,8 @@ namespace RRHH.Repository
         public IEnumerable<FichadaOriginal> ObtenerFichadasOriginales(int legajo_id, int lectora_id, string fecha, int sin_excluidos);
 
         public string ExcluirFichadas();
+
+        public string GenerarFichadas(int alta_legajo);
+
     }
 }
