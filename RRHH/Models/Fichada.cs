@@ -80,6 +80,8 @@
 
         public int? validado { get; set; }
 
+        public int? editado { get; set; }
+
         public string DiaSemana()
         {
             switch (fecha.Value.DayOfWeek)
