@@ -171,7 +171,7 @@ namespace RRHH.Controllers
 
                     fichadaRepo = new FichadaRepo();
 
-                    fichadaRepo.ExcluirFichadas();
+                   // fichadaRepo.GenerarFichadas(1);
 
                 }
 
