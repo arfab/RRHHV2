@@ -110,9 +110,10 @@
                      } 
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
-                     @if (_perfil_id <= 3)
+                    @if (_perfil_id <= 3)
                     {
                           <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="LegajoFichada" asp-action="Edit" asp-route-modo="A" asp-route-legajo_id=@ViewData["EmpleadoActual"]  asp-route-fecha=@ViewData["FechaDesdeActual"] >INGRESAR FICHADA</a>                     
+                          <a type="button" id="cmdAgregar" class="btn btn-success " asp-controller="LegajoFichada" asp-action="Agregar" asp-route-modo="A" asp-route-legajo_id=@ViewData["EmpleadoActual"]  asp-route-fecha=@ViewData["FechaDesdeActual"] >INTERCALAR FICHADA</a>                     
                     }
 
 

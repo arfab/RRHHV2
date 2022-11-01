@@ -12,5 +12,7 @@ namespace RRHH.Repository
         public IEnumerable<LegajoFichada> ObtenerTodos();
         public string Eliminar(int iID);
 
+        public string Agregar(LegajoFichada legajoFichada);
+
     }
 }

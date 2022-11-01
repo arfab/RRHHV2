@@ -96,6 +96,30 @@ namespace RRHH.Repository
         }
 
 
+
+        public string Agregar(LegajoFichada legajoFichada)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@legajo_id", legajoFichada.legajo_id);
+                parameters.Add("@nro_legajo", legajoFichada.nro_legajo);
+                parameters.Add("@fecha", legajoFichada.fecha);
+                parameters.Add("@hora1", legajoFichada.entrada_1);
+                parameters.Add("@hora2", legajoFichada.salida_1);
+
+                icantFilas = con.Execute("spFichadaAgregar", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
+        }
+
+
         public IEnumerable<LegajoFichada> ObtenerTodos()
         {
 

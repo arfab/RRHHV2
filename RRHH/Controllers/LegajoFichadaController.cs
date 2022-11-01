@@ -311,6 +311,193 @@ namespace RRHH.Controllers
         }
 
 
+
+        [HttpGet]
+        public IActionResult Agregar(int? id, int? nro_legajo, int? empresa_id, int? ubicacion_id, int? sector_id, int? local_id, string origen, int? legajo_id, string modo, int lectora_id, String fecha, String entrada_1, String salida_1, int nro_item)
+        {
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            ViewData["ITEM_ACTUAL"] = nro_item;
+
+
+            ILegajoFichadaRepo legajoFichadaRepo;
+
+            legajoFichadaRepo = new LegajoFichadaRepo();
+
+            LegajoFichada legajoFichada = null;
+
+            if (fecha == null)
+            {
+                fecha = DateTime.Now.Date.ToString("dd/MM/yyyy");
+            }
+
+            if (legajo_id != null)
+            {
+
+                if (fecha != null)
+                {
+
+                    fecha = DateTime.Parse(fecha).ToString("dd/MM/yyyy");
+
+                    legajoFichada = legajoFichadaRepo.ObtenerPorLegajo(legajo_id.Value, fecha);
+
+                    ViewData["FECHA"] = fecha;
+                }
+
+                if (legajoFichada == null) legajoFichada = new LegajoFichada();
+
+                ViewData["LEGAJO_ID"] = legajo_id;
+                ViewData["LECTORA_ID"] = lectora_id;
+
+
+
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+                legajoRepo = new LegajoRepo();
+                legajo = legajoRepo.Obtener(legajo_id.Value);
+
+
+                if (legajo != null)
+                {
+                    legajoFichada.nro_legajo = legajo.nro_legajo.Value;
+                    legajoFichada.empresa_id = legajo.empresa_id.Value;
+
+                    ViewData["EMPRESA_ID"] = legajoFichada.empresa_id;
+                    ViewData["NRO_LEGAJO"] = legajoFichada.nro_legajo;
+                    ViewData["FiltroFichadaActual"] = legajoFichada.nro_legajo;
+                    ViewData["EmpleadoActual"] = legajo.id;
+                }
+            }
+
+
+            if (legajoFichada != null)
+            {
+                ViewData["ID"] = legajoFichada.id;
+            }
+
+
+            return View(legajoFichada);
+
+
+        }
+
+
+
+        [HttpPost]
+        public IActionResult Agregar(string modo, int legajo_id, string legajos, string fechas, int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, int nro_item)
+        {
+
+            ILegajoFichadaRepo legajoFichadaRepo;
+            LegajoFichada legajoFichada = new LegajoFichada();
+            string sret;
+
+            Legajo legajo = new Legajo();
+            ILegajoRepo legajoRepo;
+            legajoRepo = new LegajoRepo();
+            legajo = legajoRepo.Obtener(legajo_id);
+
+            ViewData["ITEM_ACTUAL"] = nro_item;
+            ViewData["MODO"] = modo;
+
+            if (legajo != null)
+            {
+                legajoFichada.nro_legajo = legajo.nro_legajo.Value;
+                legajoFichada.empresa_id = legajo.empresa_id.Value;
+
+                ViewData["EMPRESA_ID"] = legajoFichada.empresa_id;
+                ViewData["NRO_LEGAJO"] = legajoFichada.nro_legajo;
+                ViewData["FiltroFichadaActual"] = legajoFichada.nro_legajo;
+                ViewData["EmpleadoActual"] = legajo.id;
+            }
+
+            if (legajo_id <= 0)
+            {
+                ViewBag.Message = "El legajo es obligatorio";
+                return View(legajoFichada);
+            }
+
+            if (entrada_1 == null && salida_1 == null)
+            {
+                ViewBag.Message = "Debe ingresar al menos una hora";
+                return View(legajoFichada);
+            }
+
+
+
+            legajoFichadaRepo = new LegajoFichadaRepo();
+
+            legajoFichada.lectora_id = -1;
+
+            legajoFichada.fecha = DateTime.Parse(fecha);
+
+            if (entrada_1 != null) legajoFichada.entrada_1 = entrada_1;
+            if (salida_1 != null) legajoFichada.salida_1 = salida_1;
+
+
+            if (legajos == null || legajos == "")
+            {
+                legajoFichada.legajo_id = legajo_id;
+
+                if (fechas == null || fechas == "")
+                    fechas = legajoFichada.fecha.ToString("dd/MM/yyyy"); ;
+
+                string[] fechas_id = fechas.Split(',');
+
+                foreach (string fec in fechas_id)
+                {
+                    legajoFichada.fecha = DateTime.Parse(fec);
+                    sret = legajoFichadaRepo.Agregar(legajoFichada);
+
+                    if (sret != "")
+                    {
+
+                        ViewBag.Message = sret;
+                    }
+                }
+
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+
+            }
+            else
+            {
+                string[] legajos_id = legajos.Split(',');
+
+                foreach (string leg in legajos_id)
+                {
+
+                    legajoFichada.legajo_id = Int16.Parse(leg);
+                    if (fechas == null || fechas == "")
+                        fechas = legajoFichada.fecha.ToString("dd/MM/yyyy"); ;
+
+                    string[] fechas_id = fechas.Split(',');
+
+                    foreach (string fec in fechas_id)
+                    {
+                        legajoFichada.fecha = DateTime.Parse(fec);
+
+                        sret = legajoFichadaRepo.Agregar(legajoFichada);
+
+                        if (sret != "")
+                        {
+
+                            ViewBag.Message = sret;
+                        }
+                    }
+                }
+
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+            }
+
+
+            return View(legajoFichada);
+        }
+
+
+
+
         [HttpPost]
         public IActionResult Delete(int legajo_id, int lectora_id, String fecha, int nro_item)
         {
