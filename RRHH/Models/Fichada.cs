@@ -44,6 +44,7 @@
 
         public int? justificacion_id { get; set; }
         public string? justificacion { get; set; }
+        public int? cantidad_justificaciones { get; set; }
 
         public string? estado { get; set; }
 

@@ -370,7 +370,10 @@ $(document).ready(function () {
     });
 
 
-    
+    $("#categoria_id").change(function () {
+        HabilitarGrabar();
+
+    });
   
 
   function mostrarModalSalida(){
@@ -686,8 +689,10 @@ var ObtenerEmpleados = function (filtro) {
         changeYear: true,
         format: "dd/mm/yyyy",
         language: "es"
-        });
-     });
+         }).on('changeDate', function(e) {    
+                    $('#txtSelectedFechaHasta').datepicker('setDate', e.date);
+             })  
+         });
 
       $(function () {
       $('#txtSelectedFechaHasta').datepicker({
@@ -707,7 +712,7 @@ var ObtenerEmpleados = function (filtro) {
 
  function HabilitarGrabar() {
     
-  if ($("#tblItems tr").length>1)
+  if (($("#tblItems tr").length>1 || $('#legajo_id').val()!='-1') && $('#categoria_id').val()!='-1')
       $("#grabar_id").show();
   else
       $("#grabar_id").hide(); 

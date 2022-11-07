@@ -113,7 +113,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int categoria_id,  int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde, string[] legajos)
+        public IActionResult Index(int categoria_id,  int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde, string fecha , string[] legajos)
         {
 
 
@@ -155,6 +155,13 @@ namespace RRHH.Controllers
                 DateTime fechaDesde = new DateTime();
                 DateTime fechaHasta = new DateTime();
 
+                if (fecha != null)
+                {
+
+                    fecha_desde = Convert.ToDateTime(fecha);
+                    fecha_hasta = Convert.ToDateTime(fecha);
+                }
+                 
                 if (fecha_desde != null)
                     if (fecha_desde.Value.Year > 2002)
                         fechaDesde = fecha_desde.Value;
