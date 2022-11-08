@@ -113,7 +113,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int categoria_id,  int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde, string fecha , string[] legajos)
+        public IActionResult Index(int categoria_id,  int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde, string fecha, string origen, int nro_item, string[] legajos)
         {
 
 
@@ -125,6 +125,11 @@ namespace RRHH.Controllers
 
             DateTime? fecha_desde = null;
             DateTime? fecha_hasta = null;
+
+
+            ViewData["ORIGEN"] = origen;
+
+            ViewData["ITEM_ACTUAL"] = nro_item;
 
             if (HttpContext.Session.GetString("FECHA_JUSTIFICACION_DESDE") != null && HttpContext.Session.GetString("FECHA_JUSTIFICACION_DESDE") != "")
                 fecha_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_JUSTIFICACION_DESDE"));

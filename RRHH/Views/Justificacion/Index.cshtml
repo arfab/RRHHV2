@@ -9,6 +9,10 @@
     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 
     var legajo =  (RRHH.Models.Legajo) ViewData["LEGAJO"];
+
+    var _origen = (string)ViewData["ORIGEN"];
+
+    var _item_actual = (ViewData["ITEM_ACTUAL"]==null)?0:(int)ViewData["ITEM_ACTUAL"];
               
     }
 
@@ -234,12 +238,12 @@
                                                     
                                                     @if (_perfil_id <= 3)
                                                     {
-                                                        <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Editar la justificación' class='bi bi-pencil-square'></i></a>
+                                                        <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="E" asp-route-id=@item.id asp-route-origen=@_origen asp-route-nro_item=@_item_actual><i data-mdb-toggle='tooltip' title='Editar la justificación' class='bi bi-pencil-square'></i></a>
                                                         <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la justificación' class='bi bi-x-circle'></i></a>
                                                     }
                                                     else
                                                     {
-                                                       <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="V" asp-route-id=@item.id><i data-mdb-toggle='tooltip' title='Ver la justificación' class='bi bi-eye'></i></a>                                                        
+                                                       <a asp-controller="Justificacion" asp-action="Edit" asp-route-modo="V" asp-route-id=@item.id asp-route-origen=@_origen asp-route-nro_item=@_item_actual ><i data-mdb-toggle='tooltip' title='Ver la justificación' class='bi bi-eye'></i></a>                                                        
                                                     }
                                                 </td>
                                             </tr>
