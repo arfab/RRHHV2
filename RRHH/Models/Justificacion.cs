@@ -25,6 +25,9 @@ namespace RRHH.Models
         public int? categoria_id { get; set; }
         public string? categoria { get; set; }
 
+        public int? momento_id { get; set; }
+        public string? momento { get; set; }
+
         public string? descripcion { get; set; }
 
         public DateTime? fecha_alta { get; set; }

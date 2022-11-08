@@ -51,6 +51,7 @@ namespace RRHH.Controllers
 
                 ViewData["EmpresaActual"] = -1;
                 ViewData["CategoriaJustificionActual"] = -1;
+                ViewData["MomentoJustificionActual"] = -1;
 
                 ViewData["LegajoActual"] = "";
                 ViewData["UbicacionActual"] = -1;
@@ -71,6 +72,7 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetString("APELLIDO_JUSTIFICACION_ACTUAL", "");
 
                 HttpContext.Session.SetString("CATEGORIA_JUSTIFICACION_ACTUAL", "");
+                HttpContext.Session.SetString("MOMENTO_JUSTIFICACION_ACTUAL", "");
 
 
                 HttpContext.Session.SetString("FECHA_JUSTIFICACION_DESDE", "");
@@ -100,6 +102,7 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("APELLIDO_JUSTIFICACION_ACTUAL", "");
 
             HttpContext.Session.SetString("CATEGORIA_JUSTIFICACION_ACTUAL", "");
+            HttpContext.Session.SetString("MOMENTO_JUSTIFICACION_ACTUAL", "");
 
             HttpContext.Session.SetString("FECHA_JUSTIFICACION_DESDE", "");
             HttpContext.Session.SetString("FECHA_JUSTIFICACION_HASTA", "");
@@ -113,7 +116,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int categoria_id,  int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde, string fecha, string origen, int nro_item, string[] legajos)
+        public IActionResult Index(int categoria_id, int momento_id,  int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde, string fecha, string origen, int nro_item, string[] legajos)
         {
 
 
@@ -148,7 +151,8 @@ namespace RRHH.Controllers
 
 
             if (HttpContext.Session.GetInt32("CATEGORIA_JUSTIFICACION_ACTUAL") != null) categoria_id = (int)HttpContext.Session.GetInt32("CATEGORIA_JUSTIFICACION_ACTUAL");
-          
+            if (HttpContext.Session.GetInt32("MOMENTO_JUSTIFICACION_ACTUAL") != null) momento_id = (int)HttpContext.Session.GetInt32("MOMENTO_JUSTIFICACION_ACTUAL");
+
 
             if (perfil_id > 0)
             {
@@ -185,6 +189,7 @@ namespace RRHH.Controllers
 
                 ViewData["EmpresaActual"] = empresa_id;
                 ViewData["CategoriaJustificacionActual"] = categoria_id;
+                ViewData["MomentoJustificacionActual"] = momento_id;
 
                 ViewData["UbicacionActual"] = ubicacion_id;
                 ViewData["SectorActual"] = sector_id;
@@ -298,7 +303,7 @@ namespace RRHH.Controllers
       
 
         [HttpPost]
-        public IActionResult Buscar(int categoria_id, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
+        public IActionResult Buscar(int categoria_id, int momento_id, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
         {
 
             HttpContext.Session.SetInt32("EMPRESA_JUSTIFICACION_ACTUAL", empresa_id);
@@ -310,7 +315,8 @@ namespace RRHH.Controllers
 
 
             HttpContext.Session.SetInt32("CATEGORIA_JUSTIFICACION_ACTUAL", categoria_id);
-  
+            HttpContext.Session.SetInt32("MOMENTO_JUSTIFICACION_ACTUAL", momento_id);
+
 
             HttpContext.Session.SetString("FECHA_JUSTIFICACION_DESDE", fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year);
             HttpContext.Session.SetString("FECHA_JUSTIFICACION_HASTA", fecha_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Year);
@@ -687,8 +693,28 @@ namespace RRHH.Controllers
             return Json(new SelectList(l, "id", "descripcion"));
         }
 
+        [HttpGet]
+        public JsonResult ObtenerMomentos()
+        {
+            List<Models.MomentoJustificacion> l = new List<Models.MomentoJustificacion>();
 
-        
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                l = con.Query<Models.MomentoJustificacion>("spMomentoJustificacionObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+          //  l.Insert(0, new Models.MomentoJustificacion(-1, "-- Seleccione el momento --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
+
         [HttpGet]
         public JsonResult ObtenerUbicaciones()
         {

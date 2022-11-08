@@ -23,6 +23,7 @@ namespace RRHH.Repository
                 parameters.Add("@fecha_desde", justificacion.fecha_desde);
                 parameters.Add("@fecha_hasta", justificacion.fecha_hasta);
                 parameters.Add("@categoria_id", justificacion.categoria_id);
+                parameters.Add("@momento_id", justificacion.momento_id);
                 parameters.Add("@descripcion", justificacion.descripcion);
                 parameters.Add("@usuario_id", usuario_id);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
@@ -52,6 +53,7 @@ namespace RRHH.Repository
                 parameters.Add("@fecha_desde", justificacion.fecha_desde);
                 parameters.Add("@fecha_hasta", justificacion.fecha_hasta);
                 parameters.Add("@categoria_id", justificacion.categoria_id);
+                parameters.Add("@momento_id", justificacion.momento_id);
                 parameters.Add("@descripcion", justificacion.descripcion);
                 parameters.Add("@usuario_id", usuario_id);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
