@@ -585,7 +585,9 @@ namespace RRHH.Repository
                                                 item.hora_salida_4,
                                                 item.ubicacion_id.Value,
                                                 item.ubicacion_id.Value == 3 ? item.local_id.Value : item.sector_id.Value,
-                                                (int)item.fecha.Value.DayOfWeek + 1);
+                                                (int)item.fecha.Value.DayOfWeek + 1,
+                                                item.legajo_id.Value,
+                                                item.fecha.Value);
 
                           if (cantidadHoras != null)
                           {
@@ -599,7 +601,7 @@ namespace RRHH.Repository
                                     if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100.Trim();
                             }
 
-                            if (item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
+                            if (1==1 || item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
                             {
 
 
@@ -636,7 +638,7 @@ namespace RRHH.Repository
                                 span1 += span4;
                             }
 
-                            item.cantidad_horas = span1.Hours.ToString() + ":" + span1.Minutes.ToString().PadLeft(2, '0');
+                            item.cantidad_horas = span1.Hours.ToString().PadLeft(2, '0') + ":" + span1.Minutes.ToString().PadLeft(2, '0');
 
 
                             }
@@ -906,7 +908,7 @@ namespace RRHH.Repository
         }
 
 
-        public CantidadHoras ObtenerCantidadHoras(string entrada1, string salida1, string entrada2, string salida2, string entrada3, string salida3, string entrada4, string salida4, int ubicacion_id, int sector_id, int dia_semana)
+        public CantidadHoras ObtenerCantidadHoras(string entrada1, string salida1, string entrada2, string salida2, string entrada3, string salida3, string entrada4, string salida4, int ubicacion_id, int sector_id, int dia_semana, int legajo_id ,  DateTime fecha)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -926,6 +928,8 @@ namespace RRHH.Repository
                 parameter.Add("@ubicacion_id", ubicacion_id);
                 parameter.Add("@sector_id", sector_id);
                 parameter.Add("@dia_semana", dia_semana);
+                parameter.Add("@legajo_id", legajo_id);
+                parameter.Add("@fecha", fecha);
 
                 return con.QuerySingle<CantidadHoras>("spCantidadHorasObtenerDesglose", parameter, commandType: CommandType.StoredProcedure);
             }
