@@ -543,6 +543,7 @@ namespace RRHH.Repository
 
 
                     if (
+                        item.tipo1 == null && item.tipo2 == null && item.tipo3 == null && item.tipo4 == null && item.tipo5 == null && item.tipo6 == null && item.tipo7 == null && item.tipo8 == null ||
                         item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 != null && item.tipo7 != null && item.tipo8 != null ||
                         item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4 != null && item.tipo5 != null && item.tipo6 != null && item.tipo7 == null && item.tipo8 == null ||
                         item.tipo1 != null && item.tipo2 != null && item.tipo3 != null && item.tipo4!=null && item.tipo5 == null && item.tipo6 == null && item.tipo7 == null && item.tipo8 == null ||
@@ -603,12 +604,15 @@ namespace RRHH.Repository
 
                             if (1==1 || item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
                             {
+                            TimeSpan span1= TimeSpan.Zero;
 
+                            if (item.tipo1 != null)
+                            {
+                                DateTime entrada1 = DateTime.Parse(item.lec1);
+                                DateTime salida1 = DateTime.Parse(item.lec2);
 
-                              DateTime entrada1 = DateTime.Parse(item.lec1);
-                              DateTime salida1 = DateTime.Parse(item.lec2);
-
-                              TimeSpan span1 = salida1.Subtract(entrada1);
+                                 span1 = salida1.Subtract(entrada1);
+                            }
 
                               if (item.tipo3 != null)
                               {
