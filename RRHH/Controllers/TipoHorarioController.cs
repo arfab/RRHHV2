@@ -316,6 +316,20 @@ namespace RRHH.Controllers
             if (valida(tipoHorario, ref mensaje))
             {
 
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+
+                if (tipoHorario.legajo_id != null)
+                {
+                    legajoRepo = new LegajoRepo();
+                    legajo = legajoRepo.Obtener(tipoHorario.legajo_id.Value);
+                    if (legajo != null)
+                    {
+                        tipoHorario.ubicacion_id = legajo.ubicacion_id.Value;
+
+                    }
+                }
+
 
                 tipoHorarioRepo = new TipoHorarioRepo();
 
