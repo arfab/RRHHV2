@@ -1,7 +1,10 @@
-﻿namespace RRHH.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RRHH.Models
 {
     public class TipoHorario
     {
+        public int? id { get; set; }
         public int? ubicacion_id { get; set; }
         public string? ubicacion { get; set; }
 
@@ -19,7 +22,10 @@
         public int? nro_legajo { get; set; }
         public int? legajo_id { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? fecha_desde { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? fecha_hasta { get; set; }
 
         public string? hora_desde { get; set; }
@@ -34,11 +40,12 @@
 
         public string? empresa { get; set; }
 
+        public int? empresa_id { get; set; }
 
-        
+        public string[]? legajos { get; set; }
 
 
-      
+
 
     }
 }

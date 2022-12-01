@@ -37,6 +37,10 @@
                <label for="sector_id">Sector/Local</label>
 			   <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SectorActual"]"></select>
 			</div>
+            <div class="col-sm-3 col-xs-6 mb-3">
+               <label for="tipo_hora_id">Tipo Hora</label>
+			   <select name="tipo_hora_id" id="tipo_hora_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["TipoHoraActual"]"></select>
+			</div>
          </div>
 
              <div class="row mb-3" >
@@ -157,7 +161,9 @@
                                                   @item.hora_hasta
                                                 </td>
                                                    <td style="font-size:16px;">
-                                                      <a asp-controller="TipoHorario" asp-action="Edit" asp-route-ubicacion_id=@item.sector_id asp-route-sector_id=@item.ubicacion_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha_desde=@Convert.ToDateTime(item.fecha_desde).ToString("dd/MM/yyyy") asp-route-fecha_hasta=@Convert.ToDateTime(item.fecha_hasta).ToString("dd/MM/yyyy")><i data-mdb-toggle='tooltip' title='Editar la fichada' class='bi bi-pencil-square'></i></a>
+                                                      <a asp-controller="TipoHorario" asp-action="Edit" asp-route-id=@item.id asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha_desde=@Convert.ToDateTime(item.fecha_desde).ToString("dd/MM/yyyy") asp-route-fecha_hasta=@Convert.ToDateTime(item.fecha_hasta).ToString("dd/MM/yyyy")><i data-mdb-toggle='tooltip' title='Editar la fichada' class='bi bi-pencil-square'></i></a>
+                                                      <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el tipo de horario' class='bi bi-x-circle'></i></a>
+
                                             
                                                 </td>
                                             </tr>
@@ -175,7 +181,31 @@
              </center>
 
 
+        <!-- Modal Eliminar -->
 
+        <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tipo de horario</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+
+                            <div class="modal-body">
+                                Se eliminará el tipo de horario con todos sus datos. Está seguro?
+                                 <input id="hfID" name="hfID" type="hidden" >
+                            </div>
+                            <div class="modal-footer">
+                                 <button id="btnEliminar" type="submit" asp-action="Delete" value="" class="btn btn-outline-success"  >SI</button>
+                                 <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                            </div>
+              
+
+                </div>
+            </div>
+        </div>
      
 
     </form>
@@ -205,7 +235,7 @@
         var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UbicacionActual"]));
         var CodEmpresa = @Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
         var CodSector = @Html.Raw(Json.Serialize(ViewData["SectorActual"]));
-
+        var CodTipoHora = @Html.Raw(Json.Serialize(ViewData["TipoHoraActual"]));
        
         var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
         var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
@@ -218,6 +248,7 @@
 
        ObtenerUbicaciones(CodEmpresa);
 
+        ObtenerTiposHora();
 
 
        if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
@@ -530,7 +561,33 @@
         }
 
 
+         var ObtenerTiposHora = function (empresa_id) {
+         var CodTipoHora =@Html.Raw(Json.Serialize(ViewData["TipoHoraActual"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerTiposHora","TipoHorario")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#tipo_hora_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodTipoHora)
+                          $('#tipo_hora_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#tipo_hora_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
 
+    function mostrarModalEliminar(id){
+          $("#hfID").val(id);
+          $("#mdEliminar").modal('show');
+
+         }
 
        function printData()
        {
