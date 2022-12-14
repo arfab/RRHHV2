@@ -119,6 +119,15 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("UBICACION_REMOTO_ACTUAL", "");
             HttpContext.Session.SetString("SECTOR_REMOTO_ACTUAL", "");
 
+            HttpContext.Session.SetString("EMPRESA_REMOTOEX_ACTUAL", "");
+            HttpContext.Session.SetString("EMPLEADO_REMOTOEX_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_REMOTOEX_ACTUAL", "");
+
+            HttpContext.Session.SetString("FILTRO_REMOTOEX_ACTUAL", "");
+
+            HttpContext.Session.SetString("UBICACION_REMOTOEX_ACTUAL", "");
+            HttpContext.Session.SetString("SECTOR_REMOTOEX_ACTUAL", "");
+
 
             return RedirectToAction("Login", "Usuario");
         }
