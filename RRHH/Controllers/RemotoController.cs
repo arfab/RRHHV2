@@ -87,7 +87,7 @@ namespace RRHH.Controllers
                 ViewData["ApellidoActual"] = apellido;
                 ViewData["EmpleadoActual"] = legajo_id;
 
-                ViewData["FiltroRemotoActual"] = filtro;
+                ViewData["FiltroActual"] = filtro;
 
               
 
@@ -189,7 +189,7 @@ namespace RRHH.Controllers
 
                 ViewData["TIPO_DIA_ID"] = remoto.dia_semana;
 
-                ViewData["FiltroRemotoActual"] = remoto.nro_legajo;
+                ViewData["FiltroActual"] = remoto.nro_legajo;
                 ViewData["EmpleadoActual"] = remoto.legajo_id;
                 ViewData["Legajos"] = remoto.legajos;
 
@@ -231,7 +231,7 @@ namespace RRHH.Controllers
 
                 ViewData["EMPRESA_ID"] = remoto.empresa_id;
                 ViewData["NRO_LEGAJO"] = remoto.nro_legajo;
-                ViewData["FiltroJustificacionActual"] = remoto.nro_legajo;
+                ViewData["FiltroActual"] = remoto.nro_legajo;
                 ViewData["EmpleadoActual"] = remoto.legajo_id;
                 ViewData["Legajos"] = remoto.legajos;
 
@@ -329,7 +329,7 @@ namespace RRHH.Controllers
 
             ViewData["EMPRESA_ID"] = remoto.empresa_id;
             ViewData["NRO_LEGAJO"] = remoto.nro_legajo;
-            ViewData["FiltroJustificacionActual"] = remoto.nro_legajo;
+            ViewData["FiltroActual"] = remoto.nro_legajo;
             ViewData["EmpleadoActual"] = remoto.legajo_id;
             ViewData["Legajos"] = remoto.legajos;
             ViewData["LegajoActual"] = remoto.nro_legajo;

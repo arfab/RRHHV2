@@ -99,6 +99,27 @@ namespace RRHH.Controllers
 
             HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", 0);
 
+
+            HttpContext.Session.SetString("EMPRESA_HORARIO_ACTUAL", "");
+            HttpContext.Session.SetString("EMPLEADO_HORARIO_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_HORARIO_ACTUAL", "");
+
+            HttpContext.Session.SetString("FILTRO_HORARIO_ACTUAL", "");
+
+            HttpContext.Session.SetString("UBICACION_HORARIO_ACTUAL", "");
+            HttpContext.Session.SetString("SECTOR_HORARIO_ACTUAL", "");
+            HttpContext.Session.SetString("TIPO_HORA_ACTUAL", "");
+
+            HttpContext.Session.SetString("EMPRESA_REMOTO_ACTUAL", "");
+            HttpContext.Session.SetString("EMPLEADO_REMOTO_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_REMOTO_ACTUAL", "");
+
+            HttpContext.Session.SetString("FILTRO_REMOTO_ACTUAL", "");
+
+            HttpContext.Session.SetString("UBICACION_REMOTO_ACTUAL", "");
+            HttpContext.Session.SetString("SECTOR_REMOTO_ACTUAL", "");
+
+
             return RedirectToAction("Login", "Usuario");
         }
 

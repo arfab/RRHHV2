@@ -92,7 +92,7 @@ namespace RRHH.Controllers
                 ViewData["TipoHoraActual"] = tipo_hora_id;
                 ViewData["EmpleadoActual"] = legajo_id;
 
-                ViewData["FiltroJustificacionActual"] = filtro;
+                ViewData["FiltroActual"] = filtro;
                 
                 /*
                Legajo legajo = new Legajo();
@@ -235,7 +235,7 @@ namespace RRHH.Controllers
                 ViewData["TIPO_HORA_ID"] = tipoHorario.tipo_hora_id;
                 ViewData["TIPO_DIA_ID"] = tipoHorario.tipo_dia_semana_id;
 
-                ViewData["FiltroJustificacionActual"] = tipoHorario.nro_legajo;
+                ViewData["FiltroActual"] = tipoHorario.nro_legajo;
                 ViewData["EmpleadoActual"] = tipoHorario.legajo_id;
                 ViewData["Legajos"] = tipoHorario.legajos;
 
@@ -277,7 +277,7 @@ namespace RRHH.Controllers
                
                     ViewData["EMPRESA_ID"] = tipoHorario.empresa_id;
                     ViewData["NRO_LEGAJO"] = tipoHorario.nro_legajo;
-                    ViewData["FiltroJustificacionActual"] = tipoHorario.nro_legajo;
+                    ViewData["FiltroActual"] = tipoHorario.nro_legajo;
                     ViewData["EmpleadoActual"] = tipoHorario.legajo_id;
                     ViewData["Legajos"] = tipoHorario.legajos;
    
@@ -375,7 +375,7 @@ namespace RRHH.Controllers
 
             ViewData["EMPRESA_ID"] = tipoHorario.empresa_id;
             ViewData["NRO_LEGAJO"] = tipoHorario.nro_legajo;
-            ViewData["FiltroJustificacionActual"] = tipoHorario.nro_legajo;
+            ViewData["FiltroActual"] = tipoHorario.nro_legajo;
             ViewData["EmpleadoActual"] = tipoHorario.legajo_id;
             ViewData["Legajos"] = tipoHorario.legajos;
             ViewData["LegajoActual"] = tipoHorario.nro_legajo;
