@@ -5,12 +5,12 @@ using System.Data.SqlClient;
 
 namespace RRHH.Repository
 {
-    public class RemotoRepo
+    public class RemotoRepo:IRemotoRepo
     {
 
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public string Insertar(Remoto remoto, int usuario_id)
+        public string Insertar(Remoto remoto)
         {
             int icantFilas;
             using (var con = new SqlConnection(strConnectionString))
@@ -24,7 +24,6 @@ namespace RRHH.Repository
                 parameters.Add("@fecha_desde", remoto.fecha_desde);
                 parameters.Add("@fecha_hasta", remoto.fecha_hasta);
                 parameters.Add("@dia_semana", remoto.dia_semana);
-                parameters.Add("@usuario_id", usuario_id);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -37,7 +36,7 @@ namespace RRHH.Repository
             return "";
         }
 
-        public string Modificar(Remoto remoto, int usuario_id)
+        public string Modificar(Remoto remoto)
         {
 
             using (var con = new SqlConnection(strConnectionString))
@@ -52,7 +51,6 @@ namespace RRHH.Repository
                 parameters.Add("@fecha_desde", remoto.fecha_desde);
                 parameters.Add("@fecha_hasta", remoto.fecha_hasta);
                 parameters.Add("@dia_semana", remoto.dia_semana);
-                parameters.Add("@usuario_id", usuario_id);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -121,7 +119,7 @@ namespace RRHH.Repository
 
         }
 
-        public IEnumerable<Remoto> ObtenerTodos(int empresa_id, int dia_semana, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, string apellido)
+        public IEnumerable<Remoto> ObtenerTodos(int empresa_id, int dia_semana, int legajo_id, DateTime fecha_desde, DateTime fecha_hasta, string apellido)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -133,7 +131,7 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@empresa_id", empresa_id);
                 parameter.Add("@dia_semana", dia_semana);
-                parameter.Add("@nro_legajo", nro_legajo);
+                parameter.Add("@legajo_id", legajo_id);
                 parameter.Add("@apellido", apellido);
                 parameter.Add("@fecha_desde", (fecha_desde.Year < 1000) ? null : fecha_desde);
                 parameter.Add("@fecha_hasta", (fecha_hasta.Year < 1000) ? null : fecha_hasta);

@@ -41,5 +41,11 @@ namespace RRHH.Models
         public string[]? legajos { get; set; }
 
         public int? dia_semana { get; set; }
+        public string? tipo_dia { get; set; }
+
+        public int? remoto { get; set; }
+
+        public string? empleado { get; set; }
+
     }
 }

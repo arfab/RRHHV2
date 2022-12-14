@@ -1,0 +1,645 @@
+﻿@model IEnumerable<RRHH.Models.Remoto>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Index";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+    var nro_item = 0; 
+    }
+
+
+     <form id="form1" method="post" enctype="multipart/form-data" class="form-floating">
+         
+
+             
+
+     <div class="container-fluid">
+         <div class="jumbotron text-center Titulo bottom-buffer ">
+          <h2>Listado de Trabajos Remotos</h2>
+          </div>
+
+          <center>
+
+              
+          <div class="row mb-3" >
+            <div class="col-sm-3 col-xs-6 mb-3">
+               <label for="empresa_id">Empresa</label>
+			   <select name="empresa_id" id="empresa_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["EmpresaActual"]"></select>
+			</div>
+            <div class="col-sm-3 col-xs-6 mb-3">
+               <label for="ubicacion_id">Ubicación</label>
+			   <select name="ubicacion_id" id="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UbicacionActual"]"></select>
+			</div>
+             <div class="col-sm-3 col-xs-6 mb-3">
+               <label for="sector_id">Sector/Local</label>
+			   <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SectorActual"]"></select>
+			</div>
+         </div>
+
+             <div class="row mb-3" >
+                 <div class="col-lg-2 col-xs-6 mb-3">
+                      <label for="filtro">Legajo / Apellido</label>
+                      <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+                </div>
+                <div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
+                    <label for="legajo_id">Empleado</label>
+                    <select  data-filter="model" class="form-control" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+                </div>
+               
+              </div>  
+
+
+             <div class="row mb-3" >
+                <div class="col">
+                     <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" class="btn btn-primary" />
+                     <input type="submit" value="Limpiar" asp-action="Limpiar" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+                    
+                     <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
+
+                    @if (_perfil_id <= 3)
+                    {
+                          <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="Remoto" asp-action="Edit" asp-route-modo="A" asp-route-legajo_id=@ViewData["EmpleadoActual"]  asp-route-fecha=@ViewData["FechaDesdeActual"] >INGRESAR TRABAJO REMOTO</a>                     
+                    }
+
+
+                </div>
+             </div>
+
+
+             <div class="row">
+                <div class="col bottom-buffer">
+                    <span id="spanTitulo"></span>
+                </div>
+            </div>
+
+        
+                <div id="divPrint">
+
+                @if (@Model != null && Model.Count()>0)
+                {
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col bottom-buffer">
+                             <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+                             @*<span style="vertical-align:auto;">HORARIOS</span><br />*@<span>Cantidad encontrada: @Model.Count()</span>    
+                         </div>
+                       </div>
+                       
+                    
+
+                   </div>
+                    
+   
+                    <div class="row">
+                        <div class="col bottom-buffer">
+                            <div class="table-responsive">
+
+
+                                <table id="tablaRemoto" class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                       
+                                        <tr >
+                                            <th>F. Desde</th>
+                                            <th>F. Hasta</th>
+                                            <th>Ubicación</th>
+                                            <th>Sector</th>
+                                            <th>Legajo</th>
+                                            <th>Empleado</th>
+                                            <th>Dia</th>
+                                            <th></th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        
+
+                                        nro_item = nro_item + 1;
+
+                                        
+
+                                            <tr >
+                                               
+                                                <td>
+                                                  @item.fecha_desde
+                                                </td>
+                                                <td>
+                                                  @item.fecha_hasta
+                                                </td>
+                                                <td>
+                                                  @item.ubicacion
+                                                </td>
+                                                 <td>
+                                                  @item.sector
+                                                </td>
+                                                <td>
+                                                  @item.nro_legajo
+                                                </td>
+                                                <td>
+                                                  @item.empleado
+                                                </td>
+                                                <td>
+                                                  @item.tipo_dia
+                                                </td>
+                                                   <td style="font-size:16px;">
+                                                      <a asp-controller="Remoto" asp-action="Edit" asp-route-id=@item.id asp-route-ubicacion_id=@item.ubicacion_id asp-route-sector_id=@item.sector_id  asp-route-legajo_id=@item.legajo_id asp-route-fecha_desde=@Convert.ToDateTime(item.fecha_desde).ToString("dd/MM/yyyy") asp-route-fecha_hasta=@Convert.ToDateTime(item.fecha_hasta).ToString("dd/MM/yyyy")><i data-mdb-toggle='tooltip' title='Editar la fichada' class='bi bi-pencil-square'></i></a>
+                                                      <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el registro' class='bi bi-x-circle'></i></a>
+
+                                            
+                                                </td>
+                                            </tr>
+
+                                    }
+                                    </tbody>
+                    </table>
+                  </div>
+                </div>
+             </div>
+         }
+                   
+
+             </div>
+             </center>
+
+
+        <!-- Modal Eliminar -->
+
+        <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  
+                            <div class="modal-header">
+                                <h5 class="modal-title">Remoto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+
+                            <div class="modal-body">
+                                Se eliminará el registro con todos sus datos. Está seguro?
+                                 <input id="hfID" name="hfID" type="hidden" >
+                            </div>
+                            <div class="modal-footer">
+                                 <button id="btnEliminar" type="submit" asp-action="Delete" value="" class="btn btn-outline-success"  >SI</button>
+                                 <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                            </div>
+              
+
+                </div>
+            </div>
+        </div>
+     
+
+    </form>
+
+    <div id="partialModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Trabajos Remotos</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+     <script type="text/javascript">
+
+    $(document).ready(function() {
+        var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UbicacionActual"]));
+        var CodEmpresa = @Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+        var CodSector = @Html.Raw(Json.Serialize(ViewData["SectorActual"]));
+        var CodTipoHora = @Html.Raw(Json.Serialize(ViewData["TipoHoraActual"]));
+       
+        var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+        var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+        var LegajoId = @Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+        var item_actual = @Html.Raw(Json.Serialize(ViewData["ITEM_ACTUAL"]));
+
+            
+       ObtenerEmpresas();
+
+       ObtenerUbicaciones(CodEmpresa);
+
+
+       if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
+            ObtenerSectores(CodUbicacion, CodEmpresa);
+        }
+        else {
+           if (CodUbicacion ==3) {
+               ObtenerLocales(CodEmpresa);
+           }
+            else {
+               $("#sector_id").val(-1);
+           }
+        }
+
+        if ($("#nro_legajo").val() <=0) 
+        {
+            $("#nro_legajo").val('');
+        }
+
+
+           ObtenerLegajos($("#empresa_id").val(),Legajo,CodUbicacion,CodSector,Filtro )
+
+        
+      
+     
+
+           if(item_actual>0) ubicarFila(item_actual);
+    });
+
+
+    $("#empresa_id").change(function () {
+         var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+         ObtenerUbicaciones($("#empresa_id").val());
+           
+         $("#ubicacion_id").val(-1);
+
+         if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+           ObtenerSectores($("#ubicacion_id").val(),$("#empresa_id").val());
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales($("#empresa_id").val());
+           }
+           else {
+             $('#sector_id').find('option').remove();
+             $("#sector_id").val(-1);
+           }
+        }
+
+         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+
+      });
+
+
+    $("#ubicacion_id").change(function () {
+          var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+            ObtenerSectores($("#ubicacion_id").val(),$("#empresa_id").val());
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales($("#empresa_id").val());
+           }
+           else {
+               $('#sector_id').find('option').remove();
+               $("#sector_id").val(-1);
+           }
+        }
+
+        ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val());
+
+         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+      });
+
+         $("#filtro").change(function () {
+             var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+             if ($("#filtro").val() != '') {            
+                 $("#divEmpleado").show();
+             }
+             else {
+               $("#legajo_id").val(-1).change();
+             }
+
+              ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+              
+         });
+
+           $("#filtro").focusout(function () {
+                         
+             //  if ($("#legajo_id").val() == null || $("#legajo_id").val() == -1)           
+             //     $('#fecha_hasta').attr("disabled", true);
+             //else 
+             //   $('#fecha_hasta').attr("disabled", false);
+         });
+
+          $("#legajo_id").change(function () {
+             //if ($("#legajo_id").val() == null || $("#legajo_id").val() == -1)           
+             //     $('#fecha_hasta').attr("disabled", true);
+             //else 
+             //   $('#fecha_hasta').attr("disabled", false);
+         });
+
+
+
+         
+         $("#sector_id").focusout(function () {
+               var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+             //if($("#nro_legajo").val()!='')
+             ObtenerLegajos($("#empresa_id").val(),Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+         });
+
+
+
+
+         $("#empresa_id").focusout(function () {
+               var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+             //if($("#nro_legajo").val()!='')
+             ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+         });
+
+
+   
+         var ObtenerLegajo = function (empresa_id, nro_legajo) {
+             $.ajax({
+                url: '@Url.Action("ObtenerLegajo","Novedad")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    empresa_id: empresa_id,
+                    nro_legajo: nro_legajo
+                },
+                success: function (data) {
+                    $('#apellido').val(data.apellido);
+                    $('#empresa_id').val(data.empresa_id);
+                   
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+        var ObtenerEmpleados = function (filtro) {
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpleados","Legajo")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    filtro: filtro
+                },
+                success: function (data) {
+                    $('#legajo_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpleado)
+                              $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                             else 
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        }
+                        );  
+
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+        var ObtenerLegajos = function (empresa_id, nro_legajo, ubicacion_id, sector_id, filtro) {
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+          
+             $.ajax({
+                url: '@Url.Action("ObtenerLegajos","Legajo")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    empresa_id: empresa_id,
+                    nro_legajo: nro_legajo,
+                    ubicacion_id: ubicacion_id,
+                    sector_id: sector_id,
+                    filtro: filtro,
+                    activo: 1
+                },
+                success: function (data) {
+
+                   
+                    $('#legajo_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpleado)
+                              $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                             else 
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        }
+                        );  
+
+                   
+                   // $('#legajo_id').val(data[0].value).change();
+
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+        var ObtenerEmpresas = function () {
+             var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#empresa_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpresa)
+                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+  var ObtenerUbicaciones = function (empresa_id) {
+         var CodUbicacion =@Html.Raw(Json.Serialize(ViewData["UbicacionActual"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Fichada")',
+            type: 'GET',
+            data: {
+              empresa_id: empresa_id
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+      var ObtenerSectores = function (ubicacion_id, empresa_id) {
+             var CodSector = @Html.Raw(Json.Serialize(ViewData["SectorActual"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerSectores","Fichada")',
+                type: 'GET',
+                 data: {
+                  ubicacion_id: ubicacion_id,
+                  empresa_id: empresa_id
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodSector)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+        var ObtenerLocales = function (empresa_id) {
+             var CodLocal = @Html.Raw(Json.Serialize(ViewData["SectorActual"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Fichada")',
+                type: 'GET',
+                data: {
+                  empresa_id: empresa_id
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+        
+
+    function mostrarModalEliminar(id){
+          $("#hfID").val(id);
+          $("#mdEliminar").modal('show');
+
+         }
+
+       function printData()
+       {
+          
+         $("#tablaRemoto th:last-child, #tablaRemoto td:last-child").hide();
+         //$("#divCabecera").show();
+
+         var divToPrint=document.getElementById("divPrint");
+         var htmlToPrint = '' +
+            '<style type="text/css">' +
+            'body {' +
+             'margin-top: 30px;' + 
+             'margin-bottom: 20px;' + 
+             '} ' +
+            'table , table th, table td {' +
+            'font-size: 10px;' + 
+            'border:1px solid;' +
+            'border-collapse: collapse;' +
+            'padding:0.5em;' +
+            '} ' +
+            'table {' +
+            'width: 100%;' + 
+            'margin-bottom: 20px;' + 
+            '} ' +
+            //'#spanSanciones  {' +
+            //'display:inline-block;' +
+            // '} ' +
+            //'#spanFelicitaciones  {' +
+            //'display:inline-block;' +
+            // '} ' +
+            '</style>';
+         htmlToPrint += divToPrint.outerHTML;
+         newWin= window.open("");
+         //newWin.document.write( htmlToPrint);
+         //newWin.document.close();
+         //newWin.print();
+         //newWin.close();
+         $("#tablaRemoto th:last-child, #tablaRemoto td:last-child").show();
+         //$("#divCabecera").hide();
+
+         var is_chrome = Boolean(newWin.chrome);
+         newWin.document.write(htmlToPrint);
+         newWin.document.close(); // necessary for IE >= 10 and necessary before onload for chrome
+
+       if (is_chrome) {
+        newWin.onload = function() { // wait until all resources loaded 
+            newWin.focus(); // necessary for IE >= 10
+            newWin.print();  // change window to mywindow
+            newWin.close();// change window to mywindow
+        };
+    }
+    else {
+        newWin.document.close(); // necessary for IE >= 10
+        newWin.focus(); // necessary for IE >= 10
+        newWin.print();
+        newWin.close();
+    }
+
+
+      }
+
+    $('#btnImprimir').on('click',function(){
+    printData();
+    })
+
+
+    function ubicarFila(item_actual){
+
+        $('#tablaRemoto').find('tr').eq(item_actual).addClass('activa');
+
+        var w = $(window);
+        var row = $('#tablaRemoto').find('tr').eq(item_actual);
+   
+  
+         if (row.length){
+           w.scrollTop( row.offset().top - (w.height()/2) );
+          }
+    }
+
+
+    </script>
+
+
+
+
+    @if (ViewBag.Message != null)
+{
+        <script type="text/javascript">
+                window.onload = function () {
+                    alert("@ViewBag.Message");
+                };
+        </script>
+}

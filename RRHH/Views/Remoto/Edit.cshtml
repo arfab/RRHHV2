@@ -1,0 +1,823 @@
+﻿@model RRHH.Models.Remoto
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    ViewData["Title"] = "Novedad";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+    var _origen = (string)ViewData["ORIGEN"];
+    var _modo = (string)ViewData["MODO"];
+    var _id = ViewData["ID"];
+    var _empleado = (ViewData["EmpleadoActual"]==null)?-1:(int)ViewData["EmpleadoActual"];
+    var _item_actual = (ViewData["ITEM_ACTUAL"]==null)?0:(int)ViewData["ITEM_ACTUAL"];
+}
+
+<form  method="post" id="form1">
+ <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+
+<div class="container">
+<h2>Tipo de Horario</h2>
+
+        <div class="row mb-3" >
+            <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="empresa_id">Empresa</label>
+			   <select name="empresa_id" id="empresa_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["EMPRESA_ID"]"></select>
+			</div>
+            <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="ubicacion_id">Ubicación</label>
+			   <select name="ubicacion_id" id="ubicacion_id" asp-for="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UBICACION_ID"]"></select>
+			</div>
+             <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="sector_id">Sector/Local</label>
+			   <select name="sector_id" id="sector_id" asp-for="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SECTOR_ID"]"></select>
+			</div>
+         </div>
+
+           <div class="row mb-3" >
+             <div class="col-lg-2 col-xs-6 mb-3">
+                  <label for="filtro">Legajo / Apellido</label>
+                  <input name="filtro" id="filtro" onpaste="return false;" ondrop="return false;" autocomplete="off"   placeholder="Filtro" value="@ViewData["FiltroJustificacionActual"]" class="form-control" />                                          
+			</div>
+  		    <div class="col-lg-6 col-xs-6 mb-3">
+                <label for="legajo_id">Empleado</label>
+                <select  data-filter="model" class="form-control"  asp-for="legajo_id"  name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+			</div>
+             @if (_modo == "A" )
+             {
+               <div class="col-lg-4 col-xs-4 mb-3">
+                 <input type="button" value="Limpiar" asp-action="Limpiar" onclick="Limpiar();" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+               </div>
+             }
+          </div>  
+        
+          @if (_modo == "A" )
+          {
+            <div class="row"> 
+              <div class="col-lg-6 col-xs-6 mb-3">
+              <button id="btnAgregar" type="button" onclick="AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());" class="btn btn-success btn-sm" >AGREGAR</button>
+            </div>
+            </div>
+            <div class="row"> 
+              <div class="col" style="margin-right:5px;">
+                 <table class="table table-light table-hover" id="tblItems">
+                   <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Legajo</th>
+                      <th>Apellido</th>
+                      <th>Nombre</th>
+                      <th></th>
+                   </tr>
+                  </thead>
+                </table>
+              </div>
+           </div> 
+           }
+            <div class="row" hidden>
+                  <div class="col bottom-buffer">
+                     <label asp-for="empresa_id" class="control-label">Empresa</label>
+                     <select  class="form-control" id="empresa_id" asp-for="empresa_id" ></select>
+                     <span class="alert-danger" asp-validation-for="empresa_id"></span>
+                  </div>
+            </div>
+
+       
+            <div class="row " hidden>
+                <div class="col bottom-buffer">
+                  <label asp-for="nro_legajo" class="control-label">Nro. Legajo</label>
+                  <input asp-for="nro_legajo" id="nro_legajo" name="nro_legajo" type="number" class="form-control" />
+                  <span class="alert-danger" asp-validation-for="nro_legajo"></span>
+                </div>
+                <div class="col bottom-buffer">
+                  <label asp-for="nombre" id="nombre" name="nombre" class="control-label"></label> <label asp-for="apellido" id="apellido" name="apellido" class="control-label"></label>
+                  <input id="legajos" name="legajos" class="form-control" />
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col bottom-buffer btns2" id="divFechaDesde">
+                      <label asp-for="fecha_desde" class="control-label">Fecha Desde</label><br />
+                      <input type="text" id="txtSelectedFechaDesde" name="fecha_desde"  asp-for="fecha_desde" />
+
+                </div>
+                <div class="col bottom-buffer btns2" id="divFechaHasta">
+                      <label asp-for="fecha_hasta" class="control-label">Fecha Hasta</label><br />
+                      <input type="text" id="txtSelectedFechaHasta" name="fecha_hasta"  asp-for="fecha_hasta" />
+
+                </div>
+            </div>
+
+            <div class="row">
+
+              <div class="col bottom-buffer">
+                     <label asp-for="dia_semana" class="control-label">Tipo Dia Semana</label>
+                     <select  class="form-control" id="dia_semana" asp-for="dia_semana" value="@ViewData["TIPO_DIA_ID"]" ></select>
+                     <span class="alert-danger" asp-validation-for="dia_semana"></span>
+
+             </div>
+
+
+           </div>
+
+
+
+           <div class="row " id="divInsertar">
+                <div class="col bottom-buffer">
+                <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+
+                 <a id="grabar_id" value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
+              
+                  @if (Model.id>0) {
+                     <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalEliminar();" >Eliminar</a>
+                  }
+
+                </div>
+                @* <div class="col bottom-buffer">
+                     Ultima modificación: @Model.usuario (@Model.fecha_alta)
+                 </div>*@
+            </div>
+   
+
+
+
+
+  <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Trabajo Remoto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit" onclick="ObtenerLegajosID();" asp-route-modo=@ViewData["MODO"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!-- Modal Eliminar -->
+<div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Trabajo Remoto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se eliminarán los datos. Está seguro?
+      </div>
+      <div class="modal-footer">
+         <button type="submit"  asp-action="Delete" asp-controller="Remoto" asp-route-hfID=@ViewData["ID"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value=""  class="btn btn-outline-success" >SI</button>
+         <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Salir -->
+<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Trabajo Remoto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se perderán los cambios efectuados. Está seguro?
+      </div>
+      <div class="modal-footer">
+       @if (_origen=="F") {
+          <a asp-controller="Fichada" asp-action="Index" asp-route-item_actual=@ViewData["ITEM_ACTUAL"]  class="btn btn-outline-success"  Text="SI">SI</a>
+       }
+       else {
+          <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
+       }
+
+       
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ </form>
+
+
+ <script type="text/javascript">
+
+
+$(document).ready(function () {
+    var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+    var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+    var CodTipoDiaSemana = @Html.Raw(Json.Serialize(Model.dia_semana));
+    var FechaDesde = @Html.Raw(Json.Serialize(Model.fecha_desde));
+    var FechaHasta = @Html.Raw(Json.Serialize(Model.fecha_hasta));
+
+    var Apellido = @Html.Raw(Json.Serialize(Model.apellido));
+    var Nombre = @Html.Raw(Json.Serialize(Model.nombre));
+
+     var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+     var LegajoId = @Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+    var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroRemotoActual"]));
+
+
+     var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+     var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+
+    
+
+    $("#apellido").text('');
+    $("#nombre").text('');
+
+          
+       ObtenerEmpresas();
+
+       ObtenerUbicaciones();
+    
+
+    if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
+            ObtenerSectores(CodUbicacion);
+        }
+        else {
+           if (CodUbicacion ==3) {
+               ObtenerLocales();
+           }
+            else {
+               $("#sector_id").val(-1);
+           }
+        }
+
+        if ($("#nro_legajo").val() <=0) 
+        {
+            $("#nro_legajo").val('');
+        }
+
+
+       ObtenerLegajos($("#empresa_id").val(),Legajo,CodUbicacion,CodSector,Filtro )
+
+    ObtenerTiposDiaSemana();
+
+
+    ObtenerEmpleados(Filtro);
+
+    if ($("#nro_legajo").val() == 0) 
+    {
+        $("#nro_legajo").val('');
+    }
+
+
+    if (Apellido != null) 
+    {
+        $("#apellido").text(Apellido);
+    }
+
+     if (Nombre != null) 
+    {
+        $("#nombre").text(Nombre);
+    }
+
+        $('#txtSelectedFechaDesde').datepicker({format: 'dd/mm/yyyy' });
+        $('#txtSelectedFechaHasta').datepicker({format: 'dd/mm/yyyy' });
+
+        if(FechaDesde==null) $('#txtSelectedFechaDesde').datepicker('setDate', "-0d");
+        //if(FechaHasta==null) $('#txtSelectedFechaHasta').datepicker('setDate', "-0d");
+
+        HabilitarGrabar();
+
+
+   })
+
+
+     $('#filtro').keyup(function(event){
+    if(event.which == 13 ){        
+        ObtenerEmpleados($("#filtro").val());
+        AgregarItem($('#legajo_id').val(),$('#nro_legajo').val(),$('#apellido').text(),$('#nombre').text());
+        return false; 
+    }    
+   });
+
+
+     $("#filtro").change(function () {
+        ObtenerEmpleados($("#filtro").val());       
+     });
+
+
+
+     $("#legajo_id").change(function () {
+     
+        if ($("#legajo_id").val() > 0) {
+             ObtenerLegajoPorID($("#legajo_id").val());
+         }
+    });
+
+     $("#legajo_id").focusout(function () {
+          
+        if ($("#legajo_id").val() > 0) {
+             ObtenerLegajoPorID($("#legajo_id").val());
+         }
+    });
+
+     $("#nro_legajo").change(function () {
+           
+         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+
+    });
+
+
+    $("#tipo_hora_id").change(function () {
+        HabilitarGrabar();
+
+    });
+  
+     $("#dia_semana").change(function () {
+        HabilitarGrabar();
+
+    });
+
+     $("#hora_desde").change(function () {
+        HabilitarGrabar();
+
+    });
+
+     $("#hora_hasta").change(function () {
+        HabilitarGrabar();
+
+    });
+
+  function mostrarModalSalida(){
+      var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+
+      if ($("#grabar_id").is(":visible"))
+        $("#mdSalir").modal('show');
+       else {
+         var url;
+         if (origen == "L") 
+           url = "@Url.Action("Index", "Legajo")";
+         else 
+           url = "@Url.Action("Index", "Remoto")"; 
+         window.location.href = url;
+       }
+
+  }
+
+  function mostrarModalGrabar(){
+    $("#mdGrabar").modal('show');
+  }
+
+  function mostrarModalEliminar(){
+    $("#mdEliminar").modal('show');
+}
+
+
+ $("#ubicacion_id").change(function () {
+         var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+            ObtenerSectores($("#ubicacion_id").val());
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales();
+           }
+           else {
+                $("#sector_id").val(-1);
+           }
+        }
+
+         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+      });
+
+        $("#sector_id").change(function () {
+              var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+             //if($("#nro_legajo").val()!='')
+       ObtenerLegajos($("#empresa_id").val(), Legajo, $("#ubicacion_id").val(), $("#sector_id").val(), $("#filtro").val());
+
+           
+         });
+
+   $("#sector_id").focusout(function () {
+              var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+             //if($("#nro_legajo").val()!='')
+       ObtenerLegajos($("#empresa_id").val(), Legajo, $("#ubicacion_id").val(), $("#sector_id").val(), $("#filtro").val());
+
+           
+         });
+
+
+
+
+         $("#empresa_id").focusout(function () {
+              var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+             //if($("#nro_legajo").val()!='')
+             ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+         });
+
+ 
+ var ObtenerTiposDiaSemana = function () {
+         var CodTipoDiaSemana =@Html.Raw(Json.Serialize(Model.dia_semana));
+         $.ajax({
+            url: '@Url.Action("ObtenerTiposDiaSemana","TipoHorario")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#dia_semana').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodTipoDiaSemana)
+                          $('#dia_semana').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#dia_semana').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+    
+   
+
+    var ObtenerLegajo = function (empresa_id, nro_legajo) {
+         $.ajax({
+            url: '@Url.Action("ObtenerLegajo","Novedad")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                empresa_id: empresa_id,
+                nro_legajo: nro_legajo
+            },
+            success: function (data) {
+                $('#apellido').text(data.apellido);
+                $('#nombre').text(data.nombre);
+
+            },
+            error: function () {
+            }
+      });
+    }
+     
+
+
+var ObtenerLegajoPorID = function (id) {
+        var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerLegajoPorID","Legajo")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (data) {
+                $('#apellido').text(data.apellido);
+                $('#nombre').text(data.nombre);
+                $('#nro_legajo').val(data.nro_legajo);
+    
+            },
+            error: function () {
+            }
+      });
+    }
+
+var ObtenerEmpleados = function (filtro) {
+         var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+         var CodModo =@Html.Raw(Json.Serialize(ViewData["Modo"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerEmpleados","Legajo")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                filtro: filtro
+            },
+            success: function (data) {
+                $('#legajo_id').find('option').remove()
+                if (data[0].value > 0) { 
+                   ObtenerLegajoPorID(data[0].value);
+                }
+                $(data).each(
+                    function (index, item) {    
+                       // if (item.value!=-1) { 
+                          if (item.value==CodEmpleado || CodEmpleado==null && index==0)
+                            $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                           else 
+                            $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')            
+                        //}
+                    }
+                    );
+
+                    HabilitarGrabar();
+
+      
+            },
+            error: function () {
+             
+            }
+      });
+    }
+
+     var ObtenerLegajos = function (empresa_id, nro_legajo, ubicacion_id, sector_id, filtro) {
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+             var CodModo =@Html.Raw(Json.Serialize(ViewData["Modo"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerLegajos","Legajo")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    empresa_id: empresa_id,
+                    nro_legajo: nro_legajo,
+                    ubicacion_id: ubicacion_id,
+                    sector_id: sector_id,
+                    filtro: filtro,
+                    activo: 1
+                },
+                success: function (data) {
+
+                   
+                    $('#legajo_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {     
+                           // if (item.value!=-1) { 
+                             if (item.value==CodEmpleado)
+                               $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                             else 
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')         
+                          //  }
+                        }
+                        ); 
+
+
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+      var ObtenerEmpresas = function () {
+             var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#empresa_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpresa)
+                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+  var ObtenerUbicaciones = function () {
+         var CodUbicacion =@Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Legajo")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+      var ObtenerSectores = function (ubicacion_id) {
+             var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerSectores","Legajo")',
+                type: 'GET',
+                 data: {
+                ubicacion_id: ubicacion_id
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodSector)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+        var ObtenerLocales = function () {
+             var CodLocal = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+    $(function () {
+      $('#txtSelectedFechaDesde').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
+
+      $(function () {
+      $('#txtSelectedFechaHasta').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
+
+
+ //$('#form1').submit(function()
+ //{
+ //   $("input[type='submit']", this)
+ //     .attr('disabled', 'disabled');
+ // });
+
+ function HabilitarGrabar() {
+    
+  if ($('#dia_semana').val()!='-1')
+      $("#grabar_id").show();
+  else
+      $("#grabar_id").hide(); 
+}
+
+
+function Limpiar() {
+  $("#apellido").val('');
+  $("#nombre").val('');
+  $("#filtro").val('').change();
+
+  $("#empresa_id").val(-1).change();
+  $("#ubicacion_id").val(-1).change();
+  $("#sector_id").val(-1).change();
+  $("#legajo_id").val(-1).change();
+
+  $("dia_semana").val(1);
+  $("#descripcion").val('').change();
+
+  $("#tblItems").find("tr:gt(0)").remove();
+
+  $('#txtSelectedFechaDesde').datepicker('setDate', "-0d");
+  $('#txtSelectedFechaHasta').datepicker('setDate', "-0d");
+
+  HabilitarGrabar();
+
+  
+
+    //document.getElementById("tblItems").deleteRow(rowIndex);   
+}
+
+
+
+function AgregarItem(
+     id,
+     nro_legajo,
+     apellido,
+     nombre
+     ) 
+
+  {
+
+  if (id<0) return;
+
+  if (BuscarItem(id)>0) return;
+
+  var table = document.getElementById("tblItems");
+  var rowCount = table.rows.length;
+  var row = table.insertRow(rowCount);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+  var cell4 = row.insertCell(3);
+  var cell5 = row.insertCell(4);
+
+
+  row.id="row_"+rowCount.toString();
+     
+  cell5.style.textAlign = "right";
+  
+  cell1.innerHTML = id;
+  cell2.innerHTML = nro_legajo;
+  cell3.innerHTML = apellido;
+  cell4.innerHTML = nombre;
+  cell5.innerHTML = "<a onclick='EliminarItem(" + rowCount + ")'><i data-mdb-toggle='tooltip' title='Eliminar'  class='bi bi-x-circle'></i></a>";
+
+   $("#filtro").val('');
+
+  HabilitarGrabar();
+
+ // var cant = CalcularCantidadTotal();
+   
+
+}
+
+function EliminarItem(id) {
+    var clave= "row_"+id.toString();      
+    var rowIndex = document.getElementById(clave).rowIndex;
+    document.getElementById("tblItems").deleteRow(rowIndex);   
+
+   HabilitarGrabar();
+}
+
+function BuscarItem(cod)
+{
+
+  var table = document.getElementById("tblItems");
+  var rowCount = table.rows.length;
+  for (var i=0; i<rowCount; i++)
+  {
+    if (table.rows[i].cells[0].innerHTML == cod )
+        return i;
+  }
+  return -1;
+
+}
+
+function ObtenerLegajosID()
+{
+  var legajos = "";
+  var table = document.getElementById("tblItems");
+  var rowCount = table.rows.length;
+  for (var i=1; i<rowCount; i++)
+  {
+    legajos = legajos + table.rows[i].cells[0].innerHTML;
+    if (i < rowCount - 1) legajos = legajos + ",";
+  }
+
+  $('#legajos').text(legajos);   
+  $('#legajos').val(legajos);  
+
+  return legajos;
+
+}
+
+</script>
+
+
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
+
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial" />
+}
