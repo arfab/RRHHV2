@@ -93,7 +93,7 @@ namespace RRHH.Controllers
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
 
-            //if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO");
+            if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO");
             //if (HttpContext.Session.GetInt32("LEGAJO_ACTUAL_LEGAJO") != null) nro_legajo = (int)HttpContext.Session.GetInt32("LEGAJO_ACTUAL_LEGAJO");
           
             if (HttpContext.Session.GetString("APELLIDO_ACTUAL_LEGAJO") != null) apellido = HttpContext.Session.GetString("APELLIDO_ACTUAL_LEGAJO");
@@ -118,7 +118,7 @@ namespace RRHH.Controllers
 
                 ViewData["APELLIDO"] = apellido;
                 //ViewData["NRO_LEGAJO"] = nro_legajo;
-                //ViewData["EMPRESA_ID"] = empresa_id;
+                ViewData["EMPRESA_ID"] = empresa_id;
 
                 ViewData["UBICACION_ID"] = ubicacion_id;
                 ViewData["SECTOR_ID"] = sector_id;
@@ -135,7 +135,7 @@ namespace RRHH.Controllers
                 {
                     ViewData["APELLIDO"] = legajo.apellido;
                     //ViewData["NRO_LEGAJO"] = legajo.nro_legajo.Value;
-                    //ViewData["EMPRESA_ID"]  = legajo.empresa_id.Value;
+                    ViewData["EMPRESA_ID"]  = legajo.empresa_id.Value;
                     nro_legajo = legajo.nro_legajo.Value;
                     empresa_id = legajo.empresa_id.Value;
                     apellido = legajo.apellido;
@@ -220,7 +220,7 @@ namespace RRHH.Controllers
 
                 ViewData["APELLIDO"] = apellido;
                 //ViewData["NRO_LEGAJO"] = nro_legajo;
-                //ViewData["EMPRESA_ID"] = empresa_id;
+                ViewData["EMPRESA_ID"] = empresa_id;
 
 
                 ViewData["UBICACION_ID"] = ubicacion_id;
@@ -237,14 +237,14 @@ namespace RRHH.Controllers
                 {
                     ViewData["APELLIDO"] = legajo.apellido;
                     //ViewData["NRO_LEGAJO"] = legajo.nro_legajo.Value;
-                    //ViewData["EMPRESA_ID"] = legajo.empresa_id.Value;
+                    ViewData["EMPRESA_ID"] = legajo.empresa_id.Value;
                     nro_legajo = legajo.nro_legajo.Value;
                     empresa_id = legajo.empresa_id.Value;
                     apellido = legajo.apellido;
                 }
 
 
-                //HttpContext.Session.SetInt32("EMPRESA_ACTUAL_LEGAJO", empresa_id);
+                HttpContext.Session.SetInt32("EMPRESA_ACTUAL_LEGAJO", empresa_id);
                 //HttpContext.Session.SetInt32("LEGAJO_ACTUAL_LEGAJO", nro_legajo);
                 HttpContext.Session.SetString("APELLIDO_ACTUAL_LEGAJO", (apellido==null)?"":apellido);
 
@@ -322,6 +322,9 @@ namespace RRHH.Controllers
         {
 
             HttpContext.Session.SetString("APELLIDO_ACTUAL_LEGAJO", (apellido == null) ? "" : apellido);
+
+            HttpContext.Session.SetInt32("EMPRESA_ACTUAL_LEGAJO", empresa_id);
+
 
             HttpContext.Session.SetInt32("UBICACION_ACTUAL_LEGAJO", ubicacion_id);
 

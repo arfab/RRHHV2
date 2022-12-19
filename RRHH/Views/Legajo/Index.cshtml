@@ -67,7 +67,7 @@
                   <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
 			</div>
 			<div class="col-lg-6 col-xs-4 mb-3" id="divEmpleado">
-                <label for="empresa_id">Empleado</label>
+                <label for="empleado_id">Empleado</label>
                 <select  data-filter="model" class="form-control" name="empleado_id" id="empleado_id" value="@ViewData["EmpleadoActual"]" ></select>           
 			</div>
             <div class="col-lg-4 col-xs-4 mb-3" id="divActivo">
@@ -81,6 +81,10 @@
           </div>  
 
          <div class="row mb-3" id="divBusquedaAvanzada" >
+              <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="empresa_id">Empresa</label>
+			   <select name="empresa_id" id="empresa_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["EMPRESA_ID"]"></select>
+			</div>
             <div class="col-sm-4 col-xs-6 mb-3">
                <label for="ubicacion_id">Ubicación</label>
 			   <select name="ubicacion_id" id="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UBICACION_ID"]"></select>
@@ -288,7 +292,7 @@
  <script type="text/javascript">
 
   $(document).ready(function() {
-
+    var CodEmpresa = @Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
     var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
     var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
     var Activo = @Html.Raw(Json.Serialize(ViewData["ActivoActual"]));
@@ -300,7 +304,7 @@
         $("#nro_legajo").val('');
     }
 
-     if (CodUbicacion>0)
+     if (CodEmpresa>0 || CodUbicacion>0)
        $("#divBusquedaAvanzada").show();
      else
        $("#divBusquedaAvanzada").hide();
@@ -420,16 +424,43 @@
          ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
      });
 
-      $("#empresa_id").change(function () {
-         if($("#nro_legajo").val()!='')
-         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
-     });
+     $("#empresa_id").change(function () {
+         var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+         ObtenerUbicaciones($("#empresa_id").val());
+           
+         $("#ubicacion_id").val(-1);
+
+         if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+           ObtenerSectores($("#ubicacion_id").val(),$("#empresa_id").val());
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales($("#empresa_id").val());
+           }
+           else {
+             $('#sector_id').find('option').remove();
+             $("#sector_id").val(-1);
+           }
+        }
+
+         ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val());
+
+         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
 
-     $("#empresa_id").focusout(function () {
-         if($("#nro_legajo").val()!='')
-         ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
-     });
+      });
+
+     // $("#empresa_id").change(function () {
+     //    if($("#nro_legajo").val()!='')
+     //    ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+     //});
+
+
+     //$("#empresa_id").focusout(function () {
+     //    if($("#nro_legajo").val()!='')
+     //    ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+     //});
 
 
   var ObtenerEmpresas = function () {
