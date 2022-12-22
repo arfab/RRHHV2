@@ -35,6 +35,9 @@ namespace RRHH.Models
         public int? local_id { get; set; }
         public string? local { get; set; }
 
+        public int? turno_id { get; set; }
+        public string? turno { get; set; }
+
         public int? funcion_id { get; set; }
         public string? funcion { get; set; }
 

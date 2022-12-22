@@ -73,6 +73,7 @@ namespace RRHH.Repository
                 parameters.Add("@ubicacion_id", legajo.ubicacion_id);
                 parameters.Add("@sector_id", (legajo.sector_id == -1) ? null : legajo.sector_id);
                 parameters.Add("@local_id", (legajo.local_id == -1) ? null : legajo.local_id);
+                parameters.Add("@turno_id", (legajo.turno_id == -1) ? null : legajo.turno_id);
                 parameters.Add("@categoria_id", legajo.categoria_id);
                 parameters.Add("@funcion_id", (legajo.funcion_id<=0)?null:legajo.funcion_id);
                 parameters.Add("@observacion", legajo.observacion);

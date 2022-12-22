@@ -63,6 +63,11 @@
                      <select  class="form-control" id="local_id" asp-for="local_id" ></select>
                      <span class="alert-danger" asp-validation-for="local_id"></span>
                   </div>
+                   <div class="col bottom-buffer" id="divTurno">
+                     <label asp-for="turno_id" class="control-label">Turno</label>
+                     <select  class="form-control" id="turno_id" asp-for="turno_id" ></select>
+                     <span class="alert-danger" asp-validation-for="turno_id"></span>
+                  </div>
                 </div>
 
                 <div class="row">
@@ -172,6 +177,7 @@
         var Nombre = @Html.Raw(Json.Serialize(Model.nombre));
         var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
         var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
+        var CodTurno = @Html.Raw(Json.Serialize(Model.turno_id));
 
         if (Modo == "E") {
             $('#nro_legajo').prop('readonly', true);
@@ -189,6 +195,7 @@
 
         ObtenerUbicaciones();
     
+        ObtenerTurnos(CodUbicacion);
 
        if (CodUbicacion==1 || CodUbicacion==2 || CodUbicacion==4) {
             ObtenerSectores(CodUbicacion);
@@ -224,6 +231,7 @@
        })
 
       $("#ubicacion_id").change(function () {
+          ObtenerTurnos($("#ubicacion_id").val());
        if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
             ObtenerSectores($("#ubicacion_id").val());
             $("#divSector").show();
@@ -311,6 +319,30 @@
                               $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
                             else 
                               $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+        var ObtenerTurnos = function (ubicacion_id) {
+             var CodTurno = @Html.Raw(Json.Serialize(Model.turno_id));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerTurnos","Legajo")',
+                type: 'GET',
+                 data: {
+                ubicacion_id: ubicacion_id
+                },
+                success: function (data) {
+                    $('#turno_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodTurno)
+                              $('#turno_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#turno_id').append('<option value="' + item.value + '">' + item.text + '</option>')
                         });
                 },
                 error: function () {

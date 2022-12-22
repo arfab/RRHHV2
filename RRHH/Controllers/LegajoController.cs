@@ -898,6 +898,28 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
+        public JsonResult ObtenerTurnos(int ubicacion_id)
+        {
+            List<Models.Turno> l = new List<Models.Turno>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@ubicacion_id", ubicacion_id);
+
+                l = con.Query<Models.Turno>("spTurnoObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.Turno(-1, "-- Seleccione el turno --", -1, ""));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
+        [HttpGet]
         public JsonResult ObtenerCategorias()
         {
             List<Models.Categoria> l = new List<Models.Categoria>();
