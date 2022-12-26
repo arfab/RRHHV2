@@ -80,6 +80,7 @@ namespace RRHH.Repository
                 parameters.Add("@activo", 1);
                 parameters.Add("@fecha_alta", legajo.fecha_alta);
                 parameters.Add("@fecha_baja", legajo.fecha_baja);
+                parameters.Add("@fecha_cambio", legajo.fecha_cambio);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 

@@ -50,6 +50,8 @@ namespace RRHH.Models
         public DateTime? fecha_alta { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? fecha_baja { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? fecha_cambio { get; set; }
         public string? observacion { get; set; }
 
     }

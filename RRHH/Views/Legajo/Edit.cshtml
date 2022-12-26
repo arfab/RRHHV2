@@ -68,6 +68,10 @@
                      <select  class="form-control" id="turno_id" asp-for="turno_id" ></select>
                      <span class="alert-danger" asp-validation-for="turno_id"></span>
                   </div>
+                  <div class="col bottom-buffer btns2" id="divFechaCambio">
+                     <label asp-for="fecha_cambio" class="control-label">Fecha Cambio</label><br />
+                     <input type="text" id="txtSelectedFechaCambio" name="fecha_cambio"  asp-for="fecha_cambio" />
+                  </div>
                 </div>
 
                 <div class="row">
@@ -228,6 +232,10 @@
           $('#txtSelectedFechaAlta').datepicker({format: 'dd/mm/yyyy' });
           $('#txtSelectedFechaBaja').datepicker({format: 'dd/mm/yyyy' });
 
+          $('#txtSelectedFechaCambio').datepicker({format: 'dd/mm/yyyy' });
+
+
+          $("#divFechaCambio").hide();
        })
 
       $("#ubicacion_id").change(function () {
@@ -245,6 +253,34 @@
             $("#divSector").hide();
         }
       });
+
+    $("#empresa_id").change(function () {
+        $("#divFechaCambio").show();
+    });
+
+    $("#sector_id").change(function () {
+        $("#divFechaCambio").show();
+    });
+
+    $("#ubicacion_id").change(function () {
+        $("#divFechaCambio").show();
+    });
+
+    $("#local_id").change(function () {
+        $("#divFechaCambio").show();
+    });
+
+    $("#turno_id").change(function () {
+        $("#divFechaCambio").show();
+    });
+
+    $("#categoria_id").change(function () {
+        $("#divFechaCambio").show();
+    });
+
+    $("#funcion_id").change(function () {
+        $("#divFechaCambio").show();
+    });
 
 
       function mostrarModalSalida(){
@@ -453,6 +489,12 @@
         format: "dd/mm/yyyy",
         language: "es"
         }); 
+        $('#txtSelectedFechaCambio').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
      });
 
 
