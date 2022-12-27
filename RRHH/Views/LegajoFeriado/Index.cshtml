@@ -1,0 +1,268 @@
+﻿@model IEnumerable<RRHH.Models.LegajoFeriado>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Index";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+
+    var legajo =  (RRHH.Models.Legajo) ViewData["LEGAJO"];
+
+    var _origen = (string)ViewData["ORIGEN"];
+
+    var _item_actual = (ViewData["ITEM_ACTUAL"]==null)?0:(int)ViewData["ITEM_ACTUAL"];
+              
+    }
+
+
+     <form id="form1" method="post" enctype="multipart/form-data" class="form-floating">
+         
+
+             
+
+     <div class="container-fluid">
+         <div class="jumbotron text-center Titulo bottom-buffer ">
+          <h2>Legajos para el feriado</h2>
+        
+     </div>
+
+     <center>
+
+
+               
+             <div class="row mb-3" >
+                <div class="col">
+                  <input type="submit" asp-action="ExportarExcel"   value="Exportar a Excel" class="btn btn-primary" />
+                     <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
+
+                    @if (_perfil_id <= 3)
+                    {
+                          <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="LegajoFeriado" asp-action="Edit" asp-route-modo="A"   asp-route-legajo_id="@ViewData["EmpleadoActual"]" asp-route-feriado_id="@ViewData["FERIADO_ID"]">INGRESAR LEGAJO/S</a>                     
+                    }
+
+                </div>
+             </div>
+
+
+             <div class="row">
+                <div class="col bottom-buffer">
+                    <span id="spanTitulo"></span>
+                </div>
+              </div>
+
+    
+              <div id="divPrint">
+
+                   
+             
+
+                @if (@Model != null && Model.Count()>0)
+                {
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col bottom-buffer">
+                             <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+                             <span style="vertical-align:auto;">LEGAJOS</span>
+                         </div>
+                          @*<span id="spanSanciones" style="font-weight: bold; padding-bottom:10px;  padding-top:10px; border: 1px solid black; text-align:center;">Sanciones</span>*@
+                       </div>
+                   </div>
+                   
+                    <div class="row">
+                        <div class="col bottom-buffer">
+                            <div class="table-responsive">
+
+
+                                <table id="tablaLegajos" class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                       
+                                        <tr >
+                                            <th>Nro. Legajo</th>
+                                            <th>Apellido</th>
+                                            <th>Nombre</th>
+                                            <th>Ubicacion</th>
+                                            <th>Sector/Local</th>
+
+                                            <th></th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                        
+                                            <tr  >
+
+                                                    <td>
+                                                        @item.nro_legajo
+                                                    </td>
+                                                    <td>
+                                                        @item.apellido
+                                                    </td>
+                                                    <td>
+                                                        @item.nombre
+                                                    </td>
+                                                    <td>
+                                                        @item.ubicacion
+                                                    </td>
+                                                <td>
+                                                    @if (@item.ubicacion_id == 1 || @item.ubicacion_id == 2 || @item.ubicacion_id == 4)
+                                                {
+                                                        @item.sector
+                                                }
+                                                else
+                                                {
+                                                        @item.local
+                                                }
+                                                </td>
+          
+                                                
+                                                <td style="font-size:16px;">
+                                                    
+                                                    @if (_perfil_id <= 3)
+                                                    {
+                                                        <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar' class='bi bi-x-circle'></i></a>
+                                                    }
+                                                </td>
+                                            </tr>
+
+                                    }
+                                    </tbody>
+                    </table>
+                  </div>
+                </div>
+             </div>
+            }
+                   
+             </div>
+             </center>
+
+
+
+        <!-- Modal Eliminar -->
+
+        <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  
+                            <div class="modal-header">
+                                <h5 class="modal-title">Legajo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+
+                            <div class="modal-body">
+                                Se eliminará el legajo. Está seguro?
+                                 <input id="hfID" name="hfID" type="hidden" >
+                            </div>
+                            <div class="modal-footer">
+                                 <button id="btnEliminar" type="submit" asp-action="Delete" asp-route-feriado_id=@ViewData["FERIADO_ID"]  value="" class="btn btn-outline-success"  >SI</button>
+                                 <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                            </div>
+              
+
+                </div>
+            </div>
+        </div>
+        </div>
+
+    </form>
+
+
+     <script type="text/javascript">
+
+    $(document).ready(function() {
+       
+        return;
+      
+    });
+
+        
+
+       
+
+        function mostrarModalEliminar(nro_legajo){
+          $("#hfID").val(nro_legajo);
+          $("#mdEliminar").modal('show');
+
+         }
+      
+        
+
+       function printData()
+       {
+         var mostrar=0;
+           
+         $("#tablaLegajos th:last-child").hide();
+         
+        
+         var divToPrint=document.getElementById("divPrint");
+         var htmlToPrint = '' +
+            '<style type="text/css">' +
+            'body {' +
+             'margin-top: 30px;' + 
+             'margin-bottom: 20px;' + 
+             '} ' +
+            'table , table th, table td {' +
+            'font-size: 10px;' + 
+            'border:1px solid;' +
+            'border-collapse: collapse;' +
+            'padding:0.5em;' +
+            '} ' +
+            'table {' +
+            'width: 100%;' + 
+            'margin-bottom: 20px;' + 
+            '} ' +
+            '</style>';
+         htmlToPrint += divToPrint.outerHTML;
+         newWin= window.open("");
+
+         $("#tablaLegajos th:last-child").show();
+
+
+           //if (mostrar==1) {
+           //    $("#tablaSanciones .observacion").show();
+           //    $("#tablaFelicitaciones .observacion").show();
+           //    $("#tablaSanciones .estado").show();
+           //    $("#tablaFelicitaciones .estado").show();
+           //}
+
+         var is_chrome = Boolean(newWin.chrome);
+         newWin.document.write(htmlToPrint);
+         newWin.document.close(); // necessary for IE >= 10 and necessary before onload for chrome
+
+       if (is_chrome) {
+        newWin.onload = function() { // wait until all resources loaded 
+            newWin.focus(); // necessary for IE >= 10
+            newWin.print();  // change window to mywindow
+            newWin.close();// change window to mywindow
+        };
+    }
+    else {
+        newWin.document.close(); // necessary for IE >= 10
+        newWin.focus(); // necessary for IE >= 10
+        newWin.print();
+        newWin.close();
+    }
+
+
+      }
+
+    $('#btnImprimir').on('click',function(){
+    printData();
+    })
+
+    </script>
+
+
+
+
+    @if (ViewBag.Message != null)
+{
+        <script type="text/javascript">
+                window.onload = function () {
+                    alert("@ViewBag.Message");
+                };
+        </script>
+}

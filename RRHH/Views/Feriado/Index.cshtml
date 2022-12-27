@@ -92,7 +92,7 @@
                         <td>
                           <a asp-controller="Feriado" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el feriado' class='bi bi-pencil-square'></i></a>
                           <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el feriado'  class='bi bi-x-circle'></i></a>
-                      
+                          <a asp-controller="LegajoFeriado" asp-action="Index" asp-route-feriado_id=@item.id ><i data-mdb-toggle='tooltip' title='Ingresar Legajos' class='bi  bi-calendar2-plus'></i></a>                      
                     </td>
                     </tr>  
                     
