@@ -1,0 +1,133 @@
+﻿@model RRHH.Models.Feriado
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@{
+    ViewData["Title"] = "Edición del feriado";
+
+}
+
+<form asp-action="Edit" method="post">
+<div class="container">
+
+    
+
+             <div class="row ">
+                <div class="col bottom-buffer btns2" id="divFecha">
+                     <label asp-for="fecha" class="control-label">Fecha</label><br />
+                     <input type="text" id="txtSelectedFecha" name="fecha"  asp-for="fecha" />
+                </div>
+                <div class="col bottom-buffer">
+                <label asp-for="tipo" class="control-label">Tipo Feriado</label>
+                 <select  data-filter="model" class="form-control" name="tipo" id="tipo" asp-for="tipo" >
+                  <option value="N">Nacional</option>
+                  <option value="P">Provincial</option>
+                  <option value="L">Local</option>
+                </select>   
+                 </div>
+            </div>    
+
+             <div class="row ">
+                <div class="col bottom-buffer">
+                <label asp-for="descripcion" class="control-label">Descripción del feriado</label>
+                <input asp-for="descripcion" class="form-control" />
+                 <span class="alert-danger" asp-validation-for="descripcion"></span>
+                 </div>
+            </div>   
+
+
+
+              <div class="row " id="divInsertar">
+                <div class="col bottom-buffer">
+                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+                     <button id="btnGrabar" type="submit" value="" class="btn btn-outline-success"   >Grabar</button>
+                </div>
+            </div>
+   
+</div>
+
+
+
+
+  <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Feriado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit"  asp-route-id=@ViewData["ID"] value=""  class="btn btn-outline-success" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Salir -->
+<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Feriado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se perderán los cambios efectuados. Está seguro?
+      </div>
+      <div class="modal-footer">
+        <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+ </form>
+
+
+ <script type="text/javascript">
+
+
+ $(document).ready(function () {
+   $('#txtSelectedFecha').datepicker({format: 'dd/mm/yyyy' });
+ })
+
+function mostrarModalSalida(){
+    if ($("#btnGrabar").is(":visible"))
+      $("#mdSalir").modal('show');
+    else 
+      window.location.href = "/TipoJustificacion/Index";
+}
+function mostrarModalGrabar(){
+    $("#mdGrabar").modal('show');
+}
+
+ 
+
+$(function () {
+   $('#txtSelectedFecha').datepicker({
+       changeMonth: true,
+       changeYear: true,
+       format: "dd/mm/yyyy",
+       language: "es"
+    });
+});
+
+</script>
+
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}

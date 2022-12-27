@@ -1,0 +1,196 @@
+﻿@model IEnumerable<RRHH.Models.Feriado>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<form asp-controller="Feriado"  method="post" >
+ <div class="container">
+     <div class="jumbotron text-center Titulo">
+      <h2>Feriados</h2>
+    </div>
+
+      <center>
+     <div class="row">
+            <div class="col bottom-buffer">
+                <span id="spanTitulo"></span>
+            </div>
+        </div>
+
+          <div class="row bottom-buffer">
+            <div class="col bottom-buffer">
+                <div class="btns2">
+                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Feriado" asp-action="Edit">NUEVO FERIADO</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+                   <div class="col bottom-buffer">
+                     <label class="control-label">Año</label>
+                     <select  class="form-control" id="anio" name="anio"  ></select>
+                     <span class="alert-danger" ></span>
+                  </div>
+                   <div class="col bottom-buffer">
+                     <label class="control-label">Tipo Feriado</label>
+                     <select  class="form-control" id="tipo" name="tipo"  ></select>
+                     <span class="alert-danger" ></span>
+                  </div>
+                  @*<div class="col bottom-buffer">
+                    <label  class="control-label">Tipo Feriado</label>
+                    <select  data-filter="model" class="form-control" name="tipo" id="tipo"  value=@ViewData["TIPO"] >
+                     <option value="TODOS">Seleccion el tipo de feriado</option>
+                     <option value="N">Nacional</option>
+                     <option value="P">Provincial</option>
+                     <option value="L">Local</option>
+                    </select>   
+                 </div>*@
+                <div class="col">
+                  <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" class="btn btn-primary" />
+                </div>
+
+            </div>
+
+          
+      
+
+        <div class="row">
+            <div class="col bottom-buffer">
+                <div class="table-responsive">
+
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Descripcion</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                     @foreach (var item in Model)
+                     {
+                     <tr>
+                      <td>
+                          @item.id
+                     </td>
+                     <td>
+                           @Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy")
+                     </td>  
+                     <td>
+                         @item.tipo
+                     </td>  
+                      <td>
+                          @item.descripcion
+                     </td>     
+                      
+                        <td>
+                          <a asp-controller="Feriado" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el feriado' class='bi bi-pencil-square'></i></a>
+                          <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el feriado'  class='bi bi-x-circle'></i></a>
+                      
+                    </td>
+                    </tr>  
+                    
+                 }
+                 </tbody>
+                </table>
+              </div>
+            </div>
+         </div>
+
+         </center>
+
+
+    <!-- Modal Eliminar -->
+
+    <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              
+                        <div class="modal-header">
+                            <h5 class="modal-title">Feriado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+                            Se eliminará el feriado con todos sus datos. Está seguro?
+                             <input id="hfID" name="hfID" type="hidden" >
+                        </div>
+                        <div class="modal-footer">
+                             <button id="btnEliminar" type="submit" asp-action="Delete"  value="" class="btn btn-outline-success"  >SI</button>
+                             <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                        </div>
+          
+
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+ <script type="text/javascript">
+   $(document).ready(function () {
+    ObtenerAnios();   
+    ObtenerTipos();
+
+   })
+
+     var ObtenerAnios = function () {
+         var CodAnio = @ViewData["ANIO"];
+
+         $.ajax({
+            url: '@Url.Action("ObtenerAnios","Feriado")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#anio').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                       if (item.value==CodAnio)
+                              $('#anio').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                       else 
+                              $('#anio').append('<option value="' + item.value + '">' + item.text + '</option>') 
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+     var ObtenerTipos = function () {
+         var CodTipo = @Html.Raw(Json.Serialize(ViewData["TIPO"]));
+         
+    
+         $.ajax({
+            url: '@Url.Action("ObtenerTipos","Feriado")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#tipo').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                       if (item.value==CodTipo)
+                              $('#tipo').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                       else 
+                              $('#tipo').append('<option value="' + item.value + '">' + item.text + '</option>') 
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+
+    function mostrarModalEliminar(id){
+      $("#hfID").val(id);
+      $("#mdEliminar").modal('show');
+     }
+</script>
