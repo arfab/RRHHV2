@@ -105,7 +105,12 @@
             </div>
 
              <div class="row ">
-               <div class="col bottom-buffer btns2" id="divFechaNovedad">
+                  @if (_modo != "A" ) {
+                      @:<div class="col bottom-buffer btns2" id="divFechaNovedad" hidden>
+                  } 
+                  else { 
+                     @:<div class="col bottom-buffer btns2" id="divFechaNovedad">
+                  }   
                       <label asp-for="fecha" class="control-label">Fecha</label><br />
                       <input type="text" class="form_control" id="txtSelectedFecha" name="fecha"  asp-for="fecha" readonly="readonly"/>
 
@@ -113,6 +118,10 @@
 
             @if (_modo != "A" )
             {
+                 <div class="col bottom-buffer btns2"  style="text-align:center">
+                   <label class="control-label">FECHA</label><br />
+                   <label class="control-label"> @Convert.ToDateTime(@Model.fecha).ToString("dd/MM/yyyy")</label><br />
+               </div>
                 <div class="col bottom-buffer btns2" id="divHorasCalculadas"  style="text-align:center">
                     <label asp-for="fecha" class="control-label">Horas Calculadas</label><br />
                     <label class="control-label">@ViewData["HORAS_CALCULADAS"]</label><br />

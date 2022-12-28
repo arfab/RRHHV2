@@ -32,6 +32,7 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
+                            <th>Nro</th>
                             <th>Nombre</th>
                             <th>Días Ultima Lectura</th>
                             <th>Ultima Lectura</th>
@@ -41,7 +42,9 @@
                      @foreach (var item in Model)
                      {
                      <tr>
-                   
+                      <td>
+                          @item.nro             
+                     </td>  
                      
                       <td>
                           @item.descripcion             

@@ -25,5 +25,7 @@
 
         public int empresa_id { get; set; }
 
+        public int nro { get; set; }
+
     }
 }
