@@ -466,7 +466,9 @@ namespace RRHH.Repository
         public IEnumerable<Fichada> ObtenerTodos(int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, int empresa_id, int ubicacion_id, int sector_id, int lectora_id, int tipo_listado)
         {
 
-            using (IDbConnection con = new SqlConnection(strConnectionString))
+            try
+            {
+                using (IDbConnection con = new SqlConnection(strConnectionString))
             {
                 if (con.State == ConnectionState.Closed)
                     con.Open();
@@ -504,7 +506,7 @@ namespace RRHH.Repository
 
 
                 IEnumerable<Fichada> lFichadas;
-                lFichadas = con.Query<Fichada>("spFichadaAgrupadaObtener", parameter, commandType: CommandType.StoredProcedure).ToList();
+                lFichadas = con.Query<Fichada>("spFichadaAgrupadaObtener", parameter, commandType: CommandType.StoredProcedure, commandTimeout: 120).ToList();
 
                 foreach (Fichada item in lFichadas)
                 {
@@ -892,6 +894,15 @@ namespace RRHH.Repository
                 return lFichadas;
 
             }
+
+            }
+            catch (SqlException e)
+            {
+                string a = e.Message;
+
+                return Enumerable.Empty<Fichada>();
+            }
+
 
         }
 
