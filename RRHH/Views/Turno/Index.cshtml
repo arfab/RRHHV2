@@ -74,7 +74,9 @@
                         <td>
                           <a asp-controller="Turno" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el turno' class='bi bi-pencil-square'></i></a>
                           <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el turno'  class='bi bi-x-circle'></i></a>
-                          <a asp-controller="TurnoDetalle" asp-action="Index" asp-route-turno_id=@item.id ><i data-mdb-toggle='tooltip' title='Ingresar detalle del turno' class='bi  bi-calendar2-plus'></i></a>                      
+                          <a asp-controller="TurnoDetalle" asp-action="Index" asp-route-turno_id=@item.id ><i data-mdb-toggle='tooltip' title='Ingresar detalle del turno' class='bi  bi-calendar2-plus'></i></a>       
+                          <a asp-controller="TurnoHoras" asp-action="Index" asp-route-turno_id=@item.id ><i data-mdb-toggle='tooltip' title='Ingresar autoirzación de horas del turno' class='bi  bi-calendar2-plus'></i></a>                      
+                          
                     </td>
                     </tr>  
                     
