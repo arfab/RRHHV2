@@ -1,0 +1,304 @@
+﻿@model RRHH.Models.TurnoDetalle
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    ViewData["Title"] = "Novedad";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+    var _origen = (string)ViewData["ORIGEN"];
+    var _modo = (string)ViewData["MODO"];
+    var _id = ViewData["ID"];
+    var _item_actual = (ViewData["ITEM_ACTUAL"]==null)?0:(int)ViewData["ITEM_ACTUAL"];
+}
+
+<form  method="post" id="form1">
+ <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+
+<div class="container">
+<h2>Turno: @ViewData["Turno"] (@ViewData["Ubicacion"])</h2>
+
+       
+
+           <div class="row mb-3" >
+             @if (_modo == "A" )
+             {
+               <div class="col-lg-4 col-xs-4 mb-3">
+                 <input type="button" value="Limpiar" asp-action="Limpiar" onclick="Limpiar();" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+               </div>
+             }
+          </div>  
+        
+
+
+            <div class="row">
+              <div class="col bottom-buffer">
+                     <label asp-for="tipo_hora_id" class="control-label">Tipo Hora</label>
+                     <select  class="form-control" id="tipo_hora_id" asp-for="tipo_hora_id" value="@ViewData["TIPO_HORA_ID"]" ></select>
+                     <span class="alert-danger" asp-validation-for="tipo_hora_id"></span>
+
+             </div>
+
+              <div class="col bottom-buffer">
+                     <label asp-for="tipo_dia_semana_id" class="control-label">Tipo Dia Semana</label>
+                     <select  class="form-control" id="tipo_dia_semana_id" asp-for="tipo_dia_semana_id" value="@ViewData["TIPO_DIA_ID"]" ></select>
+                     <span class="alert-danger" asp-validation-for="tipo_dia_semana_id"></span>
+
+             </div>
+
+            <div class="col bottom-buffer">
+                  <label asp-for="hora_desde" class="control-label">Desde</label>
+                  <input type="time" asp-for="hora_desde" step="1" class="form-control" />
+                </div>
+                <div class="col bottom-buffer">
+                  <label asp-for="hora_hasta" class="control-label">Hasta</label>
+                  <input type="time" asp-for="hora_hasta" step="1" class="form-control" />
+                </div>
+          
+                <div class="col bottom-buffer">
+                  <label asp-for="almuerzo" class="control-label">Almuerzo</label>
+                  <input type="number" asp-for="almuerzo" step="1" class="form-control" />
+                </div>
+
+           </div>
+
+
+
+
+           <div class="row " id="divInsertar">
+                <div class="col bottom-buffer">
+                <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+
+                 <a id="grabar_id" value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
+              
+                  @if (Model.id>0) {
+                     <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalEliminar();" >Eliminar</a>
+                  }
+
+                </div>
+            </div>
+   
+
+
+
+
+  <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Detalle de turno</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit" asp-route-turno_id=@ViewData["TurnoActual"] asp-route-modo=@ViewData["MODO"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!-- Modal Eliminar -->
+<div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Detalle de turno</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se eliminarán los datos del detalle de turno. Está seguro?
+      </div>
+      <div class="modal-footer">
+         <button type="submit"  asp-action="Delete" asp-controller="Turno" asp-route-hfID=@ViewData["ID"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value=""  class="btn btn-outline-success" >SI</button>
+         <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Salir -->
+<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Detalle de turno</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se perderán los cambios efectuados. Está seguro?
+      </div>
+      <div class="modal-footer">
+          <a asp-action="Index" asp-controller="Turno" class="btn btn-outline-success"  Text="SI">SI</a>
+       
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ </form>
+
+
+ <script type="text/javascript">
+
+
+$(document).ready(function () {
+
+    var CodTipoHora = @Html.Raw(Json.Serialize(Model.tipo_hora_id));
+    var CodTipoDiaSemana = @Html.Raw(Json.Serialize(Model.tipo_dia_semana_id));
+
+    var HoraDesde = @Html.Raw(Json.Serialize(Model.hora_desde));
+    var HoraHasta = @Html.Raw(Json.Serialize(Model.hora_hasta));
+
+     var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+     var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+
+    
+
+    ObtenerTiposHora();
+    ObtenerTiposDiaSemana();
+
+
+
+        HabilitarGrabar();
+
+
+   })
+
+
+
+    $("#tipo_hora_id").change(function () {
+        HabilitarGrabar();
+
+    });
+  
+     $("#tipo_dia_semana_id").change(function () {
+        HabilitarGrabar();
+
+    });
+
+     $("#hora_desde").change(function () {
+        HabilitarGrabar();
+
+    });
+
+     $("#hora_hasta").change(function () {
+        HabilitarGrabar();
+
+    });
+
+  function mostrarModalSalida(){
+      var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+
+      if ($("#grabar_id").is(":visible"))
+        $("#mdSalir").modal('show');
+       else {
+         var url;
+         if (origen == "L") 
+           url = "@Url.Action("Index", "TurnoDetalle")";
+         else 
+           url = "@Url.Action("Index", "TurnoDetalle")"; 
+         window.location.href = url;
+       }
+
+  }
+
+  function mostrarModalGrabar(){
+    $("#mdGrabar").modal('show');
+  }
+
+  function mostrarModalEliminar(){
+    $("#mdEliminar").modal('show');
+}
+
+
+
+  var ObtenerTiposHora = function () {
+         var CodTipoHora =@Html.Raw(Json.Serialize(Model.tipo_hora_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerTiposHora","TipoHorario")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#tipo_hora_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodTipoHora)
+                          $('#tipo_hora_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#tipo_hora_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+ var ObtenerTiposDiaSemana = function () {
+         var CodTipoDiaSemana =@Html.Raw(Json.Serialize(Model.tipo_dia_semana_id));
+         $.ajax({
+            url: '@Url.Action("ObtenerTiposDiaSemana","TipoHorario")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#tipo_dia_semana_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodTipoDiaSemana)
+                          $('#tipo_dia_semana_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#tipo_dia_semana_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+    
+   
+
+ function HabilitarGrabar() {
+    
+  if ($('#tipo_hora_id').val()!='-1' && $('#tipo_dia_semana_id').val()!='-1')
+      $("#grabar_id").show();
+  else
+      $("#grabar_id").hide(); 
+}
+
+
+function Limpiar() {
+  $("#tipo_hora_id").val(-1);
+  $("tipo_dia_semana_id").val(1);
+ 
+  HabilitarGrabar();
+
+  
+}
+
+
+</script>
+
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
+
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial" />
+}

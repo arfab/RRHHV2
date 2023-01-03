@@ -1,0 +1,152 @@
+﻿@model IEnumerable<RRHH.Models.Turno>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<form asp-controller="Turno"  method="post" >
+ <div class="container">
+     <div class="jumbotron text-center Titulo">
+      <h2>Turnos</h2>
+    </div>
+
+      <center>
+     <div class="row">
+            <div class="col bottom-buffer">
+                <span id="spanTitulo"></span>
+            </div>
+        </div>
+
+          <div class="row bottom-buffer">
+            <div class="col bottom-buffer">
+                <div class="btns2">
+                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Turno" asp-action="Edit">NUEVO TURNO</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+                   <div class="col bottom-buffer">
+                     <label class="control-label">Ubicación</label>
+                     <select  class="form-control" id="ubicacion_id" name="ubicacion_id"  ></select>
+                     <span class="alert-danger" ></span>
+                  </div>
+                <div class="col">
+                  <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" class="btn btn-primary" />
+                </div>
+
+            </div>
+
+          
+      
+
+        <div class="row">
+            <div class="col bottom-buffer">
+                <div class="table-responsive">
+
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ubicación</th>
+                            <th>Turno</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                     @foreach (var item in Model)
+                     {
+                     <tr>
+                      <td>
+                          @item.id
+                     </td>
+                     <td>
+                         @item.ubicacion
+                     </td>  
+                      <td>
+                          @item.descripcion
+                     </td>     
+                      
+                        <td>
+                          <a asp-controller="Turno" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el turno' class='bi bi-pencil-square'></i></a>
+                          <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el turno'  class='bi bi-x-circle'></i></a>
+                          <a asp-controller="TurnoDetalle" asp-action="Index" asp-route-turno_id=@item.id ><i data-mdb-toggle='tooltip' title='Ingresar detalle del turno' class='bi  bi-calendar2-plus'></i></a>                      
+                    </td>
+                    </tr>  
+                    
+                 }
+                 </tbody>
+                </table>
+              </div>
+            </div>
+         </div>
+
+         </center>
+
+
+    <!-- Modal Eliminar -->
+
+    <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              
+                        <div class="modal-header">
+                            <h5 class="modal-title">Turno</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+                            Se eliminará el turno con todos sus datos. Está seguro?
+                             <input id="hfID" name="hfID" type="hidden" >
+                        </div>
+                        <div class="modal-footer">
+                             <button id="btnEliminar" type="submit" asp-action="Delete"  value="" class="btn btn-outline-success"  >SI</button>
+                             <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                        </div>
+          
+
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+
+ <script type="text/javascript">
+   $(document).ready(function () {
+    ObtenerUbicaciones(-1);   
+   })
+
+     var ObtenerUbicaciones = function (empresa_id) {
+         var CodUbicacion =@Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Fichada")',
+            type: 'GET',
+            data: {
+              empresa_id: empresa_id
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+ 
+    function mostrarModalEliminar(id){
+      $("#hfID").val(id);
+      $("#mdEliminar").modal('show');
+     }
+</script>
