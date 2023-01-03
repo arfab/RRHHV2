@@ -57,8 +57,10 @@ namespace RRHH.Controllers
                     ViewData["FECHA"] = fecha;
                 }
 
-                if (legajoFichada == null) legajoFichada = new LegajoFichada();
-
+                if (legajoFichada == null) {
+                    legajoFichada = new LegajoFichada();
+                    legajoFichada.fecha = DateTime.Parse(fecha);
+                }
                 ViewData["LEGAJO_ID"] = legajo_id;
                 ViewData["LECTORA_ID"] = lectora_id;
              
