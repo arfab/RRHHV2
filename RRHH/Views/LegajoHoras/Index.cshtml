@@ -36,7 +36,7 @@
                           <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="LegajoHoras" asp-action="Edit" asp-route-legajo_id=@ViewData["EmpleadoActual"]>INGRESAR HORAS</a>                     
                     }
 
-                     <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Turno" asp-action="Index">SALIR</a>
+                     <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Legajo" asp-action="Edit" asp-route-id=@ViewData["EmpleadoActual"]>SALIR</a>
 
                 </div>
              </div>
@@ -96,14 +96,17 @@
                                                <td  >
                                                     @Convert.ToDateTime(item.fecha_desde).ToString("dd/MM/yyyy")
                                                 </td>
-                                               <td  >
-                                                    @Convert.ToDateTime(item.fecha_hasta).ToString("dd/MM/yyyy")
+                                                <td>
+                                                    @if (item.fecha_hasta != null)
+                                                    {
+                                                        @Convert.ToDateTime(item.fecha_hasta).ToString("dd/MM/yyyy")
+                                                    }
                                                 </td>
                                                 <td>
-                                                  @item.tipo
+                                                  @item.tipo_desc
                                                 </td>
                                                  <td>
-                                                  @item.habilitado
+                                                  @item.habilitado_desc
                                                 </td>
                                                    <td style="font-size:16px;">
                                                       <a asp-controller="LegajoHoras" asp-action="Edit" asp-route-id=@item.id asp-route-legajo_id=@ViewData["EmpleadoActual"] ><i data-mdb-toggle='tooltip' title='Editar la autorización de horas del legajo' class='bi bi-pencil-square'></i></a>

@@ -96,10 +96,13 @@
                                                     @Convert.ToDateTime(item.fecha_desde).ToString("dd/MM/yyyy")
                                                 </td>
                                                <td  >
-                                                    @Convert.ToDateTime(item.fecha_hasta).ToString("dd/MM/yyyy")
+                                                     @if (item.fecha_hasta != null)
+                                                    {
+                                                        @Convert.ToDateTime(item.fecha_hasta).ToString("dd/MM/yyyy")
+                                                    }
                                                 </td>
                                                 <td>
-                                                  @item.tipo
+                                                  @item.tipo_desc
                                                 </td>
 
                                                    <td style="font-size:16px;">

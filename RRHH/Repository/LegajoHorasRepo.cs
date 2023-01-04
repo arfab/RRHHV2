@@ -25,6 +25,7 @@ namespace RRHH.Repository
                 parameters.Add("@fecha_desde", legajoHoras.fecha_desde);
                 parameters.Add("@fecha_hasta", legajoHoras.fecha_hasta);
                 parameters.Add("@tipo", legajoHoras.tipo);
+                parameters.Add("@habilitado", legajoHoras.habilitado);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -52,6 +53,7 @@ namespace RRHH.Repository
                 parameters.Add("@fecha_desde", legajoHoras.fecha_desde);
                 parameters.Add("@fecha_hasta", legajoHoras.fecha_hasta);
                 parameters.Add("@tipo", legajoHoras.tipo);
+                parameters.Add("@habilitado", legajoHoras.habilitado);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 

@@ -52,9 +52,9 @@
 
                  <a id="grabar_id" value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
               
-                  @if (Model.id>0) {
+                 @* @if (Model.id>0) {
                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalEliminar();" >Eliminar</a>
-                  }
+                  }*@
 
                    <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
                 </div>
@@ -143,7 +143,7 @@ $(document).ready(function () {
         $('#txtSelectedFechaHasta').datepicker({format: 'dd/mm/yyyy' });
 
         if(FechaDesde==null) $('#txtSelectedFechaDesde').datepicker('setDate', "-0d");
-        if(FechaHasta==null) $('#txtSelectedFechaHasta').datepicker('setDate', "-0d");
+        //if(FechaHasta==null) $('#txtSelectedFechaHasta').datepicker('setDate', "-0d");
 
         HabilitarGrabar();
 

@@ -1,5 +1,254 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model RRHH.Models.LegajoHoras
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
 @{
+    ViewData["Title"] = "Autorización horas extra por legajo";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+    var _origen = (string)ViewData["ORIGEN"];
+    var _modo = (string)ViewData["MODO"];
+    var _id = ViewData["ID"];
+    var _item_actual = (ViewData["ITEM_ACTUAL"]==null)?0:(int)ViewData["ITEM_ACTUAL"];
+}
+
+<form  method="post" id="form1">
+@* <button type="submit" disabled style="display: none" aria-hidden="true"></button>*@
+ <center>
+<div class="container">
+ <h2>Empleado: @ViewData["ApellidoActual"],  (@ViewData["NombreActual"])</h2>
+
+         <div class="row">
+
+                  
+             <div class="col bottom-buffer btns2" id="divFechaDesde">
+                      <label asp-for="fecha_desde" class="control-label">Fecha Desde</label><br />
+                      <input type="text" id="txtSelectedFechaDesde" name="fecha_desde"  asp-for="fecha_desde" />
+
+             </div>
+             <div class="col bottom-buffer btns2" id="divFechaHasta">
+                      <label asp-for="fecha_hasta" class="control-label">Fecha Hasta</label><br />
+                      <input type="text" id="txtSelectedFechaHasta" name="fecha_hasta"  asp-for="fecha_hasta" />
+
+             </div>
+
+             <div class="col bottom-buffer">
+                <label asp-for="tipo" class="control-label">Tipo Hora</label>
+                 <select  data-filter="model" class="form-control" name="tipo" id="tipo" asp-for="tipo" >
+                  <option value="E">Entrada</option>
+                  <option value="S">Salida</option>
+                </select>   
+                 </div>
+
+                 <div class="col bottom-buffer">
+                <label asp-for="habilitado" class="control-label">Habilitdo</label>
+                 <select  data-filter="model" class="form-control" name="habilitado" id="habilitado" asp-for="habilitado" >
+                  <option value=1>SI</option>
+                  <option value=0>NO</option>
+                </select>   
+                 </div>
+             </div>
+           
+
+               
+
+
+
+           <div class="row " id="divInsertar">
+                <div class="col bottom-buffer">
+               
+
+                 <a id="grabar_id" value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
+              
+               @*   @if (Model.id>0) {
+                     <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalEliminar();" >Eliminar</a>
+                  }*@
+
+                   <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+                </div>
+            </div>
+   
+      </div>
+
+ </center>
+
+  <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Autorización de horas del legajo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit" asp-route-legajo_id=@ViewData["EmpleadoActual"] asp-route-modo=@ViewData["MODO"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!-- Modal Eliminar -->
+<div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Autorización de horas del legajo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se eliminarán los datos de la autorización de horas del legajo. Está seguro?
+      </div>
+      <div class="modal-footer">
+         <button type="submit"  asp-action="Delete"   asp-route-hfID=@ViewData["ID"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value=""  class="btn btn-outline-success" >SI</button>
+         <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Salir -->
+<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Autorización de horas del legajo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se perderán los cambios efectuados. Está seguro?
+      </div>
+      <div class="modal-footer">
+          <a asp-action="Index" asp-controller="LegajoHoras" asp-route-legajo_id=@ViewData["EmpleadoActual"] class="btn btn-outline-success"  Text="SI">SI</a>
+       
+        <a  class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ </form>
+
+
+ <script type="text/javascript">
+
+
+$(document).ready(function () {
+
+    var FechaDesde = @Html.Raw(Json.Serialize(Model.fecha_desde));
+    var FechaHasta = @Html.Raw(Json.Serialize(Model.fecha_hasta));
+    var Tipo = @Html.Raw(Json.Serialize(Model.tipo));
+
+     var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+     var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+
+    
+        $('#txtSelectedFechaDesde').datepicker({format: 'dd/mm/yyyy' });
+        $('#txtSelectedFechaHasta').datepicker({format: 'dd/mm/yyyy' });
+
+        if(FechaDesde==null) $('#txtSelectedFechaDesde').datepicker('setDate', "-0d");
+        //if(FechaHasta==null) $('#txtSelectedFechaHasta').datepicker('setDate', "-0d");
+
+        HabilitarGrabar();
+
+   })
+
+
+
+    $("#tipo").change(function () {
+        HabilitarGrabar();
+
+    });
+
+    
+    $("#habilitado").change(function () {
+        HabilitarGrabar();
+
+    });
+  
+
+  function mostrarModalSalida(){
+      var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
+
+      if ($("#grabar_id").is(":visible"))
+        $("#mdSalir").modal('show');
+       else {
+         var url;
+         if (origen == "L") 
+           url = "@Url.Action("Index", "LegajoHoras", new { legajo_id = @ViewData["EmpleadoActual"] })";
+         else 
+           url = "@Url.Action("Index", "LegajoHoras", new { legajo_id = @ViewData["EmpleadoActual"] })";
+         window.location.href = url;
+       }
+
+  }
+
+  function mostrarModalGrabar(){
+    $("#mdGrabar").modal('show');
+  }
+
+  function mostrarModalEliminar(){
+    $("#mdEliminar").modal('show');
+}
+
+ $(function () {
+      $('#txtSelectedFechaDesde').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+         }).on('changeDate', function(e) {    
+                    $('#txtSelectedFechaHasta').datepicker('setDate', e.date);
+             })  
+         });
+
+      $(function () {
+      $('#txtSelectedFechaHasta').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "es"
+        });
+     });
+   
+
+ function HabilitarGrabar() {
+    
+  if ($('#tipo').val()!='' && $('#habilitado').val()!='')
+      $("#grabar_id").show();
+  else
+      $("#grabar_id").hide(); 
+}
+
+
+function Limpiar() {
+  $("#tipo").val('');
+ 
+  HabilitarGrabar();
+
+  
+}
+
+
+</script>
+
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
+
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial" />
 }

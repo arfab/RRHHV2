@@ -12,6 +12,8 @@ namespace RRHH.Models
 
         public string? tipo { get; set; }
 
+        public string? tipo_desc { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? fecha_desde { get; set; }
 

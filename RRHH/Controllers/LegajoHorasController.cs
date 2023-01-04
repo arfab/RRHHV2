@@ -218,7 +218,7 @@ namespace RRHH.Controllers
 
 
 
-        public IActionResult Delete(int hfID, string origen, int turno_id, int nro_item)
+        public IActionResult Delete(int hfID, string origen, int legajo_id, int nro_item)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -234,9 +234,9 @@ namespace RRHH.Controllers
 
 
             if (origen == "F")
-                return RedirectToAction("Index", "LegajoHoras", new { turno_id = turno_id });
+                return RedirectToAction("Index", "LegajoHoras", new { legajo_id = legajo_id });
             else
-                return RedirectToAction("Index", "LegajoHoras", new { turno_id = turno_id });
+                return RedirectToAction("Index", "LegajoHoras", new { legajo_id = legajo_id });
 
         }
 
