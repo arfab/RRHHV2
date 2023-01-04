@@ -992,9 +992,12 @@ namespace RRHH.Controllers
 
 
         [HttpGet]
-        public JsonResult ObtenerLectoras(int ubicacion_id, int empresa_id)
+        public JsonResult ObtenerLectoras(int ubicacion_id, int empresa_id, string? fecha)
         {
             List<Models.Lectora> l = new List<Models.Lectora>();
+
+            if (fecha!= null)
+                fecha = fecha.Substring(6, 4) + "-" + fecha.Substring(3, 2) + "-" + fecha.Substring(0, 2);
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
             {
@@ -1004,6 +1007,7 @@ namespace RRHH.Controllers
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@ubicacion_id", ubicacion_id == 0 ? -1 : ubicacion_id);
                 parameters.Add("@empresa_id", empresa_id == 0 ? -1 : empresa_id);
+                parameters.Add("@fecha", fecha);
 
                 l = con.Query<Models.Lectora>("spLectoraObtenerPorFiltro", parameters, commandType: CommandType.StoredProcedure).ToList();
             }

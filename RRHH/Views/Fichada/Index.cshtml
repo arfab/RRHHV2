@@ -462,7 +462,7 @@
 
        ObtenerUbicaciones(CodEmpresa);
 
-       ObtenerLectoras(CodUbicacion, CodEmpresa);
+      
 
 
        if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
@@ -513,6 +513,8 @@
             else 
               $('#fecha_hasta').datepicker('setDate',FechaHasta);
 
+              ObtenerLectoras(CodUbicacion, CodEmpresa, $("#fecha_desde").datepicker().val());
+
            if(item_actual>0) ubicarFila(item_actual);
     });
 
@@ -537,7 +539,7 @@
            }
         }
 
-         ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val());
+         ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val(), $("#fecha_desde").datepicker().val());
 
          ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
@@ -561,7 +563,7 @@
            }
         }
 
-        ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val());
+        ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val(), $("#fecha_desde").datepicker().val());
 
          ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
@@ -819,7 +821,7 @@
         }
 
 
-         var ObtenerLectoras = function (ubicacion_id, empresa_id) {
+         var ObtenerLectoras = function (ubicacion_id, empresa_id, fecha) {
              var CodLectora = @Html.Raw(Json.Serialize(ViewData["LECTORA_ID"]));
             
              $.ajax({
@@ -827,7 +829,8 @@
                 type: 'GET',
                  data: {
                   ubicacion_id: ubicacion_id,
-                  empresa_id: empresa_id
+                  empresa_id: empresa_id,
+                  fecha: fecha
                 },
                 success: function (data) {
                     $('#lectora_id').find('option').remove()
@@ -878,6 +881,7 @@
                 if ($("#legajo_id").val() == null || $("#legajo_id").val() == -1) {        
                     $('#fecha_hasta').datepicker('setDate', e.date);
                 }
+                 ObtenerLectoras($("#ubicacion_id").val(), $("#empresa_id").val(), $("#fecha_desde").datepicker().val());
              })  
          });
 
