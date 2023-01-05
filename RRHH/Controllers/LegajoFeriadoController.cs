@@ -111,7 +111,10 @@ namespace RRHH.Controllers
 
             string mensaje = "";
 
-            if (legajoFeriado.legajo_id != null && (legajos == null || legajos == ""))
+            if (valida(legajoFeriado, ref mensaje))
+            {
+
+                if (legajoFeriado.legajo_id != null && (legajos == null || legajos == ""))
             {
                 legajoFeriado.feriado_id = feriado_id;
                 sret = legajoFeriadoRepo.Insertar(legajoFeriado);
@@ -141,6 +144,12 @@ namespace RRHH.Controllers
 
                 return RedirectToAction("Index", "LegajoFeriado", new { item_actual = ViewData["ITEM_ACTUAL"], feriado_id = ViewData["FERIADO_ID"] });
 
+
+            }
+            else
+            {
+                ViewBag.Message = mensaje;
+            }
 
             }
             else
@@ -190,6 +199,27 @@ namespace RRHH.Controllers
             return View();
         }
 
+
+        public Boolean valida(LegajoFeriado legajoFeriado, ref string mensaje)
+        {
+
+            if (legajoFeriado.legajo_id == null && legajoFeriado.legajos == null)
+            {
+                mensaje = "Debe seleccionar al menos un legajo";
+                return false;
+            }
+
+            if (legajoFeriado.legajo_id < 0)
+            {
+                mensaje = "Debe seleccionar al menos un legajo";
+                return false;
+            }
+
+
+
+            return true;
+
+        }
 
 
     }

@@ -119,10 +119,10 @@ namespace RRHH.Controllers
             string sret;
             IFeriadoRepo feriadoRepo;
 
-            //if (ModelState.IsValid)
-            //{
-
-            feriadoRepo = new FeriadoRepo();
+            string mensaje = "";
+            if (valida(feriado, ref mensaje))
+            {
+                feriadoRepo = new FeriadoRepo();
 
             if (id != null)
                 sret = feriadoRepo.Modificar(feriado);
@@ -139,7 +139,11 @@ namespace RRHH.Controllers
                 ViewBag.Message = sret;
             }
 
-            // }
+            }
+            else
+            {
+                ViewBag.Message = mensaje;
+            }
 
             return View(feriado);
         }
@@ -166,7 +170,11 @@ namespace RRHH.Controllers
             else
             {
                 ViewBag.Message = sret;
+                TempData["Message"] = sret;
             }
+
+            
+            //return RedirectToAction("Action2");
 
             return RedirectToAction("Index");
 
@@ -219,6 +227,22 @@ namespace RRHH.Controllers
 
 
         }
+
+
+
+        public Boolean valida(Feriado feriado, ref string mensaje)
+        {
+
+
+            if (feriado.tipo == "") { mensaje = "El tipo es obligario";  return false; };
+
+            if (feriado.fecha == null) { mensaje = "La fecha es obligaria"; return false; };
+
+
+            return true;
+
+        }
+
 
     }
 }

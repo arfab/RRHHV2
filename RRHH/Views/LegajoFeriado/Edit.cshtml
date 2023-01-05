@@ -191,6 +191,8 @@
 $(document).ready(function () {
      ObtenerEmpresas();
      ObtenerUbicaciones();
+     HabilitarGrabar();
+
     return;
 
    })
@@ -232,11 +234,6 @@ $(document).ready(function () {
     });
 
 
-    $("#categoria_id").change(function () {
-        HabilitarGrabar();
-
-    });
-  
 
   function mostrarModalSalida(){
       var origen = @Html.Raw(Json.Serialize(ViewData["ORIGEN"]));
@@ -248,7 +245,7 @@ $(document).ready(function () {
          if (origen == "L") 
            url = "@Url.Action("Index", "Legajo")";
          else 
-           url = "@Url.Action("Index", "Justificacion")"; 
+           url = "@Url.Action("Index", "Feriado")"; 
          window.location.href = url;
        }
 
@@ -525,7 +522,7 @@ var ObtenerEmpleados = function (filtro) {
 
  function HabilitarGrabar() {
     
-  if (($("#tblItems tr").length>1 || $('#legajo_id').val()!='-1') && $('#categoria_id').val()!='-1')
+  if (($("#tblItems tr").length>1 || $('#legajo_id').val()!='-1' && $('#legajo_id').val()!=null))
       $("#grabar_id").show();
   else
       $("#grabar_id").hide(); 
@@ -541,7 +538,7 @@ function Limpiar() {
   $("#ubicacion_id").val(-1).change();
   $("#sector_id").val(-1).change();
   $("#legajo_id").val(-1).change();
-  $("#categoria_id").val(-1);
+
 
 
   $("#tblItems").find("tr:gt(0)").remove();
@@ -567,7 +564,7 @@ function AgregarItem(
 
   {
 
-  if (id<0) return;
+  if (id<0 || id==null) return;
 
   if (BuscarItem(id)>0) return;
 
