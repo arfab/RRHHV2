@@ -1,0 +1,167 @@
+﻿@model RRHH.Models.Lectora
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+@{
+    ViewData["Title"] = "Edición de la lectora";
+
+}
+
+<form asp-action="Edit" method="post">
+<div class="container">
+
+    
+
+                 <div class="row">
+                  <div class="col bottom-buffer">
+                     <label asp-for="empresa_id" class="control-label">Empresa</label>
+                     <select  class="form-control" id="empresa_id" asp-for="empresa_id" ></select>
+                     <span class="alert-danger" asp-validation-for="empresa_id"></span>
+                  </div>
+                  
+
+                     <div class="col bottom-buffer">
+                        <label asp-for="descripcion" class="control-label">Descripción</label>
+                        <input asp-for="descripcion" class="form-control" />
+                        <span class="alert-danger" asp-validation-for="descripcion"></span>
+                    </div>
+                    <div class="col bottom-buffer">
+                        <label asp-for="ip" class="control-label">IP</label>
+                        <input asp-for="ip" class="form-control" />
+                        <span class="alert-danger" asp-validation-for="ip"></span>
+                    </div>
+                     <div class="col bottom-buffer">
+                        <label asp-for="nro" class="control-label">NRO</label>
+                        <input asp-for="nro" class="form-control" />
+                        <span class="alert-danger" asp-validation-for="nro"></span>
+                    </div>
+                 </div>   
+
+               <div class="row ">
+                <div class="col bottom-buffer btns2" id="divFecha">
+                     <label asp-for="fecha_baja" class="control-label">Fecha</label><br />
+                     <input type="text" id="txtSelectedFecha" name="fecha_baja"  asp-for="fecha_baja" />
+                </div>
+                
+               </div>    
+
+
+              <div class="row " id="divInsertar">
+                <div class="col bottom-buffer">
+                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
+                     <button id="btnGrabar" type="submit" value="" class="btn btn-outline-success"   >Grabar</button>
+                </div>
+            </div>
+   
+</div>
+
+
+
+
+  <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Lectora</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit"  asp-route-id=@ViewData["ID"] value=""  class="btn btn-outline-success" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal Salir -->
+<div class="modal fade" id="mdSalir" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Lectora</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se perderán los cambios efectuados. Está seguro?
+      </div>
+      <div class="modal-footer">
+        <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
+        <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+ </form>
+
+
+ <script type="text/javascript">
+
+
+ $(document).ready(function () {
+   $('#txtSelectedFecha').datepicker({format: 'dd/mm/yyyy' });
+     ObtenerEmpresas();
+ })
+
+function mostrarModalSalida(){
+    if ($("#btnGrabar").is(":visible"))
+      $("#mdSalir").modal('show');
+    else 
+      window.location.href = "/TipoJustificacion/Index";
+}
+function mostrarModalGrabar(){
+    $("#mdGrabar").modal('show');
+}
+
+ 
+
+$(function () {
+   $('#txtSelectedFecha').datepicker({
+       changeMonth: true,
+       changeYear: true,
+       format: "dd/mm/yyyy",
+       language: "es"
+    });
+});
+
+
+var ObtenerEmpresas = function () {
+             var CodEmpresa =@Html.Raw(Json.Serialize(Model.empresa_id));
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#empresa_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpresa)
+                              $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+</script>
+
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}

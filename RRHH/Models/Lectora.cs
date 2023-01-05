@@ -1,4 +1,6 @@
-﻿namespace RRHH.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RRHH.Models
 {
     public class Lectora
     {
@@ -26,6 +28,9 @@
         public int empresa_id { get; set; }
 
         public int nro { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? fecha_baja { get; set; }
 
     }
 }

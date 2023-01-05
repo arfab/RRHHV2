@@ -4,6 +4,13 @@ namespace RRHH.Repository
 {
     public interface ILectoraRepo
     {
+        public string Insertar(Lectora lectora);
+
+        public string Modificar(Lectora lectora);
+
+        public string Eliminar(int nro_equipo);
+
+        public Lectora Obtener(int iId);
 
         public IEnumerable<Lectora> ObtenerTodos();
 

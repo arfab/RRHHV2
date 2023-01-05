@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<RRHH.Models.Lectora>
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewBag.Title = "Index";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 }
 
 
@@ -20,9 +23,15 @@
             </div>
         </div>
 
-       
-
-      
+        @if (_perfil_id ==1 ) {
+         <div class="row bottom-buffer">
+            <div class="col bottom-buffer">
+                <div class="btns2">
+                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Lectora" asp-action="Edit">NUEVA LECTORA</a>
+                </div>
+            </div>
+        </div>
+       }
 
         <div class="row">
             <div class="col bottom-buffer">
@@ -36,6 +45,7 @@
                             <th>Nombre</th>
                             <th>Días Ultima Lectura</th>
                             <th>Ultima Lectura</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,7 +66,14 @@
                      <td>
                           @Convert.ToDateTime(item.ultima_actualizacion).ToString("dd/MM/yyyy HH:mm:ss")
                      </td>
-
+                      <td>
+                          @if (_perfil_id ==1)
+                          {
+                          <a asp-controller="Lectora" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar la lectora' class='bi bi-pencil-square'></i></a>
+                          <a onclick="mostrarModalEliminar('@item.nro');" ><i data-mdb-toggle='tooltip' title='Eliminar la lectora'  class='bi bi-x-circle'></i></a>
+                          }
+                      
+                    </td>
                     </tr>  
                     
                  }
@@ -69,9 +86,41 @@
          </center>
 
 
+             <!-- Modal Eliminar -->
+
+    <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              
+                        <div class="modal-header">
+                            <h5 class="modal-title">Lectora</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+
+                        <div class="modal-body">
+                            Se eliminará la lectora con todos sus datos. Está seguro?
+                             <input id="hfID" name="hfID" type="hidden" >
+                        </div>
+                        <div class="modal-footer">
+                             <button id="btnEliminar" type="submit" asp-action="Delete"  value="" class="btn btn-outline-success"  >SI</button>
+                             <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                        </div>
+          
+
+            </div>
+        </div>
+    </div>
+
     </div>
 </form>
 
+ <script type="text/javascript">
+    function mostrarModalEliminar(id){
+      $("#hfID").val(id);
+      $("#mdEliminar").modal('show');
+     }
+</script>
 
 
 @if (ViewBag.Message != null)

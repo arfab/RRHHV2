@@ -10,6 +10,100 @@ namespace RRHH.Repository
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
+
+        public string Insertar(Lectora lectora)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@descripcion", lectora.descripcion);
+                parameters.Add("@ip", lectora.ip);
+                parameters.Add("@nro_equipo", lectora.nro);
+                parameters.Add("@empresa_id", lectora.empresa_id);
+                parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
+
+                icantFilas = con.Execute("spLectoraInsertar", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<int>("@retValue") < 0) return "Error al insertar la lectora";
+
+
+            }
+            return "";
+        }
+
+        public string Modificar(Lectora lectora)
+        {
+
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@id", lectora.id);
+                parameters.Add("@descripcion", lectora.descripcion);
+                parameters.Add("@ip", lectora.ip);
+                parameters.Add("@nro_equipo", lectora.nro);
+                parameters.Add("@empresa_id", lectora.empresa_id);
+                parameters.Add("@fecha_baja", lectora.fecha_baja);
+                parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
+
+                con.Execute("spLectoraModificar", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<int>("@retValue") < 0) return "Error al modificar la lectora";
+
+            }
+            return "";
+        }
+
+        public string Eliminar(int nro_equipo)
+        {
+
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@nro_equipo", nro_equipo);
+                parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
+
+                con.Execute("spLectoraEliminar", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<int>("@retValue") < 0) return "Errora al eliminar la lectora";
+
+            }
+            return "";
+        }
+
+        public Lectora Obtener(int iId)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@id", iId);
+
+                return con.QuerySingle<Lectora>("spLectoraObtener", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
+
         public IEnumerable<Lectora> ObtenerTodos()
         {
 
