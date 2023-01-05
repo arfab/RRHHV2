@@ -88,10 +88,12 @@ namespace RRHH.Controllers
             string sret;
             ILectoraRepo lectoraRepo;
 
-            //if (ModelState.IsValid)
-            //{
 
-            lectoraRepo = new LectoraRepo();
+            string mensaje = "";
+            if (valida(lectora, ref mensaje))
+            {
+
+                lectoraRepo = new LectoraRepo();
 
             if (id != null)
                 sret = lectoraRepo.Modificar(lectora);
@@ -108,7 +110,11 @@ namespace RRHH.Controllers
                 ViewBag.Message = sret;
             }
 
-            // }
+            }
+            else
+            {
+                ViewBag.Message = mensaje;
+            }
 
             return View(lectora);
         }
@@ -141,6 +147,20 @@ namespace RRHH.Controllers
 
         }
 
+
+        public Boolean valida(Lectora lectora, ref string mensaje)
+        {
+
+            if (lectora.empresa_id <0) { mensaje = "La empresa es obligatoria"; return false; };
+
+            if (lectora.descripcion == null ||  lectora.descripcion.Trim() == "" ) { mensaje = "La descripcion es obligatoria"; return false; };
+
+            if (lectora.nro<=0) { mensaje = "El nro es obligatorio y debe ser mayor que 0"; return false; };
+
+
+            return true;
+
+        }
 
 
     }
