@@ -236,7 +236,10 @@
                                             <th>Cant. Hs.</th>
                                             <th>Normales</th>
                                             <th>50%</th>
+                                            <th>50% fds</th>
                                             <th>100%</th>
+                                            <th>Fer.Trab.</th>
+                                            <th>Descuento</th>
                                             <th>Justificación</th>
                                             <th></th>
                                         </tr>
@@ -357,10 +360,31 @@
                                                     @item.horas_normales
                                                 </td>
                                                 <td>
+                                                   @if (item.feriado==0) {
                                                     @item.horas_50
+                                                   }
+                                                </td>
+                                                 <td>
+                                                   @if (item.feriado==1) {
+                                                    @item.horas_50
+                                                   }
+
                                                 </td>
                                                 <td>
-                                                    @item.horas_100
+                                                     @if (item.feriado==0) {
+                                                        @item.horas_100
+                                                     }
+                                                </td>
+                                                <td>
+                                                     @if (item.feriado==1) {
+                                                        @item.horas_100
+                                                     }
+
+                                                </td>
+                                                  <td>
+                                                    @if (item.descuento>0) {
+                                                      @item.descuento_str
+                                                    }
                                                 </td>
                                                  <td>
                                                     @if (item.cantidad_justificaciones<=1) {

@@ -602,6 +602,12 @@ namespace RRHH.Repository
 
                                 if (item.horas_100 == null || item.horas_100 == "")
                                     if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100.Trim();
+
+                                item.descuento = cantidadHoras.descuento;
+                                item.descuento_str = ((int)(item.descuento / 60)).ToString().PadLeft(2,'0') + ':' + (item.descuento - (int)(item.descuento / 60) * 60).ToString().PadLeft(2, '0');
+
+                                item.feriado = cantidadHoras.feriado;
+
                             }
 
                             if (1==1 || item.horas_normales == "" && item.horas_50 == "" && item.horas_100 == "")
