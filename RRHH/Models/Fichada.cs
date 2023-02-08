@@ -79,6 +79,10 @@
 
         public string? horas_100 { get; set; }
 
+        public string? horas_50_fds { get; set; }
+
+        public string? horas_feriado { get; set; }
+
         public int feriado { get; set; }
 
         public int descuento { get; set; }

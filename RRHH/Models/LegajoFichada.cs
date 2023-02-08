@@ -38,6 +38,10 @@ namespace RRHH.Models
         public string? horas_50 { get; set; }
         public string? horas_100 { get; set; }
 
+        public string? descuento { get; set; }
+        public string? horas_50_fds { get; set; }
+        public string? horas_feriado { get; set; }
+
         public int? empresa_id { get; set; }
         public string? empresa { get; set; }
         

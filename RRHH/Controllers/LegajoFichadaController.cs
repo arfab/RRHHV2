@@ -98,7 +98,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(string modo, int legajo_id, string legajos, string fechas , int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100, int nro_item, int validado, int cantidad_lecturas)
+        public IActionResult Edit(string modo, int legajo_id, string legajos, string fechas , int lectora_id, String fecha, String entrada_1, String salida_1, String entrada_2, String salida_2, String entrada_3, String salida_3, String entrada_4, String salida_4, String horas_normales, String horas_50, String horas_100, String horas_50_fds, String horas_feriado, string descuento, int nro_item, int validado, int cantidad_lecturas)
         {
 
             ILegajoFichadaRepo legajoFichadaRepo;
@@ -247,9 +247,12 @@ namespace RRHH.Controllers
 
                 legajoFichada.validado = validado;
 
-            if (horas_normales != null) legajoFichada.horas_normales = horas_normales;
+                if (horas_normales != null) legajoFichada.horas_normales = horas_normales;
                 if (horas_50 != null) legajoFichada.horas_50 = horas_50;
                 if (horas_100 != null) legajoFichada.horas_100 = horas_100;
+                if (horas_50_fds != null) legajoFichada.horas_50_fds = horas_50_fds;
+                if (horas_feriado != null) legajoFichada.horas_feriado = horas_feriado;
+                if (descuento != null) legajoFichada.descuento = descuento;
 
             if (legajos==null || legajos == "")
             {

@@ -33,6 +33,9 @@ namespace RRHH.Repository
                 parameters.Add("@horas_normales", legajoFichada.horas_normales);
                 parameters.Add("@horas_50", legajoFichada.horas_50);
                 parameters.Add("@horas_100", legajoFichada.horas_100);
+                parameters.Add("@horas_50_fds", legajoFichada.horas_50_fds);
+                parameters.Add("@horas_feriado", legajoFichada.horas_feriado);
+                parameters.Add("@descuento", legajoFichada.descuento);
                 parameters.Add("@validado", legajoFichada.validado);
                 parameters.Add("@modo", modo);
 

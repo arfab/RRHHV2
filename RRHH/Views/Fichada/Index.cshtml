@@ -360,31 +360,22 @@
                                                     @item.horas_normales
                                                 </td>
                                                 <td>
-                                                   @if (item.feriado==0) {
                                                     @item.horas_50
-                                                   }
                                                 </td>
                                                  <td>
-                                                   @if (item.feriado==1) {
-                                                    @item.horas_50
-                                                   }
+                                                    @item.horas_50_fds
 
                                                 </td>
                                                 <td>
-                                                     @if (item.feriado==0) {
                                                         @item.horas_100
-                                                     }
                                                 </td>
                                                 <td>
-                                                     @if (item.feriado==1) {
-                                                        @item.horas_100
-                                                     }
+                                                        @item.horas_feriado
 
                                                 </td>
                                                   <td>
-                                                    @if (item.descuento>0) {
                                                       @item.descuento_str
-                                                    }
+
                                                 </td>
                                                  <td>
                                                     @if (item.cantidad_justificaciones<=1) {

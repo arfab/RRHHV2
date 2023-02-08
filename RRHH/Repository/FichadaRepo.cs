@@ -603,8 +603,26 @@ namespace RRHH.Repository
                                 if (item.horas_100 == null || item.horas_100 == "")
                                     if (cantidadHoras.horas_100 != null) item.horas_100 = cantidadHoras.horas_100.Trim();
 
+                                if (item.horas_50_fds == null || item.horas_50_fds == "")
+                                    if (cantidadHoras.horas_50_fds != null) item.horas_50_fds = cantidadHoras.horas_50_fds.Trim();
+
+                                if (item.horas_feriado == null || item.horas_feriado == "")
+                                    if (cantidadHoras.horas_feriado != null) item.horas_feriado = cantidadHoras.horas_feriado.Trim();
+
+
+                                if(item.descuento_str == null || item.descuento_str == "") {
+                                    if (cantidadHoras.descuento > 0)
+                                    {
+                                        item.descuento = cantidadHoras.descuento;
+                                        item.descuento_str = ((int)(item.descuento / 60)).ToString().PadLeft(2, '0') + ':' + (item.descuento - (int)(item.descuento / 60) * 60).ToString().PadLeft(2, '0');
+
+                                    }
+                                }
+
+                                /*
                                 item.descuento = cantidadHoras.descuento;
                                 item.descuento_str = ((int)(item.descuento / 60)).ToString().PadLeft(2,'0') + ':' + (item.descuento - (int)(item.descuento / 60) * 60).ToString().PadLeft(2, '0');
+                                */
 
                                 item.feriado = cantidadHoras.feriado;
 
