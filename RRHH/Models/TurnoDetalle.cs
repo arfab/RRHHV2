@@ -19,6 +19,9 @@ namespace RRHH.Models
         public string? hora_desde { get; set; }
         public string? hora_hasta { get; set; }
 
+        public string? almuerzo_desde { get; set; }
+        public string? almuerzo_hasta { get; set; }
+
         public int? almuerzo { get; set; }
 
 

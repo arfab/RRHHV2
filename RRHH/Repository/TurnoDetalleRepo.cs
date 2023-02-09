@@ -26,6 +26,8 @@ namespace RRHH.Repository
                 parameters.Add("@tipo_dia_semana_id", turnoDetalle.tipo_dia_semana_id);
                 parameters.Add("@hora_desde", turnoDetalle.hora_desde);
                 parameters.Add("@hora_hasta", turnoDetalle.hora_hasta);
+                parameters.Add("@almuerzo_desde", turnoDetalle.almuerzo_desde);
+                parameters.Add("@almuerzo_hasta", turnoDetalle.almuerzo_hasta);
                 parameters.Add("@almuerzo", turnoDetalle.almuerzo);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
@@ -55,6 +57,8 @@ namespace RRHH.Repository
                 parameters.Add("@tipo_dia_semana_id", turnoDetalle.tipo_dia_semana_id);
                 parameters.Add("@hora_desde", turnoDetalle.hora_desde);
                 parameters.Add("@hora_hasta", turnoDetalle.hora_hasta);
+                parameters.Add("@almuerzo_desde", turnoDetalle.almuerzo_desde);
+                parameters.Add("@almuerzo_hasta", turnoDetalle.almuerzo_hasta);
                 parameters.Add("@almuerzo", turnoDetalle.almuerzo);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 

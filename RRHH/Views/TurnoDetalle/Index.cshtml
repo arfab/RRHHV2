@@ -78,6 +78,8 @@
                                             <th>Desde</th>
                                             <th>Hasta</th>
                                             <th>Almuerzo</th>
+                                            <th>Almuerzo Desde</th>
+                                            <th>Almuerzo Hasta</th>
                                             <th></th>
                                         </tr>
 
@@ -109,9 +111,14 @@
                                                 <td>
                                                   @item.almuerzo
                                                 </td>
-
+                                                 <td>
+                                                  @item.almuerzo_desde   
+                                                </td>
+                                                <td>
+                                                  @item.almuerzo_hasta
+                                                </td>
                                                    <td style="font-size:16px;">
-                                                      <a asp-controller="TurnoDetalle" asp-action="Edit" asp-route-id=@item.id ><i data-mdb-toggle='tooltip' title='Editar el detalle de turno' class='bi bi-pencil-square'></i></a>
+                                                      <a asp-controller="TurnoDetalle" asp-action="Edit" asp-route-id=@item.id asp-route-turno_id=@item.turno_id ><i data-mdb-toggle='tooltip' title='Editar el detalle de turno' class='bi bi-pencil-square'></i></a>
                                                       <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el detalle de turno' class='bi bi-x-circle'></i></a>
 
                                             
@@ -148,7 +155,7 @@
                                  <input id="hfID" name="hfID" type="hidden" >
                             </div>
                             <div class="modal-footer">
-                                 <button id="btnEliminar" type="submit" asp-action="Delete" value="" class="btn btn-outline-success"  >SI</button>
+                                 <button id="btnEliminar" type="submit" asp-action="Delete" asp-route-turno_id=@ViewData["TurnoActual"]   value="" class="btn btn-outline-success"  >SI</button>
                                  <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
                             </div>
               

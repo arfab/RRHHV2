@@ -212,7 +212,7 @@ namespace RRHH.Controllers
 
         
 
-        public IActionResult Delete(int hfID, string origen, int nro_item)
+        public IActionResult Delete(int hfID, string origen, int nro_item, int turno_id)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -228,9 +228,9 @@ namespace RRHH.Controllers
 
 
             if (origen == "F")
-                return RedirectToAction("Index", "TurnoDetalle");
+                return RedirectToAction("Index", "TurnoDetalle", new { turno_id = turno_id });
             else
-                return RedirectToAction("Index", "TurnoDetalle");
+                return RedirectToAction("Index", "TurnoDetalle", new { turno_id = turno_id });
 
         }
 
