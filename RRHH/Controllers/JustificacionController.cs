@@ -624,7 +624,7 @@ namespace RRHH.Controllers
                 if (sret == "")
                 {
                     if (origen=="F")
-                       return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+                       return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"], desde="busqueda" });
                     else
                        return RedirectToAction("Index", "Justificacion");
 
@@ -665,7 +665,7 @@ namespace RRHH.Controllers
 
 
             if (origen == "F")
-                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"], desde="busqueda" });
             else
                 return RedirectToAction("Index", "Justificacion");
 

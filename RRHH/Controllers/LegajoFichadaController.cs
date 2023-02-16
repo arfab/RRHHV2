@@ -275,7 +275,7 @@ namespace RRHH.Controllers
                     }
                 }
 
-                    return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+                    return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"], desde = "busqueda" });
                
             }
             else
@@ -308,7 +308,7 @@ namespace RRHH.Controllers
                     }
                 }
 
-                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"], desde="busqueda" });
             }
 
 
@@ -463,7 +463,7 @@ namespace RRHH.Controllers
                     }
                 }
 
-                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"], desde="busqueda" });
 
             }
             else
@@ -493,7 +493,7 @@ namespace RRHH.Controllers
                     }
                 }
 
-                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"], desde="busqueda" });
             }
 
 
@@ -534,7 +534,7 @@ namespace RRHH.Controllers
             if (sret == "")
             {
 
-                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"], desde="busqueda" });
             }
             else
             {
@@ -564,7 +564,7 @@ namespace RRHH.Controllers
             if (sret == "")
             {
 
-                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"] });
+                return RedirectToAction("Index", "Fichada", new { item_actual = ViewData["ITEM_ACTUAL"], desde="busqueda" });
             }
             else
             {

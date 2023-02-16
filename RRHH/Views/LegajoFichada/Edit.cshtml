@@ -298,7 +298,7 @@
         Confirma los cambios hechos?
       </div>
       <div class="modal-footer">
-          <button type="submit"  asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] value=""  class="btn btn-outline-success" >SI</button>
+          <button type="submit"  asp-route-legajo_id=@ViewData["LEGAJO_ID"] asp-route-lectora_id=@ViewData["LECTORA_ID"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"]  asp-route-desde="busqueda"  value=""  class="btn btn-outline-success" >SI</button>
           <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>
@@ -357,7 +357,7 @@
         Se perderán los cambios efectuados. Está seguro?
       </div>
       <div class="modal-footer">
-        <a asp-action="Index" asp-controller="Fichada" asp-route-item_actual=@ViewData["ITEM_ACTUAL"] class="btn btn-outline-success"  Text="SI">SI</a>
+        <a asp-action="Index" asp-controller="Fichada" asp-route-item_actual=@ViewData["ITEM_ACTUAL"]  asp-route-desde="busqueda"  class="btn btn-outline-success"  Text="SI">SI</a>
         <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>

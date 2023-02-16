@@ -249,7 +249,7 @@
       </div>
       <div class="modal-footer">
        @if (_origen=="F") {
-          <a asp-controller="Fichada" asp-action="Index" asp-route-item_actual=@ViewData["ITEM_ACTUAL"]  class="btn btn-outline-success"  Text="SI">SI</a>
+          <a asp-controller="Fichada" asp-action="Index" asp-route-item_actual=@ViewData["ITEM_ACTUAL"]  asp-route-desde="busqueda" class="btn btn-outline-success"  Text="SI">SI</a>
        }
        else {
           <a asp-action="Index" class="btn btn-outline-success"  Text="SI">SI</a>
