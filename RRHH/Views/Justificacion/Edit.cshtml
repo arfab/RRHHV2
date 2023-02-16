@@ -149,6 +149,23 @@
 
            </div>
 
+           
+             <div class="row ">
+                  <div class="col bottom-buffer">
+                <label asp-for="incluye_fds" class="control-label">Incluye fines de semana?</label>
+                 <select  data-filter="model" class="form-control" name="incluye_fds" id="incluye_fds" asp-for="incluye_fds" >
+                  <option value="1">SI</option>
+                  <option value="0">NO</option>
+                </select>   
+                 </div>
+                <div class="col bottom-buffer">
+                <label asp-for="incluye_feriados" class="control-label">Incluye feriados?</label>
+                 <select  data-filter="model" class="form-control" name="incluye_feriados" id="incluye_feriados" asp-for="incluye_feriados" >
+                  <option value="1">SI</option>
+                  <option value="0">NO</option>
+                </select>   
+                 </div>
+            </div>    
 
            
           <div class="row">

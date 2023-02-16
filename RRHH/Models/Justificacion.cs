@@ -47,6 +47,10 @@ namespace RRHH.Models
         public int? empresa_id { get; set; }
         public string? empresa { get; set; }
 
+        public int? incluye_feriados { get; set; }
+
+        public int? incluye_fds { get; set; }
+
         public string[]? legajos { get; set; }
     }
 }

@@ -26,6 +26,8 @@ namespace RRHH.Repository
                 parameters.Add("@momento_id", justificacion.momento_id);
                 parameters.Add("@descripcion", justificacion.descripcion);
                 parameters.Add("@usuario_id", usuario_id);
+                parameters.Add("@incluye_feriados", justificacion.incluye_feriados);
+                parameters.Add("@incluye_fds", justificacion.incluye_fds);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -56,6 +58,8 @@ namespace RRHH.Repository
                 parameters.Add("@momento_id", justificacion.momento_id);
                 parameters.Add("@descripcion", justificacion.descripcion);
                 parameters.Add("@usuario_id", usuario_id);
+                parameters.Add("@incluye_feriados", justificacion.incluye_feriados);
+                parameters.Add("@incluye_fds", justificacion.incluye_fds);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 

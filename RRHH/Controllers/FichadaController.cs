@@ -231,7 +231,7 @@ namespace RRHH.Controllers
 
                 }
 
-                
+                if (desde != "busqueda") return View();
 
                 fichadas = fichadaRepo.ObtenerTodos(
                      (nro_legajo == 0) ? -1 : nro_legajo, 

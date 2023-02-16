@@ -17,6 +17,8 @@ namespace RRHH.Models
 
         public int? dni { get; set; }
 
+        public int? convenio { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "El campo es requerido")]
         public int? genero_id { get; set; }
         public string? genero { get; set; }
