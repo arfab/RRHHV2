@@ -110,7 +110,7 @@ namespace RRHH.Controllers
 
                 IEnumerable<Viatico> viaticos;
 
-                viaticos = reporteRepo.ReporteViaticos((empresa_id == 0) ? -1 : empresa_id, (legajo_id == 0) ? -1 : legajo_id, fecha_desde, fecha_hasta);
+                viaticos = reporteRepo.ReporteViaticos((empresa_id == 0) ? -1 : empresa_id, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (legajo_id == 0) ? -1 : legajo_id, fecha_desde, fecha_hasta);
 
                 return View(viaticos);
             }
@@ -171,7 +171,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public void ExportarViaticos(int empresa_id, int legajo_id, DateTime fecha_desde, DateTime fecha_hasta)
+        public void ExportarViaticos(int empresa_id, int ubicacion_id, int sector_id,  int legajo_id, DateTime fecha_desde, DateTime fecha_hasta)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -194,7 +194,7 @@ namespace RRHH.Controllers
 
                     IEnumerable<Viatico> viaticos;
 
-                    viaticos = reporteRepo.ReporteViaticos((empresa_id == 0) ? -1 : empresa_id, (legajo_id == 0) ? -1 : legajo_id, fecha_desde, fecha_hasta);
+                    viaticos = reporteRepo.ReporteViaticos((empresa_id == 0) ? -1 : empresa_id, (ubicacion_id == 0) ? -1 : ubicacion_id, (sector_id == 0) ? -1 : sector_id, (legajo_id == 0) ? -1 : legajo_id, fecha_desde, fecha_hasta);
 
 
 

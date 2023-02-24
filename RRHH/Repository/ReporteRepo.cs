@@ -10,7 +10,7 @@ namespace RRHH.Repository
         static readonly string strConnectionString = Tools.GetConnectionString();
 
 
-        public IEnumerable<Viatico> ReporteViaticos(int empresa_id, int legajo_id, DateTime fecha_desde, DateTime fecha_hasta)
+        public IEnumerable<Viatico> ReporteViaticos(int empresa_id, int ubicacion_id, int sector_id, int legajo_id, DateTime fecha_desde, DateTime fecha_hasta)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -21,6 +21,8 @@ namespace RRHH.Repository
 
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@empresa_id", empresa_id);
+                parameter.Add("@ubicacion_id", ubicacion_id);
+                parameter.Add("@sector_id", sector_id);
                 parameter.Add("@legajo_id", legajo_id);
                 parameter.Add("@fecha_desde", (fecha_desde.Year < 1000) ? DateTime.Now : fecha_desde);
                 parameter.Add("@fecha_hasta", (fecha_hasta.Year < 1000) ? DateTime.Now : fecha_hasta);
