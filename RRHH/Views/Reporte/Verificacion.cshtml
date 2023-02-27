@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RRHH.Models.Viatico>
+﻿@model IEnumerable<RRHH.Models.Verificacion>
 @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{ Layout = "~/Views/Shared/_Layout.cshtml"; }
 @using Microsoft.AspNetCore.Http
@@ -24,7 +24,7 @@
 
      <div class="container-fluid">
          <div class="jumbotron text-center Titulo bottom-buffer ">
-          <h2>Reporte de Viáticos</h2>
+          <h2>Reporte de Verifiación</h2>
           <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a>
 
          
@@ -73,9 +73,9 @@
 
              <div class="row mb-3" >
                 <div class="col">
-                     <input type="submit" value="Buscar" id="buscar" asp-action="BuscarViaticos" class="btn btn-primary" />
-                     <input type="submit" value="Limpiar" asp-action="LimpiarViaticos" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
-                     <input type="submit" asp-action="ExportarViaticos"   value="Exportar a Excel" class="btn btn-primary" />
+                     <input type="submit" value="Buscar" id="buscar" asp-action="BuscarVerificacion" class="btn btn-primary" />
+                     <input type="submit" value="Limpiar" asp-action="LimpiarVerificacion" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+                     <input type="submit" asp-action="ExportarVerificacion"   value="Exportar a Excel" class="btn btn-primary" />
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
 
@@ -98,7 +98,7 @@
                     <div class="row" style="margin-bottom:10px;">
                         <div class="col bottom-buffer">
                              <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
-                             <span style="vertical-align:auto;">Reporte de Viáticos</span>
+                             <span style="vertical-align:auto;">Reporte de Verificación</span>
                          </div>
                        </div>
                    </div>
@@ -115,7 +115,8 @@
                                             <th>Nro. Legajo</th>
                                             <th>Apellido</th>
                                             <th>Nombre</th>
-                                            <th>Cantidad</th>
+                                            <th>Sin fichar</th>
+                                            <th>Justificacas</th>
                                             <th></th>
                                         </tr>
 
@@ -136,9 +137,11 @@
                                                         @item.nombre
                                                     </td>
                                                     <td>
-                                                        @item.cantidad
+                                                        @item.no_fichadas
                                                     </td>
-                                   
+                                                    <td>
+                                                        @item.justificadas
+                                                    </td>
                                                
                                                 <td style="font-size:16px;">
                                                     
