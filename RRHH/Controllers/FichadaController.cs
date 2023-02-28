@@ -43,6 +43,7 @@ namespace RRHH.Controllers
 
             HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", 0);
 
+            HttpContext.Session.SetString("FICHADA_DESDE", "");
 
             return RedirectToAction("Index", "Fichada");
 
@@ -89,7 +90,9 @@ namespace RRHH.Controllers
 
             if (HttpContext.Session.GetInt32("TIPO_LISTADO_ACTUAL") != null)
                 tipo_listado = (int)HttpContext.Session.GetInt32("TIPO_LISTADO_ACTUAL");
-    
+
+            if (HttpContext.Session.GetString("FICHADA_DESDE") != null) desde = HttpContext.Session.GetString("FICHADA_DESDE");
+
 
 
 
@@ -315,6 +318,8 @@ namespace RRHH.Controllers
 
             HttpContext.Session.SetInt32("TIPO_LISTADO_ACTUAL", tipo_listado);
 
+
+            HttpContext.Session.SetString("FICHADA_DESDE","busqueda");
 
             return RedirectToAction("Index", "Fichada", new { desde = "busqueda" });
 

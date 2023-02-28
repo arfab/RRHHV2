@@ -22,7 +22,7 @@ namespace RRHH.Controllers
             Environment = _environment;
         }
 
-        public IActionResult Viaticos(int empresa_id, int legajo_id, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, string apellido, int ubicacion_id, int sector_id, int local_id, string filtro)
+        public IActionResult Viaticos(int empresa_id, int legajo_id, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, string apellido, int ubicacion_id, int sector_id, int local_id, string filtro, string desde)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -54,6 +54,7 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("EMPLEADO_VIATICOS_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_VIATICOS_ACTUAL");
             if (HttpContext.Session.GetString("FILTRO_VIATICOS_ACTUAL") != null) filtro = HttpContext.Session.GetString("FILTRO_VIATICOS_ACTUAL");
 
+            if (HttpContext.Session.GetString("VIATICOS_DESDE") != null) desde = HttpContext.Session.GetString("VIATICOS_DESDE");
 
             if (perfil_id > 0)
             {
@@ -91,18 +92,21 @@ namespace RRHH.Controllers
 
                 if (fecha_desde.Year<1000)
                 {
-                    fecha_desde = DateTime.Now;
+                    fecha_desde = DateTime.Now.Date;
                 }
 
                 if (fecha_hasta.Year < 1000)
                 { 
-                    fecha_hasta = DateTime.Now;
+                    fecha_hasta = DateTime.Now.Date;
                 }
 
 
                 ViewData["FechaDesdeActual"] = fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year;
 
                 ViewData["FechaHastaActual"] = fecha_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Year;
+
+
+                if (desde != "busqueda") return View();
 
                 IReporteRepo reporteRepo;
 
@@ -139,6 +143,8 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("FECHA_VIATICOS_DESDE", fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year);
             HttpContext.Session.SetString("FECHA_VIATICOS_HASTA", fecha_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Year);
 
+            HttpContext.Session.SetString("VIATICOS_DESDE", "busqueda");
+
             return RedirectToAction("Viaticos", "Reporte", new { desde = "busqueda" });
 
         }
@@ -162,6 +168,8 @@ namespace RRHH.Controllers
 
             HttpContext.Session.SetString("FECHA_VIATICOS_DESDE", "");
             HttpContext.Session.SetString("FECHA_VIATICOS_HASTA", "");
+
+            HttpContext.Session.SetString("VIATICOS_DESDE", "");
 
 
             return RedirectToAction("Viaticos", "Reporte");
@@ -243,7 +251,7 @@ namespace RRHH.Controllers
 
 
 
-        public IActionResult Verificacion(int empresa_id, int legajo_id, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, string apellido, int ubicacion_id, int sector_id, int local_id, string filtro)
+        public IActionResult Verificacion(int empresa_id, int legajo_id, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, string apellido, int ubicacion_id, int sector_id, int local_id, string filtro, string desde)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
@@ -274,6 +282,8 @@ namespace RRHH.Controllers
 
             if (HttpContext.Session.GetInt32("EMPLEADO_VERIFICACION_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_VERIFICACION_ACTUAL");
             if (HttpContext.Session.GetString("FILTRO_VERIFICACION_ACTUAL") != null) filtro = HttpContext.Session.GetString("FILTRO_VERIFICACION_ACTUAL");
+
+            if (HttpContext.Session.GetString("VERIFICACION_DESDE") != null) desde = HttpContext.Session.GetString("VERIFICACION_DESDE");
 
 
             if (perfil_id > 0)
@@ -325,6 +335,8 @@ namespace RRHH.Controllers
 
                 ViewData["FechaHastaActual"] = fecha_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Year;
 
+                if (desde != "busqueda") return View();
+
                 IReporteRepo reporteRepo;
 
                 reporteRepo = new ReporteRepo();
@@ -360,6 +372,9 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("FECHA_VERIFICACION_DESDE", fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year);
             HttpContext.Session.SetString("FECHA_VERIFICACION_HASTA", fecha_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Year);
 
+            HttpContext.Session.SetString("VERIFICACION_DESDE", "busqueda");
+
+
             return RedirectToAction("Verificacion", "Reporte", new { desde = "busqueda" });
 
         }
@@ -384,6 +399,7 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("FECHA_VERIFICACION_DESDE", "");
             HttpContext.Session.SetString("FECHA_VERIFICACION_HASTA", "");
 
+            HttpContext.Session.SetString("VERIFICACION_DESDE", "");
 
             return RedirectToAction("Verificacion", "Reporte");
 
