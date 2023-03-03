@@ -21,7 +21,7 @@ namespace RRHH.Controllers
             Environment = _environment;
         }
 
-        public IActionResult Index(int liquidacion_id, int nro_item)
+        public IActionResult Index(int liquidacion_id, int empresa_id, int legajo_id, int nro_legajo, int nro_item, string apellido, int ubicacion_id, int sector_id, int local_id, string filtro, string desde)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -34,10 +34,54 @@ namespace RRHH.Controllers
             ViewData["ITEM_ACTUAL"] = nro_item;
 
 
+            if (HttpContext.Session.GetInt32("EMPRESA_LIQUIDACION_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_LIQUIDACION_ACTUAL");
+            if (HttpContext.Session.GetInt32("UBICACION_LIQUIDACION_ACTUAL") != null) ubicacion_id = (int)HttpContext.Session.GetInt32("UBICACION_LIQUIDACION_ACTUAL");
+            if (HttpContext.Session.GetInt32("SECTOR_LIQUIDACION_ACTUAL") != null) sector_id = (int)HttpContext.Session.GetInt32("SECTOR_LIQUIDACION_ACTUAL");
+
+            if (apellido != null) HttpContext.Session.SetString("APELLIDO_LIQUIDACION_ACTUAL", apellido);
+
+
+            if (HttpContext.Session.GetString("APELLIDO_LIQUIDACION_ACTUAL") != null) apellido = HttpContext.Session.GetString("APELLIDO_LIQUIDACION_ACTUAL");
+
+            if (HttpContext.Session.GetInt32("EMPLEADO_LIQUIDACION_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_LIQUIDACION_ACTUAL");
+            if (HttpContext.Session.GetString("FILTRO_LIQUIDACION_ACTUAL") != null) filtro = HttpContext.Session.GetString("FILTRO_LIQUIDACION_ACTUAL");
+
+            if (HttpContext.Session.GetString("LIQUIDACION_DESDE") != null) desde = HttpContext.Session.GetString("LIQUIDACION_DESDE");
+
 
 
             if (perfil_id > 0)
             {
+
+
+                ViewData["EMPRESA_ID"] = empresa_id;
+
+                ViewData["UBICACION_ID"] = ubicacion_id;
+                ViewData["SECTOR_ID"] = sector_id;
+                ViewData["LocalActual"] = local_id;
+                ViewData["ApellidoActual"] = apellido;
+                ViewData["EmpleadoActual"] = legajo_id;
+                ViewData["FiltroActual"] = filtro;
+
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+                legajoRepo = new LegajoRepo();
+
+                legajo = legajoRepo.Obtener(legajo_id);
+
+
+                if (legajo != null)
+                {
+                    ViewData["UBICACION_ID"] = ubicacion_id;
+                    ViewData["SECTOR_ID"] = sector_id;
+                    ViewData["LocalActual"] = legajo.local_id;
+                    nro_legajo = legajo.nro_legajo.Value;
+                    empresa_id = legajo.empresa_id.Value;
+
+                    ViewData["EMPRESA_ID"] = legajo.empresa_id;
+                    ViewData["LegajoActual"] = legajo.nro_legajo;
+                    ViewData["Legajo"] = legajo;
+                }
 
                 ILiquidacionRepo liqRepo;
 
@@ -55,7 +99,9 @@ namespace RRHH.Controllers
 
                 IEnumerable<LiquidacionDetalle> detalle;
 
-                detalle = liqRepo.ObtenerDetalle(liq.anio,liq.mes,-1,-1,-1,-1,DateTime.Now,DateTime.Now);
+                if (desde != "busqueda") return View();
+
+                detalle = liqRepo.ObtenerDetalle(liq.anio,liq.mes,empresa_id,ubicacion_id,sector_id,legajo_id,DateTime.Now,DateTime.Now);
 
 
 
@@ -70,8 +116,84 @@ namespace RRHH.Controllers
 
 
 
+        public IActionResult Buscar(int liquidacion_id , int empresa_id, int legajo_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, string filtro)
+        {
+
+            HttpContext.Session.SetInt32("EMPRESA_LIQUIDACION_ACTUAL", empresa_id);
+
+            HttpContext.Session.SetInt32("UBICACION_LIQUIDACION_ACTUAL", ubicacion_id);
+
+            HttpContext.Session.SetInt32("SECTOR_LIQUIDACION_ACTUAL", sector_id);
+
+            HttpContext.Session.SetInt32("LEGAJO_LIQUIDACION_ACTUAL", nro_legajo);
+            HttpContext.Session.SetString("APELLIDO_LIQUIDACION_ACTUAL", (apellido == null) ? "" : apellido);
+
+            HttpContext.Session.SetInt32("EMPLEADO_LIQUIDACION_ACTUAL", legajo_id);
+            HttpContext.Session.SetString("FILTRO_LIQUIDACION_ACTUAL", (filtro == null) ? "" : filtro);
+
+
+            HttpContext.Session.SetString("LIQUIDACION_DESDE", "busqueda");
+
+            return RedirectToAction("Index", "LiquidacionDetalle", new { desde = "busqueda", liquidacion_id = liquidacion_id });
+
+        }
+
+
         [HttpPost]
-        public void ExportarExcel(int liquidacion_id)
+        public IActionResult Limpiar(int liquidacion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
+        {
+            HttpContext.Session.SetString("EMPRESA_LIQUIDACION_ACTUAL", "");
+
+            HttpContext.Session.SetString("UBICACION_LIQUIDACION_ACTUAL", "");
+
+            HttpContext.Session.SetString("SECTOR_LIQUIDACION_ACTUAL", "");
+
+            HttpContext.Session.SetString("LEGAJO_LIQUIDACION_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_LIQUIDACION_ACTUAL", "");
+
+            HttpContext.Session.SetString("EMPLEADO_LIQUIDACION_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_LIQUIDACION_ACTUAL", "");
+
+            HttpContext.Session.SetString("LIQUIDACION_DESDE", "");
+
+
+            return RedirectToAction("Index", "LiquidacionDetalle", new { liquidacion_id = liquidacion_id });
+
+
+        }
+
+
+        [HttpPost]
+        public IActionResult Generar(int liquidacion_id, int empresa_id, int legajo_id, int nro_legajo, int nro_item, string apellido, int ubicacion_id, int sector_id, int local_id, string filtro, string desde)
+        {
+
+            string sret;
+ 
+            ILiquidacionRepo liqRepo;
+            liqRepo = new LiquidacionRepo();
+
+            sret = liqRepo.Generar(empresa_id, ubicacion_id, sector_id, legajo_id, -1);
+ 
+
+                if (sret == "")
+                {
+
+                  return RedirectToAction("Index", "LiquidacionDetalle", new { liquidacion_id = liquidacion_id });
+                }
+                else
+                {
+                    ViewBag.Message = sret;
+                    return RedirectToAction("Index", "LiquidacionDetalle", new { liquidacion_id = liquidacion_id });
+                }
+
+        }
+          
+
+
+
+
+        [HttpPost]
+        public void ExportarExcel(int liquidacion_id, int empresa_id, int legajo_id, int nro_legajo, int nro_item, string apellido, int ubicacion_id, int sector_id, int local_id, string filtro, string desde)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -103,7 +225,7 @@ namespace RRHH.Controllers
                 {
                     var worksheet = workbook.Worksheets.Add("Liquidacion");
 
-                    detalle = liqRepo.ObtenerDetalle(liq.anio, liq.mes, -1, -1, -1, -1, DateTime.Now, DateTime.Now);
+                    detalle = liqRepo.ObtenerDetalle(liq.anio, liq.mes, empresa_id, ubicacion_id, sector_id, legajo_id, DateTime.Now, DateTime.Now);
 
 
                     var currentRow = 1;

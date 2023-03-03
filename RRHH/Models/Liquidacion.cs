@@ -14,5 +14,7 @@ namespace RRHH.Models
         public DateTime fecha_desde { get; set; }
 
         public DateTime fecha_hasta { get; set; }
+
+        public int estado { get; set; }
     }
 }

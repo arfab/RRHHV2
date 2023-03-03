@@ -10,5 +10,7 @@ namespace RRHH.Repository
 
         public IEnumerable<LiquidacionDetalle> ObtenerDetalle(int anio, int mes, int empresa_id, int ubicacion_id, int sector_id, int legajo_id, DateTime fecha_desde, DateTime fecha_hasta);
 
+        public string Generar(int empresa_id, int ubicacion_id, int sector_id, int legajo_id, int usuario_id);
+
     }
 }

@@ -22,14 +22,49 @@
           </div>
 
           <center>
-            
+ 
+              
+          <div class="row mb-3" >
+                 <div class="col-lg-2 col-xs-6 mb-3">
+                      <label for="filtro">Legajo / Apellido</label>
+                      <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+                </div>
+                <div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
+                    <label for="legajo_id">Empleado</label>
+                    <select  data-filter="model" class="form-control" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+                </div>
+
+                <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="empresa_id">Empresa</label>
+			   <select name="empresa_id" id="empresa_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["EMPRESA_ID"]"></select>
+			  </div>
+             </div>
+            <div class="row mb-3" >
+            <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="ubicacion_id">Ubicación</label>
+			   <select name="ubicacion_id" id="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UBICACION_ID"]"></select>
+			</div>
+             <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="sector_id">Sector/Local</label>
+			   <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SECTOR_ID"]"></select>
+			</div>
+
+              </div>  
+
+
 
              <div class="row mb-3" >
                 <div class="col">
                    
+                     <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" asp-route-liquidacion_id=@ViewData["LiquidacionActual"] class="btn btn-primary" />
+                     <input type="submit" value="Limpiar" asp-action="Limpiar" asp-route-liquidacion_id=@ViewData["LiquidacionActual"] class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+    
+
                      <input type="submit" asp-action="ExportarExcel" asp-route-liquidacion_id=@ViewData["LiquidacionActual"]   value="Exportar a Excel" class="btn btn-primary" />
 
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
+
+                     <input type="submit" asp-action="Generar" asp-route-liquidacion_id=@ViewData["LiquidacionActual"]   value="Generar Liquidación" class="btn btn-primary" />
 
 
                      <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Liquidacion" asp-action="Index">SALIR</a>
@@ -150,9 +185,9 @@
                                                   @item.premio_horas
                                                 </td>                                                
                                                    <td style="font-size:16px;">
-                                                      <a asp-controller="LiquidacionDetalle" asp-action="Edit" asp-route-id=@item.id asp-route-liquidacion_id=@item.liquidacion_id ><i data-mdb-toggle='tooltip' title='Editar el detalle de la liquidación' class='bi bi-pencil-square'></i></a>
+                                                    @*  <a asp-controller="LiquidacionDetalle" asp-action="Edit" asp-route-id=@item.id asp-route-liquidacion_id=@item.liquidacion_id ><i data-mdb-toggle='tooltip' title='Editar el detalle de la liquidación' class='bi bi-pencil-square'></i></a>
                                                       <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el detalle de la liquidación' class='bi bi-x-circle'></i></a>                 
-                                                </td>
+                     *@                           </td>
                                             </tr>
 
                                     }
@@ -219,6 +254,9 @@
      <script type="text/javascript">
 
     $(document).ready(function() {
+        var CodEmpresa = @Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
+        var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+        var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
 
         var CodLiquidacion = @Html.Raw(Json.Serialize(ViewData["LiquidacionActual"]));
 
@@ -226,10 +264,254 @@
           
      
         if(item_actual>0) ubicarFila(item_actual);
+
+        if ($("#nro_legajo").val() <=0) 
+        {
+            $("#nro_legajo").val('');
+        }
+
+        
+        ObtenerEmpresas();
+        
+       ObtenerUbicaciones();
+
+       if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
+            ObtenerSectores(CodUbicacion);
+        }
+        else {
+           if (CodUbicacion ==3) {
+               ObtenerLocales();;
+           }
+            else {
+                $("#sector_id").val(-1);
+           }
+        }
+
+        if (Filtro != null && Filtro!='') { 
+            $("#divEmpleado").show();
+
+        }
+        else { 
+           $("#divEmpleado").hide();
+           $("#legajo_id").val(-1).change();
+        }
+
+           ObtenerEmpleados(Filtro);
+
+
     });
 
-
+  $("#ubicacion_id").change(function () {
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+            ObtenerSectores($("#ubicacion_id").val());
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales();
+           }
+           else {
+                $("#sector_id").val(-1);
+           }
+        }
+      });
     
+      $("#filtro").change(function () {
+
+             if ($("#filtro").val() != '') {            
+                 $("#divEmpleado").show();
+             }
+             else {
+               $("#divEmpleado").hide();
+               $("#legajo_id").val(-1).change();
+             }
+
+              ObtenerEmpleados($("#filtro").val());
+
+         });
+
+
+          $("#nro_legajo").focusout(function () {
+             if ($("#nro_legajo").val() != '')
+                 ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+
+         });
+
+
+         $("#empresa_id").focusout(function () {
+             if($("#nro_legajo").val()!='')
+             ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+         });
+
+
+         $("#empresa_id").change(function () {
+           var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+           ObtenerUbicaciones($("#empresa_id").val());
+           
+           $("#ubicacion_id").val(-1);
+
+           if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+             ObtenerSectores($("#ubicacion_id").val(),$("#empresa_id").val());
+           }
+           else {
+             if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales($("#empresa_id").val());
+             }
+             else {
+               $('#sector_id').find('option').remove();
+               $("#sector_id").val(-1);
+             }
+         }
+
+         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+
+
+      });
+
+ var ObtenerEmpresas = function () {
+                 var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+                 $.ajax({
+                    url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                    type: 'GET',
+                    data: {
+                    },
+                    success: function (data) {
+                        $('#empresa_id').find('option').remove()
+                        $(data).each(
+                            function (index, item) {            
+                                if (item.value==CodEmpresa)
+                                  $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                                else 
+                                  $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                            });
+                    },
+                    error: function () {
+                    }
+              });
+            }
+
+    var ObtenerUbicaciones = function () {
+         var CodUbicacion =@Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Legajo")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+     var ObtenerSectores = function (ubicacion_id) {
+             var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerSectores","Legajo")',
+                type: 'GET',
+                 data: {
+                ubicacion_id: ubicacion_id
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodSector)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+        var ObtenerLocales = function () {
+             var CodLocal = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+         var ObtenerLegajo = function (empresa_id, nro_legajo) {
+             $.ajax({
+                url: '@Url.Action("ObtenerLegajo","Novedad")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    empresa_id: empresa_id,
+                    nro_legajo: nro_legajo
+                },
+                success: function (data) {
+                    $('#apellido').val(data.apellido);
+                    $('#empresa_id').val(data.empresa_id);
+
+                   
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+        var ObtenerEmpleados = function (filtro) {
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoJustificacionActual"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpleados","Legajo")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    filtro: filtro
+                },
+                success: function (data) {
+                    $('#legajo_id').find('option').remove()
+     
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpleado)
+                              $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                             else 
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        }
+                        );  
+
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
 
 
     function mostrarModalEliminar(id){
