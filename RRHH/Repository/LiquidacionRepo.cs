@@ -53,10 +53,10 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@anio", anio);
                 parameter.Add("@mes", mes);
-                parameter.Add("@empresa_id", empresa_id);
-                parameter.Add("@ubicacion_id", ubicacion_id);
-                parameter.Add("@sector_id", sector_id);
-                parameter.Add("@legajo_id", legajo_id);
+                parameter.Add("@empresa_id", (empresa_id == 0) ? -1 : empresa_id);
+                parameter.Add("@ubicacion_id", (ubicacion_id == 0) ? -1 : ubicacion_id);
+                parameter.Add("@sector_id", (sector_id == 0) ? -1 : sector_id);
+                parameter.Add("@legajo_id", (legajo_id == 0) ? -1 : legajo_id);
                 //parameter.Add("@fecha_desde", (fecha_desde.Year < 1000) ? DateTime.Now : fecha_desde);
                 //parameter.Add("@fecha_hasta", (fecha_hasta.Year < 1000) ? DateTime.Now : fecha_hasta);
 
@@ -80,8 +80,8 @@ namespace RRHH.Repository
 
 
                     DynamicParameters parameters = new DynamicParameters();
-                    parameters.Add("@empresa_id", empresa_id);
-                    parameters.Add("@ubicacion_id",ubicacion_id);
+                    parameters.Add("@empresa_id", (empresa_id == 0) ? -1 : empresa_id);
+                    parameters.Add("@ubicacion_id", (ubicacion_id == 0) ? -1 : ubicacion_id);
                     parameters.Add("@sector_id", (sector_id == 0) ? -1 : sector_id);
                     parameters.Add("@legajo_id", (legajo_id == 0) ? -1 : legajo_id);
                     parameters.Add("@usuario_id", (usuario_id == 0) ? -1 :usuario_id);
