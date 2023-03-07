@@ -64,8 +64,9 @@
 
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
-                     <input type="submit" asp-action="Generar" asp-route-liquidacion_id=@ViewData["LiquidacionActual"]   value="Generar Liquidación" class="btn btn-primary" />
-
+                     @if ((int)ViewData["Estado"]==0 ) {
+                        <input type="submit" asp-action="Generar" asp-route-liquidacion_id=@ViewData["LiquidacionActual"]   value="Generar Liquidación" class="btn btn-primary" />
+                     }
 
                      <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Liquidacion" asp-action="Index">SALIR</a>
 

@@ -95,6 +95,7 @@ namespace RRHH.Controllers
                 ViewData["LiquidacionActual"] = liquidacion_id;
                 ViewData["Anio"] = liq.anio;
                 ViewData["Mes"] = liq.mes;
+                ViewData["Estado"] = liq.estado;
 
 
                 IEnumerable<LiquidacionDetalle> detalle;
