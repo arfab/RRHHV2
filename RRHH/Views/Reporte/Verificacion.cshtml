@@ -24,7 +24,7 @@
 
      <div class="container-fluid">
          <div class="jumbotron text-center Titulo bottom-buffer ">
-          <h2>Reporte de Verifiación</h2>
+          <h2>Reporte de Verificación</h2>
           <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a>
 
          
@@ -110,14 +110,24 @@
 
                                 <table id="tablaReporte" class="table table-bordered table-hover table-condensed">
                                     <thead>
-                                       
+                                        <tr >
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th colspan="2" style="text-align:center">Dias sin fichar</th>
+                                            <th></th>
+                                        </tr>
+
                                         <tr >
                                             <th>Empresa</th>
                                             <th>Nro. Legajo</th>
                                             <th>Apellido</th>
                                             <th>Nombre</th>
-                                            <th>Sin fichar</th>
-                                            <th>Justificadas</th>
+                                            <th>Turno</th>
+                                            <th>Justificados</th>
+                                            <th>Sin justificar</th>
                                             <th></th>
                                         </tr>
 
@@ -140,13 +150,16 @@
                                                         @item.nombre
                                                     </td>
                                                     <td>
-                                                        @item.no_fichadas
+                                                        @item.turno
                                                     </td>
                                                     <td>
                                                         @item.justificadas
                                                     </td>
+                                                    <td>
+                                                        @item.no_fichadas
+                                                    </td>                                                   
                                                
-                                                <td style="font-size:16px;">
+                                                    <td style="font-size:16px;">
                                                     
                                                    
                                                 </td>
@@ -340,7 +353,7 @@
            }
         }
 
-         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+      //   ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
 
 

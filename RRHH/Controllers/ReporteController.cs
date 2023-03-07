@@ -365,8 +365,8 @@ namespace RRHH.Controllers
             HttpContext.Session.SetInt32("LEGAJO_VERIFICACION_ACTUAL", nro_legajo);
             HttpContext.Session.SetString("APELLIDO_VERIFICACION_ACTUAL", (apellido == null) ? "" : apellido);
 
-            HttpContext.Session.SetInt32("EMPLEADO_VIATICOS_ACTUAL", legajo_id);
-            HttpContext.Session.SetString("FILTRO_VIATICOS_ACTUAL", (filtro == null) ? "" : filtro);
+            HttpContext.Session.SetInt32("EMPLEADO_VERIFICACION_ACTUAL", legajo_id);
+            HttpContext.Session.SetString("FILTRO_VERIFICACION_ACTUAL", (filtro == null) ? "" : filtro);
 
 
             HttpContext.Session.SetString("FECHA_VERIFICACION_DESDE", fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year);

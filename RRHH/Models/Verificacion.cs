@@ -7,6 +7,8 @@
         public string empresa { get; set; }
         public string apellido { get; set; }
         public string nombre { get; set; }
+        public string turno { get; set; }
+        public int turno_id { get; set; }
         public int no_fichadas { get; set; }
         public int justificadas { get; set; }
     }
