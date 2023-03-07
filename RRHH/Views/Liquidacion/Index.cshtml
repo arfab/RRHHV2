@@ -23,7 +23,8 @@
           <div class="row bottom-buffer">
             <div class="col bottom-buffer">
                 <div class="btns2">
-                    <a type="button" id="cmdNuevo" class="btn btn-success" asp-controller="Liquidacion" asp-action="Cerrar">CERRAR LIQUIDACION</a>
+                    
+                    <a type="button" id="cmdNuevo" class="btn btn-success" onclick="mostrarModalCerrar();">CERRAR LIQUIDACION</a>
                 </div>
             </div>
         </div>
@@ -100,38 +101,48 @@
          </center>
 
 
-    <!-- Modal Eliminar -->
+        <!-- Modal Cerrar Liquidacion -->
 
-    <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal fade" id="mdCerrar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">                  
+                            <div class="modal-header">
+                                <h5 class="modal-title">Cerrar Liquidación</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                             <div class="modal-body">
+                                Se cerrará la liquidación actual. Está seguro?
+                            </div>
+                            <div class="modal-footer">
+                            <a asp-action="Cerrar" class="btn btn-outline-success" Text="SI">SI</a>  <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                            </div>
               
-                        <div class="modal-header">
-                            <h5 class="modal-title">Liuquidación</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
 
-
-                        <div class="modal-body">
-                            Se eliminará la liquidación con todos sus datos. Está seguro?
-                             <input id="hfID" name="hfID" type="hidden" >
-                        </div>
-                        <div class="modal-footer">
-                             <button id="btnEliminar" type="submit" asp-action="Delete"  value="" class="btn btn-outline-success"  >SI</button>
-                             <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
-                        </div>
-          
-
+                </div>
             </div>
         </div>
-    </div>
+
+
     </div>
 </form>
 
  <script type="text/javascript">
 
-    function mostrarModalEliminar(id){
-      $("#hfID").val(id);
-      $("#mdEliminar").modal('show');
+    function mostrarModalCerrar(){
+      $("#mdCerrar").modal('show');
      }
 </script>
+
+@if (@TempData["Message"] != null)
+{
+        <script type="text/javascript">
+                window.onload = function () {
+                    alert('@TempData["Message"]');
+                };
+        </script>
+}
+
+@section Scripts
+{
+<partial name="_ValidationScriptsPartial" />
+}

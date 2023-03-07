@@ -12,5 +12,7 @@ namespace RRHH.Repository
 
         public string Generar(int empresa_id, int ubicacion_id, int sector_id, int legajo_id, int usuario_id);
 
+        public string Cerrar(int usuario_id);
+
     }
 }

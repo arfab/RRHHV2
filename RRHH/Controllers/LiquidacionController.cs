@@ -41,5 +41,30 @@ namespace RRHH.Controllers
 
             return RedirectToAction("Login", "Usuario");
         }
+
+        public IActionResult Cerrar()
+        {
+
+            string sret;
+
+            ILiquidacionRepo liqRepo;
+            liqRepo = new LiquidacionRepo();
+
+            sret = liqRepo.Cerrar(-1);
+
+
+            if (sret == "")
+            {
+
+                return RedirectToAction("Index", "Liquidacion");
+            }
+            else
+            {
+                TempData["Message"] = sret;
+                return RedirectToAction("Index", "Liquidacion");
+            }
+
+        }
+
     }
 }

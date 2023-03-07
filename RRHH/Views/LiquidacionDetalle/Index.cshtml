@@ -203,31 +203,7 @@
              </center>
 
 
-        <!-- Modal Eliminar -->
 
-        <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                  
-                            <div class="modal-header">
-                                <h5 class="modal-title">Detalle de liquidación</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-
-
-                            <div class="modal-body">
-                                Se eliminará el detalle de la liquidación con todos sus datos. Está seguro?
-                                 <input id="hfID" name="hfID" type="hidden" >
-                            </div>
-                            <div class="modal-footer">
-                                 <button id="btnEliminar" type="submit" asp-action="Delete" asp-route-liquidacion_id=@ViewData["LiquidacionActual"]   value="" class="btn btn-outline-success"  >SI</button>
-                                 <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
-                            </div>
-              
-
-                </div>
-            </div>
-        </div>
      
 
     </form>
@@ -265,10 +241,10 @@
      
         if(item_actual>0) ubicarFila(item_actual);
 
-        if ($("#nro_legajo").val() <=0) 
-        {
-            $("#nro_legajo").val('');
-        }
+        //if ($("#nro_legajo").val() <=0) 
+        //{
+        //    $("#nro_legajo").val('');
+        //}
 
         
         ObtenerEmpresas();
@@ -330,17 +306,18 @@
          });
 
 
-          $("#nro_legajo").focusout(function () {
-             if ($("#nro_legajo").val() != '')
-                 ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+         // $("#nro_legajo").focusout(function () {
+         //    if ($("#nro_legajo").val() != '')
+         //        ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
 
-         });
+         //});
 
 
-         $("#empresa_id").focusout(function () {
-             if($("#nro_legajo").val()!='')
-             ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
-         });
+         //$("#empresa_id").focusout(function () {
+         //    alert($("#nro_legajo").val());
+         //    if($("#nro_legajo").val()!='')
+         //    ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+         //});
 
 
          $("#empresa_id").change(function () {
@@ -363,14 +340,14 @@
              }
          }
 
-         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+      //   ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
 
 
       });
 
  var ObtenerEmpresas = function () {
-                 var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+                 var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
                  $.ajax({
                     url: '@Url.Action("ObtenerEmpresas","Legajo")',
                     type: 'GET',

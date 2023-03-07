@@ -101,5 +101,37 @@ namespace RRHH.Repository
             return "";
         }
 
+
+        public string Cerrar(int usuario_id)
+        {
+            int icantFilas;
+
+            try
+            {
+                using (var con = new SqlConnection(strConnectionString))
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@usuario_id", (usuario_id == 0) ? -1 : usuario_id);
+                    parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
+
+                    icantFilas = con.Execute("spCerrarLiquidacion", parameters, commandType: CommandType.StoredProcedure);
+                    if (parameters.Get<int>("@retValue") == -2) return "No se puede cerrar la liquidacion del mes en curso";
+                    if (parameters.Get<int>("@retValue") < 0) return "Error al cerrar la liquidacion";
+
+
+                }
+            }
+            catch (SqlException e)
+            {
+                return "Error";
+            }
+            return "";
+        }
+
     }
 }

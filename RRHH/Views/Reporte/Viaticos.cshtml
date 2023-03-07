@@ -25,7 +25,7 @@
      <div class="container-fluid">
          <div class="jumbotron text-center Titulo bottom-buffer ">
           <h2>Reporte de Viáticos</h2>
-          <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a>
+         @* <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a>*@
 
          
      </div>
@@ -203,15 +203,15 @@
         var FechaDesde = @Html.Raw(Json.Serialize(ViewData["FechaDesdeActual"]));
         var FechaHasta = @Html.Raw(Json.Serialize(ViewData["FechaHastaActual"]));
 
-        if ($("#nro_legajo").val() <=0) 
-        {
-            $("#nro_legajo").val('');
-        }
+        //if ($("#nro_legajo").val() <=0) 
+        //{
+        //    $("#nro_legajo").val('');
+        //}
 
-        if (CodEmpresa>0 || CodUbicacion>0)
-       $("#divBusquedaAvanzada").show();
-     else
-       $("#divBusquedaAvanzada").hide();
+     //   if (CodEmpresa>0 || CodUbicacion>0)
+     //  $("#divBusquedaAvanzada").show();
+     //else
+     //  $("#divBusquedaAvanzada").hide();
 
 
         ObtenerEmpresas();
@@ -306,17 +306,17 @@
 
         
 
-         $("#nro_legajo").focusout(function () {
-             if ($("#nro_legajo").val() != '')
-                 ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+         //$("#nro_legajo").focusout(function () {
+         //    if ($("#nro_legajo").val() != '')
+         //        ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
 
-         });
+         //});
 
 
-         $("#empresa_id").focusout(function () {
-             if($("#nro_legajo").val()!='')
-             ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
-         });
+         //$("#empresa_id").focusout(function () {
+         //    if($("#nro_legajo").val()!='')
+         //    ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+         //});
 
 
          $("#empresa_id").change(function () {
@@ -339,14 +339,14 @@
            }
         }
 
-         ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+        // ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
 
 
 
       });
 
     var ObtenerEmpresas = function () {
-                 var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EmpresaActual"]));
+                 var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
                  $.ajax({
                     url: '@Url.Action("ObtenerEmpresas","Legajo")',
                     type: 'GET',
@@ -459,7 +459,7 @@
         }
 
         var ObtenerEmpleados = function (filtro) {
-             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoJustificacionActual"]));
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
 
              $.ajax({
                 url: '@Url.Action("ObtenerEmpleados","Legajo")',
@@ -488,10 +488,10 @@
           });
         }
 
-      function ToggleBusquedaAvanzada(){   
-           $('#divBusquedaAvanzada').toggle();
+     // function ToggleBusquedaAvanzada(){   
+     //      $('#divBusquedaAvanzada').toggle();
 
-     }
+     //}
       
       
          $(function () {
