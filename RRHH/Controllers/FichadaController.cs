@@ -335,6 +335,8 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
+            int? legajo_ant = -1;
+
             //DateTime? fecha_desde = null;
             //DateTime? fecha_hasta = null;
 
@@ -455,7 +457,8 @@ namespace RRHH.Controllers
                   (lectora_id == 0) ? -1 : lectora_id,
                   tipo_listado);
 
-                 
+                    TimeSpan ts1 = TimeSpan.Parse("00:00");
+                    TimeSpan ts2;
 
                     var currentRow = 1;
                     for (int i = 1; i <= 11; i++)
@@ -479,13 +482,31 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 15).Value = "Cant Hs.";
                     worksheet.Cell(currentRow, 16).Value = "Justificación";
 
+                   
 
                     foreach (var item in fichadas)
                     {
+                        
+
+                        if (legajo_ant!=-1 && item.nro_legajo!=legajo_ant)
+                        {
+                            currentRow++;
+                            worksheet.Cell(currentRow, 15).Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                            worksheet.Cell(currentRow, 15).Style.NumberFormat.Format = "HH:mm";
+                            worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours)*60).ToString();
+                            /*Totales*/
+                            ts1 = TimeSpan.Parse("00:00");
+                        }
+
                         currentRow++;
-                        worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
-                        worksheet.Cell(currentRow, 2).Value = item.apellido + ", " + item.nombre;
-                        worksheet.Cell(currentRow, 3).Value = item.empresa;
+                        worksheet.Cell(currentRow, 15).Style.NumberFormat.Format = "HH:mm";
+
+                        if (legajo_ant == -1 || item.nro_legajo != legajo_ant)
+                        {
+                            worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
+                            worksheet.Cell(currentRow, 2).Value = item.apellido + ", " + item.nombre;
+                            worksheet.Cell(currentRow, 3).Value = item.empresa;
+                        }
                         worksheet.Cell(currentRow, 4).Value = item.lectora;
                         worksheet.Cell(currentRow, 5).Value = item.DiaSemana();
                         worksheet.Cell(currentRow, 6).Value = Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy");
@@ -497,13 +518,28 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 12).Value = item.hora_salida_3;
                         worksheet.Cell(currentRow, 13).Value = item.hora_entrada_4;
                         worksheet.Cell(currentRow, 14).Value = item.hora_salida_4;
-                        worksheet.Cell(currentRow, 15).Value = item.cantidad_horas;
+                        worksheet.Cell(currentRow, 15).Value = item.horas_normales;
                         worksheet.Cell(currentRow, 16).Value = item.justificacion;
 
+                        if (item.horas_normales==null || item.horas_normales=="")
+                            ts2 = TimeSpan.Parse("00:00");
+                        else 
+                        ts2 = TimeSpan.Parse(item.horas_normales);
+                        ts1 = ts1.Add(ts2);
 
+                        legajo_ant = item.nro_legajo;
 
                     }
 
+                    if (legajo_ant != -1)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 15).Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                        worksheet.Cell(currentRow, 15).Style.NumberFormat.Format = "HH:mm";
+                        worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours) * 60).ToString();
+
+
+                    }
 
 
                     worksheet.Columns().AdjustToContents();
