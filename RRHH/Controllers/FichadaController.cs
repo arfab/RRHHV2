@@ -493,7 +493,7 @@ namespace RRHH.Controllers
                             currentRow++;
                             worksheet.Cell(currentRow, 15).Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                             worksheet.Cell(currentRow, 15).Style.NumberFormat.Format = "HH:mm";
-                            worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours)*60).ToString();
+                            worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours)*60).ToString().PadLeft(2, '0'); ;
                             /*Totales*/
                             ts1 = TimeSpan.Parse("00:00");
                         }
@@ -536,7 +536,7 @@ namespace RRHH.Controllers
                         currentRow++;
                         worksheet.Cell(currentRow, 15).Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                         worksheet.Cell(currentRow, 15).Style.NumberFormat.Format = "HH:mm";
-                        worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours) * 60).ToString();
+                        worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours) * 60).ToString().PadLeft(2,'0');
 
 
                     }
