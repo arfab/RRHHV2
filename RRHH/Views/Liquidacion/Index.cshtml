@@ -84,8 +84,10 @@
                      </td>  
                       
                         <td>
-@*                          <a asp-controller="Liquidacion" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar la liquidacion' class='bi bi-pencil-square'></i></a>
-                          <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la liquidacion'  class='bi bi-x-circle'></i></a>*@
+                             @if(@item.estado==0) {
+                                <a asp-controller="Liquidacion" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar la liquidacion' class='bi bi-pencil-square'></i></a>
+                             }
+                      @*      <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar la liquidacion'  class='bi bi-x-circle'></i></a>*@
                           <a asp-controller="LiquidacionDetalle" asp-action="Index" asp-route-liquidacion_id=@item.id ><i data-mdb-toggle='tooltip' title='Ver detalle de la liquidación' class='bi  bi-calendar2-plus'></i></a>       
                           
                     </td>

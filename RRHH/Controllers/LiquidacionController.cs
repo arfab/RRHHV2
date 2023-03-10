@@ -66,5 +66,74 @@ namespace RRHH.Controllers
 
         }
 
+
+
+        [HttpGet]
+        public IActionResult Edit(Int64 id)
+        {
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            if (id > 0)
+            {
+                ILiquidacionRepo liqRepo;
+
+                liqRepo = new LiquidacionRepo();
+
+                Liquidacion liq = new Liquidacion();
+
+                liq = liqRepo.Obtener(id);
+
+                ViewData["ID"] = id;
+
+                return View(liq);
+            }
+            else
+            {
+                ViewData["ID"] = 0;
+                return View();
+            }
+
+
+        }
+
+
+
+        [HttpPost]
+        public IActionResult Edit(Int64 id, Liquidacion liq)
+        {
+
+            string sret;
+
+            ILiquidacionRepo liqRepo;
+
+            //if (ModelState.IsValid)
+            //{
+
+            liqRepo = new LiquidacionRepo();
+
+           
+            sret = liqRepo.Modificar(liq);
+
+            if (sret == "")
+            {
+
+                return RedirectToAction("Index", "Liquidacion");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+            }
+
+            // }
+
+            return View(liq);
+        }
+
+
+
+
     }
 }

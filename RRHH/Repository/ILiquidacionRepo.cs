@@ -4,7 +4,7 @@ namespace RRHH.Repository
 {
     public interface ILiquidacionRepo
     {
-        public Liquidacion Obtener(int id);
+        public Liquidacion Obtener(Int64 id);
 
         public IEnumerable<Liquidacion> ObtenerTodos();
 
@@ -13,6 +13,8 @@ namespace RRHH.Repository
         public string Generar(int empresa_id, int ubicacion_id, int sector_id, int legajo_id, int usuario_id);
 
         public string Cerrar(int usuario_id);
+
+        public string Modificar(Liquidacion liquidacion);
 
     }
 }

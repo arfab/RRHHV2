@@ -10,7 +10,7 @@ namespace RRHH.Repository
     {
         static readonly string strConnectionString = Tools.GetConnectionString();
 
-        public Liquidacion Obtener(int id)
+        public Liquidacion Obtener(Int64 id)
         {
 
 
@@ -129,6 +129,28 @@ namespace RRHH.Repository
             catch (SqlException e)
             {
                 return "Error";
+            }
+            return "";
+        }
+
+
+        public string Modificar(Liquidacion liquidacion)
+        {
+
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@id", liquidacion.id);
+                parameters.Add("@desde", liquidacion.desde);
+                parameters.Add("@hasta", liquidacion.hasta);
+
+                con.Execute("spLiquidacionModificar", parameters, commandType: CommandType.StoredProcedure);
+
+
             }
             return "";
         }
