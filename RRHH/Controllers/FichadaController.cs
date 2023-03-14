@@ -460,8 +460,11 @@ namespace RRHH.Controllers
                     TimeSpan ts1 = TimeSpan.Parse("00:00");
                     TimeSpan ts2;
 
+                    TimeSpan ts3 = TimeSpan.Parse("00:00");
+                    TimeSpan ts4;
+
                     var currentRow = 1;
-                    for (int i = 1; i <= 11; i++)
+                    for (int i = 1; i <= 21; i++)
                     {
                         worksheet.Cell(currentRow, i).Style.Font.SetBold();
                     }
@@ -479,8 +482,9 @@ namespace RRHH.Controllers
                     worksheet.Cell(currentRow, 12).Value = "Hora Salida";
                     worksheet.Cell(currentRow, 13).Value = "Hora Entrada";
                     worksheet.Cell(currentRow, 14).Value = "Hora Salida";
-                    worksheet.Cell(currentRow, 15).Value = "Cant Hs.";
-                    worksheet.Cell(currentRow, 16).Value = "Justificación";
+                    worksheet.Cell(currentRow, 15).Value = "Hs. Trabajadas";
+                    worksheet.Cell(currentRow, 16).Value = "Hs. Totales";
+                    worksheet.Cell(currentRow, 17).Value = "Justificación";
 
                    
 
@@ -493,13 +497,20 @@ namespace RRHH.Controllers
                             currentRow++;
                             worksheet.Cell(currentRow, 15).Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                             worksheet.Cell(currentRow, 15).Style.NumberFormat.Format = "HH:mm";
-                            worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours)*60).ToString().PadLeft(2, '0'); ;
+                            worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours)*60).ToString().PadLeft(2, '0'); 
+
+                            worksheet.Cell(currentRow, 16).Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                            worksheet.Cell(currentRow, 16).Style.NumberFormat.Format = "HH:mm";
+                            worksheet.Cell(currentRow, 16).Value = ((int)ts3.TotalHours).ToString() + ":" + (ts3.TotalMinutes - ((int)ts3.TotalHours) * 60).ToString().PadLeft(2, '0'); 
+
                             /*Totales*/
                             ts1 = TimeSpan.Parse("00:00");
+                            ts3 = TimeSpan.Parse("00:00");
                         }
 
                         currentRow++;
                         worksheet.Cell(currentRow, 15).Style.NumberFormat.Format = "HH:mm";
+                        worksheet.Cell(currentRow, 16).Style.NumberFormat.Format = "HH:mm";
 
                         if (legajo_ant == -1 || item.nro_legajo != legajo_ant)
                         {
@@ -519,13 +530,20 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 13).Value = item.hora_entrada_4;
                         worksheet.Cell(currentRow, 14).Value = item.hora_salida_4;
                         worksheet.Cell(currentRow, 15).Value = item.horas_normales;
-                        worksheet.Cell(currentRow, 16).Value = item.justificacion;
+                        worksheet.Cell(currentRow, 16).Value = item.cantidad_horas;
+                        worksheet.Cell(currentRow, 17).Value = item.justificacion;
 
                         if (item.horas_normales==null || item.horas_normales=="")
                             ts2 = TimeSpan.Parse("00:00");
                         else 
                         ts2 = TimeSpan.Parse(item.horas_normales);
                         ts1 = ts1.Add(ts2);
+
+                        if (item.cantidad_horas == null || item.cantidad_horas == "")
+                            ts4 = TimeSpan.Parse("00:00");
+                        else
+                            ts4 = TimeSpan.Parse(item.cantidad_horas);
+                        ts3 = ts3.Add(ts4);
 
                         legajo_ant = item.nro_legajo;
 
@@ -537,6 +555,10 @@ namespace RRHH.Controllers
                         worksheet.Cell(currentRow, 15).Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                         worksheet.Cell(currentRow, 15).Style.NumberFormat.Format = "HH:mm";
                         worksheet.Cell(currentRow, 15).Value = ((int)ts1.TotalHours).ToString() + ":" + (ts1.TotalMinutes - ((int)ts1.TotalHours) * 60).ToString().PadLeft(2,'0');
+
+                        worksheet.Cell(currentRow, 16).Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                        worksheet.Cell(currentRow, 16).Style.NumberFormat.Format = "HH:mm";
+                        worksheet.Cell(currentRow, 16).Value = ((int)ts3.TotalHours).ToString() + ":" + (ts3.TotalMinutes - ((int)ts3.TotalHours) * 60).ToString().PadLeft(2, '0');
 
 
                     }
