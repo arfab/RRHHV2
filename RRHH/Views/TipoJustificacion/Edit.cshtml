@@ -26,22 +26,54 @@
 
              <div class="row ">
                 <div class="col bottom-buffer">
-                <label asp-for="pago" class="control-label">Se Paga?</label>
-                 <select  data-filter="model" class="form-control" name="pago" id="pago" asp-for="pago" >
-                  <option value="1">Pago</option>
-                  <option value="0">No Pago</option>
-                </select>   
+                  <label asp-for="pago" class="control-label">Se Paga?</label>
+                  <select  data-filter="model" class="form-control" name="pago" id="pago" asp-for="pago" >
+                    <option value="1">Pago</option>
+                    <option value="0">No Pago</option>
+                  </select>   
+                 </div>
+                 <div class="col bottom-buffer">
+                   <label asp-for="mes_completo" class="control-label">Mes Completo?</label>
+                   <select  data-filter="model" class="form-control" name="mes_completo" id="pago" asp-for="mes_completo" >
+                     <option value="1">SI</option>
+                     <option value="0">NO</option>
+                    </select>   
                  </div>
             </div>    
 
+            <div class="row ">
+                <div class="col bottom-buffer">
+                  <label asp-for="pre_presentismo" class="control-label">Presentismo?</label>
+                  <select  data-filter="model" class="form-control" name="pre_presentismo" id="pago" asp-for="pre_presentismo" >
+                    <option value="1">SI</option>
+                    <option value="0">NO</option>
+                  </select>   
+                 </div>
+                 <div class="col bottom-buffer">
+                   <label asp-for="pre_puntualidad" class="control-label">Puntualidad?</label>
+                   <select  data-filter="model" class="form-control" name="pre_puntualidad" id="pago" asp-for="pre_puntualidad" >
+                     <option value="1">SI</option>
+                     <option value="0">NO</option>
+                    </select>   
+                 </div>
+            </div>    
 
-
+           <div class="row ">
+                 <div class="col bottom-buffer">
+                   <label asp-for="pre_horas" class="control-label">Premio Horas?</label>
+                   <select  data-filter="model" class="form-control" name="pre_horas" id="pago" asp-for="pre_horas" >
+                     <option value="1">SI</option>
+                     <option value="0">NO</option>
+                    </select>   
+                 </div>
+            </div>    
 
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
-                     <button id="btnGrabar" type="submit" value="" class="btn btn-outline-success"   >Grabar</button>
-                </div>
+                      <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
+@*                     <button id="btnGrabar" type="submit" value="" class="btn btn-outline-success"   >Grabar</button>
+*@                </div>
             </div>
    
 </div>
@@ -61,7 +93,7 @@
         Confirma los cambios hechos?
       </div>
       <div class="modal-footer">
-          <button type="submit"  asp-route-id=@ViewData["ID"] value=""  class="btn btn-outline-success" >SI</button>
+          <button type="submit"  value=""  class="btn btn-outline-success" >SI</button>
           <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
       </div>
     </div>

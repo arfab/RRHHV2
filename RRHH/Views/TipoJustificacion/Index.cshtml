@@ -41,6 +41,10 @@
                             <th>ID</th>
                             <th>Descripcion</th>
                             <th>Pago</th>
+                            <th>Mes Completo</th>
+                            <th>Presentismo</th>
+                            <th>Puntualidad</th>
+                            <th>Premio Horas</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -56,6 +60,18 @@
                      </td>     
                       <td>
                           @(item.pago==1?"Si":"No")
+                     </td>  
+                     <td>
+                          @(item.mes_completo==1?"Si":"No")
+                     </td>  
+                     <td>
+                          @(item.pre_presentismo==1?"Si":"No")
+                     </td>
+                     <td>
+                          @(item.pre_puntualidad==1?"Si":"No")
+                     </td>                       
+                     <td>
+                          @(item.pre_horas==1?"Si":"No")
                      </td>  
                         <td>
                           <a asp-controller="TipoJustificacion" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el tipo de justificación' class='bi bi-pencil-square'></i></a>
