@@ -27,7 +27,7 @@ namespace RRHH.Repository
                 parameters.Add("@pre_presentismo", tipoJustificacion.pre_presentismo);
                 parameters.Add("@pre_puntualidad", tipoJustificacion.pre_puntualidad);
                 parameters.Add("@pre_horas", tipoJustificacion.pre_horas);
-
+                parameters.Add("@pre_presentismo_comercio", tipoJustificacion.pre_presentismo_comercio);
                 icantFilas = con.Execute("spTipoJustificacionInsertar", parameters, commandType: CommandType.StoredProcedure);
 
 
@@ -53,7 +53,7 @@ namespace RRHH.Repository
                 parameters.Add("@pre_presentismo", tipoJustificacion.pre_presentismo);
                 parameters.Add("@pre_puntualidad", tipoJustificacion.pre_puntualidad);
                 parameters.Add("@pre_horas", tipoJustificacion.pre_horas);
-
+                parameters.Add("@pre_presentismo_comercio", tipoJustificacion.pre_presentismo_comercio);
                 con.Execute("spTipoJustificacionModificar", parameters, commandType: CommandType.StoredProcedure);
 
 

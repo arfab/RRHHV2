@@ -45,6 +45,7 @@
                             <th>Presentismo</th>
                             <th>Puntualidad</th>
                             <th>Premio Horas</th>
+                            <th>Presentismo Comercio</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -73,6 +74,9 @@
                      <td>
                           @(item.pre_horas==1?"Si":"No")
                      </td>  
+                     <td>
+                          @(item.pre_presentismo_comercio==1?"Si":"No")
+                     </td>
                         <td>
                           <a asp-controller="TipoJustificacion" asp-action="Edit" asp-route-id="@item.id"><i data-mdb-toggle='tooltip' title='Editar el tipo de justificación' class='bi bi-pencil-square'></i></a>
                           <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el tipo de justificación'  class='bi bi-x-circle'></i></a>
