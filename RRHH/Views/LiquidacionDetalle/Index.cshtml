@@ -121,6 +121,7 @@
                                             <th>Pr. Pre</th>
                                             <th>Pr. Asi</th>
                                             <th>Pr. Hor</th>
+                                            <th>Fecha</th>
                                             <th></th>
                                         </tr>
 
@@ -184,7 +185,10 @@
                                                 </td>
                                                 <td>
                                                   @item.premio_horas
-                                                </td>                                                
+                                                </td>                   
+                                                <td>
+                                                     @Convert.ToDateTime(@item.fecha_alta).ToString("dd/MM/yyyy")
+                                                </td>
                                                    <td style="font-size:16px;">
                                                     @*  <a asp-controller="LiquidacionDetalle" asp-action="Edit" asp-route-id=@item.id asp-route-liquidacion_id=@item.liquidacion_id ><i data-mdb-toggle='tooltip' title='Editar el detalle de la liquidación' class='bi bi-pencil-square'></i></a>
                                                       <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el detalle de la liquidación' class='bi bi-x-circle'></i></a>                 
