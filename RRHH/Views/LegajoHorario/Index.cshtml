@@ -1,0 +1,290 @@
+﻿@model IEnumerable<RRHH.Models.LegajoHorario>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Index";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+    var nro_item = 0; 
+    }
+
+
+     <form id="form1" method="post" enctype="multipart/form-data" class="form-floating">
+         
+
+             
+
+     <div class="container-fluid">
+         <div class="jumbotron text-center Titulo bottom-buffer ">
+          <h2>Empleado: @ViewData["ApellidoActual"],  (@ViewData["NombreActual"])</h2>
+          </div>
+
+          <center>
+            
+
+             <div class="row mb-3" >
+                <div class="col">
+@*                     <a type="button" id="cmdNuevo" class="btn btn-primary " asp-controller="TurnoDetalle" asp-action="Index" asp-route-turno_id=@ViewData["TurnoActual"]  >BUSCAR</a>                     
+*@
+                    
+                     <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
+
+                    @if (_perfil_id <= 3)
+                    {
+                          <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="LegajoHorario" asp-action="Edit" asp-route-legajo_id=@ViewData["EmpleadoActual"]>INGRESAR HORARIOS</a>                     
+                    }
+
+                     <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Legajo" asp-action="Edit" asp-route-id=@ViewData["EmpleadoActual"]>SALIR</a>
+
+                </div>
+             </div>
+
+
+             <div class="row">
+                <div class="col bottom-buffer">
+                    <span id="spanTitulo"></span>
+                </div>
+            </div>
+
+        
+                <div id="divPrint">
+
+                @if (@Model != null && Model.Count()>0)
+                {
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col bottom-buffer">
+                             <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+                         </div>
+                       </div>
+                       
+                    
+
+                   </div>
+                    
+   
+                    <div class="row">
+                        <div class="col bottom-buffer">
+                            <div class="table-responsive">
+
+
+                                <table id="tablaHorarios" class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                       
+                                        <tr >
+                                            <th>Fecha</th>
+                                            <th>Desde</th>
+                                            <th>Hasta</th>
+                                            <th>Estado</th>
+                                            <th></th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        
+
+                                        nro_item = nro_item + 1;
+
+                                        
+
+                                            <tr >
+
+
+                                               <td  >
+                                                    @Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy")
+                                                </td>
+                                                <td>
+                                                  @item.desde
+                                                </td>
+                                                <td>
+                                                  @item.hasta
+                                                </td>
+                                                 <td>
+                                                  @item.estado
+                                                </td>
+                                                   <td style="font-size:16px;">
+                                                      <a asp-controller="LegajoHorario" asp-action="Edit" asp-route-id=@item.id asp-route-legajo_id=@ViewData["EmpleadoActual"] ><i data-mdb-toggle='tooltip' title='Editar el horario del legajo' class='bi bi-pencil-square'></i></a>
+                                                      <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar  el horario del legajo' class='bi bi-x-circle'></i></a>
+
+                                            
+                                                </td>
+                                            </tr>
+
+                                    }
+                                    </tbody>
+                    </table>
+                  </div>
+                </div>
+             </div>
+         }
+                   
+
+             </div>
+             </center>
+
+
+        <!-- Modal Eliminar -->
+
+        <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  
+                            <div class="modal-header">
+                                <h5 class="modal-title">Horario del legajo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+
+                            <div class="modal-body">
+                                Se eliminará el horario del legajo con todos sus datos. Está seguro?
+                                 <input id="hfID" name="hfID" type="hidden" >
+                            </div>
+                            <div class="modal-footer">
+                                 <button id="btnEliminar" type="submit" asp-action="Delete" asp-controller="LegajoHorario" asp-route-legajo_id=@ViewData["EmpleadoActual"] value="" class="btn btn-outline-success"  >SI</button>
+                                 <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+                            </div>
+              
+
+                </div>
+            </div>
+        </div>
+     
+
+    </form>
+
+    <div id="partialModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Horarios del legajo</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+     <script type="text/javascript">
+
+    $(document).ready(function() {
+
+        var CodLegajo = @Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+        var item_actual = @Html.Raw(Json.Serialize(ViewData["ITEM_ACTUAL"]));
+          
+     
+        if(item_actual>0) ubicarFila(item_actual);
+    });
+
+
+    
+
+
+    function mostrarModalEliminar(id){
+          $("#hfID").val(id);
+          $("#mdEliminar").modal('show');
+
+         }
+
+       function printData()
+       {
+          
+         $("#tablaHorarios th:last-child, #tablaHorarios td:last-child").hide();
+         //$("#divCabecera").show();
+
+         var divToPrint=document.getElementById("divPrint");
+         var htmlToPrint = '' +
+            '<style type="text/css">' +
+            'body {' +
+             'margin-top: 30px;' + 
+             'margin-bottom: 20px;' + 
+             '} ' +
+            'table , table th, table td {' +
+            'font-size: 10px;' + 
+            'border:1px solid;' +
+            'border-collapse: collapse;' +
+            'padding:0.5em;' +
+            '} ' +
+            'table {' +
+            'width: 100%;' + 
+            'margin-bottom: 20px;' + 
+            '} ' +
+            //'#spanSanciones  {' +
+            //'display:inline-block;' +
+            // '} ' +
+            //'#spanFelicitaciones  {' +
+            //'display:inline-block;' +
+            // '} ' +
+            '</style>';
+         htmlToPrint += divToPrint.outerHTML;
+         newWin= window.open("");
+         //newWin.document.write( htmlToPrint);
+         //newWin.document.close();
+         //newWin.print();
+         //newWin.close();
+         $("#tablaHorarios th:last-child, #tablaHorarios td:last-child").show();
+         //$("#divCabecera").hide();
+
+         var is_chrome = Boolean(newWin.chrome);
+         newWin.document.write(htmlToPrint);
+         newWin.document.close(); // necessary for IE >= 10 and necessary before onload for chrome
+
+       if (is_chrome) {
+        newWin.onload = function() { // wait until all resources loaded 
+            newWin.focus(); // necessary for IE >= 10
+            newWin.print();  // change window to mywindow
+            newWin.close();// change window to mywindow
+        };
+    }
+    else {
+        newWin.document.close(); // necessary for IE >= 10
+        newWin.focus(); // necessary for IE >= 10
+        newWin.print();
+        newWin.close();
+    }
+
+
+      }
+
+    $('#btnImprimir').on('click',function(){
+    printData();
+    })
+
+
+    function ubicarFila(item_actual){
+
+        $('#tablaHorarios').find('tr').eq(item_actual).addClass('activa');
+
+        var w = $(window);
+        var row = $('#tablaHorarios').find('tr').eq(item_actual);
+   
+  
+         if (row.length){
+           w.scrollTop( row.offset().top - (w.height()/2) );
+          }
+    }
+
+
+    </script>
+
+
+
+
+    @if (ViewBag.Message != null)
+{
+        <script type="text/javascript">
+                window.onload = function () {
+                    alert("@ViewBag.Message");
+                };
+        </script>
+}

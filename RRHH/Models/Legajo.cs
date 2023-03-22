@@ -56,5 +56,7 @@ namespace RRHH.Models
         public DateTime? fecha_cambio { get; set; }
         public string? observacion { get; set; }
 
+        public int? horas_diarias { get; set; }
+
     }
 }
