@@ -31,7 +31,7 @@
                     
                      <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
-                    @if (_perfil_id <= 3)
+                    @if (_perfil_id <= 3 || _perfil_id == 5 || _perfil_id == 6)
                     {
                           <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="LegajoFranco" asp-action="Edit" asp-route-legajo_id=@ViewData["EmpleadoActual"]>INGRESAR FRANCOS</a>                     
                     }

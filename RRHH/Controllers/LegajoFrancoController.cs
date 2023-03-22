@@ -87,9 +87,9 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            if (perfil_id > 3 && modo != "V") return RedirectToAction("Login", "Usuario");
+            if (perfil_id > 3 && perfil_id !=5 && perfil_id !=6 && modo != "V") return RedirectToAction("Login", "Usuario");
 
-            if (perfil_id > 3 && modo != "V") return RedirectToAction("Login", "Usuario");
+            
 
 
             LegajoFranco legajoFranco = new LegajoFranco();
