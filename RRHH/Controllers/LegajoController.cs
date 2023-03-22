@@ -108,7 +108,7 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("ACTIVO_ACTUAL_LEGAJO") != null) activo = (int)HttpContext.Session.GetInt32("ACTIVO_ACTUAL_LEGAJO");
 
 
-            if (perfil_id > 0 && perfil_id <= 3)
+            if (perfil_id > 0 && perfil_id <= 3 || perfil_id == 5 || perfil_id <= 6)
             {
                 ILegajoRepo legajoRepo;
 
@@ -116,7 +116,12 @@ namespace RRHH.Controllers
 
                 IEnumerable<Legajo> legajos;
 
-                ViewData["APELLIDO"] = apellido;
+
+                if (perfil_id == 5 || perfil_id <= 6)
+                {
+                    ubicacion_id = 3;
+                }
+                    ViewData["APELLIDO"] = apellido;
                 //ViewData["NRO_LEGAJO"] = nro_legajo;
                 ViewData["EMPRESA_ID"] = empresa_id;
 
@@ -192,6 +197,7 @@ namespace RRHH.Controllers
                     }
                 }
 
+
                 return View(legajos);
 
             }
@@ -210,13 +216,19 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
-            if (perfil_id >0 && perfil_id <=3)
+            if (perfil_id > 0 && perfil_id <= 3 || perfil_id == 5 || perfil_id <= 6)
             {
                 ILegajoRepo legajoRepo;
 
                 legajoRepo = new LegajoRepo();
 
                 IEnumerable<Legajo> legajos;
+
+
+                if (perfil_id == 5 || perfil_id <= 6)
+                {
+                    ubicacion_id = 3;
+                }
 
                 ViewData["APELLIDO"] = apellido;
                 //ViewData["NRO_LEGAJO"] = nro_legajo;
@@ -305,7 +317,6 @@ namespace RRHH.Controllers
                     ViewBag.Message = "No existen legajos para el criterio seleccionado";
                     return View();
                 }
-
 
 
                 return View(legajos);

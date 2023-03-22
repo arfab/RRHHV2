@@ -18,7 +18,7 @@
 
      <div class="container-fluid">
          <div class="jumbotron text-center Titulo bottom-buffer ">
-          <h2>Empleado: @ViewData["ApellidoActual"],  (@ViewData["NombreActual"])</h2>
+          <h2>Francos de @ViewData["ApellidoActual"],  (@ViewData["NombreActual"])</h2>
           </div>
 
           <center>
@@ -36,7 +36,7 @@
                           <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="LegajoFranco" asp-action="Edit" asp-route-legajo_id=@ViewData["EmpleadoActual"]>INGRESAR FRANCOS</a>                     
                     }
 
-                     <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Legajo" asp-action="Edit" asp-route-id=@ViewData["EmpleadoActual"]>SALIR</a>
+                     <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Legajo" asp-action="Index" asp-route-id=@ViewData["EmpleadoActual"]>SALIR</a>
 
                 </div>
              </div>
