@@ -151,9 +151,10 @@ namespace RRHH.Controllers
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
-            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
-
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            if (usuario_id == null || perfil_id == 6) return RedirectToAction("Login", "Usuario");
+
 
             IEnumerable<Models.Novedad> lFelicitaciones;
             int cantFelicitaciones = 0;

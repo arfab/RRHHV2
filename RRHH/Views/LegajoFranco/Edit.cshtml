@@ -41,8 +41,10 @@
                  <div class="col bottom-buffer">
                 <label asp-for="estado" class="control-label">Validado</label>
                  <select  data-filter="model" class="form-control" name="estado" id="estado" asp-for="estado" >
-                     <option value=0>No</option>
-                     <option value=1>Si</option>
+                     <option value=0 selected="selected">No</option>
+                      @if (_perfil_id !=6) {
+                        <option value=1>Si</option>
+                      }
                   
                 </select>   
                  </div>
@@ -76,7 +78,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" >Autorización de franco del legajo</h5>
+        <h5 class="modal-title" >Franco del legajo</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

@@ -88,9 +88,12 @@ namespace RRHH.Controllers
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
-            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
-
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+            int? usuario_local_id = HttpContext.Session.GetInt32("USUARIO_LOCAL_ID");
+
+
+            if (usuario_id == null || perfil_id==6 && usuario_local_id==0) return RedirectToAction("Login", "Usuario");
 
 
             if (HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_ACTUAL_LEGAJO");
@@ -121,7 +124,13 @@ namespace RRHH.Controllers
                 {
                     ubicacion_id = 3;
                 }
-                    ViewData["APELLIDO"] = apellido;
+
+                if (perfil_id <= 6)
+                {
+                    sector_id = usuario_local_id.Value;
+                }
+
+                ViewData["APELLIDO"] = apellido;
                 //ViewData["NRO_LEGAJO"] = nro_legajo;
                 ViewData["EMPRESA_ID"] = empresa_id;
 
@@ -216,6 +225,9 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
+            int? usuario_local_id = HttpContext.Session.GetInt32("USUARIO_LOCAL_ID");
+
+
             if (perfil_id > 0 && perfil_id <= 3 || perfil_id == 5 || perfil_id <= 6)
             {
                 ILegajoRepo legajoRepo;
@@ -229,6 +241,12 @@ namespace RRHH.Controllers
                 {
                     ubicacion_id = 3;
                 }
+
+                if (perfil_id <= 6)
+                {
+                    sector_id = usuario_local_id.Value;
+                }
+
 
                 ViewData["APELLIDO"] = apellido;
                 //ViewData["NRO_LEGAJO"] = nro_legajo;

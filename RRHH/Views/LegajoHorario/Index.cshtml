@@ -76,7 +76,7 @@
                                             <th>Fecha</th>
                                             <th>Desde</th>
                                             <th>Hasta</th>
-                                            <th>Estado</th>
+                                            <th>Validado</th>
                                             <th></th>
                                         </tr>
 
@@ -103,7 +103,7 @@
                                                   @item.hasta
                                                 </td>
                                                  <td>
-                                                  @item.estado
+                                                  @(item.estado==1? "SI": "NO") 
                                                 </td>
                                                    <td style="font-size:16px;">
                                                       <a asp-controller="LegajoHorario" asp-action="Edit" asp-route-id=@item.id asp-route-legajo_id=@ViewData["EmpleadoActual"] ><i data-mdb-toggle='tooltip' title='Editar el horario del legajo' class='bi bi-pencil-square'></i></a>

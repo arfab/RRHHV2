@@ -26,6 +26,8 @@ namespace RRHH.Models
         public int perfil_id { get; set; }
 
         public string? perfil_descripcion { get; set; }
+
+        public int? local_id { get; set; }
     }
 }
 

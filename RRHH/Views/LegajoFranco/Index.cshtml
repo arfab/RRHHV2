@@ -75,7 +75,7 @@
                                         <tr >
                                             <th>Fecha</th>
                                             <th>Completo</th>
-                                            <th>Estado</th>
+                                            <th>Validado</th>
                                             <th></th>
                                         </tr>
 
@@ -96,10 +96,10 @@
                                                     @Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy")
                                                 </td>
                                                 <td>
-                                                  @item.completo
+                                                  @(item.completo==1? "SI": "NO") 
                                                 </td>
                                                  <td>
-                                                  @item.estado
+                                                  @(item.estado==1? "SI": "NO") 
                                                 </td>
                                                    <td style="font-size:16px;">
                                                       <a asp-controller="LegajoFranco" asp-action="Edit" asp-route-id=@item.id asp-route-legajo_id=@ViewData["EmpleadoActual"] ><i data-mdb-toggle='tooltip' title='Editar el franco del legajo' class='bi bi-pencil-square'></i></a>

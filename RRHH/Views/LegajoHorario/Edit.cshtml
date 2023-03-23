@@ -31,18 +31,20 @@
 
                 <div class="col bottom-buffer">
                   <label asp-for="desde" class="control-label">Desde</label>
-                   <input type="time" asp-for="desde" name="desde" id="desde" step="1" class="form-control" />
+                   <input type="time" asp-for="desde" name="desde" id="desde" step="60" class="form-control" />
                 </div>
                  <div class="col bottom-buffer">
                   <label asp-for="hasta" class="control-label">Hasta</label>
-                   <input type="time" asp-for="hasta" name="hasta" id="hasta" step="1" class="form-control" />
+                   <input type="time" asp-for="hasta" name="hasta" id="hasta" step="60" class="form-control" />
                 </div>
 
                  <div class="col bottom-buffer">
                 <label asp-for="estado" class="control-label">Validado</label>
                  <select  data-filter="model" class="form-control" name="estado" id="estado" asp-for="estado" >
                      <option value=0>No</option>
-                     <option value=1>Si</option>
+                      @if (_perfil_id !=6) {
+                        <option value=1>Si</option>
+                      }
                   
                 </select>   
                  </div>
