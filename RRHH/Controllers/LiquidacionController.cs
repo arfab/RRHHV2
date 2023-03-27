@@ -31,7 +31,7 @@ namespace RRHH.Controllers
             if (usuario_id == null || perfil_id == 5 || perfil_id == 6) return RedirectToAction("Login", "Usuario");
 
 
-            if (perfil_id == 1 || perfil_id == 2)
+            if (perfil_id == 1 || perfil_id == 2 || perfil_id == 3)
             {
                 ILiquidacionRepo liqRepo;
 
