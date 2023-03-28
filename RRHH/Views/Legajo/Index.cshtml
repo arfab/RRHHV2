@@ -257,8 +257,8 @@
 
                                      @if (_perfil_id <= 3 || _perfil_id == 5 || _perfil_id == 6)
                                      {
-                                        <a asp-controller="LegajoHorario" asp-action="Index" asp-route-legajo_id=@item.id><i data-mdb-toggle='tooltip' title='Horarios' class='bi bi-calendar'></i></a>
-                                        <a asp-controller="LegajoFranco" asp-action="Index"  asp-route-legajo_id=@item.id><i data-mdb-toggle='tooltip' title='Francos' class='bi  bi-arrow-right-square-fill'></i></a>
+                                        <a asp-controller="LegajoHorario" asp-action="Index" asp-route-legajo_id=@item.id><i data-mdb-toggle='tooltip' title='Horarios' class='bi  bi-clock'></i></a>
+                                        <a asp-controller="LegajoFranco" asp-action="Index"  asp-route-legajo_id=@item.id><i data-mdb-toggle='tooltip' title='Francos' class='bi  bi-sun'></i></a>
                                      }
 
                                 </td>
