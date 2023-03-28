@@ -80,6 +80,10 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("FILTRO_ACTUAL_LEGAJO", "");
             HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", -1);
 
+            HttpContext.Session.SetInt32("USUARIO_LOCAL_ID", -1);
+ 
+
+
             HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
             HttpContext.Session.SetString("EMPRESA_ACTUAL_FICHADA", "");

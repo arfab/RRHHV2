@@ -71,6 +71,7 @@ namespace RRHH.Repository
                 parameters.Add("@nombre", usuario.Nombre);
                 parameters.Add("@apellido", usuario.Apellido);
                 parameters.Add("@perfil_id", usuario.perfil_id);
+                parameters.Add("@local_id", (usuario.local_id <= 0) ? null : usuario.local_id);
 
 
                 icantFilas = con.Execute("spUsuarioInsertar", parameters, commandType: CommandType.StoredProcedure);
@@ -94,6 +95,7 @@ namespace RRHH.Repository
                 parameters.Add("@nombre", usuario.Nombre);
                 parameters.Add("@apellido", usuario.Apellido);
                 parameters.Add("@perfil_id", usuario.perfil_id);
+                parameters.Add("@local_id", (usuario.local_id <= 0) ? null :  usuario.local_id);
 
 
                 icantFilas = con.Execute("spUsuarioModificar", parameters, commandType: CommandType.StoredProcedure);

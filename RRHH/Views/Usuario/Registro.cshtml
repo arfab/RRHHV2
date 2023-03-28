@@ -50,6 +50,16 @@
                    </div>
             </div>
 
+            
+             <div class="row" id="divLocal">
+                  <div class="col bottom-buffer" >
+                     <label asp-for="local_id" class="control-label">Local</label>
+                     <select  class="form-control" id="local_id" asp-for="local_id" ></select>
+                     <span class="alert-danger" asp-validation-for="local_id"></span>
+                  </div>
+             </div>
+
+
 @*             <div class="row" id="divPerfil2">
                   <div class="col bottom-buffer">
                  <div class="form-check form-check-inline">
@@ -134,8 +144,29 @@
 
     ObtenerPerfiles();
 
+     if (CodPerfil == 6) {
+               ObtenerLocales(0);
+               $("#divLocal").show();
+           }
+           else {
+               $("#divLocal").hide();
+                $("#local_id").val(-1);
+           }
+
 
    })
+
+     $("#perfil_id").change(function () {
+         if ($("#perfil_id").val() == 6) { 
+               ObtenerLocales(0);
+               $("#divLocal").show();
+           }
+           else {
+               $("#divLocal").hide();
+                $("#local_id").val(-1);
+           }
+
+     });
 
 //function HabilitarGrabar() {
 //    if ($("#items").val()!="" && $("#cliente_id").val()!=0) 
@@ -176,6 +207,31 @@ function mostrarModalGrabar(){
             }
       });
     }
+
+
+var ObtenerLocales = function (loc_id) {
+             var CodLocal = @Html.Raw(Json.Serialize(Model.local_id));
+             if (loc_id != 0) CodLocal = loc_id;
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#local_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#local_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#local_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
 
 </script>
 

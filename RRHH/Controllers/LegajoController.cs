@@ -120,7 +120,7 @@ namespace RRHH.Controllers
                 IEnumerable<Legajo> legajos;
 
 
-                if (perfil_id == 5 || perfil_id <= 6)
+                if (perfil_id == 5 || perfil_id == 6)
                 {
                     ubicacion_id = 3;
                 }
@@ -237,7 +237,7 @@ namespace RRHH.Controllers
                 IEnumerable<Legajo> legajos;
 
 
-                if (perfil_id == 5 || perfil_id <= 6)
+                if (perfil_id == 5 || perfil_id == 6)
                 {
                     ubicacion_id = 3;
                 }
@@ -380,6 +380,8 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("EMPLEADO_ACTUAL_LEGAJO", "");
             HttpContext.Session.SetString("FILTRO_ACTUAL_LEGAJO", "");
             HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", -1);
+
+            HttpContext.Session.SetInt32("USUARIO_LOCAL_ID", -1);
 
             HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
