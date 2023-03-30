@@ -58,5 +58,7 @@ namespace RRHH.Models
 
         public int? horas_diarias { get; set; }
 
+        public int? centro_costo_id { get; set; }
+
     }
 }

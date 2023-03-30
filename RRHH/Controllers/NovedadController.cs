@@ -132,6 +132,7 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetString("CATEGORIA_NOVEDAD_ACTUAL", "");
                 HttpContext.Session.SetString("TIPO_NOVEDAD_ACTUAL", "");
                 HttpContext.Session.SetString("TIPO_RESOLUCION_ACTUAL", "");
+                HttpContext.Session.SetString("CENTRO_COSTO_ACTUAL", "");
 
                 HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", "");
                 HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", "");
@@ -145,7 +146,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro, string desde)
+        public IActionResult Index(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, int centro_costo_id, string filtro, string desde)
         {
 
 
@@ -183,6 +184,7 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("CATEGORIA_NOVEDAD_ACTUAL") != null) categoria_novedad_id = (int)HttpContext.Session.GetInt32("CATEGORIA_NOVEDAD_ACTUAL");
             if (HttpContext.Session.GetInt32("TIPO_NOVEDAD_ACTUAL") != null) tipo_novedad_id = (int)HttpContext.Session.GetInt32("TIPO_NOVEDAD_ACTUAL");
             if (HttpContext.Session.GetInt32("TIPO_RESOLUCION_ACTUAL") != null) tipo_resolucion_id = (int)HttpContext.Session.GetInt32("TIPO_RESOLUCION_ACTUAL");
+            if (HttpContext.Session.GetInt32("CENTRO_COSTO_ACTUAL") != null) centro_costo_id = (int)HttpContext.Session.GetInt32("CENTRO_COSTO_ACTUAL");
 
 
 
@@ -226,6 +228,7 @@ namespace RRHH.Controllers
                 ViewData["CategoriaNovedadActual"] = categoria_novedad_id;
                 ViewData["TipoNovedadActual"] = tipo_novedad_id;
                 ViewData["TipoResolucionActual"] = tipo_resolucion_id;
+                ViewData["CentroCostoActual"] = centro_costo_id;
 
                 ViewData["UbicacionActual"] = ubicacion_id;
                 ViewData["SectorActual"] = sector_id;
@@ -308,9 +311,17 @@ namespace RRHH.Controllers
 
                 int cant = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido, perfil_id.Value);
                 ViewData["TOTAL_NOVEDADES"] = cant;
-               
 
-                HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
+
+                List<int> lCosto = new List<int> { };
+
+                if (centro_costo_id >= 0)
+                {
+                    lCosto.Add(centro_costo_id);
+                }
+
+
+                    HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
                 if (nro_legajo > 0)
                 {
@@ -318,7 +329,16 @@ namespace RRHH.Controllers
                     ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
 
                     lFelicitaciones = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido, perfil_id.Value);
+
+                    if (centro_costo_id >= 0)
+                    {
+                        lFelicitaciones = lFelicitaciones.Where(o => lCosto.Contains(o.centro_costo_id.Value));
+                    }
+
+
                     ViewData["FELICITACIONES"] = lFelicitaciones;
+
+
                 }
                 else
                 {
@@ -327,9 +347,17 @@ namespace RRHH.Controllers
                 }
 
                 IEnumerable<Novedad> novedades;
+              
+
+                
+
 
                 novedades = novedadRepo.ObtenerPagina(pag_novedad.Value, (empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido, perfil_id.Value);
 
+                if (centro_costo_id >= 0)
+                {
+                    novedades = novedades.Where(o => lCosto.Contains(o.centro_costo_id.Value));
+                }
 
                 if (desde == "busqueda")
                 {
@@ -521,7 +549,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public IActionResult Buscar(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, string filtro)
+        public IActionResult Buscar(int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, int empresa_id, string apellido, int ubicacion_id, int sector_id, int local_id, int legajo_id, int centro_costo_id, string filtro)
         {
 
             HttpContext.Session.SetInt32("EMPRESA_ACTUAL", empresa_id);
@@ -535,6 +563,7 @@ namespace RRHH.Controllers
             HttpContext.Session.SetInt32("CATEGORIA_NOVEDAD_ACTUAL", categoria_novedad_id);
             HttpContext.Session.SetInt32("TIPO_NOVEDAD_ACTUAL", tipo_novedad_id);
             HttpContext.Session.SetInt32("TIPO_RESOLUCION_ACTUAL", tipo_resolucion_id);
+            HttpContext.Session.SetInt32("CENTRO_COSTO_ACTUAL", centro_costo_id);
 
             HttpContext.Session.SetString("FECHA_NOVEDAD_DESDE", fecha_novedad_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_desde.Year);
             HttpContext.Session.SetString("FECHA_NOVEDAD_HASTA", fecha_novedad_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_novedad_hasta.Year);
@@ -567,7 +596,7 @@ namespace RRHH.Controllers
 
 
         [HttpPost]
-        public void  ExportarExcel(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido, int legajo_id)
+        public void  ExportarExcel(int empresa_id, int categoria_novedad_id, int tipo_novedad_id, int tipo_resolucion_id, int nro_legajo, DateTime fecha_novedad_desde, DateTime fecha_novedad_hasta, string apellido, int legajo_id, int centro_costo_id)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -592,12 +621,27 @@ namespace RRHH.Controllers
 
                 novedadRepo = new NovedadRepo();
 
-               
+                List<int> lCosto = new List<int> { };
+
+                if (centro_costo_id >= 0)
+                {
+                    lCosto.Add(centro_costo_id);
+
+                }
+
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("Novedades");
 
                     IEnumerable<Novedad> l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido, perfil_id.Value);
+
+
+                    if (centro_costo_id >= 0)
+                    {
+
+                        l = l.Where(o => lCosto.Contains(o.centro_costo_id.Value));
+                    }
+
 
 
                     var currentRow = 1;
@@ -650,6 +694,12 @@ namespace RRHH.Controllers
                     {
 
                         l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido, perfil_id.Value);
+
+                        if (centro_costo_id >= 0)
+                        {
+     
+                            l = l.Where(o => lCosto.Contains(o.centro_costo_id.Value));
+                        }
 
                         currentRow += 2;
                         worksheet.Cell(currentRow, 1).Value = "Felicitaciones";
@@ -1163,6 +1213,30 @@ namespace RRHH.Controllers
 
             return Json(legajo);
         }
+
+
+
+        [HttpGet]
+        public JsonResult ObtenerCentrosCosto()
+        {
+            List<Models.CentroCosto> l = new List<Models.CentroCosto>();
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+
+                l = con.Query<Models.CentroCosto>("spCentroCostoObtenerTodos", commandType: CommandType.StoredProcedure).ToList();
+            }
+
+            l.Insert(0, new Models.CentroCosto(-1, "-- Seleccione el centro de costo --"));
+
+
+            return Json(new SelectList(l, "id", "descripcion"));
+        }
+
 
 
         public Boolean valida(Novedad novedad)

@@ -77,6 +77,11 @@
                            <label for="fecha_novedad_hasta">Hasta</label>
                            <input type="text" id="fecha_novedad_hasta" class="form-control" name="fecha_novedad_hasta" value="@ViewData["FechaNovedadHastaActual"]" />
                       </div>
+
+                      <div class="col">
+                          <label for="centro_costo_id">Centros de costo</label>
+                          <select  name="centro_costo_id" id="centro_costo_id" data-filter="type" class="filter-type filter form-control" value="@ViewData["CentroCostoActual"]"></select>
+                      </div>
                     </div>
                 </div>
               </div>  
@@ -342,7 +347,7 @@
                                                     @{
                                                     if (item.fecha_resolucion != null)
                                                     {
-                                                                                                                                                             @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
+                                                        @Convert.ToDateTime(item.fecha_resolucion).ToString("dd/MM/yyyy")
                                                     }
                                                     }
                                                 </td>
@@ -557,6 +562,7 @@
         var CodCategoriaNovedad = @Html.Raw(Json.Serialize(ViewData["CategoriaNovedadActual"]));
         var CodTipoNovedad = @Html.Raw(Json.Serialize(ViewData["TipoNovedadActual"]));
         var CodTipoResolucion = @Html.Raw(Json.Serialize(ViewData["TipoResolucionActual"]));
+        var CodCentroCosto = @Html.Raw(Json.Serialize(ViewData["CentroCostoActual"]));
        
         var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
 
@@ -577,7 +583,7 @@
         ObtenerCategoriasNovedad();
         ObtenerTiposNovedad();
         ObtenerTiposResolucion();
-
+        ObtenerCentrosCosto();
 
         if (Filtro != null && Filtro!='') { 
             $("#divEmpleado").show();
@@ -783,6 +789,28 @@
                 }
           });
         }
+
+
+         var ObtenerCentrosCosto = function () {
+              var CodCentroCosto =@Html.Raw(Json.Serialize(ViewData["CentroCostoActual"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerCentrosCosto","Novedad")',
+                type: 'GET',
+                success: function (data) {
+                    $('#centro_costo_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodCentroCosto)
+                              $('#centro_costo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#centro_costo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
 
         function ToggleBusquedaAvanzada(){   
                $('#divBusquedaAvanzada').toggle();

@@ -57,5 +57,7 @@ namespace RRHH.Models
 
         public string? empresa { get; set; }
 
+        public int? centro_costo_id { get; set; }
+
     }
 }

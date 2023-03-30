@@ -61,7 +61,7 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("CATEGORIA_NOVEDAD_ACTUAL", "");
             HttpContext.Session.SetString("TIPO_NOVEDAD_ACTUAL", "");
             HttpContext.Session.SetString("TIPO_RESOLUCION_ACTUAL", "");
-
+            HttpContext.Session.SetString("CENTRO_COSTO_ACTUAL", "");
 
             HttpContext.Session.SetString("EMPLEADO_ACTUAL", "");
             HttpContext.Session.SetString("FILTRO_ACTUAL", "");
