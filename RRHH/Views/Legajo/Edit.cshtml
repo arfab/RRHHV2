@@ -101,6 +101,12 @@
                   </div>
                </div>
 
+                  <div class="col bottom-buffer" id="divCentroCosto">
+                     <label asp-for="centro_costo_id" class="control-label">Centro Costo</label>
+                     <select  class="form-control" id="centro_costo_id" asp-for="centro_costo_id" ></select>
+                     <span class="alert-danger" asp-validation-for="centro_costo_id"></span>
+                  </div>
+
                <div class="row">
                  <div class="col bottom-buffer btns2" id="divFechaAlta">
                       <label asp-for="fecha_alta" class="control-label">Fecha Ingreso</label><br />
@@ -192,6 +198,7 @@
         var CodSector = @Html.Raw(Json.Serialize(Model.sector_id));
         var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
         var CodTurno = @Html.Raw(Json.Serialize(Model.turno_id));
+        var CodTCentroCosto = @Html.Raw(Json.Serialize(Model.centro_costo_id));
 
         if (Modo == "E") {
             $('#nro_legajo').prop('readonly', true);
@@ -210,6 +217,8 @@
         ObtenerUbicaciones();
     
         ObtenerTurnos(CodUbicacion);
+
+        ObtenerCentrosCosto();
 
        if (CodUbicacion==1 || CodUbicacion==2 || CodUbicacion==4) {
             ObtenerSectores(CodUbicacion);
@@ -285,6 +294,11 @@
     });
 
     $("#turno_id").change(function () {
+        if (@Html.Raw(Json.Serialize(@ViewData["MODO"])) == "E")
+          $("#divFechaCambio").show();
+    });
+
+     $("#centro_costo_id").change(function () {
         if (@Html.Raw(Json.Serialize(@ViewData["MODO"])) == "E")
           $("#divFechaCambio").show();
     });
@@ -492,6 +506,27 @@
                 }
           });
         }
+
+          var ObtenerCentrosCosto = function () {
+              var CodCentroCosto =@Html.Raw(Json.Serialize(Model.centro_costo_id));
+             $.ajax({
+                url: '@Url.Action("ObtenerCentrosCosto","Novedad")',
+                type: 'GET',
+                success: function (data) {
+                    $('#centro_costo_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodCentroCosto)
+                              $('#centro_costo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#centro_costo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
 
      $(function () {
       $('#txtSelectedFechaAlta').datepicker({

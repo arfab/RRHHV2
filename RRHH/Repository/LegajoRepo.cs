@@ -40,6 +40,8 @@ namespace RRHH.Repository
                     parameters.Add("@fecha_baja", legajo.fecha_baja);
                     parameters.Add("@convenio", legajo.convenio);
                     parameters.Add("@horas_diarias", legajo.horas_diarias);
+                    parameters.Add("@centro_costo_id", (legajo.centro_costo_id == -1) ? null : legajo.centro_costo_id);
+
                     parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -86,6 +88,8 @@ namespace RRHH.Repository
                 parameters.Add("@fecha_cambio", legajo.fecha_cambio);
                 parameters.Add("@convenio", legajo.convenio);
                 parameters.Add("@horas_diarias", legajo.horas_diarias);
+                parameters.Add("@centro_costo_id", (legajo.centro_costo_id == -1) ? null : legajo.centro_costo_id);
+
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
