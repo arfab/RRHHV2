@@ -80,7 +80,7 @@
 
                       <div class="col">
                           <label for="centro_costo_id">Centros de costo</label>
-                          <select  name="centro_costo_id" id="centro_costo_id" data-filter="type" class="filter-type filter form-control" value="@ViewData["CentroCostoActual"]"></select>
+                          <select  name="centro_costo" id="centro_costo_id" multiple="multiple" data-filter="type" class="filter-type filter form-control" value="@ViewData["CentroCostoActual"]"></select>
                       </div>
                     </div>
                 </div>
@@ -609,6 +609,7 @@
             else 
               $('#fecha_novedad_hasta').datepicker('setDate',FechaNovedadHasta);
 
+            $('#centro_costo_id').select2();
 
     });
 
@@ -800,7 +801,7 @@
                     $('#centro_costo_id').find('option').remove()
                     $(data).each(
                         function (index, item) {            
-                            if (item.value==CodCentroCosto)
+                            if (CodCentroCosto.indexOf(item.value) > -1)
                               $('#centro_costo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
                             else 
                               $('#centro_costo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
