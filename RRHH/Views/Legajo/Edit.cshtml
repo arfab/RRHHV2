@@ -73,11 +73,7 @@
                      <select  class="form-control" id="turno_id" asp-for="turno_id" ></select>
                      <span class="alert-danger" asp-validation-for="turno_id"></span>
                   </div>
-                  <div class="col bottom-buffer">
-                   <label asp-for="horas_diarias" class="control-label">Horas Diarias</label>
-                   <input asp-for="horas_diarias" id="horas_diarias" type="number" class="form-control"  />
-                   <span class="alert-danger" asp-validation-for="horas_diarias"></span>
-                </div>
+                
                   <div class="col bottom-buffer btns2" id="divFechaCambio">
                      <label asp-for="fecha_cambio" class="control-label">Fecha Cambio</label><br />
                      <input type="text" id="txtSelectedFechaCambio" name="fecha_cambio"  asp-for="fecha_cambio" />
