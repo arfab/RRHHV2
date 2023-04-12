@@ -23,6 +23,8 @@
 
         public string ubicacion { get; set; }
 
+        public int? horas_diarias { get; set; }
+
     }
 }
 

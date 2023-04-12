@@ -23,6 +23,13 @@
                      <span class="alert-danger" asp-validation-for="ubicacion_id"></span>
                   </div>
 
+              <div class="col bottom-buffer" id="divHorasDiarias">
+                   <label asp-for="horas_diarias" class="control-label">Horas Diarias</label>
+                   <input asp-for="horas_diarias" id="horas_diarias" type="number" class="form-control"  />
+                   <span class="alert-danger" asp-validation-for="horas_diarias"></span>
+              </div>
+				
+
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
@@ -91,6 +98,14 @@
 $(document).ready(function () {  
         var CodUbicacion = @Html.Raw(Json.Serialize(Model.ubicacion_id));
         ObtenerUbicaciones();
+
+        if (CodUbicacion==3) {
+            $("#divHorasDiarias").show();
+        }
+        else {
+               $("#divHorasDiarias").hide();
+        }
+
  })
 
 function mostrarModalSalida(){
@@ -102,6 +117,21 @@ function mostrarModalSalida(){
 function mostrarModalGrabar(){
     $("#mdGrabar").modal('show');
 }
+
+ 
+    $("#ubicacion_id").change(function () {
+        
+       if ($("#ubicacion_id").val() ==3) {
+            $("#divHorasDiarias").show();
+            $("#horas_diarias").val('');
+        }
+        else {
+            $("#horas_diarias").val('');
+            $("#divHorasDiarias").hide();
+           
+        }
+           
+    });
 
 
  var ObtenerUbicaciones = function () {
