@@ -125,7 +125,7 @@ namespace RRHH.Controllers
                     ubicacion_id = 3;
                 }
 
-                if (perfil_id <= 6)
+                if (perfil_id == 6)
                 {
                     sector_id = usuario_local_id.Value;
                 }
@@ -242,7 +242,7 @@ namespace RRHH.Controllers
                     ubicacion_id = 3;
                 }
 
-                if (perfil_id <= 6)
+                if (perfil_id == 6)
                 {
                     sector_id = usuario_local_id.Value;
                 }
