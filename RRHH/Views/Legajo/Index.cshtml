@@ -18,7 +18,7 @@
          
 
  <div class="container-fluid">
-     <div class="jumbotron text-center Titulo bottom-buffer ">
+     <div class="jumbotron text-center Titulo bottom-buffer " id="divBusquedaAvanzada">
       <h2>Legajos</h2>
       <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada | </a> 
       @if (_perfil_id <= 3)
@@ -85,15 +85,15 @@
           </div>  
 
          <div class="row mb-3" id="divBusquedaAvanzada" >
-              <div class="col-sm-4 col-xs-6 mb-3">
+              <div class="col-sm-4 col-xs-6 mb-3" id="divEmpresa">
                <label for="empresa_id">Empresa</label>
 			   <select name="empresa_id" id="empresa_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["EMPRESA_ID"]"></select>
 			</div>
-            <div class="col-sm-4 col-xs-6 mb-3">
+            <div class="col-sm-4 col-xs-6 mb-3" id="divUbicacion">
                <label for="ubicacion_id">Ubicación</label>
 			   <select name="ubicacion_id" id="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UBICACION_ID"]"></select>
 			</div>
-             <div class="col-sm-4 col-xs-6 mb-3">
+             <div class="col-sm-4 col-xs-6 mb-3" id="divSector">
                <label for="sector_id">Sector/Local</label>
 			   <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SECTOR_ID"]"></select>
 			</div>
@@ -255,7 +255,7 @@
                                         <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
                                      }
 
-                                     @if ( _perfil_id == 5 || _perfil_id == 6)
+                                     @if (@item.ubicacion_id==3 &&  (_perfil_id == 2 || _perfil_id == 3 || _perfil_id == 5 || _perfil_id == 6))
                                      {
                                         <a asp-controller="LegajoHorario" asp-action="Index" asp-route-legajo_id=@item.id><i data-mdb-toggle='tooltip' title='Horarios' class='bi  bi-clock'></i></a>
                                         <a asp-controller="LegajoFranco" asp-action="Index"  asp-route-legajo_id=@item.id><i data-mdb-toggle='tooltip' title='Francos' class='bi  bi-sun'></i></a>
@@ -309,6 +309,7 @@
     var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
     var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
     var Activo = @Html.Raw(Json.Serialize(ViewData["ActivoActual"]));
+    var perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
 
     $("#activo").val(Activo);
 
@@ -349,7 +350,27 @@
            }
         }
 
-        
+      if (perfil_id == 5) {
+          
+          $("#divBusquedaAvanzada").hide();
+          $("#divUbicacion").hide();
+          $("#divEmpresa").hide();
+          $("#activo").val('1');
+          $("#divActivo").hide();
+          // $('#ubicacion_id').attr("disabled", true);
+      }
+      else {
+        if ( perfil_id == 6) {
+          $("#divBusquedaAvanzada").hide();
+          $("#divEmpresa").hide();
+          $("#divUbicacion").hide();
+          $("#divSector").hide();
+          $("#activo").val('1');
+          $("#divActivo").hide();
+         //   $('#sector_id').attr("disabled", true);
+        }
+      }
+
        if (Filtro != null  && Filtro!='') { 
          $("#divEmpleado").show();
        }
