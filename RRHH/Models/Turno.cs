@@ -25,6 +25,8 @@
 
         public int? horas_diarias { get; set; }
 
+        public int? horas_medio_franco { get; set; }
+
     }
 }
 

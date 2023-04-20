@@ -29,6 +29,11 @@
                    <span class="alert-danger" asp-validation-for="horas_diarias"></span>
               </div>
 				
+               <div class="col bottom-buffer" id="divHorasMedioFranco">
+                   <label asp-for="horas_medio_franco" class="control-label">Horas Medio Franco</label>
+                   <input asp-for="horas_medio_franco" id="horas_medio_franco" type="number" class="form-control"  />
+                   <span class="alert-danger" asp-validation-for="horas_medio_franco"></span>
+              </div>
 
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
@@ -123,11 +128,15 @@ function mostrarModalGrabar(){
         
        if ($("#ubicacion_id").val() ==3) {
             $("#divHorasDiarias").show();
+            $("#divHorasMedioFranco").show();
             $("#horas_diarias").val('');
+            $("#horas_medio_franco").val('');
         }
         else {
             $("#horas_diarias").val('');
             $("#divHorasDiarias").hide();
+            $("#horas_medio_franco").hide();
+            $("#divHorasMedioFranco").hide();
            
         }
            

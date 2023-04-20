@@ -24,6 +24,7 @@ namespace RRHH.Repository
                 parameters.Add("@ubicacion_id", turno.ubicacion_id == -1 ? null : turno.ubicacion_id);
                 parameters.Add("@descripcion", turno.descripcion);
                 parameters.Add("@horas_diarias", turno.horas_diarias <= 0 ? null : turno.horas_diarias);
+                parameters.Add("@horas_medio_franco", turno.horas_medio_franco <= 0 ? null : turno.horas_medio_franco);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
@@ -51,6 +52,8 @@ namespace RRHH.Repository
                 parameters.Add("@ubicacion_id", turno.ubicacion_id == -1 ? null : turno.ubicacion_id);
                 parameters.Add("@descripcion", turno.descripcion);
                 parameters.Add("@horas_diarias", turno.horas_diarias <=0 ? null : turno.horas_diarias);
+                parameters.Add("@horas_medio_franco", turno.horas_medio_franco <= 0 ? null : turno.horas_medio_franco);
+
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
