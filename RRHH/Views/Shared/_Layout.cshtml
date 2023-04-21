@@ -25,6 +25,7 @@
 
     <link rel="icon" type="image/x-icon" href="~/img/logo.png">
 
+     @RenderSection("HeadersScripts",false)
    </head>
 <body>
      @using Microsoft.AspNetCore.Http
@@ -160,7 +161,7 @@
                           
 
                              @if (_perfil_id <=3)
-                            {
+                             {
                               <li class="nav-item dropdown">
                                       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                           Reportes
@@ -171,7 +172,7 @@
                                        </ul>
                               </li>
                              }
-
+                            
 
                         </ul>
 

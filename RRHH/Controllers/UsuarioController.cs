@@ -53,6 +53,8 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("NOMBRE", "");
             HttpContext.Session.SetString("PERFIL_ID", "");
             HttpContext.Session.SetString("ID", "");
+            HttpContext.Session.SetString("USUARIO_LOCAL_ID", "");
+            HttpContext.Session.SetString("USUARIO_LEGAJO_ID", "");
 
             HttpContext.Session.SetString("EMPRESA_ACTUAL", "");
             HttpContext.Session.SetString("LEGAJO_ACTUAL", "");
@@ -173,6 +175,7 @@ namespace RRHH.Controllers
                 HttpContext.Session.SetInt32("PERFIL_ID", usuario.perfil_id);
                 HttpContext.Session.SetString("PERFIL", usuario.perfil_descripcion);
                 HttpContext.Session.SetInt32("USUARIO_LOCAL_ID", usuario.local_id.Value);
+                HttpContext.Session.SetInt32("USUARIO_LEGAJO_ID", usuario.legajo_id.Value);
                 HttpContext.Session.SetInt32("ACTIVO_ACTUAL_LEGAJO", -1);
 
                 HttpContext.Session.SetString("EMPRESA_ACTUAL", "");
@@ -201,17 +204,20 @@ namespace RRHH.Controllers
 
                 HttpContext.Session.SetInt32("PAG_LEGAJO", 1);
 
-                if (usuario.perfil_id<=3)
-                {
-                    IFichadaRepo fichadaRepo;
+                //if (usuario.perfil_id<=3)
+                //{
+                //    IFichadaRepo fichadaRepo;
 
-                    fichadaRepo = new FichadaRepo();
+                //    fichadaRepo = new FichadaRepo();
 
-                   // fichadaRepo.GenerarFichadas(1);
+                //   // fichadaRepo.GenerarFichadas(1);
 
-                }
+                //}
 
-                return RedirectToAction("Menu", "Home");
+                if (usuario.perfil_id == 7)
+                    return RedirectToAction("Fichar", "Usuario");
+                else 
+                   return RedirectToAction("Menu", "Home");
             }
             else
             {
@@ -471,6 +477,105 @@ namespace RRHH.Controllers
 
 
         [HttpGet]
+        public IActionResult Fichar()
+        {
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            int? legajo_id = HttpContext.Session.GetInt32("USUARIO_LEGAJO_ID");
+            if (legajo_id == 0) return RedirectToAction("Login", "Usuario");
+
+            DateTime? dEntrada;
+            DateTime? dSalida;
+
+            IUsuarioRepo usuarioRepo;
+
+            usuarioRepo = new UsuarioRepo();
+
+            dEntrada = usuarioRepo.HomeOfficeObtenerEntrada(legajo_id.Value);
+            dSalida = usuarioRepo.HomeOfficeObtenerSalida(legajo_id.Value);
+
+            if (dEntrada != null && dEntrada.Value.Year!=1)
+                ViewData["FechaEntrada"] = dEntrada.Value.ToString("HH:mm");
+            else
+                ViewData["FechaEntrada"] = "";
+
+            if (dSalida != null && dSalida.Value.Year != 1)
+                ViewData["FechaSalida"] = dSalida.Value.ToString("HH:mm");
+            else
+                ViewData["FechaSalida"] = "";
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult FicharEntrada()
+        {
+
+            string sret;
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            int? legajo_id = HttpContext.Session.GetInt32("USUARIO_LEGAJO_ID");
+            if (legajo_id == 0) return RedirectToAction("Login", "Usuario");
+
+
+            IUsuarioRepo usuarioRepo;
+
+            usuarioRepo = new UsuarioRepo();
+
+            sret = usuarioRepo.HomeOfficeFichar(legajo_id.Value, "E");
+
+            if (sret == "")
+            {
+
+                return RedirectToAction("Fichar", "Usuario");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+            }
+
+
+            return View();
+        }
+
+
+        [HttpGet]
+        public IActionResult FicharSalida()
+        {
+
+            string sret;
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            int? legajo_id = HttpContext.Session.GetInt32("USUARIO_LEGAJO_ID");
+            if (legajo_id == 0) return RedirectToAction("Login", "Usuario");
+
+            IUsuarioRepo usuarioRepo;
+
+            usuarioRepo = new UsuarioRepo();
+
+            sret = usuarioRepo.HomeOfficeFichar(legajo_id.Value, "S");
+
+            if (sret == "")
+            {
+
+                return RedirectToAction("Fichar", "Usuario");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+            }
+
+
+            return View();
+        }
+
+
+        [HttpGet]
         public JsonResult ObtenerPerfiles()
         {
 
@@ -663,6 +768,25 @@ namespace RRHH.Controllers
             return Json(new SelectList(l, "perfil_id", "descripcion"));
         }
 
+
+
+        [HttpGet]
+        public JsonResult HoraServidor()
+        {
+            DateTime d;
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                d = con.QuerySingle<DateTime>("select getdate()");
+            }
+
+
+            return Json(d.ToString());
+        }
 
     }
 }

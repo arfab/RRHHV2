@@ -19,6 +19,9 @@ namespace RRHH.Repository
         public string InsertarWeb(string UsuarioID, string web, int perfil_id);
         public string EliminarWeb(string UsuarioID, string web);
 
+        public string HomeOfficeFichar(int legajo_id, string tipo_fichada);
+        public DateTime? HomeOfficeObtenerEntrada(int legajo_id);
+        public DateTime? HomeOfficeObtenerSalida(int legajo_id);
 
     }
 }

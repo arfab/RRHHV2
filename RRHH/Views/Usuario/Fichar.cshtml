@@ -1,0 +1,87 @@
+﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Index";
+     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+}
+
+@section HeadersScripts
+{
+   <script type="text/javascript"> 
+       function display_c(){
+            var refresh=1000; // Refresh rate in milli seconds
+            mytime=setTimeout('ObtenerHoraServidor()',refresh)
+        }
+     </script>
+}
+
+ <div class="container">
+     <div class="jumbotron text-center Titulo">
+      <h2>Home Office</h2>
+    </div>
+
+      <center>
+     <div class="row">
+            <div class="col bottom-buffer">
+                <span id="spanTitulo"></span>
+                <span id='ct' ></span>
+            </div>
+        </div>
+
+        <div class="row bottom-buffer">
+            <div class="col bottom-buffer">
+               
+                    <a type="button"  id="cmdFicharEntrada" class="btn btn-success mr-1 " asp-controller="Usuario" asp-action="FicharEntrada">ENTRADA <span id="spanEntrada"></span></a>
+
+                    <a type="button"   id="cmdFicharSalida" class="btn btn-success" asp-controller="Usuario" asp-action="FicharSalida">SALIDA  <span id="spanSalida"></span></a>
+                 
+         
+            </div>
+        </div>
+
+       
+
+         </center>
+
+    </div>
+
+
+@section Scripts
+{
+  <script type="text/javascript">
+  $(document).ready(function () {  
+    var FechaEntrada = @Html.Raw(Json.Serialize(ViewData["FechaEntrada"]));
+    var FechaSalida  = @Html.Raw(Json.Serialize(ViewData["FechaSalida"]));
+    
+    display_c();
+
+    if (FechaEntrada!='') {
+     $('#cmdFicharEntrada').addClass('disabled');
+     $('#spanEntrada').text(FechaEntrada);
+    }
+    
+    if (FechaSalida!='') {
+     $('#cmdFicharSalida').addClass('disabled');
+     $('#spanSalida').text(FechaSalida);
+    }
+
+  })
+
+
+   var ObtenerHoraServidor = function () {
+    $.ajax({
+        url: '@Url.Action("HoraServidor","Usuario")',
+        type: "get",
+        success: function (result) {
+           document.getElementById("ct").innerHTML=result;
+           document.getElementById("ct").style.background='#f1f1f1';
+           display_c();
+        }
+      });
+    }
+      </script>
+
+}

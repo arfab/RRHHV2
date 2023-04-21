@@ -127,6 +127,61 @@ namespace RRHH.Repository
             return "";
         }
 
+
+        public string HomeOfficeFichar(int legajo_id, string tipo_fichada)
+        {
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@legajo_id",legajo_id);
+                parameters.Add("@tipo_fichada", tipo_fichada);
+ 
+                icantFilas = con.Execute("spHomeOfficeFichar", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+            return "";
+        }
+
+        public DateTime? HomeOfficeObtenerEntrada(int legajo_id)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@legajo_id", legajo_id);
+
+                return con.QuerySingleOrDefault<DateTime>("spHomeOfficeObtenerEntrada", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
+        public DateTime? HomeOfficeObtenerSalida(int legajo_id)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@legajo_id", legajo_id);
+
+                return con.QuerySingleOrDefault<DateTime>("spHomeOfficeObtenerSalida", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
         public IEnumerable<Usuario> ObtenerUsuarios(int perfil_id)
         {
 

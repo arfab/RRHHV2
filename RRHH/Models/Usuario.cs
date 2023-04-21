@@ -28,6 +28,8 @@ namespace RRHH.Models
         public string? perfil_descripcion { get; set; }
 
         public int? local_id { get; set; }
+
+        public int? legajo_id { get; set; }
     }
 }
 
