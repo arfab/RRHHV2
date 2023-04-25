@@ -111,7 +111,7 @@ namespace RRHH.Controllers
             if (HttpContext.Session.GetInt32("ACTIVO_ACTUAL_LEGAJO") != null) activo = (int)HttpContext.Session.GetInt32("ACTIVO_ACTUAL_LEGAJO");
 
 
-            if (perfil_id > 0 && perfil_id <= 3 || perfil_id == 5 || perfil_id == 6)
+            if (perfil_id > 0 && perfil_id <= 3 || perfil_id == 4 || perfil_id == 5 || perfil_id == 6)
             {
                 ILegajoRepo legajoRepo;
 
@@ -120,7 +120,7 @@ namespace RRHH.Controllers
                 IEnumerable<Legajo> legajos;
 
 
-                if (perfil_id == 5 || perfil_id == 6)
+                if (perfil_id == 4 ||  perfil_id == 5 || perfil_id == 6)
                 {
                     ubicacion_id = 3;
                     activo = 1;
@@ -229,7 +229,7 @@ namespace RRHH.Controllers
             int? usuario_local_id = HttpContext.Session.GetInt32("USUARIO_LOCAL_ID");
 
 
-            if (perfil_id > 0 && perfil_id <= 3 || perfil_id == 5 || perfil_id == 6)
+            if (perfil_id > 0 && perfil_id <= 3 || perfil_id == 4 || perfil_id == 5 || perfil_id == 6)
             {
                 ILegajoRepo legajoRepo;
 
@@ -238,7 +238,7 @@ namespace RRHH.Controllers
                 IEnumerable<Legajo> legajos;
 
 
-                if (perfil_id == 5 || perfil_id == 6)
+                if (perfil_id == 4 || perfil_id == 5 || perfil_id == 6)
                 {
                     ubicacion_id = 3;
                     activo = 1;

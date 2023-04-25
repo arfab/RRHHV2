@@ -211,19 +211,21 @@ namespace RRHH.Controllers
                     {
                         worksheet.Cell(currentRow, i).Style.Font.SetBold();
                     }
-                    worksheet.Cell(currentRow, 1).Value = "Legajo";
-                    worksheet.Cell(currentRow, 2).Value = "Apellido";
-                    worksheet.Cell(currentRow, 3).Value = "Nombre";
-                    worksheet.Cell(currentRow, 4).Value = "Cantidad";
+                    worksheet.Cell(currentRow, 1).Value = "Empresa";
+                    worksheet.Cell(currentRow, 2).Value = "Legajo";
+                    worksheet.Cell(currentRow, 3).Value = "Apellido";
+                    worksheet.Cell(currentRow, 4).Value = "Nombre";
+                    worksheet.Cell(currentRow, 5).Value = "Cantidad";
 
 
                     foreach (var item in viaticos)
                     {
                         currentRow++;
-                        worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
-                        worksheet.Cell(currentRow, 2).Value = item.apellido;
-                        worksheet.Cell(currentRow, 3).Value = item.nombre;
-                        worksheet.Cell(currentRow, 4).Value = item.cantidad;
+                        worksheet.Cell(currentRow, 1).Value = item.empresa;
+                        worksheet.Cell(currentRow, 2).Value = item.nro_legajo;
+                        worksheet.Cell(currentRow, 3).Value = item.apellido;
+                        worksheet.Cell(currentRow, 4).Value = item.nombre;
+                        worksheet.Cell(currentRow, 5).Value = item.cantidad;
 
                     }
 
