@@ -31,11 +31,17 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
+            DateTime fecha_desde;
+
+            if (HttpContext.Session.GetString("FECHA_HORARIO_DESDE") != null && HttpContext.Session.GetString("FECHA_HORARIO_DESDE") != "")
+                fecha_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_HORARIO_DESDE"));
+            else
+                fecha_desde = DateTime.Now.Date;
 
 
             ViewData["ITEM_ACTUAL"] = nro_item;
 
-
+            ViewData["FechaDesdeActual"] = fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year;
 
 
             if (perfil_id > 0)
@@ -60,7 +66,7 @@ namespace RRHH.Controllers
 
                 IEnumerable<LegajoHorario> detalle;
 
-                detalle = legajoHorarioRepo.ObtenerPorLegajo(legajo_id);
+                detalle = legajoHorarioRepo.ObtenerPorLegajo(legajo_id, fecha_desde);
 
 
 
@@ -75,7 +81,19 @@ namespace RRHH.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult Buscar(int legajo_id, DateTime fecha_desde)
+        {
 
+
+            HttpContext.Session.SetString("FECHA_HORARIO_DESDE", "");
+
+            HttpContext.Session.SetString("FECHA_HORARIO_DESDE", fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year);
+
+
+            return RedirectToAction("Index", "LegajoHorario", new { legajo_id = legajo_id, desde = "busqueda" }); 
+
+        }
 
         [HttpGet]
         public IActionResult Edit(int? id, int legajo_id, string origen, string modo, int nro_item)

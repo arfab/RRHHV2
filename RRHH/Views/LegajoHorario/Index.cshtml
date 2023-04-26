@@ -22,7 +22,15 @@
           </div>
 
           <center>
-            
+            <div class="row mb-3" >
+                <div class="col-lg-4 col-xs-6 mb-3">
+                   <label for="fecha">Fecha</label>
+                   <input type="text" id="fecha_desde" class="form-control" name="fecha_desde" value="@ViewData["FechaDesdeActual"]"  />
+                   <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" asp-route-legajo_id=@ViewData["EmpleadoActual"] class="btn btn-primary" />
+
+              </div>
+            </div>
+
 
              <div class="row mb-3" >
                 <div class="col">
@@ -75,6 +83,7 @@
                                         <tr >
                                             <th>Fecha</th>
                                             <th>Descripcion</th>
+                                            <th>Horas</th>
                                             <th>Validado</th>
                                             <th></th>
                                         </tr>
@@ -98,6 +107,9 @@
                                                 <td>
                                                   @item.descripcion
                                                 </td>
+                                                  <td style='@(item.valida_horas==0? "background-color:Yellow;": " ")'>
+                                                  @item.cantidad_horas
+                                                  </td>
                                                  <td>
                                                   @(item.estado==1? "SI": "NO") 
                                                 </td>
@@ -173,6 +185,7 @@
      <script type="text/javascript">
 
     $(document).ready(function() {
+        var FechaDesde = @Html.Raw(Json.Serialize(ViewData["FechaDesdeActual"]));
 
         var CodLegajo = @Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
 
@@ -180,6 +193,13 @@
           
      
         if(item_actual>0) ubicarFila(item_actual);
+
+        $('#fecha_desde').datepicker({format: 'dd/mm/yyyy' });
+
+            if (FechaDesde==null)
+              $('#fecha_desde').datepicker('setDate', "-0d");
+            else 
+              $('#fecha_desde').datepicker('setDate',FechaDesde);
     });
 
 
@@ -256,6 +276,14 @@
     printData();
     })
 
+    $(function () {
+          $('#fecha_desde').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "es"
+            });
+         });
 
     function ubicarFila(item_actual){
 

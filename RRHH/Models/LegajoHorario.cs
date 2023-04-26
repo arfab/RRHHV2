@@ -31,5 +31,8 @@ namespace RRHH.Models
 
         public string? descripcion { get; set; }
 
+        public string? cantidad_horas { get; set; }
+        public int? valida_horas { get; set; }
+
     }
 }

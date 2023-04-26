@@ -106,7 +106,7 @@ namespace RRHH.Repository
         }
 
 
-        public IEnumerable<LegajoHorario> ObtenerPorLegajo(int legajo_id)
+        public IEnumerable<LegajoHorario> ObtenerPorLegajo(int legajo_id, DateTime fecha_desde)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -117,6 +117,7 @@ namespace RRHH.Repository
 
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@legajo_id", legajo_id);
+                parameter.Add("@fecha", (fecha_desde.Year < 1000) ? null : fecha_desde);
 
 
                 return con.Query<LegajoHorario>("spLegajoHorarioObtenerPorLegajo", parameter, commandType: CommandType.StoredProcedure).ToList();
