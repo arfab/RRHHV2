@@ -29,16 +29,14 @@
 
              </div>
 
-                <div class="col bottom-buffer">
-                  <label asp-for="desde" class="control-label">Desde</label>
-                   <input type="time" asp-for="desde" name="desde" id="desde" step="60" class="form-control" />
-                </div>
-                 <div class="col bottom-buffer">
-                  <label asp-for="hasta" class="control-label">Hasta</label>
-                   <input type="time" asp-for="hasta" name="hasta" id="hasta" step="60" class="form-control" />
-                </div>
-
-                 <div class="col bottom-buffer">
+             <div class="col bottom-buffer">
+                  <label asp-for="concepto"  class="control-label">Concepto</label>
+                  <select  data-filter="model" class="form-control" name="concepto" id="concepto" asp-for="concepto" >
+                    <option value="1">Horario</option>
+                    <option value="2">Franco</option>
+                  </select>   
+             </div>
+              <div class="col-2 bottom-buffer">
                 <label asp-for="estado" class="control-label">Validado</label>
                  <select  data-filter="model" class="form-control" name="estado" id="estado" asp-for="estado" >
                      <option value=0>No</option>
@@ -48,11 +46,20 @@
                   
                 </select>   
                  </div>
-             </div>
+           </div>
+
+            <div class="row">
+                <div class="col bottom-buffer" id="divHoraDesde">
+                  <label asp-for="desde" class="control-label">Desde</label>
+                   <input type="time" asp-for="desde" name="desde" id="desde" step="60" class="form-control" />
+                </div>
+                 <div class="col bottom-buffer" id="divHoraHasta"> 
+                  <label asp-for="hasta" class="control-label">Hasta</label>
+                   <input type="time" asp-for="hasta" name="hasta" id="hasta" step="60" class="form-control" />
+                </div>
+           </div>
+
            
-
-               
-
 
 
            <div class="row " id="divInsertar">
@@ -152,15 +159,35 @@ $(document).ready(function () {
      var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
 
     
-        $('#txtSelectedFecha').datepicker({format: 'dd/mm/yyyy' });
+     $('#txtSelectedFecha').datepicker({format: 'dd/mm/yyyy' });
 
-        if(Fecha==null) $('#txtSelectedFecha').datepicker('setDate', "-0d");
+     if(Fecha==null) $('#txtSelectedFecha').datepicker('setDate', "-0d");
 
-        HabilitarGrabar();
+
+    if ($("#concepto").val() == '1') {
+       $("#divHoraDesde").show();
+       $("#divHoraHasta").show();
+    }
+    else {
+       $("#divHoraDesde").hide();
+       $("#divHoraHasta").hide();
+    }
+
+     HabilitarGrabar();
 
    })
 
-
+    $("#concepto").change(function () {
+      if ($("#concepto").val() == '1') {
+         $("#divHoraDesde").show();
+         $("#divHoraHasta").show();
+      }
+      else {
+       $("#divHoraDesde").hide();
+       $("#divHoraHasta").hide();
+      }
+        HabilitarGrabar();
+    });
 
     $("#desde").change(function () {
         HabilitarGrabar();
@@ -213,7 +240,7 @@ $(document).ready(function () {
 
  function HabilitarGrabar() {
     
-  if ($('#desde').val()!='' && $('#hasta').val()!='')
+  if ($('#concepto').val()=='1' && $('#desde').val()!='' && $('#hasta').val()!='' || $('#concepto').val()=='2')
       $("#grabar_id").show();
   else
       $("#grabar_id").hide(); 

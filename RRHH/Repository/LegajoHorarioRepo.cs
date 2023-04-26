@@ -21,6 +21,7 @@ namespace RRHH.Repository
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@legajo_id", legajoHorario.legajo_id);
+                parameters.Add("@concepto", legajoHorario.concepto);
                 parameters.Add("@fecha", legajoHorario.fecha);
                 parameters.Add("@desde", legajoHorario.desde);
                 parameters.Add("@hasta", legajoHorario.hasta);
@@ -49,6 +50,7 @@ namespace RRHH.Repository
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@id", legajoHorario.id);
+                parameters.Add("@concepto", legajoHorario.concepto);
                 parameters.Add("@fecha", legajoHorario.fecha);
                 parameters.Add("@desde", legajoHorario.desde);
                 parameters.Add("@hasta", legajoHorario.hasta);

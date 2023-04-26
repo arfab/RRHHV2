@@ -74,8 +74,7 @@
                                        
                                         <tr >
                                             <th>Fecha</th>
-                                            <th>Desde</th>
-                                            <th>Hasta</th>
+                                            <th>Descripcion</th>
                                             <th>Validado</th>
                                             <th></th>
                                         </tr>
@@ -97,10 +96,7 @@
                                                     @Convert.ToDateTime(item.fecha).ToString("dd/MM/yyyy")
                                                 </td>
                                                 <td>
-                                                  @item.desde
-                                                </td>
-                                                <td>
-                                                  @item.hasta
+                                                  @item.descripcion
                                                 </td>
                                                  <td>
                                                   @(item.estado==1? "SI": "NO") 

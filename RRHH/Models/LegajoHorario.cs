@@ -27,5 +27,9 @@ namespace RRHH.Models
 
         public int? estado { get; set; }
 
+        public int? concepto { get; set; }
+
+        public string? descripcion { get; set; }
+
     }
 }
