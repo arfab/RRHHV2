@@ -9,5 +9,6 @@ namespace RRHH.Repository
         public LegajoHorario Obtener(int id);
         public IEnumerable<LegajoHorario> ObtenerPorLegajo(int legajo_id, DateTime fecha_desde);
         public string Eliminar(int id);
+        public string Semana(DateTime fecha);
     }
 }

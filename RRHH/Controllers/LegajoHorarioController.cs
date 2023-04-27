@@ -43,6 +43,7 @@ namespace RRHH.Controllers
 
             ViewData["FechaDesdeActual"] = fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year;
 
+          
 
             if (perfil_id > 0)
             {
@@ -63,8 +64,9 @@ namespace RRHH.Controllers
                 ViewData["ApellidoActual"] = legajo.apellido;
                 ViewData["NombreActual"] = legajo.nombre;
 
+                ViewData["Semana"] = legajoHorarioRepo.Semana(fecha_desde);
 
-                IEnumerable<LegajoHorario> detalle;
+                IEnumerable <LegajoHorario> detalle;
 
                 detalle = legajoHorarioRepo.ObtenerPorLegajo(legajo_id, fecha_desde);
 
@@ -96,7 +98,7 @@ namespace RRHH.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id, int legajo_id, string origen, string modo, int nro_item)
+        public IActionResult Edit(int? id, int legajo_id, string origen, string modo, int nro_item, string fecha)
         {
 
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");

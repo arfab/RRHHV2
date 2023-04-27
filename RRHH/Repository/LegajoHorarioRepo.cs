@@ -2,6 +2,7 @@
 using RRHH.Models;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace RRHH.Repository
 {
@@ -123,6 +124,18 @@ namespace RRHH.Repository
                 return con.Query<LegajoHorario>("spLegajoHorarioObtenerPorLegajo", parameter, commandType: CommandType.StoredProcedure).ToList();
             }
 
+        }
+
+
+        public string Semana(DateTime fecha)
+        {
+            DayOfWeek fdow = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
+            int offset = fdow - fecha.DayOfWeek;
+            DateTime fdowDate = fecha.AddDays(offset);
+
+            DateTime ldowDate = fdowDate.AddDays(6);
+
+            return "Semana del " + fdowDate.Day + "/" + fdowDate.Month + " al " + ldowDate.Day + "/" + ldowDate.Month + " de " + fecha.Year;
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace RRHH.Models
 {
@@ -34,5 +35,34 @@ namespace RRHH.Models
         public string? cantidad_horas { get; set; }
         public int? valida_horas { get; set; }
 
-    }
+        public string DiaSemana()
+        {
+            switch (fecha.Value.DayOfWeek)
+            {
+                case DayOfWeek.Monday:
+                    return "Lun";
+
+                case DayOfWeek.Tuesday:
+                    return "Mar";
+
+                case DayOfWeek.Wednesday:
+                    return "Mié";
+
+                case DayOfWeek.Thursday:
+                    return "Jue";
+
+                case DayOfWeek.Friday:
+                    return "Vie";
+
+                case DayOfWeek.Saturday:
+                    return "Sáb";
+
+                case DayOfWeek.Sunday:
+                    return "Dom";
+
+            }
+            return "";
+        }
+
+      }
 }
