@@ -97,6 +97,53 @@ namespace RRHH.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult Grabar(int legajo_id, int concepto, DateTime fecha, string desde, string hasta, int estado)
+        {
+
+            int? usuario_id = HttpContext.Session.GetInt32("UID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            string sret = "";
+
+            ILegajoHorarioRepo legajoHorarioRepo;
+            legajoHorarioRepo = new LegajoHorarioRepo();
+            LegajoHorario legajoHorario = new LegajoHorario();
+
+            legajoHorario.legajo_id = legajo_id;
+            legajoHorario.concepto = concepto;
+            legajoHorario.fecha = fecha;
+            legajoHorario.desde = desde;
+            legajoHorario.hasta = hasta;
+            legajoHorario.estado = estado;
+            legajoHorario.usuario_id = usuario_id;
+
+
+            string mensaje = "";
+            if (valida(legajoHorario, ref mensaje))
+            {
+
+
+                sret = legajoHorarioRepo.Insertar(legajo_id, legajoHorario);
+
+
+                if (sret == "")
+                {
+                        return RedirectToAction("Index", "LegajoHorario", new { legajo_id = legajo_id });
+                }
+
+
+            }
+            else
+            {
+                ViewBag.Message = mensaje;
+            }
+
+            return View(legajoHorario);
+
+        }
+
         [HttpGet]
         public IActionResult Edit(int? id, int legajo_id, string origen, string modo, int nro_item, string fecha)
         {

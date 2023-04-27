@@ -20,45 +20,28 @@
 
 
           <center>
-            <div class="row justify-content-center mt-3">
-                <div class="col-1">
-                    <label for="fecha">Fecha</label>
-                </div>
-                <div class="col-2">
+            <div class="row justify-content-center mt-1 ">
+                <div class="col-lg-2 col-md-4 input-group">
+                   <span class="input-group-text">Fecha</span> 
                    <input type="text" id="fecha_desde" class="form-control" name="fecha_desde" value="@ViewData["FechaDesdeActual"]"  /> 
-                </div>
-                <div class="col-1">
-                    <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" asp-route-legajo_id=@ViewData["EmpleadoActual"] class="btn btn-primary" />
-                </div>
+                   <input type="submit" value="Buscar" id="buscar" asp-action="Buscar" asp-route-legajo_id=@ViewData["EmpleadoActual"] class="btn btn-primary" />
+                    <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
+                   <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Legajo" asp-action="Index" asp-route-id=@ViewData["EmpleadoActual"]>SALIR</a>
+               </div>
+
             </div>
 
 
-             <div class="row mt-3 mb-3" >
-                <div class="col">
-@*                     <a type="button" id="cmdNuevo" class="btn btn-primary " asp-controller="TurnoDetalle" asp-action="Index" asp-route-turno_id=@ViewData["TurnoActual"]  >BUSCAR</a>                     
-*@
-                    
-                     <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
 
-                    @if (_perfil_id <= 3 || _perfil_id == 5 || _perfil_id == 6)
-                    {
-                          <a type="button" id="cmdNuevo" class="btn btn-success " asp-controller="LegajoHorario" asp-action="Edit" asp-route-legajo_id=@ViewData["EmpleadoActual"] asp-route-fecha=@ViewData["FechaDesdeActual"]>INGRESAR HORARIOS</a>                     
-                    }
-
-                     <a type="button" id="cmdSalir" class="btn btn-success" asp-controller="Legajo" asp-action="Index" asp-route-id=@ViewData["EmpleadoActual"]>SALIR</a>
-
-                </div>
-             </div>
 
         
                 <div id="divPrint">
 
-                @if (@Model != null && Model.Count()>0)
-                {
-                    <div class="row" style="margin-bottom:10px;">
+                
+                    <div class="row mt-1" >
                         <div class="col bottom-buffer">
                              <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
-                                 Horarios de @ViewData["ApellidoActual"],  (@ViewData["NombreActual"])<br />
+                                 Horarios de @ViewData["ApellidoActual"],  @ViewData["NombreActual"]<br />
                                  @ViewData["Semana"]
                              </div>
                        </div>
@@ -66,8 +49,55 @@
                     
 
                    </div>
-                    
-   
+               
+      <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+         
+           <div class="row">
+
+                  
+             <div class="col-4" id="divFecha">
+                      <label  class="control-label">Fecha</label><br />
+                      <input type="text" id="txtSelectedFecha" name="fecha"  />
+
+             </div>
+
+             <div class="col-4">
+                  <label   class="control-label">Concepto</label>
+                  <select  data-filter="model" class="form-control" name="concepto" id="concepto"  >
+                    <option value="1">Horario</option>
+                    <option value="2">Franco</option>
+                  </select>   
+             </div>
+              <div class="col-4">
+                <label  class="control-label">Validado</label>
+                 <select  data-filter="model" class="form-control" name="estado" id="estado"  >
+                     <option value=0>No</option>
+                      @if (_perfil_id !=6) {
+                        <option value=1>Si</option>
+                      }
+                  
+                </select>   
+                 </div>
+              </div>
+               <div class="row">
+                <div class="col-4" id="divHoraDesde">
+                  <label  class="control-label">Desde</label>
+                   <input type="time" name="desde" id="desde" step="60" class="form-control" />
+                </div>
+                 <div class="col-4"  id="divHoraHasta"> 
+                  <label  class="control-label">Hasta</label>
+                   <input type="time"  name="hasta" id="hasta" step="60" class="form-control" />
+                </div>
+              </div>
+               <div class="row mt-2">
+                <div class="col">
+                   <a id="grabar_id" value=""  class="btn btn-outline-danger" onclick="mostrarModalGrabar();" >Grabar</a>
+                </div>
+            </div>
+            </div>
+
+             @if (@Model != null && Model.Count()>0)
+                  { 
                     <div class="row">
                         <div class="col bottom-buffer">
                             <div class="table-responsive">
@@ -133,6 +163,10 @@
              </center>
 
 
+           
+   
+      </div>
+
         <!-- Modal Eliminar -->
 
         <div class="modal fade" id="mdEliminar" tabindex="-1" aria-labelledby="" aria-hidden="true">
@@ -159,6 +193,26 @@
             </div>
         </div>
      
+
+
+         <!-- Modal Grabar -->
+<div class="modal fade" id="mdGrabar" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Horario del legajo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Confirma los cambios hechos?
+      </div>
+      <div class="modal-footer">
+          <button type="submit"  asp-action="Grabar"  asp-route-legajo_id=@ViewData["EmpleadoActual"] asp-route-modo=@ViewData["MODO"] asp-route-origen=@ViewData["ORIGEN"] asp-route-nro_item=@ViewData["ITEM_ACTUAL"] class="btn btn-outline-success"  data-bs-dismiss="modal" >SI</button>
+          <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
 
     </form>
 
@@ -199,10 +253,54 @@
               $('#fecha_desde').datepicker('setDate', "-0d");
             else 
               $('#fecha_desde').datepicker('setDate',FechaDesde);
+
+          $('#txtSelectedFecha').datepicker({format: 'dd/mm/yyyy' });
+          $('#txtSelectedFecha').datepicker('setDate', "-0d");
+
+        if ($("#concepto").val() == '1') {
+              $("#divHoraDesde").show();
+              $("#divHoraHasta").show();
+         }
+         else {
+              $("#divHoraDesde").hide();
+              $("#divHoraHasta").hide();
+         }
+
+     HabilitarGrabar();
     });
 
+    $("#concepto").change(function () {
+      if ($("#concepto").val() == '1') {
+         $("#divHoraDesde").show();
+         $("#divHoraHasta").show();
+      }
+      else {
+       $("#divHoraDesde").hide();
+       $("#divHoraHasta").hide();
+      }
+        HabilitarGrabar();
+    });
 
+    $("#desde").change(function () {
+        HabilitarGrabar();
+    });
+
+    $("#hasta").change(function () {
+        HabilitarGrabar();
+    });
     
+    $("#estado").change(function () {
+        HabilitarGrabar();
+
+    });
+  
+   function HabilitarGrabar() {
+    
+      if ($('#concepto').val()=='1' && $('#desde').val()!='' && $('#hasta').val()!='' || $('#concepto').val()=='2')
+        $("#grabar_id").show();
+      else
+        $("#grabar_id").hide(); 
+   } 
 
 
     function mostrarModalEliminar(id){
@@ -210,6 +308,10 @@
           $("#mdEliminar").modal('show');
 
          }
+
+    function mostrarModalGrabar(){
+      $("#mdGrabar").modal('show');
+    }
 
        function printData()
        {
@@ -277,6 +379,16 @@
 
     $(function () {
           $('#fecha_desde').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "es"
+            });
+         });
+
+    
+    $(function () {
+          $('#txtSelectedFecha').datepicker({
             changeMonth: true,
             changeYear: true,
             format: "dd/mm/yyyy",
