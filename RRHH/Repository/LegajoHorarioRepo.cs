@@ -33,7 +33,7 @@ namespace RRHH.Repository
 
                 icantFilas = con.Execute("spLegajoHorarioInsertar", parameters, commandType: CommandType.StoredProcedure);
 
-                if (parameters.Get<int>("@retValue") == -1) return "Error al insertar";
+                if (parameters.Get<int>("@retValue") == -1) return "Ya hay un horario cargado en ese fecha";
 
 
             }
@@ -62,7 +62,7 @@ namespace RRHH.Repository
 
                 con.Execute("spLegajoHorarioModificar", parameters, commandType: CommandType.StoredProcedure);
 
-                // if (parameters.Get<int>("@retValue") < 0) return "El legajo no existe";
+                if (parameters.Get<int>("@retValue") == -1) return "Ya hay un horario cargado en ese fecha";
 
             }
             return "";

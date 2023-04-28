@@ -21,7 +21,7 @@ namespace RRHH.Controllers
         }
 
 
-        public IActionResult Index(int legajo_id, int nro_item)
+        public IActionResult Index(int legajo_id, int nro_item, int? mostrarAlta, string? mensaje)
         {
 
 
@@ -40,6 +40,8 @@ namespace RRHH.Controllers
 
 
             ViewData["ITEM_ACTUAL"] = nro_item;
+
+            ViewData["MOSTRAR_ALTA"] = (mostrarAlta==null||mostrarAlta==0?0:1);
 
             ViewData["FechaDesdeActual"] = fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year;
 
@@ -70,13 +72,13 @@ namespace RRHH.Controllers
 
                 detalle = legajoHorarioRepo.ObtenerPorLegajo(legajo_id, fecha_desde);
 
-
+                ViewBag.Message =  mensaje;
 
                 return View(detalle);
 
             }
 
-
+           
 
             return View();
 
@@ -98,7 +100,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Grabar(int legajo_id, int concepto, DateTime fecha, string desde, string hasta, int estado)
+        public IActionResult Grabar(int legajo_id, int concepto, DateTime fecha, string desde, string hasta, int estado, int mostrarAlta)
         {
 
             int? usuario_id = HttpContext.Session.GetInt32("UID");
@@ -130,9 +132,12 @@ namespace RRHH.Controllers
 
                 if (sret == "")
                 {
-                        return RedirectToAction("Index", "LegajoHorario", new { legajo_id = legajo_id });
+                        return RedirectToAction("Index", "LegajoHorario", new { legajo_id = legajo_id, mostrarAlta= mostrarAlta });
                 }
-
+                else
+                {
+                   mensaje = sret;
+                }
 
             }
             else
@@ -140,7 +145,9 @@ namespace RRHH.Controllers
                 ViewBag.Message = mensaje;
             }
 
-            return View(legajoHorario);
+            return RedirectToAction("Index", "LegajoHorario", new { legajo_id = legajo_id, mostrarAlta = mostrarAlta, mensaje=mensaje});
+
+         //  return View(legajoHorario);
 
         }
 
@@ -271,7 +278,10 @@ namespace RRHH.Controllers
                         return RedirectToAction("Index", "LegajoHorario", new { legajo_id = legajo_id });
 
                 }
-
+                else
+                {
+                    ViewBag.Message = sret;
+                }
 
             }
             else
