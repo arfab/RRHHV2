@@ -89,6 +89,53 @@ namespace RRHH.Repository
             return "";
         }
 
+
+        public string CopiarSemana(int legajo_id, DateTime fecha_desde)
+        {
+
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@legajo_id", legajo_id);
+                parameters.Add("@fecha", (fecha_desde.Year < 1000) ? null : fecha_desde);
+
+
+                icantFilas = con.Execute("spLegajoHorarioCopiarSemana", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+
+            return "";
+        }
+
+        public string ValidarSemana(int legajo_id, DateTime fecha_desde)
+        {
+
+            int icantFilas;
+            using (var con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@legajo_id", legajo_id);
+                parameters.Add("@fecha", (fecha_desde.Year < 1000) ? null : fecha_desde);
+
+
+                icantFilas = con.Execute("spLegajoHorarioValidarSemana", parameters, commandType: CommandType.StoredProcedure);
+
+
+            }
+
+            return "";
+        }
+
         public LegajoHorario Obtener(int id)
         {
 
@@ -131,7 +178,7 @@ namespace RRHH.Repository
         {
             DayOfWeek fdow = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
             int offset = fdow - fecha.DayOfWeek;
-            DateTime fdowDate = fecha.AddDays(offset);
+            DateTime fdowDate = fecha.AddDays(offset+1);
 
             DateTime ldowDate = fdowDate.AddDays(6);
 

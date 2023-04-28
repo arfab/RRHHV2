@@ -65,6 +65,7 @@ namespace RRHH.Controllers
                 ViewData["EmpleadoActual"] = legajo_id;
                 ViewData["ApellidoActual"] = legajo.apellido;
                 ViewData["NombreActual"] = legajo.nombre;
+                ViewData["NroLegajoActual"] = legajo.nro_legajo;
 
                 ViewData["Semana"] = legajoHorarioRepo.Semana(fecha_desde);
 
@@ -317,6 +318,43 @@ namespace RRHH.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult CopiarSemana(int legajo_id, DateTime fecha_desde)
+        {
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            ILegajoHorarioRepo legajoHorarioRepo;
+
+            legajoHorarioRepo = new LegajoHorarioRepo();
+
+            legajoHorarioRepo.CopiarSemana(legajo_id, fecha_desde);
+
+
+            return RedirectToAction("Index", "LegajoHorario", new { legajo_id = legajo_id });
+
+
+        }
+
+        [HttpPost]
+        public IActionResult ValidarSemana(int legajo_id, DateTime fecha_desde)
+        {
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            ILegajoHorarioRepo legajoHorarioRepo;
+
+            legajoHorarioRepo = new LegajoHorarioRepo();
+
+            legajoHorarioRepo.ValidarSemana(legajo_id, fecha_desde);
+
+
+            return RedirectToAction("Index", "LegajoHorario", new { legajo_id = legajo_id });
+
+
+        }
 
 
         public Boolean valida(LegajoHorario legajoHorario, ref string mensaje)
