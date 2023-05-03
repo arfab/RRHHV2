@@ -27,6 +27,8 @@
 
         public int? horas_medio_franco { get; set; }
 
+        public int? tipo_turno_id { get; set; }
+
     }
 }
 

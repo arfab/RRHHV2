@@ -35,6 +35,14 @@
                    <span class="alert-danger" asp-validation-for="horas_medio_franco"></span>
               </div>
 
+              <div class="col bottom-buffer">
+                <label asp-for="tipo_turno_id" class="control-label">Tipo Turno</label>
+                 <select  data-filter="model" class="form-control" name="tipo_turno_id" id="tipo_turno_id" asp-for="tipo_turno_id" >
+                  <option value=1>Full Time</option>
+                  <option value=2>Part Time</option>
+                </select>   
+              </div>
+
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>

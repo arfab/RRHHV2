@@ -5,13 +5,13 @@ using System.Data.SqlClient;
 
 namespace RRHH.Repository
 {
-    public class TurnoRepo: ITurnoRepo
+    public class TurnoDesgloseHorasRepo:ITurnoDesgloseHorasRepo
     {
 
         static readonly string strConnectionString = Tools.GetConnectionString();
 
 
-        public string Insertar(Turno turno)
+        public string Insertar(int turno_id, TurnoDesgloseHoras turnoDesgloseHoras)
         {
             int icantFilas;
             using (var con = new SqlConnection(strConnectionString))
@@ -21,18 +21,15 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@ubicacion_id", turno.ubicacion_id == -1 ? null : turno.ubicacion_id);
-                parameters.Add("@descripcion", turno.descripcion);
-                parameters.Add("@horas_diarias", turno.horas_diarias <= 0 ? null : turno.horas_diarias);
-                parameters.Add("@horas_medio_franco", turno.horas_medio_franco <= 0 ? null : turno.horas_medio_franco);
-                parameters.Add("@tipo_turno_id", turno.tipo_turno_id);
-
+                parameters.Add("@turno_id", turno_id);
+                parameters.Add("@cantidad_dias", turnoDesgloseHoras.cantidad_dias);
+                parameters.Add("@cantidad_horas_dia", turnoDesgloseHoras.cantidad_horas_dia);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
-                icantFilas = con.Execute("spTurnoInsertar", parameters, commandType: CommandType.StoredProcedure);
+                icantFilas = con.Execute("spTurnoDesgloseHorasInsertar", parameters, commandType: CommandType.StoredProcedure);
 
-                if (parameters.Get<int>("@retValue") == -1) return "Error al insertar el turno";
+                if (parameters.Get<int>("@retValue") == -1) return "Error al insertar el desglose de horas del turno";
 
 
             }
@@ -40,7 +37,7 @@ namespace RRHH.Repository
         }
 
 
-        public string Modificar(Turno turno)
+        public string Modificar(TurnoDesgloseHoras turnoDesgloseHoras)
         {
 
             using (var con = new SqlConnection(strConnectionString))
@@ -50,19 +47,16 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@id", turno.id);
-                parameters.Add("@ubicacion_id", turno.ubicacion_id == -1 ? null : turno.ubicacion_id);
-                parameters.Add("@descripcion", turno.descripcion);
-                parameters.Add("@horas_diarias", turno.horas_diarias <=0 ? null : turno.horas_diarias);
-                parameters.Add("@horas_medio_franco", turno.horas_medio_franco <= 0 ? null : turno.horas_medio_franco);
-                parameters.Add("@tipo_turno_id", turno.tipo_turno_id);
+                parameters.Add("@id", turnoDesgloseHoras.id);
+                parameters.Add("@cantidad_dias", turnoDesgloseHoras.cantidad_dias);
+                parameters.Add("@cantidad_horas_dia", turnoDesgloseHoras.cantidad_horas_dia);
 
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
 
-                con.Execute("spTurnoModificar", parameters, commandType: CommandType.StoredProcedure);
+                con.Execute("spTurnoDesgloseHorasModificar", parameters, commandType: CommandType.StoredProcedure);
 
-                if (parameters.Get<int>("@retValue") == -1) return "Error al modificar el horario";
+                if (parameters.Get<int>("@retValue") == -1) return "Error al modificar el desglose de horas del turno";
 
 
             }
@@ -82,7 +76,7 @@ namespace RRHH.Repository
                 DynamicParameters parameters2 = new DynamicParameters();
                 parameters2.Add("@id", id);
 
-                icantFilas = con.Execute("spTurnoEliminar", parameters2, commandType: CommandType.StoredProcedure);
+                icantFilas = con.Execute("spTurnoDesgloseHorasEliminar", parameters2, commandType: CommandType.StoredProcedure);
 
 
             }
@@ -90,7 +84,7 @@ namespace RRHH.Repository
             return "";
         }
 
-        public Turno Obtener(int id)
+        public TurnoDesgloseHoras Obtener(int id)
         {
 
 
@@ -103,12 +97,12 @@ namespace RRHH.Repository
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@id", id);
 
-                return con.QuerySingleOrDefault<Turno>("spTurnoObtener", parameter, commandType: CommandType.StoredProcedure);
+                return con.QuerySingleOrDefault<TurnoDesgloseHoras>("spTurnoDesgloseHorasObtener", parameter, commandType: CommandType.StoredProcedure);
             }
         }
 
 
-        public IEnumerable<Turno> ObtenerTodos(int? ubicacion_id)
+        public IEnumerable<TurnoDesgloseHoras> ObtenerTodos(int turno_id)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -118,13 +112,12 @@ namespace RRHH.Repository
 
 
                 DynamicParameters parameter = new DynamicParameters();
-                parameter.Add("@ubicacion_id", (ubicacion_id == null) ? -1 : ubicacion_id.Value);
+                parameter.Add("@turno_id", turno_id);
 
-                return con.Query<Turno>("spTurnoObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
+                return con.Query<TurnoDesgloseHoras>("spTurnoDesgloseHorasObtenerTodos", parameter, commandType: CommandType.StoredProcedure).ToList();
             }
 
         }
-
 
     }
 }
