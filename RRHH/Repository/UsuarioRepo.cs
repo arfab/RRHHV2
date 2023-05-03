@@ -72,6 +72,7 @@ namespace RRHH.Repository
                 parameters.Add("@apellido", usuario.Apellido);
                 parameters.Add("@perfil_id", usuario.perfil_id);
                 parameters.Add("@local_id", (usuario.local_id <= 0) ? null : usuario.local_id);
+                parameters.Add("@legajo_id", (usuario.legajo_id <= 0) ? null : usuario.legajo_id);
 
 
                 icantFilas = con.Execute("spUsuarioInsertar", parameters, commandType: CommandType.StoredProcedure);
@@ -96,6 +97,7 @@ namespace RRHH.Repository
                 parameters.Add("@apellido", usuario.Apellido);
                 parameters.Add("@perfil_id", usuario.perfil_id);
                 parameters.Add("@local_id", (usuario.local_id <= 0) ? null :  usuario.local_id);
+                parameters.Add("@legajo_id", (usuario.legajo_id <= 0) ? null : usuario.legajo_id);
 
 
                 icantFilas = con.Execute("spUsuarioModificar", parameters, commandType: CommandType.StoredProcedure);
@@ -178,6 +180,40 @@ namespace RRHH.Repository
                 parameter.Add("@legajo_id", legajo_id);
 
                 return con.QuerySingleOrDefault<DateTime>("spHomeOfficeObtenerSalida", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
+        public int HomeOfficeObtenerCantidadEntradas(int legajo_id)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@legajo_id", legajo_id);
+
+                return con.QuerySingleOrDefault<int>("spHomeOfficeObtenerCantidadEntradas", parameter, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
+        public int HomeOfficeObtenerCantidadSalidas(int legajo_id)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@legajo_id", legajo_id);
+
+                return con.QuerySingleOrDefault<int>("spHomeOfficeObtenerCantidadSalidas", parameter, commandType: CommandType.StoredProcedure);
             }
 
         }

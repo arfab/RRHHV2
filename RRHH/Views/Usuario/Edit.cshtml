@@ -71,6 +71,20 @@
                    </div>
             </div>
 
+            <div class="row mb-3" id="divLegajo" >
+               <div class="col-lg-2 col-xs-6 mb-3">
+                  <label for="filtro">Legajo / Apellido</label>
+                  <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+			  </div>
+			  <div class="col-lg-6 col-xs-6 mb-3">
+                <label for="legajo_id">Empleado</label>
+                <select  data-filter="model" class="form-control" asp-for="legajo_id" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+			  </div>
+
+            </div>  
+
+
+
              <div class="row" id="divLocal">
                   <div class="col bottom-buffer" >
                      <label asp-for="local_id" class="control-label">Local</label>
@@ -141,10 +155,11 @@
   $(document).ready(function () {
 
     var CodPerfil = @Html.Raw(Json.Serialize(Model.perfil_id));
-    
+    var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+
 
     ObtenerPerfiles();
-
+     ObtenerEmpleados(Filtro);
      if (CodPerfil == 6) {
                ObtenerLocales(0);
                $("#divLocal").show();
@@ -154,7 +169,10 @@
                 $("#local_id").val(-1);
            }
 
-
+     if ($("#nro_legajo").val() == 0) 
+     {
+        $("#nro_legajo").val('');
+     }
 
    })
 
@@ -170,6 +188,9 @@
 
      });
 
+$("#filtro").change(function () {
+        ObtenerEmpleados($("#filtro").val());       
+     });
 
 //function HabilitarGrabar() {
 //    if ($("#items").val()!="" && $("#cliente_id").val()!=0) 
@@ -234,7 +255,60 @@ var ObtenerLocales = function (loc_id) {
           });
         }
 
+        var ObtenerLegajoPorID = function (id) {
+        var modo = @Html.Raw(Json.Serialize(ViewData["MODO"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerLegajoPorID","Legajo")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (data) {
+                $('#apellido').text(data.apellido);
+                $('#nombre').text(data.nombre);
 
+
+
+                
+            },
+            error: function () {
+            }
+      });
+    }
+
+var ObtenerEmpleados = function (filtro) {
+         var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+         $.ajax({
+            url: '@Url.Action("ObtenerEmpleados","Legajo")',
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: {
+                filtro: filtro
+            },
+            success: function (data) {
+                $('#legajo_id').find('option').remove()
+                if (data[0].value > 0) { 
+                   ObtenerLegajoPorID(data[0].value);
+                }
+                $(data).each(
+                    function (index, item) {    
+                       
+                        if (item.value==CodEmpleado || CodEmpleado==null && index==0)
+                          $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                         else 
+                          $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    }
+                    );
+            },
+            error: function () {
+             
+            }
+      });
+    }
 </script>
 
 

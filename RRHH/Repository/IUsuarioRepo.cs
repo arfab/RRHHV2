@@ -23,5 +23,8 @@ namespace RRHH.Repository
         public DateTime? HomeOfficeObtenerEntrada(int legajo_id);
         public DateTime? HomeOfficeObtenerSalida(int legajo_id);
 
+        public int HomeOfficeObtenerCantidadEntradas(int legajo_id);
+        public int HomeOfficeObtenerCantidadSalidas(int legajo_id);
+
     }
 }

@@ -302,7 +302,7 @@ namespace RRHH.Controllers
             Usuario usuario = new Usuario();
 
             usuario = usuarioRepo.ObtenerUsuario(UsuarioId);
-
+            ViewData["EmpleadoActual"] = usuario.legajo_id;
 
             return View(usuario);
         }
@@ -485,26 +485,37 @@ namespace RRHH.Controllers
             int? legajo_id = HttpContext.Session.GetInt32("USUARIO_LEGAJO_ID");
             if (legajo_id == 0) return RedirectToAction("Login", "Usuario");
 
-            DateTime? dEntrada;
-            DateTime? dSalida;
+            //DateTime? dEntrada;
+            //DateTime? dSalida;
+
+            int cantidadEntradas;
+            int cantidadSalidas;
 
             IUsuarioRepo usuarioRepo;
 
             usuarioRepo = new UsuarioRepo();
 
-            dEntrada = usuarioRepo.HomeOfficeObtenerEntrada(legajo_id.Value);
-            dSalida = usuarioRepo.HomeOfficeObtenerSalida(legajo_id.Value);
+            //dEntrada = usuarioRepo.HomeOfficeObtenerEntrada(legajo_id.Value);
+            //dSalida = usuarioRepo.HomeOfficeObtenerSalida(legajo_id.Value);
 
-            if (dEntrada != null && dEntrada.Value.Year!=1)
-                ViewData["FechaEntrada"] = dEntrada.Value.ToString("HH:mm");
+            cantidadEntradas = usuarioRepo.HomeOfficeObtenerCantidadEntradas(legajo_id.Value);
+            cantidadSalidas = usuarioRepo.HomeOfficeObtenerCantidadSalidas(legajo_id.Value);
+
+            //if (dEntrada != null && dEntrada.Value.Year!=1)
+            //    ViewData["FechaEntrada"] = dEntrada.Value.ToString("HH:mm");
+            //else
+            //    ViewData["FechaEntrada"] = "";
+
+            //if (dSalida != null && dSalida.Value.Year != 1)
+            //    ViewData["FechaSalida"] = dSalida.Value.ToString("HH:mm");
+            //else
+            //    ViewData["FechaSalida"] = "";
+
+            ViewData["legajo_id"] = legajo_id;
+            if (cantidadEntradas <= cantidadSalidas)
+                ViewData["turno"] = "E";
             else
-                ViewData["FechaEntrada"] = "";
-
-            if (dSalida != null && dSalida.Value.Year != 1)
-                ViewData["FechaSalida"] = dSalida.Value.ToString("HH:mm");
-            else
-                ViewData["FechaSalida"] = "";
-
+                ViewData["turno"] = "S";
             return View();
         }
 

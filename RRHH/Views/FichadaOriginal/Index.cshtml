@@ -17,7 +17,14 @@
             }
             else
             {
-                <h2>Fichadas sin duplicados</h2>
+                @if (@sin_excluidos == 1)
+                {
+                 <h2>Fichadas sin duplicados</h2>
+                }
+                else
+                {
+                  <h2></h2>
+                }
             }
            
     </div>

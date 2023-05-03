@@ -42,7 +42,7 @@
             </div>
         </div>
 
-       
+       <span id="fichadas"></span>
 
          </center>
 
@@ -53,20 +53,19 @@
 {
   <script type="text/javascript">
   $(document).ready(function () {  
-    var FechaEntrada = @Html.Raw(Json.Serialize(ViewData["FechaEntrada"]));
-    var FechaSalida  = @Html.Raw(Json.Serialize(ViewData["FechaSalida"]));
+
+    var turno=@Html.Raw(Json.Serialize(ViewData["turno"]));
+    var legajo_id=@Html.Raw(Json.Serialize(ViewData["legajo_id"]));
     
+
     display_c();
 
-    if (FechaEntrada!='') {
-     $('#cmdFicharEntrada').addClass('disabled');
-     $('#spanEntrada').text(FechaEntrada);
-    }
-    
-    if (FechaSalida!='') {
-     $('#cmdFicharSalida').addClass('disabled');
-     $('#spanSalida').text(FechaSalida);
-    }
+    if (turno=="E") 
+        $('#cmdFicharSalida').addClass('disabled');
+     else
+        $('#cmdFicharEntrada').addClass('disabled');
+
+     ObtenerFichadasOriginales(legajo_id,58,'',-1);
 
   })
 
@@ -82,6 +81,25 @@
         }
       });
     }
+
+      var ObtenerFichadasOriginales = function (legajo_id, lectora_id, fecha, sin_excluidos) {
+            
+               $.ajax({
+                    type: "GET",
+                    url: "/FichadaOriginal/Index",
+                    data: { legajo_id: legajo_id, lectora_id: lectora_id, fecha: fecha, sin_excluidos: sin_excluidos },
+                    success: function (response) {
+                        $("#fichadas").html(response);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+        }
+
       </script>
 
 }

@@ -91,7 +91,7 @@
           var _usuario_id = @HttpContextAccessor.HttpContext.Session.GetString("USUARIO_ID");
           var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
           var _perfil = @HttpContextAccessor.HttpContext.Session.GetString("PERFIL");
-
+          var _legajo_id = @HttpContextAccessor.HttpContext.Session.GetInt32("USUARIO_LEGAJO_ID");
        }
 
      </script>
@@ -187,6 +187,11 @@
                                      {
                                       <li class="nav-item"><a class="dropdown-item" href="/Usuario/CambiarClavePersonal">Cambiar Clave</a></li>
                                      }*@
+                                    
+                                     @if (_perfil_id !=7 && _perfil_id!=6 && _legajo_id!=0)
+                                     {
+                                      <li><a class="dropdown-item" href="/Usuario/Fichar">Fichar</a></li>
+                                      }
                                     <li><a class="dropdown-item" href="/Usuario/Logout">Salir</a></li>
                                 </ul>
                             </li>
