@@ -70,6 +70,7 @@
                   <select  data-filter="model" class="form-control" name="concepto" id="concepto"  >
                     <option value="1">Horario</option>
                     <option value="2">Franco</option>
+                    <option value="3">Medio Franco</option>
                   </select>   
              </div>
               <div class="col-4">
@@ -319,7 +320,7 @@
     });
 
     $("#concepto").change(function () {
-      if ($("#concepto").val() == '1') {
+      if ($("#concepto").val() == '1' || $("#concepto").val() == '3') {
          $("#divHoraDesde").show();
          $("#divHoraHasta").show();
       }
@@ -345,7 +346,7 @@
   
    function HabilitarGrabar() {
     
-      if ($('#concepto').val()=='1' && $('#desde').val()!='' && $('#hasta').val()!='' || $('#concepto').val()=='2')
+      if (($('#concepto').val()=='1' || $('#concepto').val()=='3') && $('#desde').val()!='' && $('#hasta').val()!='' || $('#concepto').val()=='2')
         $("#grabar_id").show();
       else
         $("#grabar_id").hide(); 
