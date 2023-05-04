@@ -1,0 +1,565 @@
+﻿@model IEnumerable<RRHH.Models.LlegadaTarde>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Index";
+    var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
+
+    var legajo =  (RRHH.Models.Legajo) ViewData["LEGAJO"];
+
+    var _origen = (string)ViewData["ORIGEN"];
+
+    var _item_actual = (ViewData["ITEM_ACTUAL"]==null)?0:(int)ViewData["ITEM_ACTUAL"];
+              
+    }
+
+
+     <form id="form1" method="post" enctype="multipart/form-data" class="form-floating">
+         
+
+             
+
+     <div class="container-fluid">
+         <div class="jumbotron text-center Titulo bottom-buffer ">
+          <h2>Reporte de Llegadas Tarde</h2>
+         @* <a href="#" onclick='ToggleBusquedaAvanzada()'>Búsqueda Avanzada</a>*@
+
+         
+     </div>
+
+     <center>
+
+             <div class="row mb-3" >
+                 <div class="col-lg-2 col-xs-6 mb-3">
+                      <label for="filtro">Legajo / Apellido</label>
+                      <input name="filtro" id="filtro"  placeholder="Filtro" value="@ViewData["FiltroActual"]" class="form-control" />                                          
+                </div>
+                <div class="col-lg-6 col-xs-6 mb-3" id="divEmpleado">
+                    <label for="legajo_id">Empleado</label>
+                    <select  data-filter="model" class="form-control" name="legajo_id" id="legajo_id" value="@ViewData["EmpleadoActual"]" ></select>           
+                </div>
+                <div class="col-lg-4 col-xs-6 mb-3">
+                    <div class="row" >
+                        <div class="col" >
+                            <label for="fecha_desde">Desde</label>
+                            <input type="text" id="fecha_desde" class="form-control" name="fecha_desde" value="@ViewData["FechaDesdeActual"]"  />
+                        </div>
+                         <div class="col" >
+                           <label for="fecha_hasta">Hasta</label>
+                           <input type="text" id="fecha_hasta" class="form-control" name="fecha_hasta" value="@ViewData["FechaHastaActual"]" />
+                      </div>
+                    </div>
+                </div>
+              </div>  
+
+              <div class="row mb-3" id="divBusquedaAvanzada" >
+              <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="empresa_id">Empresa</label>
+			   <select name="empresa_id" id="empresa_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["EMPRESA_ID"]"></select>
+			</div>
+            <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="ubicacion_id">Ubicación</label>
+			   <select name="ubicacion_id" id="ubicacion_id" data-filter="make" class="filter-make filter form-control" value="@ViewData["UBICACION_ID"]"></select>
+			</div>
+             <div class="col-sm-4 col-xs-6 mb-3">
+               <label for="sector_id">Sector/Local</label>
+			   <select name="sector_id" id="sector_id" data-filter="make" class="filter-make filter form-control"  value="@ViewData["SECTOR_ID"]"></select>
+			</div>
+         </div>
+
+
+             <div class="row mb-3" >
+                <div class="col">
+                     <input type="submit" value="Buscar" id="buscar" asp-action="BuscarLlegadasTarde" class="btn btn-primary" />
+                     <input type="submit" value="Limpiar" asp-action="LimpiarLlegadasTarde" class="btn btn-primary" title="Limpiar todos los datos de la búsqueda"  />
+                     <input type="submit" asp-action="ExportarLlegadasTarde"   value="Exportar a Excel" class="btn btn-primary" />
+                     <input type="button" id="btnImprimir" value="Imprimir" class="btn btn-primary" />
+
+
+                </div>
+             </div>
+
+
+             <div class="row">
+                <div class="col bottom-buffer">
+                    <span id="spanTitulo"></span>
+                </div>
+              </div>
+
+    
+              <div id="divPrint">
+
+
+                @if (@Model != null && Model.Count()>0)
+                {
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col bottom-buffer">
+                             <div style="background-color: white ; padding: 10px; border: 1px solid black; text-align:center;">
+                             <span style="vertical-align:auto;">Reporte de Llegadas Tarde</span>
+                         </div>
+                       </div>
+                   </div>
+                   
+                    <div class="row">
+                        <div class="col bottom-buffer">
+                            <div class="table-responsive">
+
+
+                                <table id="tablaReporte" class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                       
+                                        <tr >
+                                            <th>Empresa</th>
+                                            <th>Nro. Legajo</th>
+                                            <th>Apellido</th>
+                                            <th>Nombre</th>
+                                            <th>Fecha</th>
+                                            <th>Comienzo Turno</th>
+                                            <th>Primera Fichada</th>
+                                            <th>Descuento</th>
+         
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                        
+                                            <tr  >
+                                                
+                                                    <td>
+                                                        @item.empresa
+                                                    </td>
+
+                                                    <td>
+                                                        @item.nro_legajo
+                                                    </td>
+                                                    <td>
+                                                        @item.apellido
+                                                    </td>
+                                                    <td>
+                                                        @item.nombre
+                                                    </td>
+                                                    <td> 
+                                                        @Convert.ToDateTime(@item.fecha).ToString("dd/MM/yyyy")
+                                                    </td>
+                                                    <td>
+                                                        @item.hora_desde
+                                                    </td>
+                                                    <td>
+                                                        @item.primera_fichada
+                                                    </td>
+                                                    <td>
+                                                        @item.descuento
+                                                    </td>
+                               
+                                            </tr>
+
+                                    }
+                                    </tbody>
+                    </table>
+                  </div>
+                </div>
+             </div>
+            }
+                   
+             </div>
+             </center>
+
+
+        </div>
+
+    </form>
+
+
+     <script type="text/javascript">
+
+    $(document).ready(function() {
+        var CodEmpresa = @Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
+        var CodUbicacion = @Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+        var Filtro = @Html.Raw(Json.Serialize(ViewData["FiltroActual"]));
+        var FechaDesde = @Html.Raw(Json.Serialize(ViewData["FechaDesdeActual"]));
+        var FechaHasta = @Html.Raw(Json.Serialize(ViewData["FechaHastaActual"]));
+
+        //if ($("#nro_legajo").val() <=0) 
+        //{
+        //    $("#nro_legajo").val('');
+        //}
+
+     //   if (CodEmpresa>0 || CodUbicacion>0)
+     //  $("#divBusquedaAvanzada").show();
+     //else
+     //  $("#divBusquedaAvanzada").hide();
+
+
+        ObtenerEmpresas();
+        
+       ObtenerUbicaciones();
+
+       if (CodUbicacion== 1 || CodUbicacion == 2 || CodUbicacion == 4) {
+            ObtenerSectores(CodUbicacion);
+            //$("#divSector").show();
+            //$("#local_id").val(-1);
+            //$("#divLocal").hide();
+        }
+        else {
+           if (CodUbicacion ==3) {
+               ObtenerLocales();
+              // $("#divLocal").show();
+              // $("#sector_id").val(-1);
+              // $("#divSector").hide();
+           }
+            else {
+                $("#sector_id").val(-1);
+              //  $("#local_id").val(-1);
+              //  $("#divSector").hide();
+               // $("#divLocal").hide();
+           }
+        }
+
+        if (Filtro != null && Filtro!='') { 
+            $("#divEmpleado").show();
+
+        }
+        else { 
+           $("#divEmpleado").hide();
+           $("#legajo_id").val(-1).change();
+        }
+
+           ObtenerEmpleados(Filtro);
+      
+           $('#fecha_desde').datepicker({format: 'dd/mm/yyyy' });
+            $('#fecha_hasta').datepicker({format: 'dd/mm/yyyy' });
+
+            if (FechaDesde==null)
+              $('#fecha_desde').datepicker('setDate', "-0d");
+            else 
+              $('#fecha_desde').datepicker('setDate',FechaDesde);
+
+            if (FechaHasta==null)
+              $('#fecha_hasta').datepicker('setDate', "-0d");
+            else 
+              $('#fecha_hasta').datepicker('setDate',FechaHasta);
+
+
+    });
+
+
+    $("#ubicacion_id").change(function () {
+       if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+            ObtenerSectores($("#ubicacion_id").val());
+           // $("#divSector").show();
+           // $("#local_id").val(-1);
+           // $("#divLocal").hide();
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales();
+               //$("#divLocal").show();
+              // $("#sector_id").val(-1);
+               //$("#divSector").hide();
+           }
+           else {
+                $("#sector_id").val(-1);
+               //  $("#local_id").val(-1);
+               //  $("#divSector").hide();
+               //  $("#divLocal").hide();
+           }
+        }
+      });
+
+         $("#filtro").change(function () {
+
+             if ($("#filtro").val() != '') {            
+                 $("#divEmpleado").show();
+             }
+             else {
+               $("#divEmpleado").hide();
+               $("#legajo_id").val(-1).change();
+             }
+
+              ObtenerEmpleados($("#filtro").val());
+
+         });
+
+        
+
+         //$("#nro_legajo").focusout(function () {
+         //    if ($("#nro_legajo").val() != '')
+         //        ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val());
+
+         //});
+
+
+         //$("#empresa_id").focusout(function () {
+         //    if($("#nro_legajo").val()!='')
+         //    ObtenerLegajo($("#empresa_id").val(), $("#nro_legajo").val())
+         //});
+
+
+         $("#empresa_id").change(function () {
+         var Legajo = @Html.Raw(Json.Serialize(ViewData["LegajoActual"]));
+
+         ObtenerUbicaciones($("#empresa_id").val());
+           
+         $("#ubicacion_id").val(-1);
+
+         if ($("#ubicacion_id").val() == 1 || $("#ubicacion_id").val() == 2 || $("#ubicacion_id").val() == 4) {
+           ObtenerSectores($("#ubicacion_id").val(),$("#empresa_id").val());
+        }
+        else {
+           if ($("#ubicacion_id").val() == 3) {
+               ObtenerLocales($("#empresa_id").val());
+           }
+           else {
+             $('#sector_id').find('option').remove();
+             $("#sector_id").val(-1);
+           }
+        }
+
+        // ObtenerLegajos($("#empresa_id").val(), Legajo,$("#ubicacion_id").val(),$("#sector_id").val(),$("#filtro").val() )
+
+
+
+      });
+
+    var ObtenerEmpresas = function () {
+                 var CodEmpresa =@Html.Raw(Json.Serialize(ViewData["EMPRESA_ID"]));
+                 $.ajax({
+                    url: '@Url.Action("ObtenerEmpresas","Legajo")',
+                    type: 'GET',
+                    data: {
+                    },
+                    success: function (data) {
+                        $('#empresa_id').find('option').remove()
+                        $(data).each(
+                            function (index, item) {            
+                                if (item.value==CodEmpresa)
+                                  $('#empresa_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                                else 
+                                  $('#empresa_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                            });
+                    },
+                    error: function () {
+                    }
+              });
+            }
+
+    var ObtenerUbicaciones = function () {
+         var CodUbicacion =@Html.Raw(Json.Serialize(ViewData["UBICACION_ID"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerUbicaciones","Legajo")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#ubicacion_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodUbicacion)
+                          $('#ubicacion_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#ubicacion_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
+     var ObtenerSectores = function (ubicacion_id) {
+             var CodSector = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerSectores","Legajo")',
+                type: 'GET',
+                 data: {
+                ubicacion_id: ubicacion_id
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodSector)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+        var ObtenerLocales = function () {
+             var CodLocal = @Html.Raw(Json.Serialize(ViewData["SECTOR_ID"]));
+             $.ajax({
+                url: '@Url.Action("ObtenerLocales","Legajo")',
+                type: 'GET',
+                data: {
+                },
+                success: function (data) {
+                    $('#sector_id').find('option').remove()
+                    $(data).each(
+                        function (index, item) {   
+                            if (item.value==CodLocal)
+                              $('#sector_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                            else 
+                              $('#sector_id').append('<option value="' + item.value + '">' + item.text + '</option>')
+                        });
+                },
+                error: function () {
+                }
+          });
+        }
+
+
+         var ObtenerLegajo = function (empresa_id, nro_legajo) {
+             $.ajax({
+                url: '@Url.Action("ObtenerLegajo","Novedad")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    empresa_id: empresa_id,
+                    nro_legajo: nro_legajo
+                },
+                success: function (data) {
+                    $('#apellido').val(data.apellido);
+                    $('#empresa_id').val(data.empresa_id);
+
+                   
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+        var ObtenerEmpleados = function (filtro) {
+             var CodEmpleado =@Html.Raw(Json.Serialize(ViewData["EmpleadoActual"]));
+
+             $.ajax({
+                url: '@Url.Action("ObtenerEmpleados","Legajo")',
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: {
+                    filtro: filtro
+                },
+                success: function (data) {
+                    $('#legajo_id').find('option').remove()
+     
+                    $(data).each(
+                        function (index, item) {            
+                            if (item.value==CodEmpleado)
+                              $('#legajo_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                             else 
+                              $('#legajo_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                        }
+                        );  
+
+                },
+                error: function () {
+                 
+                }
+          });
+        }
+
+     // function ToggleBusquedaAvanzada(){   
+     //      $('#divBusquedaAvanzada').toggle();
+
+     //}
+      
+      
+         $(function () {
+          $('#fecha_desde').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "es"
+            });
+         });
+
+         
+         $(function () {
+          $('#fecha_hasta').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "dd/mm/yyyy",
+            language: "es"
+            });
+
+         });
+
+       function printData()
+       {
+         var mostrar=0;
+           
+         $("#tablaReporte th:last-child, #tablaSanciones td:last-child").hide();
+         
+        
+         var divToPrint=document.getElementById("divPrint");
+         var htmlToPrint = '' +
+            '<style type="text/css">' +
+            'body {' +
+             'margin-top: 30px;' + 
+             'margin-bottom: 20px;' + 
+             '} ' +
+            'table , table th, table td {' +
+            'font-size: 10px;' + 
+            'border:1px solid;' +
+            'border-collapse: collapse;' +
+            'padding:0.5em;' +
+            '} ' +
+            'table {' +
+            'width: 100%;' + 
+            'margin-bottom: 20px;' + 
+            '} ' +
+            '</style>';
+         htmlToPrint += divToPrint.outerHTML;
+         newWin= window.open("");
+
+         $("#tablaReporte th:last-child, #tablaSanciones td:last-child").show();
+
+         var is_chrome = Boolean(newWin.chrome);
+         newWin.document.write(htmlToPrint);
+         newWin.document.close(); // necessary for IE >= 10 and necessary before onload for chrome
+
+       if (is_chrome) {
+        newWin.onload = function() { // wait until all resources loaded 
+            newWin.focus(); // necessary for IE >= 10
+            newWin.print();  // change window to mywindow
+            newWin.close();// change window to mywindow
+        };
+    }
+    else {
+        newWin.document.close(); // necessary for IE >= 10
+        newWin.focus(); // necessary for IE >= 10
+        newWin.print();
+        newWin.close();
+    }
+
+
+      }
+
+    $('#btnImprimir').on('click',function(){
+    printData();
+    })
+
+    </script>
+
+
+
+
+    @if (ViewBag.Message != null)
+{
+        <script type="text/javascript">
+                window.onload = function () {
+                    alert("@ViewBag.Message");
+                };
+        </script>
+}
