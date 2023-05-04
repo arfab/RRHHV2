@@ -26,6 +26,10 @@ namespace RRHH.Models
         public string? desde { get; set; }
         public string? hasta { get; set; }
 
+
+        public string? desde2 { get; set; }
+        public string? hasta2 { get; set; }
+
         public int? estado { get; set; }
 
         public int? concepto { get; set; }
