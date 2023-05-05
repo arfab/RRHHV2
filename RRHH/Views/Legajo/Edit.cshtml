@@ -130,6 +130,11 @@
                           <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
                           @if (_perfil_id <=3) {
                            <button id="btnGrabar" type="submit" asp-route-modo=@ViewData["MODO"] class="btn btn-outline-success"   >Grabar</button>
+
+                          }
+                          @if (_perfil_id==1) {
+                             <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalHomeOffice();" >Crear Usuario Home Office</a>
+
                           }
                     </div>
                 </div>
@@ -178,6 +183,27 @@
         </div>
       </div>
     </div>
+
+
+
+    <!-- Modal Home Office -->
+<div class="modal fade" id="mdHomeOffice" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Home Office</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Se creará un usuario para que este legajo pueda loguearse por Home Office. Está seguro?
+      </div>
+      <div class="modal-footer">
+         <button type="submit"  asp-action="CrearHomeOffice" asp-controller="Legajo" asp-route-legajo_id=@Model.id value=""  class="btn btn-outline-success" >SI</button>
+     <a class="btn btn-outline-danger" data-bs-dismiss="modal" >NO</a>
+      </div>
+    </div>
+  </div>
+</div>
 
      </form>
 
@@ -320,6 +346,10 @@
       function mostrarModalGrabar(){
         $("#mdGrabar").modal('show');
       }
+
+      function mostrarModalHomeOffice(){
+        $("#mdHomeOffice").modal('show');
+     }
 
        var ObtenerGeneros = function () {
              var CodGenero = @Html.Raw(Json.Serialize(Model.genero_id));

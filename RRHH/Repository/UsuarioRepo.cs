@@ -218,7 +218,7 @@ namespace RRHH.Repository
 
         }
 
-        public IEnumerable<Usuario> ObtenerUsuarios(int perfil_id)
+        public IEnumerable<Usuario> ObtenerUsuarios(int perfil_id, int perfil2_id)
         {
 
             using (IDbConnection con = new SqlConnection(strConnectionString))
@@ -228,6 +228,7 @@ namespace RRHH.Repository
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@perfil_id", perfil_id);
+                parameters.Add("@perfil2_id", perfil2_id);
 
                 return con.Query<Usuario>("spUsuarioObtenerTodos", parameters, commandType: CommandType.StoredProcedure).ToList();
             }

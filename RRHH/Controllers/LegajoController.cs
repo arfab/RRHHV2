@@ -519,6 +519,50 @@ namespace RRHH.Controllers
         }
 
 
+        [HttpPost]
+        public IActionResult CrearHomeOffice(int legajo_id)
+        {
+
+            string sret;
+
+            ILegajoRepo legajoRepo;
+            legajoRepo = new LegajoRepo();
+
+            Legajo legajo = new Legajo();
+
+
+            legajo = legajoRepo.Obtener(legajo_id);
+
+
+
+            IUsuarioRepo usuarioRepo;
+            usuarioRepo = new UsuarioRepo();
+
+            Usuario usuario = new Usuario();
+
+            usuario.Nombre = legajo.nombre;
+            usuario.Apellido = legajo.apellido;
+            usuario.UsuarioID = legajo.nro_legajo.Value.ToString();
+            usuario.clave = "test1234";
+            usuario.perfil_id = 7;
+            usuario.local_id = -1;
+            usuario.legajo_id = legajo_id;
+
+            sret = usuarioRepo.Insertar(usuario);
+
+            if (sret == "")
+            {
+                return RedirectToAction("Index", "Usuario");
+            }
+            else
+            {
+                ViewBag.Message = sret;
+            }
+
+            return View(usuario);
+        }
+
+
 
         [HttpPost]
         public ActionResult Importar(IFormFile file)

@@ -34,6 +34,18 @@
         </div>
        }
 
+       <div class="row" id="divPerfil">
+           <div class="col bottom-buffer" >
+               <label class="control-label">Perfil</label>
+               <select  class="form-control" name="perfil2_id" id="perfil_id"  ></select>
+   
+           </div>
+           <div class="col bottom-buffer" >
+               <input type="submit" value="Buscar" id="buscar" asp-action="Index" class="btn btn-primary" />
+           </div>
+        </div>
+
+
        @* <div class="d-flex justify-content-center align-items-center container ">
             <div class="row">
                 <div class="col bottom-buffer badge bg-secondary">
@@ -129,9 +141,44 @@
 </form>
 
  <script type="text/javascript">
+
+  $(document).ready(function() {
+    var CodPerfil = @Html.Raw(Json.Serialize(ViewData["PerfilActual"]));
+
+   ObtenerPerfiles();
+
+
+
+ 
+  });
+
     function mostrarModalEliminar(id){
       $("#hfID").val(id);
       $("#bReserva").attr('asp-route-id2', id.toString());
       $("#mdEliminar").modal('show');
      }
+
+
+     var ObtenerPerfiles = function () {
+         var CodPerfil =@Html.Raw(Json.Serialize(ViewData["PerfilActual"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerPerfiles","Usuario")',
+            type: 'GET',
+            data: {
+            },
+            success: function (data) {
+                $('#perfil_id').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CodPerfil)
+                          $('#perfil_id').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#perfil_id').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+            },
+            error: function () {
+            }
+      });
+    }
+
 </script>

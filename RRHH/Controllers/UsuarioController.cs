@@ -20,7 +20,7 @@ namespace RRHH.Controllers
             this._httpContextAccessor = httpContextAccessor;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int perfil2_id)
         {
             string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
 
@@ -28,13 +28,15 @@ namespace RRHH.Controllers
 
             int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
 
+            ViewData["PerfilActual"] = perfil2_id;
+
             if (perfil_id == 1 || perfil_id == 2)
             {
                 IUsuarioRepo usuarioRepo;
 
                 usuarioRepo = new UsuarioRepo();
 
-                return View(usuarioRepo.ObtenerUsuarios(perfil_id.Value));
+                return View(usuarioRepo.ObtenerUsuarios(perfil_id.Value, perfil2_id));
             }
 
             return RedirectToAction("Login", "Usuario");
@@ -286,6 +288,7 @@ namespace RRHH.Controllers
 
             return View(usuario);
         }
+
 
 
         [HttpGet]
