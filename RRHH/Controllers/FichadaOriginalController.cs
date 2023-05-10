@@ -40,7 +40,7 @@ namespace RRHH.Controllers
             }
 
 
-            if (perfil_id == 1 || perfil_id == 2)
+            if (perfil_id == 1 || perfil_id == 2 || perfil_id == 7)
             {
                 IFichadaRepo fichadaRepo;
 
