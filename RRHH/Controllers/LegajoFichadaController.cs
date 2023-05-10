@@ -112,6 +112,7 @@ namespace RRHH.Controllers
 
             ViewData["ITEM_ACTUAL"] = nro_item;
             ViewData["MODO"] = modo;
+            ViewData["CANTIDAD_LECTURAS"] = cantidad_lecturas;
 
             if (legajo != null)
             {
@@ -130,7 +131,7 @@ namespace RRHH.Controllers
                 return View(legajoFichada);
             }
            
-            /*
+            
             if (entrada_1 == null && salida_1!=null ||
                 salida_1 == null && entrada_2!= null ||
                 entrada_2 == null && salida_2!= null ||
@@ -226,7 +227,7 @@ namespace RRHH.Controllers
                 }
             }
 
-            */
+            
 
             legajoFichadaRepo = new LegajoFichadaRepo();
 
