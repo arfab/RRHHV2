@@ -32,7 +32,7 @@ namespace RRHH.Repository
             //    usuario.UsuarioID = login.ToLower();
             //}
 
-            if (usuario != null && BCrypt.Net.BCrypt.Verify(clave, usuario.clave))
+            if (usuario != null && (usuario.perfil_id == 7 && clave == usuario.clave || usuario.perfil_id!=7 && BCrypt.Net.BCrypt.Verify(clave, usuario.clave)))
                 return usuario;
             else
                 return null;
