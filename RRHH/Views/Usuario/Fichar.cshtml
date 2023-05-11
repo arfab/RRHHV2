@@ -56,6 +56,7 @@
 
     var turno=@Html.Raw(Json.Serialize(ViewData["turno"]));
     var legajo_id=@Html.Raw(Json.Serialize(ViewData["legajo_id"]));
+    var fecha=@Html.Raw(Json.Serialize(ViewData["fecha"]));
     
 
     display_c();
@@ -65,7 +66,7 @@
      else
         $('#cmdFicharEntrada').addClass('disabled');
 
-     ObtenerFichadasOriginales(legajo_id,58,'',-1);
+     ObtenerFichadasOriginales(legajo_id,58,fecha,0);
 
   })
 

@@ -515,6 +515,7 @@ namespace RRHH.Controllers
             //    ViewData["FechaSalida"] = "";
 
             ViewData["legajo_id"] = legajo_id;
+            ViewData["fecha"] = DateTime.Now.Date.Year.ToString() + '-' + DateTime.Now.Date.Month.ToString().PadLeft(2, '0') + '-' + DateTime.Now.Date.Day.ToString().PadLeft(2, '0');
             if (cantidadEntradas <= cantidadSalidas)
                 ViewData["turno"] = "E";
             else
