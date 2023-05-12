@@ -654,52 +654,58 @@ namespace RRHH.Controllers
 
 
                     var currentRow = 1;
-                    worksheet.Cell(currentRow, 1).Value = "Sanciones";
-                    worksheet.Cell(currentRow, 1).Style.Font.SetBold();
-                    currentRow += 1;
-                    for (int i = 1; i <= 15; i++)
+
+                    if (categoria_novedad_id != 2)
                     {
-                        worksheet.Cell(currentRow, i).Style.Font.SetBold();
+                        worksheet.Cell(currentRow, 1).Value = "Sanciones";
+                        worksheet.Cell(currentRow, 1).Style.Font.SetBold();
+                        currentRow += 1;
+                        for (int i = 1; i <= 15; i++)
+                        {
+                            worksheet.Cell(currentRow, i).Style.Font.SetBold();
+                        }
+                        worksheet.Cell(currentRow, 1).Value = "Empresa";
+                        worksheet.Cell(currentRow, 2).Value = "Legajo";
+                        worksheet.Cell(currentRow, 3).Value = "Apellido";
+                        worksheet.Cell(currentRow, 4).Value = "Nombre";
+                        worksheet.Cell(currentRow, 5).Value = "Ubicacion";
+                        worksheet.Cell(currentRow, 6).Value = "Sector";
+                        worksheet.Cell(currentRow, 7).Value = "Responsable";
+                        worksheet.Cell(currentRow, 8).Value = "Fecha Novedad";
+                        worksheet.Cell(currentRow, 9).Value = "Tipo Novedad";
+                        worksheet.Cell(currentRow, 10).Value = "Fecha Resolución";
+                        worksheet.Cell(currentRow, 11).Value = "Tipo Resolución";
+                        worksheet.Cell(currentRow, 12).Value = "Días";
+                        worksheet.Cell(currentRow, 13).Value = "Descripción";
+                        worksheet.Cell(currentRow, 14).Value = "Observación";
+                        worksheet.Cell(currentRow, 15).Value = "Estado";
+
+                        foreach (var item in l)
+                        {
+                            currentRow++;
+                            worksheet.Cell(currentRow, 1).Value = item.empresa;
+                            worksheet.Cell(currentRow, 2).Value = item.nro_legajo;
+                            worksheet.Cell(currentRow, 3).Value = item.apellido;
+                            worksheet.Cell(currentRow, 4).Value = item.nombre;
+                            worksheet.Cell(currentRow, 5).Value = item.ubicacion;
+                            worksheet.Cell(currentRow, 6).Value = item.sector;
+                            worksheet.Cell(currentRow, 7).Value = item.responsable;
+                            worksheet.Cell(currentRow, 8).Value = item.fecha_novedad;
+                            worksheet.Cell(currentRow, 9).Value = item.tipo_novedad;
+                            worksheet.Cell(currentRow, 10).Value = item.fecha_resolucion;
+                            worksheet.Cell(currentRow, 11).Value = item.tipo_resolucion;
+                            worksheet.Cell(currentRow, 12).Value = item.dias;
+                            worksheet.Cell(currentRow, 13).Value = item.descripcion;
+                            worksheet.Cell(currentRow, 14).Value = item.observacion;
+                            worksheet.Cell(currentRow, 15).Value = item.estado;
+
+
+                        }
                     }
-                    worksheet.Cell(currentRow, 1).Value = "Empresa";
-                    worksheet.Cell(currentRow, 2).Value = "Legajo";
-                    worksheet.Cell(currentRow, 3).Value = "Apellido";
-                    worksheet.Cell(currentRow, 4).Value = "Nombre";
-                    worksheet.Cell(currentRow, 5).Value = "Ubicacion";
-                    worksheet.Cell(currentRow, 6).Value = "Sector";
-                    worksheet.Cell(currentRow, 7).Value = "Responsable";
-                    worksheet.Cell(currentRow, 8).Value = "Fecha Novedad";
-                    worksheet.Cell(currentRow, 9).Value = "Tipo Novedad";
-                    worksheet.Cell(currentRow, 10).Value = "Fecha Resolución";
-                    worksheet.Cell(currentRow, 11).Value = "Tipo Resolución";
-                    worksheet.Cell(currentRow, 12).Value = "Días";
-                    worksheet.Cell(currentRow, 13).Value = "Descripción";
-                    worksheet.Cell(currentRow, 14).Value = "Observación";
-                    worksheet.Cell(currentRow, 15).Value = "Estado";
-
-                    foreach (var item in l)
-                    {
-                        currentRow++;
-                        worksheet.Cell(currentRow, 1).Value = item.empresa;
-                        worksheet.Cell(currentRow, 2).Value = item.nro_legajo;
-                        worksheet.Cell(currentRow, 3).Value = item.apellido;
-                        worksheet.Cell(currentRow, 4).Value = item.nombre;
-                        worksheet.Cell(currentRow, 5).Value = item.ubicacion;
-                        worksheet.Cell(currentRow, 6).Value = item.sector;
-                        worksheet.Cell(currentRow, 7).Value = item.responsable;
-                        worksheet.Cell(currentRow, 8).Value = item.fecha_novedad;
-                        worksheet.Cell(currentRow, 9).Value = item.tipo_novedad;
-                        worksheet.Cell(currentRow, 10).Value = item.fecha_resolucion;
-                        worksheet.Cell(currentRow, 11).Value = item.tipo_resolucion;
-                        worksheet.Cell(currentRow, 12).Value = item.dias;
-                        worksheet.Cell(currentRow, 13).Value = item.descripcion;
-                        worksheet.Cell(currentRow, 14).Value = item.observacion;
-                        worksheet.Cell(currentRow, 15).Value = item.estado;
 
 
-                    }
 
-                    if (nro_legajo > 0)
+                    if (nro_legajo > 0 && categoria_novedad_id!=1)
                     {
 
                         l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido, perfil_id.Value);

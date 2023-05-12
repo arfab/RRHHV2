@@ -9,6 +9,7 @@
     var _perfil_id = @HttpContextAccessor.HttpContext.Session.GetInt32("PERFIL_ID");
     var pagina = @HttpContextAccessor.HttpContext.Session.GetInt32("PAG_NOVEDAD");
     var total_paginas = @HttpContextAccessor.HttpContext.Session.GetInt32("TOT_PAG_NOVEDAD");
+    var categoria_novedad = ViewData["CategoriaNovedadActual"];
     var fel = ViewData["FELICITACIONES"];
     var total_fel = ViewData["TOTAL_FELICITACIONES"];
 
@@ -87,7 +88,7 @@
               </div>  
 
               <div class="row mb-3" id="divBusquedaAvanzada" >
-                <div class="col-sm-4 col-xs-6 mb-3" hidden>
+                <div class="col-sm-4 col-xs-6 mb-3" >
                     <label for="categoria_novedad_id">Categoría</label>
                     <select name="categoria_novedad_id" id="categoria_novedad_id" data-filter="make" class="filter-make filter form-control"></select>
                 </div>
@@ -251,7 +252,7 @@
                                 </div></div></div>
                     
                 }
-                @if (@Model != null && Model.Count()>0)
+                @if (@Model != null && Model.Count()>0 && (int) categoria_novedad!=2)
             {
                     <div class="row" style="margin-bottom:10px;">
                         <div class="col bottom-buffer">
@@ -392,7 +393,7 @@
          }
                    
 
-             @if ( (int) total_fel>0)
+             @if ( (int) total_fel>0 && (int)categoria_novedad!=1)
             {
 
 
