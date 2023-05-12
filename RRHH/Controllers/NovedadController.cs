@@ -328,7 +328,7 @@ namespace RRHH.Controllers
 
                     HttpContext.Session.SetInt32("TOT_PAG_NOVEDAD", cant % cantPag == 0 ? cant / cantPag : cant / cantPag + 1);
 
-                if (nro_legajo > 0)
+                if (1==1 || nro_legajo > 0)
                 {
                     cantFelicitaciones = novedadRepo.ObtenerCantidad((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fechaDesde, fechaHasta, (apellido == null) ? "" : apellido, perfil_id.Value);
                     ViewData["TOTAL_FELICITACIONES"] = cantFelicitaciones;
@@ -705,7 +705,7 @@ namespace RRHH.Controllers
 
 
 
-                    if (nro_legajo > 0 && categoria_novedad_id!=1)
+                    if ((1==1 || nro_legajo > 0) && categoria_novedad_id!=1)
                     {
 
                         l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 2, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido, perfil_id.Value);
