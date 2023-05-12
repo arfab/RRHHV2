@@ -642,21 +642,24 @@ namespace RRHH.Controllers
                 {
                     var worksheet = workbook.Worksheets.Add("Novedades");
 
-                    IEnumerable<Novedad> l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido, perfil_id.Value);
 
-
-                    if (centro_costo.Count() > 0)
-                    {
-
-                        l = l.Where(o => lCosto.Contains(o.centro_costo_id.Value));
-                    }
-
+                    IEnumerable<Novedad> l;
 
 
                     var currentRow = 1;
 
                     if (categoria_novedad_id != 2)
                     {
+
+                         l = novedadRepo.ObtenerTodos((empresa_id == 0) ? -1 : empresa_id, 1, (tipo_novedad_id == 0) ? -1 : tipo_novedad_id, (tipo_resolucion_id == 0) ? -1 : tipo_resolucion_id, (nro_legajo == 0) ? -1 : nro_legajo, fecha_novedad_desde, fecha_novedad_hasta, (apellido == null) ? "" : apellido, perfil_id.Value);
+
+
+                        if (centro_costo.Count() > 0)
+                        {
+
+                            l = l.Where(o => lCosto.Contains(o.centro_costo_id.Value));
+                        }
+
                         worksheet.Cell(currentRow, 1).Value = "Sanciones";
                         worksheet.Cell(currentRow, 1).Style.Font.SetBold();
                         currentRow += 1;
@@ -682,6 +685,7 @@ namespace RRHH.Controllers
 
                         foreach (var item in l)
                         {
+
                             currentRow++;
                             worksheet.Cell(currentRow, 1).Value = item.empresa;
                             worksheet.Cell(currentRow, 2).Value = item.nro_legajo;
@@ -712,7 +716,7 @@ namespace RRHH.Controllers
 
                         if (centro_costo.Count() > 0)
                         {
-     
+
                             l = l.Where(o => lCosto.Contains(o.centro_costo_id.Value));
                         }
 
@@ -739,6 +743,7 @@ namespace RRHH.Controllers
                         currentRow += 1;
                         foreach (var item in l)
                         {
+
                             currentRow++;
                             worksheet.Cell(currentRow, 1).Value = item.nro_legajo;
                             worksheet.Cell(currentRow, 2).Value = item.apellido;
