@@ -101,7 +101,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Grabar(int legajo_id, int concepto, DateTime fecha, string desde, string hasta, int estado, int mostrarAlta)
+        public IActionResult Grabar(int legajo_id, int concepto, DateTime fecha, string desde, string hasta, string desde2, string hasta2, int estado, int mostrarAlta)
         {
 
             int? usuario_id = HttpContext.Session.GetInt32("UID");
@@ -119,6 +119,8 @@ namespace RRHH.Controllers
             legajoHorario.fecha = fecha;
             legajoHorario.desde = desde;
             legajoHorario.hasta = hasta;
+            legajoHorario.desde2 = desde2;
+            legajoHorario.hasta2 = hasta2;
             legajoHorario.estado = estado;
             legajoHorario.usuario_id = usuario_id;
 
