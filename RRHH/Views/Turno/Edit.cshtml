@@ -45,8 +45,9 @@
 
               <div class="row " id="divInsertar">
                 <div class="col bottom-buffer">
+                      <a id="lnkDesglose" class="btn btn-outline-success" asp-controller="TurnoDesgloseHoras" asp-action="Index" asp-route-turno_id="@Model.id">Desglose Horas</a>
+                      <button id="btnGrabar" type="submit" value="" class="btn btn-outline-success"   >Grabar</button>
                       <a  value=""  class="btn btn-outline-danger" onclick="mostrarModalSalida();" >Salir</a>
-                     <button id="btnGrabar" type="submit" value="" class="btn btn-outline-success"   >Grabar</button>
                 </div>
             </div>
    
@@ -114,9 +115,13 @@ $(document).ready(function () {
 
         if (CodUbicacion==3) {
             $("#divHorasDiarias").show();
+            $("#divHorasMedioFranco").show();
+            $("#lnkDesglose").show();
         }
         else {
                $("#divHorasDiarias").hide();
+               $("#divHorasMedioFranco").hide();
+               $("#lnkDesglose").hide();
         }
 
  })
