@@ -28,6 +28,8 @@ namespace RRHH.Repository
                 parameters.Add("@hasta", legajoHorario.hasta);
                 parameters.Add("@desde2", legajoHorario.desde2 == "" ? null : legajoHorario.desde2);
                 parameters.Add("@hasta2", legajoHorario.hasta2 == "" ? null : legajoHorario.hasta2);
+                parameters.Add("@cantidad_horas", legajoHorario.cantidad_horas == -1 ? null : legajoHorario.cantidad_horas);
+
                 parameters.Add("@estado", legajoHorario.estado);
                 parameters.Add("@usuario_id", legajoHorario.usuario_id);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
@@ -59,6 +61,9 @@ namespace RRHH.Repository
                 parameters.Add("@hasta", legajoHorario.hasta);
                 parameters.Add("@desde2", legajoHorario.desde2 == "" ? null : legajoHorario.desde2);
                 parameters.Add("@hasta2", legajoHorario.hasta2 == "" ? null : legajoHorario.hasta2);
+                parameters.Add("@cantidad_horas", legajoHorario.cantidad_horas == -1 ? null : legajoHorario.cantidad_horas);
+
+
                 parameters.Add("@estado", legajoHorario.estado);
                 parameters.Add("@usuario_id", legajoHorario.usuario_id);
                 parameters.Add("@retValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);

@@ -66,7 +66,7 @@ namespace RRHH.Controllers
                 ViewData["ApellidoActual"] = legajo.apellido;
                 ViewData["NombreActual"] = legajo.nombre;
                 ViewData["NroLegajoActual"] = legajo.nro_legajo;
-
+                ViewData["TurnoActual"] = legajo.turno_id;
                 ViewData["Semana"] = legajoHorarioRepo.Semana(fecha_desde);
 
                 IEnumerable <LegajoHorario> detalle;
@@ -101,7 +101,7 @@ namespace RRHH.Controllers
         }
 
         [HttpPost]
-        public IActionResult Grabar(int legajo_id, int concepto, DateTime fecha, string desde, string hasta, string desde2, string hasta2, int estado, int mostrarAlta)
+        public IActionResult Grabar(int legajo_id, int concepto, DateTime fecha, string desde, string hasta, string desde2, string hasta2, int cantidad_horas,  int estado, int mostrarAlta)
         {
 
             int? usuario_id = HttpContext.Session.GetInt32("UID");
@@ -121,6 +121,7 @@ namespace RRHH.Controllers
             legajoHorario.hasta = hasta;
             legajoHorario.desde2 = desde2;
             legajoHorario.hasta2 = hasta2;
+            legajoHorario.cantidad_horas = cantidad_horas;
             legajoHorario.estado = estado;
             legajoHorario.usuario_id = usuario_id;
 
@@ -193,6 +194,8 @@ namespace RRHH.Controllers
 
                 ViewData["MODO"] = (modo == null) ? "E" : modo;
 
+                ViewData["CANTIDAD_HORAS"] = legajoHorario.cantidad_horas;
+
                 ILegajoRepo legajoRepo;
 
                 legajoRepo = new LegajoRepo();
@@ -205,6 +208,7 @@ namespace RRHH.Controllers
                 ViewData["EmpleadoActual"] = legajo_id;
                 ViewData["ApellidoActual"] = legajo.apellido;
                 ViewData["NombreActual"] = legajo.nombre;
+                ViewData["TurnoActual"] = legajo.turno_id;
 
 
 

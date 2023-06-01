@@ -93,6 +93,11 @@
                   <label  class="control-label">Hasta</label>
                    <input type="time"  name="hasta" id="hasta" step="60" class="form-control" />
                 </div>
+                  <div class="col-4" id="divCantidadHoras">
+                     <label  class="control-label">Cantidad Horas</label>
+                     <select  class="form-control" id="cantidad_horas" name="cantidad_horas" ></select>
+                     <span class="alert-danger" ></span>
+                  </div>
               </div>
 
               <div class="row">
@@ -155,7 +160,7 @@
                                                   @item.descripcion
                                                 </td>
                                                   <td style='@(item.valida_horas==0? "background-color:Yellow;": " ")'>
-                                                  @item.cantidad_horas
+                                                  @item.total_horas
                                                   </td>
                                                  <td>
                                                   @(item.estado==1? "SI": "NO") 
@@ -301,6 +306,7 @@
 
         var mostrar_alta = @Html.Raw(Json.Serialize(ViewData["MOSTRAR_ALTA"]));
           
+         var TurnoId = @Html.Raw(Json.Serialize(ViewData["TurnoActual"]));
      
         if(item_actual>0) ubicarFila(item_actual);
 
@@ -328,6 +334,8 @@
          else
            $("#divIngresarHorarios").show();
 
+
+     ObtenerCantidadHoras(TurnoId);   
      HabilitarGrabar();
     });
 
@@ -490,6 +498,33 @@
           }
     }
 
+
+
+     var ObtenerCantidadHoras = function (turno_id) {
+         var CantidadHoras =@Html.Raw(Json.Serialize(ViewData["CANTIDAD_HORAS"]));
+         $.ajax({
+            url: '@Url.Action("ObtenerCantidadHoras","Turno")',
+            type: 'GET',
+            data: {
+              turno_id: turno_id
+            },
+            success: function (data) {
+                $('#cantidad_horas').find('option').remove()
+                $(data).each(
+                    function (index, item) {            
+                        if (item.value==CantidadHoras)
+                          $('#cantidad_horas').append('<option value="' + item.value + '" selected>' + item.text + '</option>')
+                        else 
+                          $('#cantidad_horas').append('<option value="' + item.value + '">' + item.text + '</option>')                        
+                    });
+
+
+                if (data.length <= 2) $('#divCantidadHoras').hide(); else $('#divCantidadHoras').show();
+            },
+            error: function () {
+            }
+      });
+    }
 
     </script>
 

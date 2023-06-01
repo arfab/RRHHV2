@@ -217,5 +217,32 @@ namespace RRHH.Controllers
 
         }
 
+
+        [HttpGet]
+        public JsonResult ObtenerCantidadHoras(int turno_id)
+        {
+            List<Models.TipoCantidadHoras> l = new List<Models.TipoCantidadHoras> ();
+
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@turno_id", turno_id);
+
+                l = con.Query<Models.TipoCantidadHoras>("spTurnoObtenerCantidadHoras", parameters, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+
+            l.Insert(0, new Models.TipoCantidadHoras(-1, "-- Seleccione la cantidad de horas --"));
+
+            return Json(new SelectList(l, "id", "descripcion"));
+
+
+        }
+
+
     }
 }

@@ -30,13 +30,16 @@ namespace RRHH.Models
         public string? desde2 { get; set; }
         public string? hasta2 { get; set; }
 
+        public string? total_horas { get; set; }
+
+        public int? cantidad_horas { get; set; }
+
         public int? estado { get; set; }
 
         public int? concepto { get; set; }
 
         public string? descripcion { get; set; }
 
-        public string? cantidad_horas { get; set; }
         public int? valida_horas { get; set; }
 
         public string DiaSemana()
