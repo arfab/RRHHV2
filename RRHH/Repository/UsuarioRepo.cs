@@ -22,6 +22,7 @@ namespace RRHH.Repository
 
                 DynamicParameters parameter = new DynamicParameters();
                 parameter.Add("@UsuarioID", login);
+                parameter.Add("@clave", clave);
                 //parameter.Add("@clave", BCryptNet.HashPassword(clave));
                 usuario = con.QueryFirstOrDefault<Models.Usuario>("spLogin", parameter, commandType: CommandType.StoredProcedure);
 
