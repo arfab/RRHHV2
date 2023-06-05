@@ -105,5 +105,29 @@ namespace RRHH.Repository
 
         }
 
+
+        public IEnumerable<HorarioFaltante> ReporteHorarioFaltante(int empresa_id, int sector_id, int legajo_id, DateTime fecha_desde, DateTime fecha_hasta)
+        {
+
+            using (IDbConnection con = new SqlConnection(strConnectionString))
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+
+
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@empresa_id", empresa_id);
+                parameter.Add("@sector_id", sector_id);
+                parameter.Add("@legajo_id", legajo_id);
+                parameter.Add("@fecha_desde", (fecha_desde.Year < 1000) ? DateTime.Now : fecha_desde);
+                parameter.Add("@fecha_hasta", (fecha_hasta.Year < 1000) ? DateTime.Now : fecha_hasta);
+
+
+                return con.Query<HorarioFaltante>("spReporteHorarioFaltante", parameter, commandType: CommandType.StoredProcedure).ToList();
+            }
+
+        }
+
+
     }
 }

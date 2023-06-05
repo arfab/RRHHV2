@@ -951,5 +951,235 @@ namespace RRHH.Controllers
 
 
 
+
+
+
+        public IActionResult HorarioFaltante(int empresa_id, int legajo_id, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, string apellido, int sector_id, int local_id, string filtro, string desde)
+        {
+
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return RedirectToAction("Login", "Usuario");
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+
+
+            if (HttpContext.Session.GetInt32("EMPRESA_HFALTANTE_ACTUAL") != null) empresa_id = (int)HttpContext.Session.GetInt32("EMPRESA_HFALTANTE_ACTUAL");
+            if (HttpContext.Session.GetInt32("SECTOR_HFALTANTE_ACTUAL") != null) sector_id = (int)HttpContext.Session.GetInt32("SECTOR_HFALTANTE_ACTUAL");
+
+
+
+            if (HttpContext.Session.GetString("FECHA_HFALTANTE_DESDE") != null && HttpContext.Session.GetString("FECHA_HFALTANTE_DESDE") != "")
+                fecha_desde = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_HFALTANTE_DESDE"));
+
+            if (HttpContext.Session.GetString("FECHA_HFALTANTE_HASTA") != null && HttpContext.Session.GetString("FECHA_HFALTANTE_HASTA") != "")
+                fecha_hasta = Convert.ToDateTime(HttpContext.Session.GetString("FECHA_HFALTANTE_HASTA"));
+
+
+            if (apellido != null) HttpContext.Session.SetString("APELLIDO_HFALTANTE_ACTUAL", apellido);
+
+
+            if (HttpContext.Session.GetString("APELLIDO_HFALTANTE_ACTUAL") != null) apellido = HttpContext.Session.GetString("APELLIDO_HFALTANTE_ACTUAL");
+
+            if (HttpContext.Session.GetInt32("EMPLEADO_HFALTANTE_ACTUAL") != null) legajo_id = (int)HttpContext.Session.GetInt32("EMPLEADO_HFALTANTE_ACTUAL");
+            if (HttpContext.Session.GetString("FILTRO_HFALTANTE_ACTUAL") != null) filtro = HttpContext.Session.GetString("FILTRO_HFALTANTE_ACTUAL");
+
+            if (HttpContext.Session.GetString("HFALTANTE_DESDE") != null) desde = HttpContext.Session.GetString("HFALTANTE_DESDE");
+
+            if (perfil_id > 0)
+            {
+
+
+
+                ViewData["EMPRESA_ID"] = empresa_id;
+                ViewData["SECTOR_ID"] = sector_id;
+                ViewData["LocalActual"] = local_id;
+                ViewData["ApellidoActual"] = apellido;
+                ViewData["EmpleadoActual"] = legajo_id;
+                ViewData["FiltroActual"] = filtro;
+
+                Legajo legajo = new Legajo();
+                ILegajoRepo legajoRepo;
+                legajoRepo = new LegajoRepo();
+
+                legajo = legajoRepo.Obtener(legajo_id);
+
+
+                if (legajo != null)
+                {
+                    ViewData["SECTOR_ID"] = sector_id;
+                    ViewData["LocalActual"] = legajo.local_id;
+                    nro_legajo = legajo.nro_legajo.Value;
+                    empresa_id = legajo.empresa_id.Value;
+
+                    ViewData["EMPRESA_ID"] = legajo.empresa_id;
+                    ViewData["LegajoActual"] = legajo.nro_legajo;
+                    ViewData["Legajo"] = legajo;
+                }
+
+                if (fecha_desde.Year < 1000)
+                {
+                    fecha_desde = DateTime.Now.Date;
+                }
+
+                if (fecha_hasta.Year < 1000)
+                {
+                    fecha_hasta = DateTime.Now.Date;
+                }
+
+
+                ViewData["FechaDesdeActual"] = fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year;
+
+                ViewData["FechaHastaActual"] = fecha_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Year;
+
+
+                if (desde != "busqueda") return View();
+
+                IReporteRepo reporteRepo;
+
+                reporteRepo = new ReporteRepo();
+
+                IEnumerable<HorarioFaltante> faltante;
+
+                faltante = reporteRepo.ReporteHorarioFaltante((empresa_id == 0) ? -1 : empresa_id, (sector_id == 0) ? -1 : sector_id, (legajo_id == 0) ? -1 : legajo_id, fecha_desde, fecha_hasta);
+
+                return View(faltante);
+            }
+
+
+
+            return View();
+        }
+
+        public IActionResult BuscarHorarioFaltante(int empresa_id, int legajo_id, int nro_legajo, DateTime fecha_desde, DateTime fecha_hasta, string apellido, int sector_id, int local_id, string filtro)
+        {
+
+            HttpContext.Session.SetInt32("EMPRESA_HFALTANTE_ACTUAL", empresa_id);
+
+            HttpContext.Session.SetInt32("SECTOR_HFALTANTE_ACTUAL", sector_id);
+
+            HttpContext.Session.SetInt32("LEGAJO_HFALTANTE_ACTUAL", nro_legajo);
+            HttpContext.Session.SetString("APELLIDO_HFALTANTE_ACTUAL", (apellido == null) ? "" : apellido);
+
+            HttpContext.Session.SetInt32("EMPLEADO_HFALTANTE_ACTUAL", legajo_id);
+            HttpContext.Session.SetString("FILTRO_HFALTANTE_ACTUAL", (filtro == null) ? "" : filtro);
+
+
+            HttpContext.Session.SetString("FECHA_HFALTANTE_DESDE", fecha_desde.Day.ToString().PadLeft(2, '0') + "/" + fecha_desde.Month.ToString().PadLeft(2, '0') + "/" + fecha_desde.Year);
+            HttpContext.Session.SetString("FECHA_HFALTANTE_HASTA", fecha_hasta.Day.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Month.ToString().PadLeft(2, '0') + "/" + fecha_hasta.Year);
+
+            HttpContext.Session.SetString("HFALTANTE_DESDE", "busqueda");
+
+            return RedirectToAction("HorarioFaltante", "Reporte", new { desde = "busqueda" });
+
+        }
+
+
+        [HttpPost]
+        public IActionResult LimpiarHorarioFaltante(int empresa_id, int nro_legajo, string apellido, int ubicacion_id, int sector_id, int local_id)
+        {
+            HttpContext.Session.SetString("EMPRESA_HFALTANTE_ACTUAL", "");
+
+            HttpContext.Session.SetString("UBICACION_HFALTANTE_ACTUAL", "");
+
+            HttpContext.Session.SetString("SECTOR_HFALTANTE_ACTUAL", "");
+
+            HttpContext.Session.SetString("LEGAJO_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_HFALTANTE_ACTUAL", "");
+
+            HttpContext.Session.SetString("EMPLEADO_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_HFALTANTE_ACTUAL", "");
+
+
+            HttpContext.Session.SetString("FECHA_HFALTANTE_DESDE", "");
+            HttpContext.Session.SetString("FECHA_HFALTANTE_HASTA", "");
+
+            HttpContext.Session.SetString("HFALTANTE_DESDE", "");
+
+
+            return RedirectToAction("HorarioFaltante", "Reporte");
+
+
+        }
+
+
+        [HttpPost]
+        public void ExportarHorarioFaltante(int empresa_id, int sector_id, int legajo_id, DateTime fecha_desde, DateTime fecha_hasta)
+        {
+            string? usuario_id = HttpContext.Session.GetString("USUARIO_ID");
+
+            if (usuario_id == null) return;
+
+            int? perfil_id = HttpContext.Session.GetInt32("PERFIL_ID");
+
+
+
+            if (perfil_id > 0)
+            {
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("ReporteHrarioFaltante");
+
+                    IReporteRepo reporteRepo;
+
+                    reporteRepo = new ReporteRepo();
+
+                    IEnumerable<HorarioFaltante> faltante;
+
+                    faltante = reporteRepo.ReporteHorarioFaltante((empresa_id == 0) ? -1 : empresa_id, (sector_id == 0) ? -1 : sector_id, (legajo_id == 0) ? -1 : legajo_id, fecha_desde, fecha_hasta);
+
+
+
+                    var currentRow = 1;
+                    for (int i = 1; i <= 11; i++)
+                    {
+                        worksheet.Cell(currentRow, i).Style.Font.SetBold();
+                    }
+                    worksheet.Cell(currentRow, 1).Value = "Empresa";
+                    worksheet.Cell(currentRow, 2).Value = "Legajo";
+                    worksheet.Cell(currentRow, 3).Value = "Apellido";
+                    worksheet.Cell(currentRow, 4).Value = "Nombre";
+                    worksheet.Cell(currentRow, 5).Value = "Fecha";
+
+
+
+                    foreach (var item in faltante)
+                    {
+                        currentRow++;
+                        worksheet.Cell(currentRow, 1).Value = item.empresa;
+                        worksheet.Cell(currentRow, 2).Value = item.nro_legajo;
+                        worksheet.Cell(currentRow, 3).Value = item.apellido;
+                        worksheet.Cell(currentRow, 4).Value = item.nombre;
+                        worksheet.Cell(currentRow, 5).Value = item.fecha;
+
+
+                    }
+
+
+
+                    worksheet.Columns().AdjustToContents();
+
+                    using var stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    Response.Clear();
+                    Response.Headers.Add("content-disposition", "attachment;filename=ReporteHorarioFaltante.xls");
+                    Response.ContentType = "application/xls";
+                    Response.Body.WriteAsync(content);
+                    Response.Body.Flush();
+                }
+            }
+
+
+            return;
+        }
+
+
+
+
+
+
     }
 }

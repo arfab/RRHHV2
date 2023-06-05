@@ -137,6 +137,60 @@ namespace RRHH.Controllers
             HttpContext.Session.SetString("UBICACION_REMOTOEX_ACTUAL", "");
             HttpContext.Session.SetString("SECTOR_REMOTOEX_ACTUAL", "");
 
+            HttpContext.Session.SetString("EMPRESA_TARDE_ACTUAL", "");
+            HttpContext.Session.SetString("UBICACION_TARDE_ACTUAL", "");
+            HttpContext.Session.SetString("SECTOR_TARDE_ACTUAL", "");
+            HttpContext.Session.SetString("LEGAJO_TARDE_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_TARDE_ACTUAL", "");
+            HttpContext.Session.SetString("EMPLEADO_TARDE_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_TARDE_ACTUAL", "");
+            HttpContext.Session.SetString("FECHA_TARDE_DESDE", "");
+            HttpContext.Session.SetString("FECHA_TARDE_HASTA", "");
+            HttpContext.Session.SetString("TARDE_DESDE", "");
+
+            HttpContext.Session.SetString("EMPRESA_VERIFICACION_ACTUAL", "");
+            HttpContext.Session.SetString("UBICACION_VERIFICACION_ACTUAL", "");
+            HttpContext.Session.SetString("SECTOR_VERIFICACION_ACTUAL", "");
+            HttpContext.Session.SetString("LEGAJO_VERIFICACION_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_VERIFICACION_ACTUAL", "");
+            HttpContext.Session.SetString("EMPLEADO_VERIFICACION_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_VERIFICACION_ACTUAL", "");
+            HttpContext.Session.SetString("FECHA_VERIFICACION_DESDE", "");
+            HttpContext.Session.SetString("FECHA_VERIFICACION_HASTA", "");
+            HttpContext.Session.SetString("VERIFICACION_DESDE", "");
+
+            HttpContext.Session.SetString("EMPRESA_VIATICOS_ACTUAL", "");
+            HttpContext.Session.SetString("UBICACION_VIATICOS_ACTUAL", "");
+            HttpContext.Session.SetString("SECTOR_VIATICOS_ACTUAL", "");
+            HttpContext.Session.SetString("LEGAJO_VIATICOS_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_VIATICOS_ACTUAL", "");
+            HttpContext.Session.SetString("EMPLEADO_VIATICOS_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_VIATICOS_ACTUAL", "");
+            HttpContext.Session.SetString("FECHA_VIATICOS_DESDE", "");
+            HttpContext.Session.SetString("FECHA_VIATICOS_HASTA", "");
+            HttpContext.Session.SetString("VIATICOS_DESDE", "");
+
+            HttpContext.Session.SetString("EMPRESA_HSNOAUT_ACTUAL", "");
+            HttpContext.Session.SetString("UBICACION_HSNOAUT_ACTUAL", "");
+            HttpContext.Session.SetString("SECTOR_HSNOAUT_ACTUAL", "");
+            HttpContext.Session.SetString("LEGAJO_HSNOAUT_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_HSNOAUT_ACTUAL", "");
+            HttpContext.Session.SetString("EMPLEADO_HSNOAUT_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_HSNOAUT_ACTUAL", "");
+            HttpContext.Session.SetString("FECHA_HSNOAUT_DESDE", "");
+            HttpContext.Session.SetString("FECHA_HSNOAUT_HASTA", "");
+
+            HttpContext.Session.SetString("HSNOAUT_DESDE", "");
+            HttpContext.Session.SetString("EMPRESA_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("UBICACION_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("SECTOR_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("LEGAJO_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("APELLIDO_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("EMPLEADO_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("FILTRO_HFALTANTE_ACTUAL", "");
+            HttpContext.Session.SetString("FECHA_HFALTANTE_DESDE", "");
+            HttpContext.Session.SetString("FECHA_HFALTANTE_HASTA", "");
+            HttpContext.Session.SetString("HFALTANTE_DESDE", "");
 
             return RedirectToAction("Login", "Usuario");
         }
