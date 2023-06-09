@@ -126,10 +126,10 @@ namespace RRHH.Controllers
                     activo = 1;
                 }
 
-                if (perfil_id == 6)
-                {
-                    sector_id = usuario_local_id.Value;
-                }
+                //if (perfil_id == 6)
+                //{
+                //    sector_id = usuario_local_id.Value;
+                //}
 
                 ViewData["APELLIDO"] = apellido;
                 //ViewData["NRO_LEGAJO"] = nro_legajo;
