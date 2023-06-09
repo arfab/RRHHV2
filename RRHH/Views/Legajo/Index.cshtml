@@ -256,7 +256,7 @@
                                         <a onclick="mostrarModalEliminar('@item.id');" ><i data-mdb-toggle='tooltip' title='Eliminar el Legajo'  class='bi bi-x-circle'></i></a>
                                      }
 
-                                     @if (@item.ubicacion_id==3 &&  (_perfil_id == 2 || _perfil_id == 3 || _perfil_id == 4 || _perfil_id == 5 || _perfil_id == 6))
+                                                @if (@item.ubicacion_id == 3 && (_perfil_id == 1 || _perfil_id == 2 || _perfil_id == 3 || _perfil_id == 4 || _perfil_id == 5 || _perfil_id == 6))
                                      {
                                         <a asp-controller="LegajoHorario" asp-action="Index" asp-route-legajo_id=@item.id><i data-mdb-toggle='tooltip' title='Horarios' class='bi  bi-clock'></i></a>
                                         
